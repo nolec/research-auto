@@ -1,2 +1,33 @@
 # OMC runtime state and generated reports
 .omc/
+
+# Local agent/editor integrations (not project source)
+.DS_Store
+.agent-hooks/
+.agent/
+.agents/
+.claude/
+.codex/
+.cursor/
+.gemini/
+.cursorignore
+
+# Local OMC instructions, prompts, and runner files
+AGENTS.md
+CODEX.md
+CONVENTIONS.md
+ETHOS.md
+PROMPT_COMMON.md
+PROMPT_COMMON_LEAN.md
+prompts/
+run
+
+# OMC support documentation and scripts
+docs/agent_behavior.md
+docs/kit_map.md
+docs/next_project_pack.md
+docs/omc_quickstart.md
+docs/omc_workflow.md
+docs/quickstart_kr.md
+docs/verification_checklist.md
+scripts/
