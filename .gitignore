@@ -31,3 +31,8 @@ docs/omc_workflow.md
 docs/quickstart_kr.md
 docs/verification_checklist.md
 scripts/
+
+# Python runtime and test caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
