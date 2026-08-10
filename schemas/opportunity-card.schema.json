@@ -1,0 +1,385 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/opportunity-card.schema.json",
+  "title": "Opportunity Card",
+  "description": "A reviewable, evidence-backed business opportunity candidate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "card_id",
+    "cluster_id",
+    "observed_actor",
+    "inferred_customer_segment",
+    "problem_statement",
+    "evidence_status",
+    "actionability_status",
+    "review_value_score",
+    "independent_author_count",
+    "independent_evidence_group_count",
+    "recent_case_count",
+    "growth_status",
+    "loss_evidence",
+    "money_evidence",
+    "current_alternatives",
+    "current_solution_evidence",
+    "customer_channel_evidence",
+    "productizable_scope",
+    "known_blockers",
+    "blocker_assessment",
+    "solution_gap_evidence",
+    "supporting_evidence",
+    "counter_evidence",
+    "counter_assessment",
+    "uncertainties",
+    "automatic_decision",
+    "decision_reasons",
+    "human_audit",
+    "source_versions",
+    "model_version",
+    "prompt_version",
+    "policy_version",
+    "generated_at"
+  ],
+  "properties": {
+    "card_id": {"type": "string", "minLength": 1},
+    "cluster_id": {"type": "string", "minLength": 1},
+    "observed_actor": {"type": "string", "minLength": 1},
+    "inferred_customer_segment": {"type": ["string", "null"]},
+    "problem_statement": {"type": "string", "minLength": 1},
+    "evidence_status": {
+      "type": "string",
+      "enum": [
+        "INSUFFICIENT_EVIDENCE",
+        "CONFLICTING_EVIDENCE",
+        "EVIDENCE_BACKED",
+        "NEEDS_REVIEW"
+      ]
+    },
+    "actionability_status": {
+      "type": "string",
+      "enum": ["ACTIONABLE", "NOT_ACTIONABLE", "UNKNOWN"]
+    },
+    "review_value_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "independent_author_count": {"type": "integer", "minimum": 0},
+    "independent_evidence_group_count": {"type": "integer", "minimum": 0},
+    "recent_case_count": {"type": "integer", "minimum": 0},
+    "growth_status": {"type": "string", "enum": ["KNOWN", "UNKNOWN", "EXCLUDED"]},
+    "loss_evidence": {"$ref": "#/$defs/loss_evidence_list"},
+    "money_evidence": {"$ref": "#/$defs/money_evidence_list"},
+    "current_alternatives": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "current_solution_evidence": {"$ref": "#/$defs/current_solution_evidence_list"},
+    "customer_channel_evidence": {"$ref": "#/$defs/customer_channel_evidence_list"},
+    "productizable_scope": {"$ref": "#/$defs/productizable_scope"},
+    "known_blockers": {"$ref": "#/$defs/blocker_evidence_list"},
+    "blocker_assessment": {"$ref": "#/$defs/blocker_assessment"},
+    "solution_gap_evidence": {"$ref": "#/$defs/solution_gap_evidence_list"},
+    "supporting_evidence": {"$ref": "#/$defs/supporting_evidence_list"},
+    "counter_evidence": {"$ref": "#/$defs/counter_evidence_list"},
+    "counter_assessment": {"$ref": "#/$defs/counter_assessment"},
+    "uncertainties": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "automatic_decision": {
+      "type": "string",
+      "enum": ["REVIEW", "HOLD", "REJECT"]
+    },
+    "decision_reasons": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "human_audit": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/human_audit"}
+      ]
+    },
+    "source_versions": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": "string", "minLength": 1}
+    },
+    "model_version": {"type": "string", "minLength": 1},
+    "prompt_version": {"type": "string", "minLength": 1},
+    "policy_version": {"type": "string", "minLength": 1},
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"evidence_status": {"const": "EVIDENCE_BACKED"}},
+        "required": ["evidence_status"]
+      },
+      "then": {
+        "properties": {
+          "independent_author_count": {"minimum": 5},
+          "independent_evidence_group_count": {"minimum": 3},
+          "recent_case_count": {"minimum": 10},
+          "loss_evidence": {"minItems": 2},
+          "money_evidence": {"minItems": 2},
+          "supporting_evidence": {"minItems": 3},
+          "counter_assessment": {
+            "properties": {"status": {"const": "NONE_CRITICAL"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"actionability_status": {"const": "ACTIONABLE"}},
+        "required": ["actionability_status"]
+      },
+      "then": {
+        "properties": {
+          "current_alternatives": {"minItems": 1},
+          "current_solution_evidence": {"minItems": 1},
+          "customer_channel_evidence": {"minItems": 1},
+          "productizable_scope": {
+            "properties": {"status": {"const": "PRODUCTIZABLE"}}
+          },
+          "known_blockers": {"maxItems": 0},
+          "blocker_assessment": {
+            "properties": {"status": {"const": "NONE_FOUND"}}
+          },
+          "solution_gap_evidence": {"minItems": 2}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "document_id",
+        "source_url",
+        "published_at",
+        "author_hash",
+        "community",
+        "evidence_group_id",
+        "kind",
+        "quote",
+        "interpretation",
+        "confidence"
+      ],
+      "properties": {
+        "evidence_id": {"type": "string", "minLength": 1},
+        "document_id": {"type": "string", "minLength": 1},
+        "source_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://[^\\s]+$"
+        },
+        "published_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "author_hash": {"type": "string", "minLength": 1},
+        "community": {"type": "string", "minLength": 1},
+        "evidence_group_id": {"type": "string", "minLength": 1},
+        "kind": {
+          "type": "string",
+          "enum": [
+            "problem",
+            "loss",
+            "money",
+            "willingness_to_pay",
+            "alternative",
+            "customer_channel",
+            "solution_gap",
+            "counter",
+            "blocker"
+          ]
+        },
+        "quote": {"type": "string", "minLength": 1},
+        "interpretation": {"type": "string", "minLength": 1},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "loss_evidence_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/evidence"},
+          {"properties": {"kind": {"const": "loss"}}}
+        ]
+      }
+    },
+    "money_evidence_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/evidence"},
+          {"properties": {"kind": {"enum": ["money", "willingness_to_pay"]}}}
+        ]
+      }
+    },
+    "solution_gap_evidence_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/evidence"},
+          {"properties": {"kind": {"const": "solution_gap"}}}
+        ]
+      }
+    },
+    "supporting_evidence_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/evidence"},
+          {"properties": {"kind": {"not": {"const": "counter"}}}}
+        ]
+      }
+    },
+    "counter_evidence_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/evidence"},
+          {"properties": {"kind": {"const": "counter"}}}
+        ]
+      }
+    },
+    "current_solution_evidence_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/evidence"},
+          {"properties": {"kind": {"const": "alternative"}}}
+        ]
+      }
+    },
+    "customer_channel_evidence_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/evidence"},
+          {"properties": {"kind": {"const": "customer_channel"}}}
+        ]
+      }
+    },
+    "blocker_evidence_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/evidence"},
+          {"properties": {"kind": {"const": "blocker"}}}
+        ]
+      }
+    },
+    "productizable_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "delivery_mode", "summary"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["PRODUCTIZABLE", "NOT_PRODUCTIZABLE", "UNKNOWN"]
+        },
+        "delivery_mode": {
+          "type": "string",
+          "enum": ["SOFTWARE", "SERVICE", "HYBRID", "UNKNOWN"]
+        },
+        "summary": {"type": "string", "minLength": 1}
+      }
+    },
+    "blocker_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reasons"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["NONE_FOUND", "BLOCKED", "UNKNOWN"]
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "counter_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reasons"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["NONE_CRITICAL", "CRITICAL", "UNKNOWN"]
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "human_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_status", "actionability_status", "reason_codes", "duration_seconds", "audited_at"],
+      "properties": {
+        "evidence_status": {
+          "type": "string",
+          "enum": [
+            "INSUFFICIENT_EVIDENCE",
+            "CONFLICTING_EVIDENCE",
+            "EVIDENCE_BACKED",
+            "NEEDS_REVIEW"
+          ]
+        },
+        "actionability_status": {
+          "type": "string",
+          "enum": ["ACTIONABLE", "NOT_ACTIONABLE", "UNKNOWN"]
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "CONFIRMED",
+              "MISINTERPRETED_QUOTE",
+              "DUPLICATE_EVIDENCE",
+              "MISSING_COUNTER_EVIDENCE",
+              "WRONG_CLUSTER",
+              "INACCESSIBLE_SOURCE",
+              "POLICY_MISMATCH"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "duration_seconds": {"type": "integer", "minimum": 0, "maximum": 1800},
+        "audited_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        }
+      }
+    }
+  }
+}

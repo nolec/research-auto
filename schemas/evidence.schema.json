@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/evidence.schema.json",
+  "title": "Opportunity Evidence",
+  "description": "A source-backed observation used by an Opportunity Card decision.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_id",
+    "document_id",
+    "source_url",
+    "published_at",
+    "author_hash",
+    "community",
+    "evidence_group_id",
+    "kind",
+    "quote",
+    "interpretation",
+    "confidence"
+  ],
+  "properties": {
+    "evidence_id": {"type": "string", "minLength": 1},
+    "document_id": {"type": "string", "minLength": 1},
+    "source_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://[^\\s]+$"
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "author_hash": {"type": "string", "minLength": 1},
+    "community": {"type": "string", "minLength": 1},
+    "evidence_group_id": {"type": "string", "minLength": 1},
+    "kind": {
+      "type": "string",
+      "enum": [
+        "problem",
+        "loss",
+        "money",
+        "willingness_to_pay",
+        "alternative",
+        "customer_channel",
+        "solution_gap",
+        "counter",
+        "blocker"
+      ]
+    },
+    "quote": {"type": "string", "minLength": 1},
+    "interpretation": {"type": "string", "minLength": 1},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+  }
+}
