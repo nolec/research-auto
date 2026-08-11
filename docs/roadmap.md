@@ -46,6 +46,8 @@ Completed foundation:
 - [x] Development/holdout split of 10/10 per source
 - [x] Five double-review assignments per source
 - [x] Human-label schema and labeling guide
+- [x] Minimal source adapter and collection-result contracts
+- [x] Per-source runner failure isolation and provenance validation
 
 ### M2-A — GitHub First Real Data
 
@@ -53,8 +55,8 @@ The adapter layer stays deliberately small. Every adapter returns normalized `Ra
 
 Definition of done:
 
-- [ ] Freeze the GitHub compliance decision from current official sources
-- [ ] Define the minimal adapter interface and isolated failure result
+- [x] Freeze the GitHub compliance decision from current official sources
+- [x] Define the minimal adapter interface and isolated failure result
 - [ ] Add fixture-based GitHub parsing, pagination, deduplication, unknown-author, and rate-limit tests
 - [ ] Complete a separate real GitHub API smoke collection
 - [ ] Produce at least 10 valid real GitHub `RawSourceItem` records
@@ -62,6 +64,9 @@ Definition of done:
 - [ ] Verify PII minimization and raw-retention behavior on real responses
 
 M2-A smoke status: **0 / 10 valid real GitHub records**
+
+Current next action: implement fixture-based GitHub parsing and pagination tests,
+then run the first separate 5–10 item real API smoke collection.
 
 Adapter implementation sequence:
 

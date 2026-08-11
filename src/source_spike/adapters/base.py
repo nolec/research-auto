@@ -221,4 +221,7 @@ class SourceAdapter(Protocol):
         self,
         source_config: Mapping[str, object],
         target_valid_count: int,
+        *,
+        run_id: str,
+        manifest_version: str,
     ) -> CollectionResult: ...
