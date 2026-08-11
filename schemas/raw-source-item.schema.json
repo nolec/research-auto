@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/raw-source-item.schema.json",
+  "title": "Raw Source Item",
+  "description": "A normalized, privacy-safe, top-level public document collected for the source spike.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "document_id",
+    "source",
+    "source_item_id",
+    "source_url",
+    "item_type",
+    "author_hash",
+    "community",
+    "thread_id",
+    "parent_id",
+    "title",
+    "text",
+    "text_fingerprint",
+    "text_length",
+    "original_text_length",
+    "text_truncated",
+    "published_at",
+    "updated_at",
+    "language",
+    "engagement",
+    "source_metadata",
+    "collected_at",
+    "collector_version",
+    "fetch_run_id"
+  ],
+  "properties": {
+    "document_id": {"type": "string", "minLength": 3},
+    "source": {"type": "string", "minLength": 1},
+    "source_item_id": {"type": "string", "minLength": 1},
+    "source_url": {"type": "string", "format": "uri"},
+    "item_type": {
+      "enum": ["submission", "issue", "review", "question", "top_level_comment", "story"]
+    },
+    "author_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "community": {"type": "string", "minLength": 1},
+    "thread_id": {"type": "string", "minLength": 1},
+    "parent_id": {"type": "null"},
+    "title": {
+      "oneOf": [
+        {"type": "string", "minLength": 1},
+        {"type": "null"}
+      ]
+    },
+    "text": {"type": "string", "minLength": 40, "maxLength": 20000},
+    "text_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "text_length": {"type": "integer", "minimum": 40},
+    "original_text_length": {"type": "integer", "minimum": 40},
+    "text_truncated": {"type": "boolean"},
+    "published_at": {"type": "string", "format": "date-time"},
+    "updated_at": {
+      "oneOf": [
+        {"type": "string", "format": "date-time"},
+        {"type": "null"}
+      ]
+    },
+    "language": {
+      "oneOf": [
+        {"type": "string", "pattern": "^[a-z]{2,3}(?:-[A-Z]{2})?$"},
+        {"type": "null"}
+      ]
+    },
+    "engagement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "score": {"type": "integer"},
+        "comments": {"type": "integer", "minimum": 0},
+        "likes": {"type": "integer", "minimum": 0},
+        "views": {"type": "integer", "minimum": 0},
+        "answers": {"type": "integer", "minimum": 0},
+        "helpful": {"type": "integer", "minimum": 0},
+        "votes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "source_metadata": {"type": "object"},
+    "collected_at": {"type": "string", "format": "date-time"},
+    "collector_version": {"type": "string", "minLength": 1},
+    "fetch_run_id": {"type": "string", "minLength": 1}
+  }
+}
