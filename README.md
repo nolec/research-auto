@@ -16,8 +16,8 @@
 
 `수집 → 정제 → 문제 추출 → 문제 클러스터링 → Evidence → Actionability → Review Value → TOP 20 → 사람 감사`
 
-현재 권위 있는 제품 계약은 [`docs/prd.md`](docs/prd.md)를 참고한다. 초기 아이디어를 정리한 [`docs/v1-spec.md`](docs/v1-spec.md)는 역사적 초안이다.
+현재 권위 있는 제품 계약은 [`docs/prd.md`](docs/prd.md), 구현 진행 상황과 다음 작업은 [`docs/roadmap.md`](docs/roadmap.md)를 참고한다. 초기 아이디어를 정리한 [`docs/v1-spec.md`](docs/v1-spec.md)는 역사적 초안이다.
 
 ## 현재 상태
 
-초기 제품 정의 단계. 다음 구현 순서는 V1 명세의 실행 백로그를 따른다.
+Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **0/500**이다. 다음 마일스톤은 GitHub compliance와 최소 adapter 계약을 확정한 뒤 별도 실제 API smoke에서 `RawSourceItem` 10건을 확보하는 **M2-A GitHub First Real Data**다.
