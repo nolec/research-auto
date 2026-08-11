@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/source-label.schema.json",
+  "title": "Source Spike Human Label",
+  "description": "A human judgment used to evaluate source signal density independently of automated scoring.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "label_id",
+    "document_id",
+    "source",
+    "reviewer_id",
+    "assignment_split",
+    "review_round",
+    "problem_signal",
+    "money_signal",
+    "money_signal_type",
+    "structural_money_signal",
+    "usable_evidence",
+    "noise",
+    "label_reason",
+    "labeled_at",
+    "guide_version"
+  ],
+  "properties": {
+    "label_id": {"type": "string", "minLength": 3},
+    "document_id": {"type": "string", "minLength": 3},
+    "source": {"type": "string", "minLength": 1},
+    "reviewer_id": {"type": "string", "minLength": 1},
+    "assignment_split": {"enum": ["development", "holdout"]},
+    "review_round": {"enum": ["primary", "secondary"]},
+    "problem_signal": {"type": "boolean"},
+    "money_signal": {"type": "boolean"},
+    "money_signal_type": {
+      "oneOf": [
+        {
+          "enum": [
+            "purchase",
+            "subscription",
+            "outsourcing",
+            "labor_cost",
+            "loss",
+            "willingness_to_pay",
+            "price_complaint",
+            "replacement_search"
+          ]
+        },
+        {"type": "null"}
+      ]
+    },
+    "structural_money_signal": {"type": "boolean"},
+    "usable_evidence": {"type": "boolean"},
+    "noise": {"type": "boolean"},
+    "label_reason": {"type": "string", "minLength": 20},
+    "labeled_at": {"type": "string", "format": "date-time"},
+    "guide_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"money_signal": {"const": true}}},
+      "then": {
+        "properties": {
+          "money_signal_type": {
+            "enum": [
+              "purchase",
+              "subscription",
+              "outsourcing",
+              "labor_cost",
+              "loss",
+              "willingness_to_pay",
+              "price_complaint",
+              "replacement_search"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"money_signal": {"const": false}}},
+      "then": {
+        "properties": {
+          "money_signal_type": {"const": null},
+          "structural_money_signal": {"const": false}
+        }
+      }
+    }
+  ]
+}
