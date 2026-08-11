@@ -1,0 +1,23 @@
+{
+  "source": "github",
+  "access_method": "Official REST API for issues in public repositories only; HTML scraping is excluded.",
+  "authentication": "Optional token supplied through an environment variable; never persisted or shared to bypass rate limits.",
+  "official_api": true,
+  "rate_limit": "Observe response headers; current primary limits are 60 requests/hour without authentication and 5,000 requests/hour for a typical authenticated user.",
+  "allowed_usage": "Internal demand research and derived analysis of public repository issues only; no spam, user contact, personal-information sale, or private repository access.",
+  "raw_text_retention": "Normalized public issue text is retained local-only for the experiment; raw author identifiers, profile data, authentication data, and full API payloads are not retained.",
+  "redistribution": "Derived metrics, source URLs, timestamps, and content fingerprints only; issue bodies and raw personal data are not redistributed.",
+  "deletion_handling": "Remove locally retained text when an item disappears during refresh or upon a valid removal request; retain only non-reversible aggregate metrics when appropriate.",
+  "attribution": "The original GitHub source URL is retained for every observation.",
+  "commercial_use_risk": "medium",
+  "robots_or_automated_access_policy": "Official REST API only; respect primary and secondary rate limits and do not scrape GitHub HTML.",
+  "decision": "conditional",
+  "checked_at": "2026-08-11T00:00:00Z",
+  "source_references": [
+    "https://docs.github.com/en/rest/issues/issues",
+    "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api",
+    "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",
+    "https://docs.github.com/en/site-policy/acceptable-use-policies/github-acceptable-use-policies",
+    "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+  ]
+}
