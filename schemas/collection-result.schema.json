@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/collection-result.schema.json",
+  "title": "Source Collection Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source",
+    "run_id",
+    "started_at",
+    "finished_at",
+    "target_valid_count",
+    "status",
+    "items",
+    "invalid_items",
+    "request_count",
+    "response_bytes",
+    "retry_count",
+    "rate_limit_events",
+    "failed_item_count",
+    "error_code",
+    "error_message",
+    "manifest_version",
+    "adapter_version"
+  ],
+  "properties": {
+    "source": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": "string", "format": "date-time"},
+    "target_valid_count": {"type": "integer", "minimum": 1},
+    "status": {"enum": ["success", "partial", "failed"]},
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "https://research-auto.local/schemas/raw-source-item.schema.json"
+      }
+    },
+    "invalid_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_item_id", "error_code", "errors"],
+        "properties": {
+          "source_item_id": {
+            "oneOf": [
+              {"type": "string", "minLength": 1},
+              {"type": "null"}
+            ]
+          },
+          "error_code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "errors": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 20,
+            "items": {"type": "string", "minLength": 1, "maxLength": 500}
+          }
+        }
+      }
+    },
+    "request_count": {"type": "integer", "minimum": 0},
+    "response_bytes": {"type": "integer", "minimum": 0},
+    "retry_count": {"type": "integer", "minimum": 0},
+    "rate_limit_events": {"type": "integer", "minimum": 0},
+    "failed_item_count": {"type": "integer", "minimum": 0},
+    "error_code": {
+      "oneOf": [
+        {"type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$"},
+        {"type": "null"}
+      ]
+    },
+    "error_message": {
+      "oneOf": [
+        {"type": "string", "minLength": 1, "maxLength": 500},
+        {"type": "null"}
+      ]
+    },
+    "manifest_version": {"type": "string", "minLength": 1},
+    "adapter_version": {"type": "string", "minLength": 1}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "success"}}},
+      "then": {
+        "properties": {
+          "error_code": {"const": null},
+          "error_message": {"const": null}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"enum": ["partial", "failed"]}}},
+      "then": {
+        "properties": {
+          "error_code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          }
+        }
+      }
+    }
+  ]
+}
