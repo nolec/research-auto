@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/source-spike-manifest.schema.json",
+  "title": "Source Spike Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "random_seed", "target_valid_records", "sources"],
+  "properties": {
+    "manifest_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "random_seed": {"type": "integer", "minimum": 0},
+    "target_valid_records": {"type": "integer", "minimum": 100},
+    "sources": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source",
+          "archetype",
+          "compliance_decision",
+          "compliance_ref",
+          "compliance_hash",
+          "strata"
+        ],
+        "properties": {
+          "source": {"type": "string", "minLength": 1},
+          "archetype": {"type": "string", "minLength": 1},
+          "compliance_decision": {"enum": ["allowed", "conditional"]},
+          "compliance_ref": {"type": "string", "minLength": 1},
+          "compliance_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "strata": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "target", "quota"],
+              "properties": {
+                "name": {"type": "string", "minLength": 1},
+                "target": {"type": "string", "minLength": 1},
+                "quota": {"type": "integer", "minimum": 1}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

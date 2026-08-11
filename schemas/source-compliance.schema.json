@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/source-compliance.schema.json",
+  "title": "Source Compliance Decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source",
+    "access_method",
+    "authentication",
+    "official_api",
+    "rate_limit",
+    "allowed_usage",
+    "raw_text_retention",
+    "redistribution",
+    "deletion_handling",
+    "attribution",
+    "commercial_use_risk",
+    "robots_or_automated_access_policy",
+    "decision",
+    "checked_at",
+    "source_references"
+  ],
+  "properties": {
+    "source": {"type": "string", "minLength": 1},
+    "access_method": {"type": "string", "minLength": 1},
+    "authentication": {"type": "string", "minLength": 1},
+    "official_api": {"type": "boolean"},
+    "rate_limit": {"type": "string", "minLength": 1},
+    "allowed_usage": {"type": "string", "minLength": 1},
+    "raw_text_retention": {"type": "string", "minLength": 1},
+    "redistribution": {"type": "string", "minLength": 1},
+    "deletion_handling": {"type": "string", "minLength": 1},
+    "attribution": {"type": "string", "minLength": 1},
+    "commercial_use_risk": {"enum": ["low", "medium", "high", "blocked"]},
+    "robots_or_automated_access_policy": {"type": "string", "minLength": 1},
+    "decision": {"enum": ["allowed", "conditional", "blocked"]},
+    "checked_at": {"type": "string", "format": "date-time"},
+    "source_references": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {"type": "string", "format": "uri"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"commercial_use_risk": {"const": "blocked"}},
+        "required": ["commercial_use_risk"]
+      },
+      "then": {"properties": {"decision": {"const": "blocked"}}}
+    },
+    {
+      "if": {
+        "properties": {"decision": {"const": "allowed"}},
+        "required": ["decision"]
+      },
+      "then": {
+        "properties": {
+          "commercial_use_risk": {"enum": ["low", "medium"]}
+        }
+      }
+    }
+  ]
+}
