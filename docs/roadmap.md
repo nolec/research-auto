@@ -49,6 +49,7 @@ Completed foundation:
 - [x] Minimal source adapter and collection-result contracts
 - [x] Per-source runner failure isolation and provenance validation
 - [x] Frozen GitHub 10-record smoke manifest and validation contract
+- [x] Privacy-safe GitHub Issue fixture parser and rejection reasons
 
 ### M2-A — GitHub First Real Data
 
@@ -59,7 +60,8 @@ Definition of done:
 - [x] Freeze the GitHub compliance decision from current official sources
 - [x] Define the minimal adapter interface and isolated failure result
 - [x] Freeze repository quotas, selection limits, and run-level request budgets
-- [ ] Add fixture-based GitHub parsing, pagination, deduplication, unknown-author, and rate-limit tests
+- [x] Add fixture-based GitHub Issue parsing and unknown-author policy tests
+- [ ] Add run-scoped pagination, deduplication, author-limit, and rate-limit tests
 - [ ] Complete a separate real GitHub API smoke collection
 - [ ] Produce at least 10 valid real GitHub `RawSourceItem` records
 - [ ] Verify source URL, publication time, collection run, manifest, and adapter provenance
@@ -67,8 +69,8 @@ Definition of done:
 
 M2-A smoke status: **0 / 10 valid real GitHub records**
 
-Current next action: implement the fixture-based GitHub Issue parser with PR,
-missing-body, short-text, timestamp, and privacy-safe author handling tests.
+Current next action: implement run-scoped pagination and incremental selection so
+cross-page duplicates and author limits are enforced until 10 valid items are reached.
 
 Adapter implementation sequence:
 
