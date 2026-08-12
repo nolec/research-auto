@@ -1,0 +1,28 @@
+{
+  "manifest_version": "0.1.0",
+  "source": "github",
+  "adapter_version": "0.1.0",
+  "target_valid_records": 10,
+  "max_items_per_author": 2,
+  "repositories": [
+    {"name": "microsoft/vscode", "quota": 5},
+    {"name": "python/cpython", "quota": 5}
+  ],
+  "request": {
+    "endpoint": "/repos/{owner}/{repo}/issues",
+    "state": "open",
+    "sort": "created",
+    "direction": "desc",
+    "per_page": 30,
+    "max_pages_total": 4,
+    "max_requests": 8
+  },
+  "retry": {
+    "max_retries": 2,
+    "base_backoff_seconds": 1,
+    "max_backoff_seconds": 8
+  },
+  "compliance_ref": "compliance/github.json",
+  "compliance_hash": "947a69c437b02e355f18f1be77babd0218a7f4edc7df77fd49f41480f2727470",
+  "compliance_decision": "conditional"
+}

@@ -1,6 +1,6 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-11
+> Updated: 2026-08-12
 > Status: Task 1 complete, Task 2 in progress
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
@@ -48,6 +48,7 @@ Completed foundation:
 - [x] Human-label schema and labeling guide
 - [x] Minimal source adapter and collection-result contracts
 - [x] Per-source runner failure isolation and provenance validation
+- [x] Frozen GitHub 10-record smoke manifest and validation contract
 
 ### M2-A — GitHub First Real Data
 
@@ -57,6 +58,7 @@ Definition of done:
 
 - [x] Freeze the GitHub compliance decision from current official sources
 - [x] Define the minimal adapter interface and isolated failure result
+- [x] Freeze repository quotas, selection limits, and run-level request budgets
 - [ ] Add fixture-based GitHub parsing, pagination, deduplication, unknown-author, and rate-limit tests
 - [ ] Complete a separate real GitHub API smoke collection
 - [ ] Produce at least 10 valid real GitHub `RawSourceItem` records
@@ -65,8 +67,8 @@ Definition of done:
 
 M2-A smoke status: **0 / 10 valid real GitHub records**
 
-Current next action: implement fixture-based GitHub parsing and pagination tests,
-then run the first separate 5–10 item real API smoke collection.
+Current next action: implement the fixture-based GitHub Issue parser with PR,
+missing-body, short-text, timestamp, and privacy-safe author handling tests.
 
 Adapter implementation sequence:
 
