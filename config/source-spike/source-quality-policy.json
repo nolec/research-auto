@@ -1,0 +1,20 @@
+{
+  "policy_version": "1.0.0",
+  "decision_mode": "descriptive_only",
+  "thresholds_applied": false,
+  "reserved_selection_constraints": {
+    "money_density_min": 0.1
+  },
+  "agreement": {
+    "mode": "descriptive_pilot",
+    "qualification_gate": false
+  },
+  "holdout": {
+    "sealed": true,
+    "unseal_requires": [
+      "extractor_candidate_frozen",
+      "source_labeling_rules_frozen",
+      "explicit_unseal_receipt"
+    ]
+  }
+}

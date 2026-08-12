@@ -20,4 +20,4 @@
 
 ## 현재 상태
 
-Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **100/500**이다. GitHub fixture와 실제 API smoke는 **10/10 qualification**을 통과했고, 동결된 analysis manifest로 네 repository archetype에서 `25건 × 4`의 **100/100 qualified dataset**을 확보했다. 다음 작업은 GitHub 20건 human labeling을 시작하면서 두 번째 source adapter를 구현하는 것이다.
+Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **100/500**이다. GitHub fixture와 실제 API smoke는 **10/10 qualification**을 통과했고, 동결된 analysis manifest로 네 repository archetype에서 `25건 × 4`의 **100/100 qualified dataset**을 확보했다. 이 dataset에 묶인 blind review packet도 primary **20/20**, secondary **5/5**로 생성됐다. 사람 판정은 현재 primary **0/20**, secondary **0/5**이며, 다음 작업은 이 라벨을 완료해 development-only density/agreement report를 생성하면서 두 번째 source adapter를 구현하는 것이다.

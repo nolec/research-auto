@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/blind-source-label.schema.json",
+  "title": "Blind Source Label Submission",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["assignment_id", "reviewer_id", "reviewer_independence_asserted", "problem_signal", "money_signal", "money_signal_type", "structural_money_signal", "usable_evidence", "noise", "external_context_used", "label_reason", "labeled_at"],
+  "properties": {
+    "assignment_id": {"type": "string", "minLength": 8},
+    "reviewer_id": {"type": "string", "minLength": 1},
+    "reviewer_independence_asserted": {"type": "boolean"},
+    "problem_signal": {"type": "boolean"},
+    "money_signal": {"type": "boolean"},
+    "money_signal_type": {"oneOf": [{"enum": ["purchase", "subscription", "outsourcing", "labor_cost", "loss", "willingness_to_pay", "price_complaint", "replacement_search"]}, {"type": "null"}]},
+    "structural_money_signal": {"type": "boolean"},
+    "usable_evidence": {"type": "boolean"},
+    "noise": {"type": "boolean"},
+    "external_context_used": {"type": "boolean"},
+    "label_reason": {"type": "string", "minLength": 20},
+    "labeled_at": {"type": "string", "format": "date-time"}
+  },
+  "allOf": [
+    {"if": {"properties": {"money_signal": {"const": true}}}, "then": {"properties": {"money_signal_type": {"enum": ["purchase", "subscription", "outsourcing", "labor_cost", "loss", "willingness_to_pay", "price_complaint", "replacement_search"]}}}},
+    {"if": {"properties": {"money_signal": {"const": false}}}, "then": {"properties": {"money_signal_type": {"const": null}, "structural_money_signal": {"const": false}}}}
+  ]
+}

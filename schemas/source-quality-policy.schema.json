@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/source-quality-policy.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["policy_version", "decision_mode", "thresholds_applied", "reserved_selection_constraints", "agreement", "holdout"],
+  "properties": {
+    "policy_version": {"const": "1.0.0"},
+    "decision_mode": {"const": "descriptive_only"},
+    "thresholds_applied": {"const": false},
+    "reserved_selection_constraints": {"type": "object", "additionalProperties": false, "required": ["money_density_min"], "properties": {"money_density_min": {"const": 0.1}}},
+    "agreement": {"type": "object", "additionalProperties": false, "required": ["mode", "qualification_gate"], "properties": {"mode": {"const": "descriptive_pilot"}, "qualification_gate": {"const": false}}},
+    "holdout": {"type": "object", "additionalProperties": false, "required": ["sealed", "unseal_requires"], "properties": {"sealed": {"const": true}, "unseal_requires": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string"}}}}
+  }
+}

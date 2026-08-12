@@ -91,14 +91,26 @@ Current real-data progress:
 - GitHub smoke qualification: **10 / 10**
 - GitHub analysis-ready observations: **100 / 100 — qualified**
 - Source Spike analysis-ready observations: **100 / 500**
+- GitHub blind primary packet: **20 / 20 — frozen**
+- GitHub blind secondary packet: **5 / 5 — frozen**
+- GitHub primary human labels: **0 / 20**
+- GitHub secondary human labels: **0 / 5**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
 repository archetypes at 25 records each. The local-only run bundle contains a
 dataset hash, privacy qualification, and a deterministic 20-item labeling sample
 with 10 development, 10 holdout, and five double-review assignments.
 
-Current next action: begin GitHub human labeling while implementing the second
-source adapter; the qualified GitHub dataset must not be retuned or silently replaced.
+The local-only blind review bundle is hash-frozen against the qualified GitHub
+dataset. Development and holdout identities remain in the internal map only; the
+holdout labels will be physically sealed at ingestion. Ingestion revalidates the
+frozen packet and assignment-map hashes, preserves assignment-level context-use audit
+metadata, and rejects incomplete or non-independent reviews. Development reporting
+accepts only schema-valid development labels with 10 unique primary records and five
+independent secondary pairs. Current next action: complete GitHub primary and
+independent secondary labeling, then produce the development-only density/agreement
+report while implementing the second source adapter. The qualified GitHub dataset
+must not be retuned or silently replaced.
 
 Adapter implementation sequence:
 
@@ -120,6 +132,12 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 
 ### M2-C — Source Quality Decision
 
+- [x] Generate a blind, hash-frozen GitHub review packet for 20 primary and five secondary reviews
+- [x] Add strict blind-label ingestion with physical development/holdout separation
+- [x] Revalidate packet integrity at ingestion and preserve hash-addressed review audit metadata
+- [x] Add development-only Wilson density and descriptive agreement reporting
+- [x] Reject holdout, duplicate, incomplete, and non-independent development report inputs
+- [x] Gate holdout unsealing on an explicit freeze receipt
 - [ ] Produce accessibility, freshness, identity, continuity, cost, and compliance observations
 - [ ] Complete primary labels for at least 20 records per source and secondary labels for five
 - [ ] Calculate problem, money, usable-evidence, and noise densities with agreement statistics

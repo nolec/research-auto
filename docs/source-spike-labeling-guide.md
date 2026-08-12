@@ -6,7 +6,7 @@ Version: 1.0.0
 
 This labeling pass measures whether a source contains analyzable demand evidence. It does not judge whether an idea is commercially attractive. Label the source text before viewing automated extraction or scoring results.
 
-The initial 20 items per source are a screening sample. Ten are development examples and ten are a sealed holdout. Do not use holdout labels to tune rules or prompts. Expansion to 40 items and statistical source comparison belong to the next experiment slice.
+The initial 20 items per source are a screening sample. Ten are development examples and ten are a sealed holdout. Review packets deliberately hide the split, document ID, sample rank, and automated signals. Do not use holdout labels to tune rules or prompts. Expansion to 40 items and statistical source comparison belong to the next experiment slice.
 
 ## Labels
 
@@ -39,11 +39,15 @@ Mark `noise=true` for advertising, self-promotion without demand evidence, bots,
 
 ## Review procedure
 
-1. Read only the normalized source item and its original URL when context is required.
+1. Treat the packet snapshot (`title`, `normalized_text`, and `published_at`) as authoritative. Open `canonical_url` only when context is required and record `external_context_used=true` when you do.
 2. Assign every boolean independently; do not infer one label solely from another.
 3. Record a concrete `label_reason` of at least 20 characters, citing the decisive detail. Explain borderline calls explicitly.
 4. Use the assigned reviewer ID and review round. Items marked for double review receive independent primary and secondary labels.
 5. Do not reconcile disagreements until both reviews are complete. Preserve both original labels.
 6. Keep holdout results sealed until source rules and extraction prompts are frozen.
+
+Submit only the opaque `assignment_id`, reviewer metadata, four labels, money-signal details, context-use flag, reason, and timestamp. Never add the hidden split or source document ID. The secondary reviewer must work independently and explicitly assert that independence.
+
+Development density and agreement reports are descriptive screening results. They do not pass or fail a source and do not apply the reserved selection thresholds. Holdout unsealing requires a separate receipt confirming that the extractor candidate and source-labeling rules are frozen and that unsealing was explicitly approved.
 
 Do not include personal identifiers in labels or reasons. Refer to “the author” or the described role.
