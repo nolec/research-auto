@@ -20,4 +20,4 @@
 
 ## 현재 상태
 
-Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **0/500**이다. GitHub fixture collection loop는 repository quota `5/5 + 5/5`로 **10/10 qualification**을 통과했다. 다음 작업은 실제 HTTP transport와 retry/rate-limit 처리를 연결한 뒤 별도 real API smoke에서 `RawSourceItem` 10건을 확보하는 **M2-A GitHub First Real Data**다.
+Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **0/500**이다. GitHub fixture와 실제 API smoke 모두 repository quota `5/5 + 5/5`로 **10/10 qualification**을 통과했다. 다음 작업은 GitHub 100-record analysis manifest를 고정하고 첫 분석용 표본을 수집하는 것이다.

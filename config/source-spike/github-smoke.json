@@ -1,7 +1,7 @@
 {
-  "manifest_version": "0.1.0",
+  "manifest_version": "0.2.0",
   "source": "github",
-  "adapter_version": "0.1.0",
+  "adapter_version": "0.2.0",
   "target_valid_records": 10,
   "max_items_per_author": 2,
   "repositories": [
@@ -15,7 +15,11 @@
     "direction": "desc",
     "per_page": 30,
     "max_pages_total": 4,
-    "max_requests": 8
+    "max_requests": 8,
+    "max_http_attempts": 12,
+    "request_timeout_seconds": 10,
+    "max_total_elapsed_seconds": 45,
+    "max_rate_limit_wait_seconds": 8
   },
   "retry": {
     "max_retries": 2,

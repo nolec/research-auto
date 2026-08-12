@@ -71,23 +71,32 @@ Definition of done:
 - [x] Add valid-count pagination, repository quota, and request/page budget tests
 - [x] Preserve parser and selector rejection order with fetched/processed metrics
 - [x] Complete fixture smoke with 10 valid records and 5/5 repository quotas
-- [ ] Add the real HTTP transport with retry and rate-limit handling
-- [ ] Complete a separate real GitHub API smoke collection
-- [ ] Produce at least 10 valid real GitHub `RawSourceItem` records
-- [ ] Verify source URL, publication time, collection run, manifest, and adapter provenance
-- [ ] Verify PII minimization and raw-retention behavior on real responses
+- [x] Add the real HTTP transport with retry and rate-limit handling
+- [x] Complete a separate real GitHub API smoke collection
+- [x] Produce at least 10 valid real GitHub `RawSourceItem` records
+- [x] Verify source URL, publication time, collection run, manifest, and adapter provenance
+- [x] Verify PII minimization and raw-retention behavior on real responses
 
 M2-A fixture status: **10 / 10 valid fixture records — qualified**
 
-M2-A real smoke status: **0 / 10 valid real GitHub records**
+M2-A real smoke status: **10 / 10 valid real GitHub records — qualified**
 
-Current next action: implement the real GitHub HTTP transport with bounded retry and
-rate-limit metadata, then run the separate 5–10 item real API smoke without changing
-the qualified fixture collection semantics.
+Latest qualification verification: **193 tests passed**, collection-result schema and
+TDD gate passed, and the sanitized real-smoke report retained no raw text, username,
+token, or full API payload.
+
+Current real-data progress:
+
+- GitHub smoke qualification: **10 / 10**
+- GitHub analysis-ready observations: **0 / 100**
+- Source Spike analysis-ready observations: **0 / 500**
+
+Current next action: freeze the GitHub 100-record analysis manifest and collect the
+first analysis-ready source sample without changing the qualified smoke semantics.
 
 Adapter implementation sequence:
 
-`fixture parsing ✓ → pagination/deduplication test ✓ → real 5–10 item smoke → 100 valid items`
+`fixture parsing ✓ → pagination/deduplication test ✓ → real 10-item smoke ✓ → 100 valid items`
 
 Do not wait for all five adapters to be complete before the first real smoke test. The main unknown is real source behavior, not the interface architecture.
 

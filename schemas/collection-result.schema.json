@@ -17,6 +17,9 @@
     "response_bytes",
     "retry_count",
     "rate_limit_events",
+    "successful_request_count",
+    "http_attempt_count",
+    "transport_events",
     "failed_item_count",
     "error_code",
     "error_message",
@@ -96,13 +99,50 @@
         "page_budget_exhausted",
         "repository_quota_unreachable",
         "source_exhausted",
-        "prerequisite_failed"
+        "prerequisite_failed",
+        "transport_error",
+        "rate_limit_exhausted",
+        "smoke_deadline_exhausted"
       ]
     },
     "fetched_item_count": {"type": "integer", "minimum": 0},
     "processed_item_count": {"type": "integer", "minimum": 0},
     "accepted_item_count": {"type": "integer", "minimum": 0},
     "rejected_item_count": {"type": "integer", "minimum": 0},
+    "successful_request_count": {"type": "integer", "minimum": 0},
+    "http_attempt_count": {"type": "integer", "minimum": 0},
+    "transport_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sequence", "category", "attempt", "status_code", "retryable", "rate_limit"],
+        "properties": {
+          "sequence": {"type": "integer", "minimum": 1},
+          "category": {"enum": ["http_error", "timeout", "connection_reset", "rate_limit"]},
+          "attempt": {"type": "integer", "minimum": 1},
+          "status_code": {"oneOf": [{"type": "integer", "minimum": 100, "maximum": 599}, {"type": "null"}]},
+          "retryable": {"type": "boolean"},
+          "rate_limit": {
+            "oneOf": [
+              {"type": "null"},
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["limit", "remaining", "reset_at", "resource", "retry_after_seconds"],
+                "properties": {
+                  "limit": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "null"}]},
+                  "remaining": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "null"}]},
+                  "reset_at": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "null"}]},
+                  "resource": {"oneOf": [{"enum": ["core", "search", "graphql", "integration_manifest", "source_import", "code_scanning", "actions_runner_registration", "scim", "unknown"]}, {"type": "null"}]},
+                  "retry_after_seconds": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "null"}]}
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
     "segment_results": {
       "type": "array",
       "minItems": 1,

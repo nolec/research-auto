@@ -57,6 +57,8 @@ def validate_github_smoke_manifest(
     retry = cast(Mapping[str, object], manifest["retry"])
     if int(retry["max_retries"]) >= int(request["max_requests"]):
         errors.append("max_retries must be less than max_requests")
+    if int(request["max_http_attempts"]) < int(request["max_requests"]):
+        errors.append("max_http_attempts cannot be less than max_requests")
     if float(retry["base_backoff_seconds"]) > float(
         retry["max_backoff_seconds"]
     ):

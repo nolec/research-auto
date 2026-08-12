@@ -34,6 +34,10 @@ def test_committed_github_smoke_manifest_is_frozen_and_valid() -> None:
         "per_page": 30,
         "max_pages_total": 4,
         "max_requests": 8,
+        "max_http_attempts": 12,
+        "request_timeout_seconds": 10,
+        "max_total_elapsed_seconds": 45,
+        "max_rate_limit_wait_seconds": 8,
     }
     repositories = manifest["repositories"]
     assert repositories == [
@@ -94,3 +98,13 @@ def test_manifest_schema_rejects_unbounded_collection() -> None:
     errors = validate_github_smoke_manifest(changed, compliance)
 
     assert any("max_requests" in error and "required" in error for error in errors)
+
+
+def test_manifest_rejects_http_attempt_budget_smaller_than_logical_requests() -> None:
+    manifest, compliance = load_inputs()
+    changed = copy.deepcopy(manifest)
+    changed["request"]["max_http_attempts"] = 7
+
+    assert validate_github_smoke_manifest(changed, compliance) == [
+        "max_http_attempts cannot be less than max_requests"
+    ]

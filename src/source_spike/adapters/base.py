@@ -12,6 +12,18 @@ from src.source_spike.raw_items import validate_raw_source_item
 
 _ERROR_CODE = re.compile(r"^[a-z][a-z0-9_]{0,63}$")
 _SHA256 = re.compile(r"^[a-f0-9]{64}$")
+_TRANSPORT_EVENT_KEYS = frozenset(
+    {"sequence", "category", "attempt", "status_code", "retryable", "rate_limit"}
+)
+_RATE_LIMIT_KEYS = frozenset(
+    {"limit", "remaining", "reset_at", "resource", "retry_after_seconds"}
+)
+_TRANSPORT_CATEGORIES = frozenset(
+    {"http_error", "timeout", "connection_reset", "rate_limit"}
+)
+_RATE_LIMIT_RESOURCES = frozenset(
+    {"core", "search", "graphql", "integration_manifest", "source_import", "code_scanning", "actions_runner_registration", "scim", "unknown"}
+)
 
 
 class CollectionStatus(StrEnum):
@@ -27,6 +39,9 @@ class TerminationReason(StrEnum):
     REPOSITORY_QUOTA_UNREACHABLE = "repository_quota_unreachable"
     SOURCE_EXHAUSTED = "source_exhausted"
     PREREQUISITE_FAILED = "prerequisite_failed"
+    TRANSPORT_ERROR = "transport_error"
+    RATE_LIMIT_EXHAUSTED = "rate_limit_exhausted"
+    SMOKE_DEADLINE_EXHAUSTED = "smoke_deadline_exhausted"
 
 
 @dataclass(frozen=True)
@@ -125,6 +140,9 @@ class CollectionResult:
     response_bytes: int
     retry_count: int
     rate_limit_events: int
+    successful_request_count: int
+    http_attempt_count: int
+    transport_events: Sequence[Mapping[str, object]]
     error_code: str | None
     error_message: str | None
     manifest_version: str
@@ -167,6 +185,8 @@ class CollectionResult:
             ("response_bytes", self.response_bytes),
             ("retry_count", self.retry_count),
             ("rate_limit_events", self.rate_limit_events),
+            ("successful_request_count", self.successful_request_count),
+            ("http_attempt_count", self.http_attempt_count),
             ("fetched_item_count", self.fetched_item_count),
             ("processed_item_count", self.processed_item_count),
             ("accepted_item_count", self.accepted_item_count),
@@ -175,8 +195,52 @@ class CollectionResult:
         for field, value in metric_values:
             if isinstance(value, bool) or not isinstance(value, int) or value < 0:
                 raise ValueError(f"{field} must be a non-negative integer")
-        if self.retry_count > max(self.request_count - 1, 0):
-            raise ValueError("retry_count cannot exceed request_count minus one")
+        if self.successful_request_count > self.request_count:
+            raise ValueError("successful_request_count cannot exceed request_count")
+        if self.request_count > self.http_attempt_count:
+            raise ValueError("request_count cannot exceed http_attempt_count")
+        if self.retry_count != self.http_attempt_count - self.request_count:
+            raise ValueError("retry_count must equal http_attempt_count minus request_count")
+        normalized_transport_events = tuple(self.transport_events)
+        if len(normalized_transport_events) > self.http_attempt_count:
+            raise ValueError("transport_events cannot exceed http_attempt_count")
+        if any(not isinstance(event, Mapping) for event in normalized_transport_events):
+            raise ValueError("transport_events must contain mappings")
+        for event in normalized_transport_events:
+            if set(event) != _TRANSPORT_EVENT_KEYS:
+                raise ValueError("transport_events must use the safe event allowlist")
+            for key in ("sequence", "attempt"):
+                value = event[key]
+                if isinstance(value, bool) or not isinstance(value, int) or value < 1:
+                    raise ValueError(f"transport event {key} must be a positive integer")
+            status_code = event["status_code"]
+            if status_code is not None and (
+                isinstance(status_code, bool)
+                or not isinstance(status_code, int)
+                or not 100 <= status_code <= 599
+            ):
+                raise ValueError(
+                    "transport event status_code must be null or an HTTP status integer"
+                )
+            if not isinstance(event["retryable"], bool):
+                raise ValueError("transport event retryable must be a boolean")
+            rate_limit = event.get("rate_limit")
+            if event.get("category") not in _TRANSPORT_CATEGORIES:
+                raise ValueError("transport event category is not allowlisted")
+            if rate_limit is not None:
+                if not isinstance(rate_limit, Mapping) or set(rate_limit) != _RATE_LIMIT_KEYS:
+                    raise ValueError("rate_limit must use the safe nested allowlist")
+                for key in ("limit", "remaining", "reset_at", "retry_after_seconds"):
+                    value = rate_limit[key]
+                    if value is not None and (
+                        isinstance(value, bool) or not isinstance(value, int) or value < 0
+                    ):
+                        raise ValueError(f"rate_limit.{key} must be null or a non-negative integer")
+                resource = rate_limit["resource"]
+                if resource is not None and (
+                    not isinstance(resource, str) or resource not in _RATE_LIMIT_RESOURCES
+                ):
+                    raise ValueError("rate_limit.resource is not allowlisted")
 
         normalized_status = CollectionStatus(self.status)
         normalized_termination = TerminationReason(self.termination_reason)
@@ -279,6 +343,9 @@ class CollectionResult:
         object.__setattr__(self, "items", tuple(_freeze(item) for item in item_payloads))
         object.__setattr__(self, "invalid_items", normalized_invalid_items)
         object.__setattr__(self, "segment_results", normalized_segments)
+        object.__setattr__(
+            self, "transport_events", tuple(_freeze(event) for event in normalized_transport_events)
+        )
 
     def replace(self, **changes: object) -> CollectionResult:
         return replace(self, **changes)
@@ -297,6 +364,9 @@ class CollectionResult:
             "response_bytes": self.response_bytes,
             "retry_count": self.retry_count,
             "rate_limit_events": self.rate_limit_events,
+            "successful_request_count": self.successful_request_count,
+            "http_attempt_count": self.http_attempt_count,
+            "transport_events": [_thaw(event) for event in self.transport_events],
             "failed_item_count": self.rejected_item_count,
             "error_code": self.error_code,
             "error_message": self.error_message,

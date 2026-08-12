@@ -90,12 +90,13 @@ class GitHubTransport(Protocol):
         state: str,
         sort: str,
         direction: str,
-    ) -> GitHubPage: ...
+        **transport_policy: object,
+    ) -> object: ...
 
 
-class GitHubFixtureAdapter:
+class GitHubIssueAdapter:
     source = "github"
-    adapter_version = "0.1.0"
+    adapter_version = "0.2.0"
 
     def __init__(
         self,
@@ -152,6 +153,11 @@ class GitHubFixtureAdapter:
                 segments=(SegmentResult("source", self.source, target_valid_count, 0),),
                 termination=TerminationReason.PREREQUISITE_FAILED,
                 request_count=0,
+                successful_requests=0,
+                http_attempts=0,
+                retries=0,
+                rate_limit_events=0,
+                transport_events=(),
                 response_bytes=0,
                 fetched=0,
                 processed=0,
@@ -167,7 +173,9 @@ class GitHubFixtureAdapter:
         accepted: list[Mapping[str, object]] = []
         rejected: list[InvalidItem] = []
         accepted_by_segment = {str(value["name"]): 0 for value in repositories}
-        request_count = response_bytes = fetched = processed = pages = 0
+        request_count = successful_requests = http_attempts = retries = 0
+        rate_limit_events = response_bytes = fetched = processed = pages = 0
+        transport_events: list[Mapping[str, object]] = []
         termination: TerminationReason | None = None
 
         for repository_config in repositories:
@@ -181,17 +189,67 @@ class GitHubFixtureAdapter:
                 if pages >= int(request["max_pages_total"]):
                     termination = TerminationReason.PAGE_BUDGET_EXHAUSTED
                     break
-                page = self._transport.fetch_issues(
+                if http_attempts >= int(request["max_http_attempts"]):
+                    termination = TerminationReason.TRANSPORT_ERROR
+                    break
+                elapsed = (self._clock() - started_at).total_seconds()
+                remaining_elapsed = float(request["max_total_elapsed_seconds"]) - elapsed
+                if remaining_elapsed <= 0:
+                    termination = TerminationReason.SMOKE_DEADLINE_EXHAUSTED
+                    break
+                outcome = self._transport.fetch_issues(
                     repository,
                     page=page_number,
                     per_page=int(request["per_page"]),
                     state=str(request["state"]),
                     sort=str(request["sort"]),
                     direction=str(request["direction"]),
+                    max_http_attempts=int(request["max_http_attempts"]) - http_attempts,
+                    request_timeout_seconds=float(request["request_timeout_seconds"]),
+                    max_total_elapsed_seconds=remaining_elapsed,
+                    max_rate_limit_wait_seconds=float(request["max_rate_limit_wait_seconds"]),
+                    max_retries=int(cast(Mapping[str, object], source_config["retry"])["max_retries"]),
+                    base_backoff_seconds=float(cast(Mapping[str, object], source_config["retry"])["base_backoff_seconds"]),
+                    max_backoff_seconds=float(cast(Mapping[str, object], source_config["retry"])["max_backoff_seconds"]),
                 )
-                request_count += 1
+                if isinstance(outcome, GitHubPage):
+                    page = outcome
+                    attempt_delta = 1
+                    retry_delta = 0
+                    rate_delta = 0
+                    event_values: Sequence[object] = ()
+                    outcome_response_bytes = page.response_bytes
+                    transport_error = None
+                else:
+                    attempt_delta = int(getattr(outcome, "http_attempt_count"))
+                    retry_delta = int(getattr(outcome, "retry_count"))
+                    rate_delta = int(getattr(outcome, "rate_limit_event_count"))
+                    event_values = cast(Sequence[object], getattr(outcome, "events"))
+                    outcome_response_bytes = int(getattr(outcome, "response_bytes"))
+                    page = getattr(outcome, "page", None)
+                    transport_error = getattr(outcome, "error_code", None)
+                http_attempts += attempt_delta
+                if attempt_delta > 0:
+                    request_count += 1
+                retries += retry_delta
+                rate_limit_events += rate_delta
+                response_bytes += outcome_response_bytes
+                for event in event_values:
+                    if hasattr(event, "to_dict"):
+                        event_payload = cast(dict[str, object], event.to_dict())
+                        event_payload["sequence"] = len(transport_events) + 1
+                        transport_events.append(event_payload)
+                if transport_error is not None:
+                    termination = {
+                        "rate_limit_exhausted": TerminationReason.RATE_LIMIT_EXHAUSTED,
+                        "smoke_deadline_exhausted": TerminationReason.SMOKE_DEADLINE_EXHAUSTED,
+                    }.get(str(transport_error), TerminationReason.TRANSPORT_ERROR)
+                    break
+                if not isinstance(page, GitHubPage):
+                    termination = TerminationReason.TRANSPORT_ERROR
+                    break
+                successful_requests += 1
                 pages += 1
-                response_bytes += page.response_bytes
                 payloads = page.to_items()
                 fetched += len(payloads)
                 for payload in payloads:
@@ -258,6 +316,11 @@ class GitHubFixtureAdapter:
             segments=final_segments,
             termination=termination,
             request_count=request_count,
+            successful_requests=successful_requests,
+            http_attempts=http_attempts,
+            retries=retries,
+            rate_limit_events=rate_limit_events,
+            transport_events=transport_events,
             response_bytes=response_bytes,
             fetched=fetched,
             processed=processed,
@@ -278,6 +341,11 @@ class GitHubFixtureAdapter:
         segments: Sequence[SegmentResult],
         termination: TerminationReason,
         request_count: int,
+        successful_requests: int,
+        http_attempts: int,
+        retries: int,
+        rate_limit_events: int,
+        transport_events: Sequence[Mapping[str, object]],
         response_bytes: int,
         fetched: int,
         processed: int,
@@ -304,8 +372,11 @@ class GitHubFixtureAdapter:
             invalid_items=invalid_items,
             request_count=request_count,
             response_bytes=response_bytes,
-            retry_count=0,
-            rate_limit_events=0,
+            retry_count=retries,
+            rate_limit_events=rate_limit_events,
+            successful_request_count=successful_requests,
+            http_attempt_count=http_attempts,
+            transport_events=transport_events,
             error_code=None if status is CollectionStatus.SUCCESS else termination.value,
             error_message=error_message,
             manifest_version=manifest_version,
@@ -319,6 +390,9 @@ class GitHubFixtureAdapter:
             manifest_hash=manifest_hash,
             compliance_hash=compliance_hash,
         )
+
+
+GitHubFixtureAdapter = GitHubIssueAdapter
 
 
 @dataclass(frozen=True)

@@ -203,9 +203,9 @@ def issue(index: int, repository: str) -> dict[str, object]:
 def smoke_manifest() -> tuple[dict[str, object], dict[str, object]]:
     compliance = {"source": "github", "decision": "conditional"}
     manifest: dict[str, object] = {
-        "manifest_version": "0.1.0",
+        "manifest_version": "0.2.0",
         "source": "github",
-        "adapter_version": "0.1.0",
+        "adapter_version": "0.2.0",
         "target_valid_records": 10,
         "max_items_per_author": 2,
         "repositories": [
@@ -220,6 +220,10 @@ def smoke_manifest() -> tuple[dict[str, object], dict[str, object]]:
             "per_page": 30,
             "max_pages_total": 4,
             "max_requests": 8,
+            "max_http_attempts": 12,
+            "request_timeout_seconds": 10,
+            "max_total_elapsed_seconds": 45,
+            "max_rate_limit_wait_seconds": 8,
         },
         "retry": {"max_retries": 2, "base_backoff_seconds": 1, "max_backoff_seconds": 8},
         "compliance_ref": "compliance/github.json",
@@ -243,7 +247,7 @@ def test_fixture_collection_reaches_global_and_repository_quotas() -> None:
     )
 
     result = adapter.collect(
-        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+        manifest, 10, run_id="run-fixture", manifest_version="0.2.0"
     )
 
     assert result.status is CollectionStatus.SUCCESS
@@ -270,7 +274,7 @@ def test_fixture_collection_returns_partial_when_repository_is_exhausted() -> No
     )
 
     result = adapter.collect(
-        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+        manifest, 10, run_id="run-fixture", manifest_version="0.2.0"
     )
 
     assert result.status is CollectionStatus.PARTIAL
@@ -288,7 +292,7 @@ def test_fixture_collection_fails_before_fetch_on_invalid_prerequisite() -> None
     )
 
     result = adapter.collect(
-        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+        manifest, 10, run_id="run-fixture", manifest_version="0.2.0"
     )
 
     assert result.status is CollectionStatus.FAILED
@@ -312,7 +316,7 @@ def test_fixture_collection_rejects_all_prerequisites_before_fetch(failure: str)
     )
 
     result = adapter.collect(
-        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+        manifest, 10, run_id="run-fixture", manifest_version="0.2.0"
     )
 
     assert result.status is CollectionStatus.FAILED
@@ -334,7 +338,7 @@ def test_fixture_collection_records_the_first_page_budget_terminal_event() -> No
     )
 
     result = adapter.collect(
-        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+        manifest, 10, run_id="run-fixture", manifest_version="0.2.0"
     )
 
     assert result.status is CollectionStatus.PARTIAL
@@ -359,7 +363,7 @@ def test_fixture_collection_records_request_budget_before_another_fetch() -> Non
     )
 
     result = adapter.collect(
-        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+        manifest, 10, run_id="run-fixture", manifest_version="0.2.0"
     )
 
     assert result.termination_reason is TerminationReason.REQUEST_BUDGET_EXHAUSTED
@@ -386,10 +390,35 @@ def test_fixture_collection_preserves_parser_then_selector_rejection_order() -> 
     )
 
     result = adapter.collect(
-        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+        manifest, 10, run_id="run-fixture", manifest_version="0.2.0"
     )
 
     assert [item.error_code for item in result.invalid_items] == [
         "pr_not_issue",
         "duplicate_text",
     ]
+
+
+class ZeroAttemptDeadlineTransport:
+    def fetch_issues(self, *_args: object, **_kwargs: object):
+        from src.source_spike.adapters.github_http import GitHubTransportFailure
+
+        return GitHubTransportFailure(
+            "smoke_deadline_exhausted", 0, 0, 0, 0, ()
+        )
+
+
+def test_zero_attempt_deadline_does_not_count_a_logical_request() -> None:
+    manifest, compliance = smoke_manifest()
+    adapter = GitHubFixtureAdapter(
+        ZeroAttemptDeadlineTransport(), author_secret=SECRET,
+        compliance_record=compliance, clock=lambda: COLLECTED_AT,
+    )
+
+    result = adapter.collect(
+        manifest, 10, run_id="run-fixture", manifest_version="0.2.0"
+    )
+
+    assert result.termination_reason is TerminationReason.SMOKE_DEADLINE_EXHAUSTED
+    assert result.request_count == 0
+    assert result.http_attempt_count == 0

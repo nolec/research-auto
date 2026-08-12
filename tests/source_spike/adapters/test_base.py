@@ -101,6 +101,9 @@ def result(
         response_bytes=2048,
         retry_count=0,
         rate_limit_events=0,
+        successful_request_count=1,
+        http_attempt_count=1,
+        transport_events=(),
         error_code=error_code,
         error_message=error_message,
         manifest_version="smoke-1.0.0",
@@ -142,6 +145,88 @@ def test_result_enforces_source_neutral_segment_and_metric_invariants() -> None:
         collection.replace(
             segment_results=(SegmentResult("repository", "example/project", 1, 0),)
         )
+
+
+def test_result_rejects_unsafe_nested_transport_metadata() -> None:
+    unsafe = {
+        "sequence": 1, "category": "rate_limit", "attempt": 1,
+        "status_code": 429, "retryable": True,
+        "rate_limit": {"retry_after_seconds": 1, "token": "CANARY"},
+    }
+    with pytest.raises(ValueError, match="rate_limit"):
+        result().replace(transport_events=(unsafe,))
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [("category", "CANARY-TOKEN"), ("resource", "CANARY-TOKEN")],
+)
+def test_result_rejects_unallowlisted_transport_event_strings(
+    field: str, value: str
+) -> None:
+    event = {
+        "sequence": 1, "category": "rate_limit", "attempt": 1,
+        "status_code": 429, "retryable": True,
+        "rate_limit": {
+            "limit": 60, "remaining": 0, "reset_at": 1,
+            "resource": "core", "retry_after_seconds": 1,
+        },
+    }
+    if field == "category":
+        event["category"] = value
+    else:
+        event["rate_limit"]["resource"] = value
+    with pytest.raises(ValueError, match=field):
+        result().replace(transport_events=(event,))
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("sequence", "CANARY-SEQUENCE"),
+        ("sequence", 0),
+        ("attempt", "CANARY-ATTEMPT"),
+        ("attempt", 0),
+        ("status_code", "CANARY-STATUS"),
+        ("status_code", 99),
+        ("status_code", 600),
+        ("retryable", "CANARY-RETRYABLE"),
+    ],
+)
+def test_result_rejects_invalid_transport_event_scalar_values(
+    field: str, value: object
+) -> None:
+    event = {
+        "sequence": 1,
+        "category": "rate_limit",
+        "attempt": 1,
+        "status_code": 429,
+        "retryable": True,
+        "rate_limit": {
+            "limit": 60,
+            "remaining": 0,
+            "reset_at": 1,
+            "resource": "core",
+            "retry_after_seconds": 1,
+        },
+    }
+    event[field] = value
+
+    with pytest.raises(ValueError, match=field):
+        result().replace(transport_events=(event,))
+
+
+def test_result_accepts_normalized_unknown_rate_limit_resource() -> None:
+    event = {
+        "sequence": 1, "category": "rate_limit", "attempt": 1,
+        "status_code": 429, "retryable": True,
+        "rate_limit": {
+            "limit": 60, "remaining": 0, "reset_at": 1,
+            "resource": "unknown", "retry_after_seconds": 1,
+        },
+    }
+    collection = result().replace(transport_events=(event,))
+    assert collection.to_dict()["transport_events"][0]["rate_limit"]["resource"] == "unknown"
 
 
 def test_status_requires_target_and_every_segment_quota() -> None:

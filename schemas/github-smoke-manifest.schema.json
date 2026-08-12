@@ -39,7 +39,7 @@
     "request": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["endpoint", "state", "sort", "direction", "per_page", "max_pages_total", "max_requests"],
+      "required": ["endpoint", "state", "sort", "direction", "per_page", "max_pages_total", "max_requests", "max_http_attempts", "request_timeout_seconds", "max_total_elapsed_seconds", "max_rate_limit_wait_seconds"],
       "properties": {
         "endpoint": {"const": "/repos/{owner}/{repo}/issues"},
         "state": {"const": "open"},
@@ -47,7 +47,11 @@
         "direction": {"const": "desc"},
         "per_page": {"type": "integer", "minimum": 1, "maximum": 100},
         "max_pages_total": {"type": "integer", "minimum": 1},
-        "max_requests": {"type": "integer", "minimum": 1}
+        "max_requests": {"type": "integer", "minimum": 1},
+        "max_http_attempts": {"type": "integer", "minimum": 1},
+        "request_timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "max_total_elapsed_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "max_rate_limit_wait_seconds": {"type": "number", "minimum": 0}
       }
     },
     "retry": {
