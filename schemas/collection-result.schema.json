@@ -21,7 +21,15 @@
     "error_code",
     "error_message",
     "manifest_version",
-    "adapter_version"
+    "adapter_version",
+    "termination_reason",
+    "fetched_item_count",
+    "processed_item_count",
+    "accepted_item_count",
+    "rejected_item_count",
+    "segment_results",
+    "manifest_hash",
+    "compliance_hash"
   ],
   "properties": {
     "source": {"type": "string", "minLength": 1},
@@ -80,7 +88,43 @@
       ]
     },
     "manifest_version": {"type": "string", "minLength": 1},
-    "adapter_version": {"type": "string", "minLength": 1}
+    "adapter_version": {"type": "string", "minLength": 1},
+    "termination_reason": {
+      "enum": [
+        "target_reached",
+        "request_budget_exhausted",
+        "page_budget_exhausted",
+        "repository_quota_unreachable",
+        "source_exhausted",
+        "prerequisite_failed"
+      ]
+    },
+    "fetched_item_count": {"type": "integer", "minimum": 0},
+    "processed_item_count": {"type": "integer", "minimum": 0},
+    "accepted_item_count": {"type": "integer", "minimum": 0},
+    "rejected_item_count": {"type": "integer", "minimum": 0},
+    "segment_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["segment_type", "segment_id", "quota", "accepted_item_count"],
+        "properties": {
+          "segment_type": {"type": "string", "minLength": 1},
+          "segment_id": {"type": "string", "minLength": 1},
+          "quota": {"type": "integer", "minimum": 0},
+          "accepted_item_count": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "manifest_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "compliance_hash": {
+      "oneOf": [
+        {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        {"type": "null"}
+      ]
+    }
   },
   "allOf": [
     {

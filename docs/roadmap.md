@@ -52,6 +52,9 @@ Completed foundation:
 - [x] Privacy-safe GitHub Issue fixture parser and rejection reasons
 - [x] Run-scoped incremental deduplication and author-limit state
 - [x] Immutable GitHub fixture transport page and protocol contracts
+- [x] Valid-count fixture collection loop with repository quotas and run budgets
+- [x] Source-neutral segment results, termination reasons, and provenance hashes
+- [x] GitHub fixture smoke qualification: 10/10 with 5/5 records per repository
 
 ### M2-A — GitHub First Real Data
 
@@ -65,20 +68,26 @@ Definition of done:
 - [x] Add fixture-based GitHub Issue parsing and unknown-author policy tests
 - [x] Add run-scoped cross-page deduplication and author-limit primitives
 - [x] Define the immutable fixture transport page and request protocol
-- [ ] Add valid-count pagination, repository quota, budget, and rate-limit tests
+- [x] Add valid-count pagination, repository quota, and request/page budget tests
+- [x] Preserve parser and selector rejection order with fetched/processed metrics
+- [x] Complete fixture smoke with 10 valid records and 5/5 repository quotas
+- [ ] Add the real HTTP transport with retry and rate-limit handling
 - [ ] Complete a separate real GitHub API smoke collection
 - [ ] Produce at least 10 valid real GitHub `RawSourceItem` records
 - [ ] Verify source URL, publication time, collection run, manifest, and adapter provenance
 - [ ] Verify PII minimization and raw-retention behavior on real responses
 
-M2-A smoke status: **0 / 10 valid real GitHub records**
+M2-A fixture status: **10 / 10 valid fixture records — qualified**
 
-Current next action: implement the GitHub adapter collection loop that consumes the
-fixture transport until repository quotas and the 10-item target are reached.
+M2-A real smoke status: **0 / 10 valid real GitHub records**
+
+Current next action: implement the real GitHub HTTP transport with bounded retry and
+rate-limit metadata, then run the separate 5–10 item real API smoke without changing
+the qualified fixture collection semantics.
 
 Adapter implementation sequence:
 
-`fixture parsing → pagination/deduplication test → real 5–10 item smoke → 100 valid items`
+`fixture parsing ✓ → pagination/deduplication test ✓ → real 5–10 item smoke → 100 valid items`
 
 Do not wait for all five adapters to be complete before the first real smoke test. The main unknown is real source behavior, not the interface architecture.
 

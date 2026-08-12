@@ -4,10 +4,19 @@ import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from types import MappingProxyType
-from typing import Mapping, Protocol, Sequence, cast
+from typing import Callable, Mapping, Protocol, Sequence, cast
 
-from src.source_spike.adapters.base import InvalidItem
+from src.source_spike.adapters.base import (
+    CollectionResult,
+    CollectionStatus,
+    InvalidItem,
+    SegmentResult,
+    TerminationReason,
+)
+from src.source_spike.github_smoke_manifest import validate_github_smoke_manifest
+from src.source_spike.protocol import content_sha256
 from src.source_spike.raw_items import (
+    IncrementalObservationSelector,
     author_hash,
     canonical_text_fingerprint,
     normalize_text,
@@ -82,6 +91,234 @@ class GitHubTransport(Protocol):
         sort: str,
         direction: str,
     ) -> GitHubPage: ...
+
+
+class GitHubFixtureAdapter:
+    source = "github"
+    adapter_version = "0.1.0"
+
+    def __init__(
+        self,
+        transport: GitHubTransport,
+        *,
+        author_secret: bytes,
+        compliance_record: Mapping[str, object],
+        clock: Callable[[], datetime] = lambda: datetime.now(timezone.utc),
+    ) -> None:
+        self._transport = transport
+        self._author_secret = author_secret
+        self._compliance_record = dict(compliance_record)
+        self._clock = clock
+
+    def collect(
+        self,
+        source_config: Mapping[str, object],
+        target_valid_count: int,
+        *,
+        run_id: str,
+        manifest_version: str,
+    ) -> CollectionResult:
+        started_at = self._clock()
+        manifest_hash = content_sha256(source_config)
+        compliance_hash = content_sha256(self._compliance_record)
+        repositories_value = source_config.get("repositories", ())
+        repositories = (
+            list(cast(Sequence[Mapping[str, object]], repositories_value))
+            if isinstance(repositories_value, (list, tuple))
+            and all(isinstance(value, Mapping) for value in repositories_value)
+            else []
+        )
+        prerequisite_errors = validate_github_smoke_manifest(
+            source_config, self._compliance_record
+        )
+        if source_config.get("source") != self.source:
+            prerequisite_errors.append("source mismatch")
+        if source_config.get("adapter_version") != self.adapter_version:
+            prerequisite_errors.append("adapter version mismatch")
+        if source_config.get("manifest_version") != manifest_version:
+            prerequisite_errors.append("manifest version mismatch")
+        if source_config.get("target_valid_records") != target_valid_count:
+            prerequisite_errors.append("target mismatch")
+        if not isinstance(self._author_secret, bytes) or len(self._author_secret) < 32:
+            prerequisite_errors.append("author_secret must contain at least 32 bytes")
+        if prerequisite_errors:
+            return self._result(
+                run_id=run_id,
+                manifest_version=manifest_version,
+                target=target_valid_count,
+                started_at=started_at,
+                items=(),
+                invalid_items=(),
+                segments=(SegmentResult("source", self.source, target_valid_count, 0),),
+                termination=TerminationReason.PREREQUISITE_FAILED,
+                request_count=0,
+                response_bytes=0,
+                fetched=0,
+                processed=0,
+                manifest_hash=manifest_hash,
+                compliance_hash=compliance_hash,
+                error_message="; ".join(prerequisite_errors)[:500],
+            )
+
+        request = cast(Mapping[str, object], source_config["request"])
+        selector = IncrementalObservationSelector(
+            max_items_per_author=int(source_config["max_items_per_author"])
+        )
+        accepted: list[Mapping[str, object]] = []
+        rejected: list[InvalidItem] = []
+        accepted_by_segment = {str(value["name"]): 0 for value in repositories}
+        request_count = response_bytes = fetched = processed = pages = 0
+        termination: TerminationReason | None = None
+
+        for repository_config in repositories:
+            repository = str(repository_config["name"])
+            quota = int(repository_config["quota"])
+            page_number = 1
+            while accepted_by_segment[repository] < quota:
+                if request_count >= int(request["max_requests"]):
+                    termination = TerminationReason.REQUEST_BUDGET_EXHAUSTED
+                    break
+                if pages >= int(request["max_pages_total"]):
+                    termination = TerminationReason.PAGE_BUDGET_EXHAUSTED
+                    break
+                page = self._transport.fetch_issues(
+                    repository,
+                    page=page_number,
+                    per_page=int(request["per_page"]),
+                    state=str(request["state"]),
+                    sort=str(request["sort"]),
+                    direction=str(request["direction"]),
+                )
+                request_count += 1
+                pages += 1
+                response_bytes += page.response_bytes
+                payloads = page.to_items()
+                fetched += len(payloads)
+                for payload in payloads:
+                    if accepted_by_segment[repository] >= quota or len(accepted) >= target_valid_count:
+                        break
+                    processed += 1
+                    parsed = parse_github_issue(
+                        payload,
+                        repository=repository,
+                        author_secret=self._author_secret,
+                        run_id=run_id,
+                        adapter_version=self.adapter_version,
+                        collected_at=started_at,
+                    )
+                    if parsed.rejection is not None:
+                        rejected.append(parsed.rejection)
+                        continue
+                    assert parsed.item is not None
+                    selection_rejection = selector.add(parsed.item)
+                    if selection_rejection is not None:
+                        source_item_id = str(parsed.item["source_item_id"])
+                        rejected.append(
+                            InvalidItem(
+                                source_item_id,
+                                selection_rejection.reason,
+                                selection_rejection.errors
+                                or (selection_rejection.reason.replace("_", " "),),
+                            )
+                        )
+                        continue
+                    accepted.append(parsed.item)
+                    accepted_by_segment[repository] += 1
+                if accepted_by_segment[repository] >= quota:
+                    break
+                if not page.has_next:
+                    termination = TerminationReason.REPOSITORY_QUOTA_UNREACHABLE
+                    break
+                page_number += 1
+            if termination is not None:
+                break
+
+        if termination is None:
+            termination = (
+                TerminationReason.TARGET_REACHED
+                if len(accepted) == target_valid_count
+                else TerminationReason.SOURCE_EXHAUSTED
+            )
+        final_segments = tuple(
+            SegmentResult(
+                "repository",
+                str(repository["name"]),
+                int(repository["quota"]),
+                accepted_by_segment[str(repository["name"])],
+            )
+            for repository in repositories
+        )
+        return self._result(
+            run_id=run_id,
+            manifest_version=manifest_version,
+            target=target_valid_count,
+            started_at=started_at,
+            items=accepted,
+            invalid_items=rejected,
+            segments=final_segments,
+            termination=termination,
+            request_count=request_count,
+            response_bytes=response_bytes,
+            fetched=fetched,
+            processed=processed,
+            manifest_hash=manifest_hash,
+            compliance_hash=compliance_hash,
+            error_message=None if termination is TerminationReason.TARGET_REACHED else termination.value,
+        )
+
+    def _result(
+        self,
+        *,
+        run_id: str,
+        manifest_version: str,
+        target: int,
+        started_at: datetime,
+        items: Sequence[Mapping[str, object]],
+        invalid_items: Sequence[InvalidItem],
+        segments: Sequence[SegmentResult],
+        termination: TerminationReason,
+        request_count: int,
+        response_bytes: int,
+        fetched: int,
+        processed: int,
+        manifest_hash: str,
+        compliance_hash: str,
+        error_message: str | None,
+    ) -> CollectionResult:
+        accepted_count = len(items)
+        status = (
+            CollectionStatus.SUCCESS
+            if termination is TerminationReason.TARGET_REACHED
+            else CollectionStatus.PARTIAL
+            if accepted_count
+            else CollectionStatus.FAILED
+        )
+        return CollectionResult(
+            source=self.source,
+            run_id=run_id,
+            started_at=started_at,
+            finished_at=self._clock(),
+            target_valid_count=target,
+            status=status,
+            items=items,
+            invalid_items=invalid_items,
+            request_count=request_count,
+            response_bytes=response_bytes,
+            retry_count=0,
+            rate_limit_events=0,
+            error_code=None if status is CollectionStatus.SUCCESS else termination.value,
+            error_message=error_message,
+            manifest_version=manifest_version,
+            adapter_version=self.adapter_version,
+            termination_reason=termination,
+            fetched_item_count=fetched,
+            processed_item_count=processed,
+            accepted_item_count=accepted_count,
+            rejected_item_count=len(invalid_items),
+            segment_results=segments,
+            manifest_hash=manifest_hash,
+            compliance_hash=compliance_hash,
+        )
 
 
 @dataclass(frozen=True)

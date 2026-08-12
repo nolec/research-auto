@@ -5,8 +5,14 @@ from typing import Mapping
 
 import pytest
 
-from src.source_spike.adapters.base import CollectionResult, CollectionStatus
+from src.source_spike.adapters.base import (
+    CollectionResult,
+    CollectionStatus,
+    SegmentResult,
+    TerminationReason,
+)
 from src.source_spike.collection import collect_source, operational_metrics_observed
+from src.source_spike.protocol import content_sha256
 from src.source_spike.raw_items import canonical_text_fingerprint
 
 
@@ -50,6 +56,8 @@ def adapter_result(
     adapter_version: str = "1.0.0",
     target: int = 1,
     success: bool = True,
+    manifest_hash: str | None = None,
+    compliance_hash: str | None = None,
 ) -> CollectionResult:
     return CollectionResult(
         source=source,
@@ -64,11 +72,24 @@ def adapter_result(
         response_bytes=1024,
         retry_count=0,
         rate_limit_events=0,
-        failed_item_count=0,
         error_code=None if success else "request_failed",
         error_message=None,
         manifest_version=manifest_version,
         adapter_version=adapter_version,
+        termination_reason=(
+            TerminationReason.TARGET_REACHED
+            if success
+            else TerminationReason.PREREQUISITE_FAILED
+        ),
+        fetched_item_count=1 if success else 0,
+        processed_item_count=1 if success else 0,
+        accepted_item_count=1 if success else 0,
+        rejected_item_count=0,
+        segment_results=(
+            SegmentResult("repository", "example/project", target, 1 if success else 0),
+        ),
+        manifest_hash=manifest_hash or content_sha256({}),
+        compliance_hash=compliance_hash,
     )
 
 
@@ -96,6 +117,12 @@ class HealthyAdapter:
             run_id=run_id,
             manifest_version=manifest_version,
             target=target_valid_count,
+            manifest_hash=content_sha256(source_config),
+            compliance_hash=(
+                str(source_config["compliance_hash"])
+                if "compliance_hash" in source_config
+                else None
+            ),
         )
         return self.returned
 
@@ -152,9 +179,10 @@ def test_runner_passes_one_run_context_and_preserves_a_valid_result() -> None:
 
 
 def test_runner_isolates_adapter_exception_without_leaking_its_message() -> None:
+    source_config = {"repository": "example/project"}
     collection = collect_source(
         RaisingAdapter(),
-        {},
+        source_config,
         10,
         manifest_version="smoke-1.0.0",
         run_id="run-failed",
@@ -166,6 +194,8 @@ def test_runner_isolates_adapter_exception_without_leaking_its_message() -> None
     assert collection.error_code == "runner_adapter_exception"
     assert collection.error_message == "Unexpected adapter failure"
     assert "secret" not in str(collection.to_dict())
+    assert collection.manifest_hash == content_sha256(source_config)
+    assert collection.compliance_hash is None
     assert operational_metrics_observed(collection) is False
 
 
@@ -240,6 +270,14 @@ def test_runner_rejects_adapter_result_using_reserved_runner_error_code() -> Non
             "runner_manifest_version_mismatch",
         ),
         (adapter_result(target=2, success=False), "runner_target_mismatch"),
+        (
+            adapter_result(manifest_hash="f" * 64, success=False),
+            "runner_manifest_hash_mismatch",
+        ),
+        (
+            adapter_result(compliance_hash="f" * 64, success=False),
+            "runner_compliance_hash_mismatch",
+        ),
     ],
 )
 def test_runner_converts_each_return_contract_violation_to_a_distinct_failure(

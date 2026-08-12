@@ -11,12 +11,50 @@ from src.source_spike.raw_items import validate_raw_source_item
 
 
 _ERROR_CODE = re.compile(r"^[a-z][a-z0-9_]{0,63}$")
+_SHA256 = re.compile(r"^[a-f0-9]{64}$")
 
 
 class CollectionStatus(StrEnum):
     SUCCESS = "success"
     PARTIAL = "partial"
     FAILED = "failed"
+
+
+class TerminationReason(StrEnum):
+    TARGET_REACHED = "target_reached"
+    REQUEST_BUDGET_EXHAUSTED = "request_budget_exhausted"
+    PAGE_BUDGET_EXHAUSTED = "page_budget_exhausted"
+    REPOSITORY_QUOTA_UNREACHABLE = "repository_quota_unreachable"
+    SOURCE_EXHAUSTED = "source_exhausted"
+    PREREQUISITE_FAILED = "prerequisite_failed"
+
+
+@dataclass(frozen=True)
+class SegmentResult:
+    segment_type: str
+    segment_id: str
+    quota: int
+    accepted_item_count: int
+
+    def __post_init__(self) -> None:
+        _validate_non_empty_string(self.segment_type, field="segment_type")
+        _validate_non_empty_string(self.segment_id, field="segment_id")
+        for field, value in (
+            ("quota", self.quota),
+            ("accepted_item_count", self.accepted_item_count),
+        ):
+            if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                raise ValueError(f"{field} must be a non-negative integer")
+        if self.accepted_item_count > self.quota:
+            raise ValueError("accepted_item_count cannot exceed segment quota")
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "segment_type": self.segment_type,
+            "segment_id": self.segment_id,
+            "quota": self.quota,
+            "accepted_item_count": self.accepted_item_count,
+        }
 
 
 def _freeze(value: object) -> object:
@@ -87,11 +125,18 @@ class CollectionResult:
     response_bytes: int
     retry_count: int
     rate_limit_events: int
-    failed_item_count: int
     error_code: str | None
     error_message: str | None
     manifest_version: str
     adapter_version: str
+    termination_reason: TerminationReason
+    fetched_item_count: int
+    processed_item_count: int
+    accepted_item_count: int
+    rejected_item_count: int
+    segment_results: Sequence[SegmentResult]
+    manifest_hash: str
+    compliance_hash: str | None
 
     def __post_init__(self) -> None:
         for field, value in (
@@ -122,7 +167,10 @@ class CollectionResult:
             ("response_bytes", self.response_bytes),
             ("retry_count", self.retry_count),
             ("rate_limit_events", self.rate_limit_events),
-            ("failed_item_count", self.failed_item_count),
+            ("fetched_item_count", self.fetched_item_count),
+            ("processed_item_count", self.processed_item_count),
+            ("accepted_item_count", self.accepted_item_count),
+            ("rejected_item_count", self.rejected_item_count),
         )
         for field, value in metric_values:
             if isinstance(value, bool) or not isinstance(value, int) or value < 0:
@@ -131,6 +179,7 @@ class CollectionResult:
             raise ValueError("retry_count cannot exceed request_count minus one")
 
         normalized_status = CollectionStatus(self.status)
+        normalized_termination = TerminationReason(self.termination_reason)
         item_payloads: list[Mapping[str, object]] = []
         for index, item in enumerate(self.items):
             if not isinstance(item, Mapping):
@@ -154,15 +203,61 @@ class CollectionResult:
         normalized_invalid_items = tuple(self.invalid_items)
         if any(not isinstance(item, InvalidItem) for item in normalized_invalid_items):
             raise ValueError("invalid_items must contain InvalidItem values")
-        if self.failed_item_count != len(normalized_invalid_items):
-            raise ValueError("failed_item_count must equal len(invalid_items)")
-
         item_count = len(item_payloads)
+        if self.accepted_item_count != item_count:
+            raise ValueError("accepted_item_count must equal len(items)")
+        if self.rejected_item_count != len(normalized_invalid_items):
+            raise ValueError("rejected_item_count must equal len(invalid_items)")
+        if self.processed_item_count != self.accepted_item_count + self.rejected_item_count:
+            raise ValueError("processed_item_count must equal accepted plus rejected counts")
+        if self.processed_item_count > self.fetched_item_count:
+            raise ValueError("processed_item_count cannot exceed fetched_item_count")
+        if self.accepted_item_count > self.target_valid_count:
+            raise ValueError("accepted_item_count cannot exceed target_valid_count")
+
+        normalized_segments = tuple(self.segment_results)
+        if not normalized_segments or any(
+            not isinstance(segment, SegmentResult) for segment in normalized_segments
+        ):
+            raise ValueError("segment_results must contain SegmentResult values")
+        segment_keys = [
+            (segment.segment_type, segment.segment_id) for segment in normalized_segments
+        ]
+        if len(segment_keys) != len(set(segment_keys)):
+            raise ValueError("segment_results must be unique")
+        if sum(segment.accepted_item_count for segment in normalized_segments) != item_count:
+            raise ValueError("segment accepted counts must equal accepted_item_count")
+
+        if not isinstance(self.manifest_hash, str) or not _SHA256.fullmatch(
+            self.manifest_hash
+        ):
+            raise ValueError("manifest_hash must be a lowercase SHA-256 hex digest")
+        if self.compliance_hash is not None and (
+            not isinstance(self.compliance_hash, str)
+            or not _SHA256.fullmatch(self.compliance_hash)
+        ):
+            raise ValueError(
+                "compliance_hash must be null or a lowercase SHA-256 hex digest"
+            )
+
+        quotas_met = all(
+            segment.accepted_item_count == segment.quota
+            for segment in normalized_segments
+        )
+        target_met = item_count == self.target_valid_count
+        if (
+            normalized_termination is TerminationReason.PREREQUISITE_FAILED
+            and item_count
+        ):
+            raise ValueError("prerequisite_failed results cannot retain accepted items")
         expected_status = (
             CollectionStatus.SUCCESS
-            if item_count >= self.target_valid_count
+            if target_met
+            and quotas_met
+            and normalized_termination is TerminationReason.TARGET_REACHED
             else CollectionStatus.PARTIAL
             if item_count > 0
+            and normalized_termination is not TerminationReason.PREREQUISITE_FAILED
             else CollectionStatus.FAILED
         )
         if normalized_status is not expected_status:
@@ -179,10 +274,11 @@ class CollectionResult:
                 or not 1 <= len(self.error_message) <= 500
             ):
                 raise ValueError("error_message must contain between 1 and 500 characters")
-
         object.__setattr__(self, "status", normalized_status)
+        object.__setattr__(self, "termination_reason", normalized_termination)
         object.__setattr__(self, "items", tuple(_freeze(item) for item in item_payloads))
         object.__setattr__(self, "invalid_items", normalized_invalid_items)
+        object.__setattr__(self, "segment_results", normalized_segments)
 
     def replace(self, **changes: object) -> CollectionResult:
         return replace(self, **changes)
@@ -201,11 +297,19 @@ class CollectionResult:
             "response_bytes": self.response_bytes,
             "retry_count": self.retry_count,
             "rate_limit_events": self.rate_limit_events,
-            "failed_item_count": self.failed_item_count,
+            "failed_item_count": self.rejected_item_count,
             "error_code": self.error_code,
             "error_message": self.error_message,
             "manifest_version": self.manifest_version,
             "adapter_version": self.adapter_version,
+            "termination_reason": self.termination_reason.value,
+            "fetched_item_count": self.fetched_item_count,
+            "processed_item_count": self.processed_item_count,
+            "accepted_item_count": self.accepted_item_count,
+            "rejected_item_count": self.rejected_item_count,
+            "segment_results": [segment.to_dict() for segment in self.segment_results],
+            "manifest_hash": self.manifest_hash,
+            "compliance_hash": self.compliance_hash,
         }
 
 

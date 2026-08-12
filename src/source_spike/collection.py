@@ -9,8 +9,11 @@ from uuid import uuid4
 from src.source_spike.adapters.base import (
     CollectionResult,
     CollectionStatus,
+    SegmentResult,
     SourceAdapter,
+    TerminationReason,
 )
+from src.source_spike.protocol import content_sha256
 
 
 _FALLBACK_MESSAGES = {
@@ -25,6 +28,12 @@ _FALLBACK_MESSAGES = {
         "Adapter result manifest version does not match"
     ),
     "runner_target_mismatch": "Adapter result target does not match the collection target",
+    "runner_manifest_hash_mismatch": (
+        "Adapter result manifest hash does not match the collection manifest"
+    ),
+    "runner_compliance_hash_mismatch": (
+        "Adapter result compliance hash does not match the collection configuration"
+    ),
 }
 _FALLBACK_ERROR_CODES = frozenset(_FALLBACK_MESSAGES)
 
@@ -68,6 +77,8 @@ def _failed_result(
     started_at: datetime,
     clock: Callable[[], datetime],
     error_code: str,
+    manifest_hash: str,
+    compliance_hash: str | None,
 ) -> CollectionResult:
     return CollectionResult(
         source=source,
@@ -82,11 +93,18 @@ def _failed_result(
         response_bytes=0,
         retry_count=0,
         rate_limit_events=0,
-        failed_item_count=0,
         error_code=error_code,
         error_message=_FALLBACK_MESSAGES[error_code],
         manifest_version=manifest_version,
         adapter_version=adapter_version,
+        termination_reason=TerminationReason.PREREQUISITE_FAILED,
+        fetched_item_count=0,
+        processed_item_count=0,
+        accepted_item_count=0,
+        rejected_item_count=0,
+        segment_results=(SegmentResult("source", source, target_valid_count, 0),),
+        manifest_hash=manifest_hash,
+        compliance_hash=compliance_hash,
     )
 
 
@@ -111,6 +129,15 @@ def collect_source(
         else str(uuid4())
     )
     config_copy = _copy_source_config(source_config)
+    manifest_hash = content_sha256(config_copy)
+    configured_compliance_hash = config_copy.get("compliance_hash")
+    compliance_hash = (
+        configured_compliance_hash
+        if isinstance(configured_compliance_hash, str)
+        and len(configured_compliance_hash) == 64
+        and all(character in "0123456789abcdef" for character in configured_compliance_hash)
+        else None
+    )
     started_at = clock()
 
     try:
@@ -130,6 +157,8 @@ def collect_source(
             started_at=started_at,
             clock=clock,
             error_code="runner_adapter_exception",
+            manifest_hash=manifest_hash,
+            compliance_hash=compliance_hash,
         )
 
     error_code: str | None = None
@@ -147,6 +176,10 @@ def collect_source(
         error_code = "runner_manifest_version_mismatch"
     elif result.target_valid_count != target:
         error_code = "runner_target_mismatch"
+    elif result.manifest_hash != manifest_hash:
+        error_code = "runner_manifest_hash_mismatch"
+    elif result.compliance_hash != compliance_hash:
+        error_code = "runner_compliance_hash_mismatch"
 
     if error_code is not None:
         return _failed_result(
@@ -158,6 +191,8 @@ def collect_source(
             started_at=started_at,
             clock=clock,
             error_code=error_code,
+            manifest_hash=manifest_hash,
+            compliance_hash=compliance_hash,
         )
     return result
 

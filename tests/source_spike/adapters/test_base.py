@@ -13,6 +13,8 @@ from src.source_spike.adapters.base import (
     CollectionResult,
     CollectionStatus,
     InvalidItem,
+    SegmentResult,
+    TerminationReason,
 )
 from src.source_spike.raw_items import canonical_text_fingerprint
 
@@ -72,10 +74,20 @@ def result(
     target: int = 1,
     status: CollectionStatus = CollectionStatus.SUCCESS,
     invalid_items: list[InvalidItem] | None = None,
-    failed_item_count: int = 0,
     error_code: str | None = None,
     error_message: str | None = None,
 ) -> CollectionResult:
+    resolved_items = items if items is not None else [raw_item(1)]
+    resolved_invalid = invalid_items or []
+    accepted_count = len(resolved_items)
+    rejected_count = len(resolved_invalid)
+    termination_reason = (
+        TerminationReason.TARGET_REACHED
+        if status is CollectionStatus.SUCCESS
+        else TerminationReason.PAGE_BUDGET_EXHAUSTED
+        if status is CollectionStatus.PARTIAL
+        else TerminationReason.PREREQUISITE_FAILED
+    )
     return CollectionResult(
         source="github",
         run_id="run-1",
@@ -83,17 +95,26 @@ def result(
         finished_at=NOW + timedelta(seconds=1),
         target_valid_count=target,
         status=status,
-        items=items if items is not None else [raw_item(1)],
-        invalid_items=invalid_items or [],
+        items=resolved_items,
+        invalid_items=resolved_invalid,
         request_count=1,
         response_bytes=2048,
         retry_count=0,
         rate_limit_events=0,
-        failed_item_count=failed_item_count,
         error_code=error_code,
         error_message=error_message,
         manifest_version="smoke-1.0.0",
         adapter_version="1.0.0",
+        termination_reason=termination_reason,
+        fetched_item_count=accepted_count + rejected_count,
+        processed_item_count=accepted_count + rejected_count,
+        accepted_item_count=accepted_count,
+        rejected_item_count=rejected_count,
+        segment_results=(
+            SegmentResult("repository", "example/project", target, accepted_count),
+        ),
+        manifest_hash="a" * 64,
+        compliance_hash="b" * 64,
     )
 
 
@@ -105,6 +126,35 @@ def test_serialized_result_satisfies_schema_and_uses_utc_strings() -> None:
     assert payload["started_at"].endswith("Z")
     assert payload["error_code"] is None
     assert payload["error_message"] is None
+    assert payload["termination_reason"] == "target_reached"
+    assert payload["failed_item_count"] == payload["rejected_item_count"]
+
+
+def test_result_enforces_source_neutral_segment_and_metric_invariants() -> None:
+    collection = result()
+
+    assert collection.segment_results == (
+        SegmentResult("repository", "example/project", 1, 1),
+    )
+    with pytest.raises(ValueError, match="processed_item_count"):
+        collection.replace(processed_item_count=2)
+    with pytest.raises(ValueError, match="segment accepted counts"):
+        collection.replace(
+            segment_results=(SegmentResult("repository", "example/project", 1, 0),)
+        )
+
+
+def test_status_requires_target_and_every_segment_quota() -> None:
+    with pytest.raises(ValueError, match="status must be partial"):
+        result().replace(
+            target_valid_count=2,
+            segment_results=(SegmentResult("repository", "example/project", 2, 1),),
+        )
+
+
+def test_prerequisite_failure_cannot_retain_accepted_items() -> None:
+    with pytest.raises(ValueError, match="prerequisite_failed"):
+        result().replace(termination_reason=TerminationReason.PREREQUISITE_FAILED)
 
 
 def test_schema_registry_rejects_an_invalid_nested_raw_item() -> None:
@@ -162,9 +212,6 @@ def test_result_rejects_status_time_metric_and_error_inconsistency() -> None:
     with pytest.raises(ValueError, match="retry_count"):
         result().replace(retry_count=1)
 
-    with pytest.raises(ValueError, match="failed_item_count"):
-        result().replace(failed_item_count=1)
-
     with pytest.raises(ValueError, match="success results cannot contain errors"):
         result(error_code="unexpected_error")
 
@@ -196,7 +243,6 @@ def test_invalid_items_are_bounded_and_counted() -> None:
     )
     collection = result(
         invalid_items=[invalid],
-        failed_item_count=1,
     )
 
     assert collection.to_dict()["invalid_items"] == [

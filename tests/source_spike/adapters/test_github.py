@@ -7,7 +7,13 @@ from pathlib import Path
 import pytest
 
 from src.source_spike.adapters.base import InvalidItem
-from src.source_spike.adapters.github import GitHubPage, parse_github_issue
+from src.source_spike.adapters.base import CollectionStatus, TerminationReason
+from src.source_spike.adapters.github import (
+    GitHubFixtureAdapter,
+    GitHubPage,
+    parse_github_issue,
+)
+from src.source_spike.protocol import content_sha256
 from src.source_spike.raw_items import author_hash, validate_raw_source_item
 
 
@@ -169,3 +175,221 @@ def test_github_page_rejects_invalid_transport_values(
 
     with pytest.raises(ValueError, match=message):
         GitHubPage(**arguments)
+
+
+class FixtureTransport:
+    def __init__(self, pages: dict[tuple[str, int], GitHubPage]) -> None:
+        self.pages = pages
+        self.calls: list[tuple[str, int]] = []
+
+    def fetch_issues(self, repository: str, *, page: int, **_: object) -> GitHubPage:
+        self.calls.append((repository, page))
+        return self.pages.get((repository, page), GitHubPage((), 0, False))
+
+
+def issue(index: int, repository: str) -> dict[str, object]:
+    payload = fixtures()[0]
+    payload.update(
+        id=index,
+        number=index,
+        html_url=f"https://github.com/{repository}/issues/{index}",
+        title=f"Workflow failure {index}",
+        body=f"Repeated concrete workflow friction number {index} causes measurable delays for operators.",
+        user={"id": index},
+    )
+    return payload
+
+
+def smoke_manifest() -> tuple[dict[str, object], dict[str, object]]:
+    compliance = {"source": "github", "decision": "conditional"}
+    manifest: dict[str, object] = {
+        "manifest_version": "0.1.0",
+        "source": "github",
+        "adapter_version": "0.1.0",
+        "target_valid_records": 10,
+        "max_items_per_author": 2,
+        "repositories": [
+            {"name": "microsoft/vscode", "quota": 5},
+            {"name": "python/cpython", "quota": 5},
+        ],
+        "request": {
+            "endpoint": "/repos/{owner}/{repo}/issues",
+            "state": "open",
+            "sort": "created",
+            "direction": "desc",
+            "per_page": 30,
+            "max_pages_total": 4,
+            "max_requests": 8,
+        },
+        "retry": {"max_retries": 2, "base_backoff_seconds": 1, "max_backoff_seconds": 8},
+        "compliance_ref": "compliance/github.json",
+        "compliance_hash": content_sha256(compliance),
+        "compliance_decision": "conditional",
+    }
+    return manifest, compliance
+
+
+def test_fixture_collection_reaches_global_and_repository_quotas() -> None:
+    manifest, compliance = smoke_manifest()
+    pages = {
+        (repository, 1): GitHubPage(
+            [issue(offset + index, repository) for index in range(6)], 1000, False
+        )
+        for repository, offset in (("microsoft/vscode", 1000), ("python/cpython", 2000))
+    }
+    adapter = GitHubFixtureAdapter(
+        FixtureTransport(pages), author_secret=SECRET, compliance_record=compliance,
+        clock=lambda: COLLECTED_AT,
+    )
+
+    result = adapter.collect(
+        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+    )
+
+    assert result.status is CollectionStatus.SUCCESS
+    assert result.termination_reason is TerminationReason.TARGET_REACHED
+    assert result.accepted_item_count == 10
+    assert [segment.accepted_item_count for segment in result.segment_results] == [5, 5]
+    assert result.fetched_item_count == 12
+    assert result.processed_item_count == 10
+    assert result.invalid_items == ()
+    assert result.manifest_hash == content_sha256(manifest)
+    assert result.compliance_hash == content_sha256(compliance)
+
+
+def test_fixture_collection_returns_partial_when_repository_is_exhausted() -> None:
+    manifest, compliance = smoke_manifest()
+    pages = {
+        ("microsoft/vscode", 1): GitHubPage(
+            [issue(1000 + index, "microsoft/vscode") for index in range(3)], 500, False
+        )
+    }
+    adapter = GitHubFixtureAdapter(
+        FixtureTransport(pages), author_secret=SECRET, compliance_record=compliance,
+        clock=lambda: COLLECTED_AT,
+    )
+
+    result = adapter.collect(
+        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+    )
+
+    assert result.status is CollectionStatus.PARTIAL
+    assert result.termination_reason is TerminationReason.REPOSITORY_QUOTA_UNREACHABLE
+    assert result.accepted_item_count == 3
+
+
+def test_fixture_collection_fails_before_fetch_on_invalid_prerequisite() -> None:
+    manifest, compliance = smoke_manifest()
+    manifest["compliance_hash"] = "0" * 64
+    transport = FixtureTransport({})
+    adapter = GitHubFixtureAdapter(
+        transport, author_secret=SECRET, compliance_record=compliance,
+        clock=lambda: COLLECTED_AT,
+    )
+
+    result = adapter.collect(
+        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+    )
+
+    assert result.status is CollectionStatus.FAILED
+    assert result.termination_reason is TerminationReason.PREREQUISITE_FAILED
+    assert result.accepted_item_count == 0
+    assert transport.calls == []
+
+
+@pytest.mark.parametrize("failure", ["empty_repository", "short_author_secret"])
+def test_fixture_collection_rejects_all_prerequisites_before_fetch(failure: str) -> None:
+    manifest, compliance = smoke_manifest()
+    secret = SECRET
+    if failure == "empty_repository":
+        manifest["repositories"][0]["name"] = ""  # type: ignore[index]
+    else:
+        secret = b"short"
+    transport = FixtureTransport({})
+    adapter = GitHubFixtureAdapter(
+        transport, author_secret=secret, compliance_record=compliance,
+        clock=lambda: COLLECTED_AT,
+    )
+
+    result = adapter.collect(
+        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+    )
+
+    assert result.status is CollectionStatus.FAILED
+    assert result.termination_reason is TerminationReason.PREREQUISITE_FAILED
+    assert transport.calls == []
+
+
+def test_fixture_collection_records_the_first_page_budget_terminal_event() -> None:
+    manifest, compliance = smoke_manifest()
+    manifest["request"]["max_pages_total"] = 1  # type: ignore[index]
+    pages = {
+        ("microsoft/vscode", 1): GitHubPage(
+            [issue(1000, "microsoft/vscode")], 200, True
+        )
+    }
+    adapter = GitHubFixtureAdapter(
+        FixtureTransport(pages), author_secret=SECRET, compliance_record=compliance,
+        clock=lambda: COLLECTED_AT,
+    )
+
+    result = adapter.collect(
+        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+    )
+
+    assert result.status is CollectionStatus.PARTIAL
+    assert result.termination_reason is TerminationReason.PAGE_BUDGET_EXHAUSTED
+    assert result.request_count == 1
+    assert result.accepted_item_count == 1
+
+
+def test_fixture_collection_records_request_budget_before_another_fetch() -> None:
+    manifest, compliance = smoke_manifest()
+    manifest["request"]["max_requests"] = 1  # type: ignore[index]
+    manifest["retry"]["max_retries"] = 0  # type: ignore[index]
+    pages = {
+        ("microsoft/vscode", 1): GitHubPage(
+            [issue(1000, "microsoft/vscode")], 200, True
+        )
+    }
+    transport = FixtureTransport(pages)
+    adapter = GitHubFixtureAdapter(
+        transport, author_secret=SECRET, compliance_record=compliance,
+        clock=lambda: COLLECTED_AT,
+    )
+
+    result = adapter.collect(
+        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+    )
+
+    assert result.termination_reason is TerminationReason.REQUEST_BUDGET_EXHAUSTED
+    assert result.request_count == 1
+    assert transport.calls == [("microsoft/vscode", 1)]
+
+
+def test_fixture_collection_preserves_parser_then_selector_rejection_order() -> None:
+    manifest, compliance = smoke_manifest()
+    pull_request = issue(1000, "microsoft/vscode")
+    pull_request["pull_request"] = {"url": "https://api.github.test/pr/1"}
+    accepted = issue(1001, "microsoft/vscode")
+    duplicate_text = issue(1002, "microsoft/vscode")
+    duplicate_text["title"] = accepted["title"]
+    duplicate_text["body"] = accepted["body"]
+    pages = {
+        ("microsoft/vscode", 1): GitHubPage(
+            [pull_request, accepted, duplicate_text], 300, False
+        )
+    }
+    adapter = GitHubFixtureAdapter(
+        FixtureTransport(pages), author_secret=SECRET, compliance_record=compliance,
+        clock=lambda: COLLECTED_AT,
+    )
+
+    result = adapter.collect(
+        manifest, 10, run_id="run-fixture", manifest_version="0.1.0"
+    )
+
+    assert [item.error_code for item in result.invalid_items] == [
+        "pr_not_issue",
+        "duplicate_text",
+    ]
