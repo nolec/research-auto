@@ -23,16 +23,16 @@ Freeze the model, prompts, policy, and thresholds before the final evaluation. V
 
 Goal: evaluate five structurally different public sources with at least 100 normalized records per source, then select three V1 sources using measured evidence quality rather than intuition.
 
-Primary progress metric: **0 / 500 valid real observations**
+Primary progress metric: **100 / 500 valid real observations**
 
 | Source | Valid real observations | Target |
 |---|---:|---:|
-| GitHub | 0 | 100 |
+| GitHub | 100 | 100 |
 | Stack Exchange | 0 | 100 |
 | Steam | 0 | 100 |
 | YouTube | 0 | 100 |
 | Reddit | 0 | 100 |
-| **Total** | **0** | **500** |
+| **Total** | **100** | **500** |
 
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
 
@@ -81,27 +81,37 @@ M2-A fixture status: **10 / 10 valid fixture records — qualified**
 
 M2-A real smoke status: **10 / 10 valid real GitHub records — qualified**
 
-Latest qualification verification: **193 tests passed**, collection-result schema and
-TDD gate passed, and the sanitized real-smoke report retained no raw text, username,
-token, or full API payload.
+Latest qualification verification: **210 tests passed**, collection-result schema and
+TDD gate passed, and the sanitized artifacts retained no raw identity, token, or full
+API payload. The project-local author-hash secret is explicitly initialized, Git-ignored,
+stored with mode `0600`, and rejected if it becomes a symlink or non-regular file.
 
 Current real-data progress:
 
 - GitHub smoke qualification: **10 / 10**
-- GitHub analysis-ready observations: **0 / 100**
-- Source Spike analysis-ready observations: **0 / 500**
+- GitHub analysis-ready observations: **100 / 100 — qualified**
+- Source Spike analysis-ready observations: **100 / 500**
 
-Current next action: freeze the GitHub 100-record analysis manifest and collect the
-first analysis-ready source sample without changing the qualified smoke semantics.
+GitHub analysis qualification uses a frozen `published_before` boundary and four
+repository archetypes at 25 records each. The local-only run bundle contains a
+dataset hash, privacy qualification, and a deterministic 20-item labeling sample
+with 10 development, 10 holdout, and five double-review assignments.
+
+Current next action: begin GitHub human labeling while implementing the second
+source adapter; the qualified GitHub dataset must not be retuned or silently replaced.
 
 Adapter implementation sequence:
 
-`fixture parsing ✓ → pagination/deduplication test ✓ → real 10-item smoke ✓ → 100 valid items`
+`fixture parsing ✓ → pagination/deduplication test ✓ → real 10-item smoke ✓ → 100 valid items ✓`
 
 Do not wait for all five adapters to be complete before the first real smoke test. The main unknown is real source behavior, not the interface architecture.
 
 ### M2-B — 500 Raw Observations
 
+- [x] Freeze the GitHub 100-record analysis manifest and time boundary
+- [x] Collect 100 valid GitHub records across four 25-record archetype strata
+- [x] Produce a privacy-qualified, hash-addressed local run bundle
+- [x] Produce the stratified 20-item GitHub labeling assignment
 - [ ] Freeze compliance decisions for the remaining four candidate sources
 - [ ] Implement five source adapters with fixtures
 - [ ] Add a rerunnable collection CLI and raw-fixture persistence

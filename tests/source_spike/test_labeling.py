@@ -9,6 +9,7 @@ from jsonschema import Draft202012Validator
 
 from src.contracts.validation import FORMAT_CHECKER
 from src.source_spike.labeling import create_labeling_assignments
+from src.source_spike.labeling import create_stratified_labeling_assignments
 
 
 ROOT = Path(__file__).resolve().parents[2]

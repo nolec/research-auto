@@ -105,11 +105,15 @@ class GitHubIssueAdapter:
         author_secret: bytes,
         compliance_record: Mapping[str, object],
         clock: Callable[[], datetime] = lambda: datetime.now(timezone.utc),
+        manifest_validator: Callable[
+            [Mapping[str, object], Mapping[str, object]], list[str]
+        ] = validate_github_smoke_manifest,
     ) -> None:
         self._transport = transport
         self._author_secret = author_secret
         self._compliance_record = dict(compliance_record)
         self._clock = clock
+        self._manifest_validator = manifest_validator
 
     def collect(
         self,
@@ -129,7 +133,7 @@ class GitHubIssueAdapter:
             and all(isinstance(value, Mapping) for value in repositories_value)
             else []
         )
-        prerequisite_errors = validate_github_smoke_manifest(
+        prerequisite_errors = self._manifest_validator(
             source_config, self._compliance_record
         )
         if source_config.get("source") != self.source:
@@ -177,6 +181,12 @@ class GitHubIssueAdapter:
         rate_limit_events = response_bytes = fetched = processed = pages = 0
         transport_events: list[Mapping[str, object]] = []
         termination: TerminationReason | None = None
+        cutoff_value = source_config.get("published_before")
+        cutoff = (
+            datetime.fromisoformat(str(cutoff_value).replace("Z", "+00:00"))
+            if cutoff_value is not None
+            else None
+        )
 
         for repository_config in repositories:
             repository = str(repository_config["name"])
@@ -268,6 +278,19 @@ class GitHubIssueAdapter:
                         rejected.append(parsed.rejection)
                         continue
                     assert parsed.item is not None
+                    if cutoff is not None:
+                        published = datetime.fromisoformat(
+                            str(parsed.item["published_at"]).replace("Z", "+00:00")
+                        )
+                        if published >= cutoff:
+                            rejected.append(
+                                InvalidItem(
+                                    str(parsed.item["source_item_id"]),
+                                    "after_cutoff",
+                                    ("published_at is not before the frozen cutoff",),
+                                )
+                            )
+                            continue
                     selection_rejection = selector.add(parsed.item)
                     if selection_rejection is not None:
                         source_item_id = str(parsed.item["source_item_id"])

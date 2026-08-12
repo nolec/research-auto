@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/github-analysis-manifest.schema.json",
+  "title": "GitHub Analysis Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "source", "adapter_version", "target_valid_records", "max_items_per_author", "published_before", "random_seed", "repositories", "request", "retry", "compliance_ref", "compliance_hash", "compliance_decision"],
+  "properties": {
+    "manifest_version": {"const": "1.0.0"},
+    "source": {"const": "github"},
+    "adapter_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "target_valid_records": {"const": 100},
+    "max_items_per_author": {"const": 2},
+    "published_before": {"type": "string", "format": "date-time"},
+    "random_seed": {"const": 20260812},
+    "repositories": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["archetype", "name", "quota"],
+        "properties": {
+          "archetype": {"enum": ["end_user_application", "language_runtime", "infrastructure_platform", "data_workflow_library"]},
+          "name": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+          "quota": {"const": 25}
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["endpoint", "state", "sort", "direction", "per_page", "max_pages_total", "max_requests", "max_http_attempts", "request_timeout_seconds", "max_total_elapsed_seconds", "max_rate_limit_wait_seconds"],
+      "properties": {
+        "endpoint": {"const": "/repos/{owner}/{repo}/issues"},
+        "state": {"const": "all"},
+        "sort": {"const": "created"},
+        "direction": {"const": "desc"},
+        "per_page": {"type": "integer", "minimum": 1, "maximum": 100},
+        "max_pages_total": {"type": "integer", "minimum": 4},
+        "max_requests": {"type": "integer", "minimum": 4},
+        "max_http_attempts": {"type": "integer", "minimum": 4},
+        "request_timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "max_total_elapsed_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "max_rate_limit_wait_seconds": {"type": "number", "minimum": 0}
+      }
+    },
+    "retry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_retries", "base_backoff_seconds", "max_backoff_seconds"],
+      "properties": {
+        "max_retries": {"type": "integer", "minimum": 0},
+        "base_backoff_seconds": {"type": "number", "minimum": 0},
+        "max_backoff_seconds": {"type": "number", "minimum": 0}
+      }
+    },
+    "compliance_ref": {"const": "compliance/github.json"},
+    "compliance_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "compliance_decision": {"const": "conditional"}
+  }
+}

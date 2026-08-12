@@ -422,3 +422,48 @@ def test_zero_attempt_deadline_does_not_count_a_logical_request() -> None:
     assert result.termination_reason is TerminationReason.SMOKE_DEADLINE_EXHAUSTED
     assert result.request_count == 0
     assert result.http_attempt_count == 0
+
+
+def test_adapter_uses_injected_manifest_validator() -> None:
+    manifest, compliance = smoke_manifest()
+    calls: list[str] = []
+
+    def validator(_manifest, _compliance):
+        calls.append("validated")
+        return ["analysis profile rejected"]
+
+    adapter = GitHubFixtureAdapter(
+        FixtureTransport({}), author_secret=SECRET,
+        compliance_record=compliance, clock=lambda: COLLECTED_AT,
+        manifest_validator=validator,
+    )
+
+    result = adapter.collect(
+        manifest, 10, run_id="run-fixture", manifest_version="0.2.0"
+    )
+
+    assert calls == ["validated"]
+    assert result.termination_reason is TerminationReason.PREREQUISITE_FAILED
+    assert result.error_message == "analysis profile rejected"
+
+
+def test_analysis_profile_rejects_items_after_frozen_cutoff() -> None:
+    manifest, compliance = smoke_manifest()
+    manifest["published_before"] = "2026-08-12T00:00:00Z"
+    later = issue(999, "microsoft/vscode")
+    later["created_at"] = "2026-08-12T00:00:01Z"
+    pages = {
+        ("microsoft/vscode", 1): GitHubPage([later], 100, False),
+    }
+    adapter = GitHubFixtureAdapter(
+        FixtureTransport(pages), author_secret=SECRET,
+        compliance_record=compliance, clock=lambda: COLLECTED_AT,
+        manifest_validator=lambda _manifest, _compliance: [],
+    )
+
+    result = adapter.collect(
+        manifest, 10, run_id="run-analysis", manifest_version="0.2.0"
+    )
+
+    assert result.accepted_item_count == 0
+    assert [item.error_code for item in result.invalid_items] == ["after_cutoff"]

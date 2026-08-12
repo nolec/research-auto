@@ -1,0 +1,36 @@
+{
+  "manifest_version": "1.0.0",
+  "source": "github",
+  "adapter_version": "0.2.0",
+  "target_valid_records": 100,
+  "max_items_per_author": 2,
+  "published_before": "2026-08-12T00:00:00Z",
+  "random_seed": 20260812,
+  "repositories": [
+    {"archetype": "end_user_application", "name": "microsoft/vscode", "quota": 25},
+    {"archetype": "language_runtime", "name": "python/cpython", "quota": 25},
+    {"archetype": "infrastructure_platform", "name": "kubernetes/kubernetes", "quota": 25},
+    {"archetype": "data_workflow_library", "name": "pandas-dev/pandas", "quota": 25}
+  ],
+  "request": {
+    "endpoint": "/repos/{owner}/{repo}/issues",
+    "state": "all",
+    "sort": "created",
+    "direction": "desc",
+    "per_page": 100,
+    "max_pages_total": 12,
+    "max_requests": 12,
+    "max_http_attempts": 24,
+    "request_timeout_seconds": 10,
+    "max_total_elapsed_seconds": 180,
+    "max_rate_limit_wait_seconds": 8
+  },
+  "retry": {
+    "max_retries": 2,
+    "base_backoff_seconds": 1,
+    "max_backoff_seconds": 8
+  },
+  "compliance_ref": "compliance/github.json",
+  "compliance_hash": "947a69c437b02e355f18f1be77babd0218a7f4edc7df77fd49f41480f2727470",
+  "compliance_decision": "conditional"
+}
