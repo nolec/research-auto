@@ -51,6 +51,7 @@ Completed foundation:
 - [x] Frozen GitHub 10-record smoke manifest and validation contract
 - [x] Privacy-safe GitHub Issue fixture parser and rejection reasons
 - [x] Run-scoped incremental deduplication and author-limit state
+- [x] Immutable GitHub fixture transport page and protocol contracts
 
 ### M2-A — GitHub First Real Data
 
@@ -63,7 +64,8 @@ Definition of done:
 - [x] Freeze repository quotas, selection limits, and run-level request budgets
 - [x] Add fixture-based GitHub Issue parsing and unknown-author policy tests
 - [x] Add run-scoped cross-page deduplication and author-limit primitives
-- [ ] Add fixture transport pagination, valid-count, budget, and rate-limit tests
+- [x] Define the immutable fixture transport page and request protocol
+- [ ] Add valid-count pagination, repository quota, budget, and rate-limit tests
 - [ ] Complete a separate real GitHub API smoke collection
 - [ ] Produce at least 10 valid real GitHub `RawSourceItem` records
 - [ ] Verify source URL, publication time, collection run, manifest, and adapter provenance
@@ -71,8 +73,8 @@ Definition of done:
 
 M2-A smoke status: **0 / 10 valid real GitHub records**
 
-Current next action: connect the parser and incremental selector through a fixture
-transport that paginates until repository quotas and the 10-item target are reached.
+Current next action: implement the GitHub adapter collection loop that consumes the
+fixture transport until repository quotas and the 10-item target are reached.
 
 Adapter implementation sequence:
 

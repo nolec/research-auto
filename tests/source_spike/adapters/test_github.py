@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from src.source_spike.adapters.base import InvalidItem
-from src.source_spike.adapters.github import parse_github_issue
+from src.source_spike.adapters.github import GitHubPage, parse_github_issue
 from src.source_spike.raw_items import author_hash, validate_raw_source_item
 
 
@@ -132,3 +132,40 @@ def test_parser_identifies_the_invalid_timestamp_field() -> None:
         "invalid_timestamp",
         ("updated_at must be a timezone-aware ISO 8601 timestamp",),
     )
+
+
+def test_github_page_is_isolated_from_input_and_output_mutation() -> None:
+    payload = fixtures()[0]
+    page = GitHubPage(items=[payload], response_bytes=2048, has_next=True)
+
+    payload["title"] = "mutated input"
+    first_items = page.to_items()
+    first_items[0]["title"] = "mutated output"
+
+    assert page.to_items()[0]["title"] == "  Search   results lose keyboard focus  "
+    assert page.response_bytes == 2048
+    assert page.has_next is True
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        ({"items": ["not-a-mapping"]}, "items"),
+        ({"response_bytes": -1}, "response_bytes"),
+        ({"response_bytes": True}, "response_bytes"),
+        ({"has_next": 1}, "has_next"),
+        ({"items": [{"value": float("nan")}]}, "JSON-compatible"),
+    ],
+)
+def test_github_page_rejects_invalid_transport_values(
+    kwargs: dict[str, object], message: str
+) -> None:
+    arguments: dict[str, object] = {
+        "items": [fixtures()[0]],
+        "response_bytes": 100,
+        "has_next": False,
+    }
+    arguments.update(kwargs)
+
+    with pytest.raises(ValueError, match=message):
+        GitHubPage(**arguments)

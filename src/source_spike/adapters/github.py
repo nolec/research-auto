@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Mapping
+from types import MappingProxyType
+from typing import Mapping, Protocol, Sequence, cast
 
 from src.source_spike.adapters.base import InvalidItem
 from src.source_spike.raw_items import (
@@ -11,6 +13,75 @@ from src.source_spike.raw_items import (
     normalize_text,
     validate_raw_source_item,
 )
+
+
+def _freeze_json(value: object) -> object:
+    if isinstance(value, Mapping):
+        return MappingProxyType(
+            {str(key): _freeze_json(nested) for key, nested in value.items()}
+        )
+    if isinstance(value, list):
+        return tuple(_freeze_json(nested) for nested in value)
+    return value
+
+
+def _thaw_json(value: object) -> object:
+    if isinstance(value, Mapping):
+        return {str(key): _thaw_json(nested) for key, nested in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_thaw_json(nested) for nested in value]
+    return value
+
+
+@dataclass(frozen=True)
+class GitHubPage:
+    items: Sequence[Mapping[str, object]]
+    response_bytes: int
+    has_next: bool
+
+    def __post_init__(self) -> None:
+        if any(not isinstance(item, Mapping) for item in self.items):
+            raise ValueError("items must contain mappings")
+        if (
+            isinstance(self.response_bytes, bool)
+            or not isinstance(self.response_bytes, int)
+            or self.response_bytes < 0
+        ):
+            raise ValueError("response_bytes must be a non-negative integer")
+        if not isinstance(self.has_next, bool):
+            raise ValueError("has_next must be a boolean")
+        try:
+            copied = json.loads(
+                json.dumps(self.items, ensure_ascii=False, allow_nan=False)
+            )
+        except (TypeError, ValueError) as error:
+            raise ValueError("items must be JSON-compatible") from error
+        object.__setattr__(
+            self,
+            "items",
+            tuple(cast(Mapping[str, object], _freeze_json(item)) for item in copied),
+        )
+
+    def to_items(self) -> list[dict[str, object]]:
+        return cast(
+            list[dict[str, object]],
+            json.loads(
+                json.dumps(_thaw_json(self.items), ensure_ascii=False, allow_nan=False)
+            ),
+        )
+
+
+class GitHubTransport(Protocol):
+    def fetch_issues(
+        self,
+        repository: str,
+        *,
+        page: int,
+        per_page: int,
+        state: str,
+        sort: str,
+        direction: str,
+    ) -> GitHubPage: ...
 
 
 @dataclass(frozen=True)
