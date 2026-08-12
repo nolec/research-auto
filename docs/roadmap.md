@@ -50,6 +50,7 @@ Completed foundation:
 - [x] Per-source runner failure isolation and provenance validation
 - [x] Frozen GitHub 10-record smoke manifest and validation contract
 - [x] Privacy-safe GitHub Issue fixture parser and rejection reasons
+- [x] Run-scoped incremental deduplication and author-limit state
 
 ### M2-A — GitHub First Real Data
 
@@ -61,7 +62,8 @@ Definition of done:
 - [x] Define the minimal adapter interface and isolated failure result
 - [x] Freeze repository quotas, selection limits, and run-level request budgets
 - [x] Add fixture-based GitHub Issue parsing and unknown-author policy tests
-- [ ] Add run-scoped pagination, deduplication, author-limit, and rate-limit tests
+- [x] Add run-scoped cross-page deduplication and author-limit primitives
+- [ ] Add fixture transport pagination, valid-count, budget, and rate-limit tests
 - [ ] Complete a separate real GitHub API smoke collection
 - [ ] Produce at least 10 valid real GitHub `RawSourceItem` records
 - [ ] Verify source URL, publication time, collection run, manifest, and adapter provenance
@@ -69,8 +71,8 @@ Definition of done:
 
 M2-A smoke status: **0 / 10 valid real GitHub records**
 
-Current next action: implement run-scoped pagination and incremental selection so
-cross-page duplicates and author limits are enforced until 10 valid items are reached.
+Current next action: connect the parser and incremental selector through a fixture
+transport that paginates until repository quotas and the 10-item target are reached.
 
 Adapter implementation sequence:
 

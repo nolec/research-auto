@@ -7,6 +7,7 @@ from jsonschema import Draft202012Validator
 
 from src.contracts.validation import FORMAT_CHECKER
 from src.source_spike.raw_items import (
+    IncrementalObservationSelector,
     author_hash,
     canonical_text_fingerprint,
     normalize_text,
@@ -268,6 +269,48 @@ def test_observation_selection_caps_each_author_at_two_items() -> None:
     assert [(entry.document_id, entry.reason) for entry in result.rejected] == [
         ("github:3", "author_quota_exceeded")
     ]
+
+
+def test_incremental_selector_keeps_duplicate_state_between_add_calls() -> None:
+    selector = IncrementalObservationSelector()
+    first = make_item("1")
+    duplicate_url = make_item("2", source_url=first["source_url"])
+
+    assert selector.add(first) is None
+    rejection = selector.add(duplicate_url)
+
+    assert rejection is not None
+    assert (rejection.index, rejection.document_id, rejection.reason) == (
+        1,
+        "github:2",
+        "duplicate_source_url",
+    )
+    assert [item["document_id"] for item in selector.selection().accepted] == [
+        "github:1"
+    ]
+
+
+def test_incremental_selector_keeps_author_quota_between_add_calls() -> None:
+    selector = IncrementalObservationSelector(max_items_per_author=2)
+    shared_author = "a" * 64
+    items = [
+        make_item(
+            str(index),
+            author_hash=shared_author,
+            text=f"Distinct incremental problem number {index} with sufficient evidence detail.",
+        )
+        for index in range(1, 4)
+    ]
+    for item in items:
+        item["text_fingerprint"] = canonical_text_fingerprint(item["text"])
+
+    assert selector.add(items[0]) is None
+    assert selector.add(items[1]) is None
+    rejection = selector.add(items[2])
+
+    assert rejection is not None
+    assert rejection.reason == "author_quota_exceeded"
+    assert [entry.index for entry in selector.selection().rejected] == [2]
 
 
 def test_observation_selection_preserves_every_duplicate_id_rejection() -> None:

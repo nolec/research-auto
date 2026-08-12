@@ -217,26 +217,29 @@ class ObservationRejection:
     errors: tuple[str, ...] = ()
 
 
-def select_observation_units(
-    items: Sequence[Mapping[str, object]], *, max_items_per_author: int = 2
-) -> ObservationSelection:
-    """Apply deterministic independence and duplicate limits in input order."""
-    if max_items_per_author < 1:
-        raise ValueError("max_items_per_author must be positive")
+class IncrementalObservationSelector:
+    """Apply observation independence rules while retaining state across pages."""
 
-    accepted: list[Mapping[str, object]] = []
-    rejected: list[ObservationRejection] = []
-    seen_document_ids: set[str] = set()
-    seen_urls: set[str] = set()
-    seen_fingerprints: set[str] = set()
-    seen_threads: set[tuple[str, str]] = set()
-    author_counts: Counter[tuple[str, str]] = Counter()
+    def __init__(self, *, max_items_per_author: int = 2) -> None:
+        if max_items_per_author < 1:
+            raise ValueError("max_items_per_author must be positive")
+        self._max_items_per_author = max_items_per_author
+        self._accepted: list[Mapping[str, object]] = []
+        self._rejected: list[ObservationRejection] = []
+        self._seen_document_ids: set[str] = set()
+        self._seen_urls: set[str] = set()
+        self._seen_fingerprints: set[str] = set()
+        self._seen_threads: set[tuple[str, str]] = set()
+        self._author_counts: Counter[tuple[str, str]] = Counter()
+        self._next_index = 0
 
-    for index, item in enumerate(items):
+    def add(self, item: Mapping[str, object]) -> ObservationRejection | None:
+        index = self._next_index
+        self._next_index += 1
         document_id = str(item.get("document_id", f"<missing:{index}>"))
         validation_errors = validate_raw_source_item(item)
         if validation_errors:
-            rejected.append(
+            return self._reject(
                 ObservationRejection(
                     index=index,
                     document_id=document_id,
@@ -244,7 +247,6 @@ def select_observation_units(
                     errors=tuple(validation_errors),
                 )
             )
-            continue
 
         source = str(item["source"])
         source_url = str(item["source_url"])
@@ -253,34 +255,56 @@ def select_observation_units(
         author_key = (source, str(item["author_hash"]))
 
         reason: str | None = None
-        if document_id in seen_document_ids:
+        if document_id in self._seen_document_ids:
             reason = "duplicate_document_id"
-        elif source_url in seen_urls:
+        elif source_url in self._seen_urls:
             reason = "duplicate_source_url"
-        elif fingerprint in seen_fingerprints:
+        elif fingerprint in self._seen_fingerprints:
             reason = "duplicate_text"
-        elif thread_key in seen_threads:
+        elif thread_key in self._seen_threads:
             reason = "duplicate_thread"
-        elif author_counts[author_key] >= max_items_per_author:
+        elif self._author_counts[author_key] >= self._max_items_per_author:
             reason = "author_quota_exceeded"
 
         if reason is not None:
-            rejected.append(
+            return self._reject(
                 ObservationRejection(
                     index=index,
                     document_id=document_id,
                     reason=reason,
                 )
             )
-            continue
 
-        accepted.append(
-            json.loads(json.dumps(item, ensure_ascii=False, allow_nan=False))
+        copied = json.loads(json.dumps(item, ensure_ascii=False, allow_nan=False))
+        self._accepted.append(copied)
+        self._seen_document_ids.add(document_id)
+        self._seen_urls.add(source_url)
+        self._seen_fingerprints.add(fingerprint)
+        self._seen_threads.add(thread_key)
+        self._author_counts[author_key] += 1
+        return None
+
+    def _reject(self, rejection: ObservationRejection) -> ObservationRejection:
+        self._rejected.append(rejection)
+        return rejection
+
+    def selection(self) -> ObservationSelection:
+        accepted = json.loads(
+            json.dumps(self._accepted, ensure_ascii=False, allow_nan=False)
         )
-        seen_document_ids.add(document_id)
-        seen_urls.add(source_url)
-        seen_fingerprints.add(fingerprint)
-        seen_threads.add(thread_key)
-        author_counts[author_key] += 1
+        return ObservationSelection(
+            accepted=accepted,
+            rejected=list(self._rejected),
+        )
 
-    return ObservationSelection(accepted=accepted, rejected=rejected)
+
+def select_observation_units(
+    items: Sequence[Mapping[str, object]], *, max_items_per_author: int = 2
+) -> ObservationSelection:
+    """Apply deterministic independence and duplicate limits in input order."""
+    selector = IncrementalObservationSelector(
+        max_items_per_author=max_items_per_author
+    )
+    for item in items:
+        selector.add(item)
+    return selector.selection()
