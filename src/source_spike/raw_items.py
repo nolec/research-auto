@@ -42,7 +42,7 @@ _FORBIDDEN_IDENTITY_KEYS = {
 }
 _ALLOWED_METADATA_PATHS = {
     "github": {"labels", "locked", "state"},
-    "stackexchange": {"accepted_answer_id", "closed_reason", "is_answered", "tags"},
+    "stackexchange": {"accepted_answer_id", "closed_reason", "content_license", "is_answered", "tags"},
     "steam": {
         "playtime_forever",
         "received_for_free",

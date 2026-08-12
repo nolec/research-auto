@@ -42,6 +42,8 @@ class TerminationReason(StrEnum):
     TRANSPORT_ERROR = "transport_error"
     RATE_LIMIT_EXHAUSTED = "rate_limit_exhausted"
     SMOKE_DEADLINE_EXHAUSTED = "smoke_deadline_exhausted"
+    BACKOFF_BUDGET_EXHAUSTED = "backoff_budget_exhausted"
+    QUOTA_BUDGET_EXHAUSTED = "quota_budget_exhausted"
 
 
 @dataclass(frozen=True)

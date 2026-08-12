@@ -1,0 +1,26 @@
+{
+  "source": "stackexchange",
+  "access_method": "Official Stack Exchange API v2.3 for public questions only; HTML scraping is excluded.",
+  "authentication": "Optional application key supplied through an environment variable; user OAuth and access tokens are excluded from the smoke.",
+  "official_api": true,
+  "rate_limit": "Respect wrapper backoff globally for the questions method, preserve quota fields, and stop before the frozen quota reserve.",
+  "allowed_usage": "Internal demand research and derived source-quality analysis of public questions only; no user contact, profiling, spam, or personal-information sale.",
+  "raw_text_retention": "Normalized public question text is retained local-only; raw owner identifiers, display names, profile URLs, credentials, and full API payloads are not retained.",
+  "redistribution": "Only attributed derived metrics, source URLs, timestamps, content licenses, and fingerprints may be shared; raw question bodies are not redistributed.",
+  "deletion_handling": "Remove locally retained text when a question disappears during refresh or upon a valid removal request; retain only non-reversible aggregate metrics when appropriate.",
+  "attribution": "Every observation retains Stack Exchange as the source, the canonical source URL, and the API content_license value for attribution.",
+  "commercial_use_risk": "medium",
+  "robots_or_automated_access_policy": "Official Stack Exchange API only; no HTML scraping, and all API quota and backoff instructions are mandatory.",
+  "decision": "conditional",
+  "checked_at": "2026-08-13T00:00:00Z",
+  "source_references": [
+    "https://api.stackexchange.com/docs/questions",
+    "https://api.stackexchange.com/docs/throttle",
+    "https://api.stackexchange.com/docs/wrapper",
+    "https://api.stackexchange.com/docs/filters",
+    "https://stackoverflow.com/legal/api-terms-of-use",
+    "https://stackoverflow.com/help/licensing",
+    "https://stackoverflow.com/legal/terms-of-service/public",
+    "https://stackoverflow.com/legal/privacy-policy"
+  ]
+}

@@ -102,7 +102,9 @@
         "prerequisite_failed",
         "transport_error",
         "rate_limit_exhausted",
-        "smoke_deadline_exhausted"
+        "smoke_deadline_exhausted",
+        "backoff_budget_exhausted",
+        "quota_budget_exhausted"
       ]
     },
     "fetched_item_count": {"type": "integer", "minimum": 0},

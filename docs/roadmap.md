@@ -93,8 +93,10 @@ Current real-data progress:
 - Source Spike analysis-ready observations: **100 / 500**
 - GitHub blind primary packet: **20 / 20 — frozen**
 - GitHub blind secondary packet: **5 / 5 — frozen**
-- GitHub primary human labels: **0 / 20**
+- GitHub primary human labels: **20 / 20 — confirmed**
 - GitHub secondary human labels: **0 / 5**
+- Stack Exchange real smoke: **10 / 10 — qualified**
+- Stack Exchange analysis-ready observations: **0 / 100**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
 repository archetypes at 25 records each. The local-only run bundle contains a
@@ -107,14 +109,40 @@ holdout labels will be physically sealed at ingestion. Ingestion revalidates the
 frozen packet and assignment-map hashes, preserves assignment-level context-use audit
 metadata, and rejects incomplete or non-independent reviews. Development reporting
 accepts only schema-valid development labels with 10 unique primary records and five
-independent secondary pairs. Current next action: complete GitHub primary and
-independent secondary labeling, then produce the development-only density/agreement
-report while implementing the second source adapter. The qualified GitHub dataset
-must not be retuned or silently replaced.
+independent secondary pairs. Current next action: complete the independent GitHub
+secondary review and freeze the Stack Exchange 100-record analysis manifest. The
+qualified GitHub dataset and confirmed primary labels must not be retuned or silently
+replaced.
+
+### M2-B2 — Stack Exchange First Real Data
+
+Stack Exchange uses questions as the observation unit and treats four sites as smoke
+transport-coverage strata rather than source-quality samples. The official API,
+conditional compliance decision, immutable safe custom filter, 90-day window, and
+quota/backoff budgets are hash-frozen before collection.
+
+- [x] Freeze the official API compliance and attribution decision
+- [x] Create and independently re-read an immutable safe custom filter
+- [x] Freeze the four-site `3/3/2/2` smoke manifest and 90-day window
+- [x] Add deterministic HTML-to-text normalization and privacy-safe question parsing
+- [x] Add valid-count collection with deduplication and author limits
+- [x] Enforce method-global backoff, `Retry-After`, request/attempt/deadline budgets,
+  and quota reserve termination
+- [x] Complete real API smoke with **10 / 10** valid questions
+- [x] Verify content-license completeness, attribution, privacy, and provenance
+- [x] Pass the final review and full **251-test** regression suite
+
+M2-B2 real smoke status: **10 / 10 — qualified**
+
+Qualification result: `stackoverflow 3/3`, `superuser 3/3`, `serverfault 2/2`,
+`softwareengineering 2/2`; four requests, no retries or backoffs, final API quota
+remaining 294, content-license completeness PASS, privacy PASS. Smoke records do not
+increase the **100 / 500** analysis progress. The next Stack Exchange milestone is a
+separately frozen 100-record analysis manifest.
 
 Adapter implementation sequence:
 
-`fixture parsing ✓ → pagination/deduplication test ✓ → real 10-item smoke ✓ → 100 valid items ✓`
+`fixture parsing ✓ → pagination/deduplication test ✓ → real 10-item smoke ✓ → 100 valid items pending`
 
 Do not wait for all five adapters to be complete before the first real smoke test. The main unknown is real source behavior, not the interface architecture.
 
@@ -124,8 +152,9 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Collect 100 valid GitHub records across four 25-record archetype strata
 - [x] Produce a privacy-qualified, hash-addressed local run bundle
 - [x] Produce the stratified 20-item GitHub labeling assignment
-- [ ] Freeze compliance decisions for the remaining four candidate sources
-- [ ] Implement five source adapters with fixtures
+- [ ] Freeze compliance decisions for the remaining three candidate sources
+- [x] Freeze Stack Exchange compliance and complete its real 10-record smoke
+- [ ] Implement the remaining three source adapters with fixtures
 - [ ] Add a rerunnable collection CLI and raw-fixture persistence
 - [ ] Collect at least 100 valid records from each source
 - [ ] Continue remaining sources when one source returns `partial` or `failed`
