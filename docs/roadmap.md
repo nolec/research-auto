@@ -99,6 +99,7 @@ Current real-data progress:
 - Stack Exchange analysis-ready observations: **100 / 100 — qualified**
 - Stack Exchange blind primary packet: **20 / 20 — frozen**
 - Stack Exchange blind secondary packet: **5 / 5 — frozen**
+- Stack Exchange label ingestion and development report CLI: **ready**
 - Stack Exchange human labels: **0 / 20 primary, 0 / 5 secondary**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
@@ -148,7 +149,11 @@ without retaining probe records. The qualified balanced sample contains 25 quest
 from each site, license and privacy qualification PASS, and a separate blind packet
 with 20 primary and five secondary assignments. This equal-weight sample must not be
 interpreted as Stack Exchange-wide prevalence; official eligibility remains deferred
-until human labels and site-level results are available.
+until human labels and site-level results are available. The Stack Exchange labeling
+CLI now supports packet generation, strict human-label ingestion, and development-only
+density/agreement reporting. It rejects stale qualified provenance, non-Stack Exchange
+packets, malformed authority files, incomplete reviews, and non-independent secondary
+reviews while keeping holdout labels physically sealed.
 
 Adapter implementation sequence:
 
@@ -177,6 +182,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Revalidate packet integrity at ingestion and preserve hash-addressed review audit metadata
 - [x] Add development-only Wilson density and descriptive agreement reporting
 - [x] Reject holdout, duplicate, incomplete, and non-independent development report inputs
+- [x] Connect Stack Exchange packet, ingestion, and development-report CLI surfaces
 - [x] Gate holdout unsealing on an explicit freeze receipt
 - [ ] Produce accessibility, freshness, identity, continuity, cost, and compliance observations
 - [ ] Complete primary labels for at least 20 records per source and secondary labels for five
