@@ -26,7 +26,7 @@ def test_qualification_report_excludes_text_identity_and_secrets(tmp_path) -> No
         accepted_item_count=1, rejected_item_count=0, fetched_item_count=1,
         processed_item_count=1, request_count=1, successful_request_count=1,
         http_attempt_count=1, retry_count=0, rate_limit_events=0,
-        segment_results=(SegmentResult("repository", "example/project", 1, 1),),
+        segment_results=(SegmentResult("repository", "example/project", 1, 1, 1, 1, 0),),
         invalid_items=(), transport_events=(), items=(item,),
         to_dict=lambda: {"started_at": "2026-08-12T00:00:00Z", "finished_at": "2026-08-12T00:00:01Z"},
     )

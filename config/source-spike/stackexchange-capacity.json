@@ -1,0 +1,29 @@
+{
+  "manifest_version": "1.0.0",
+  "source": "stackexchange",
+  "adapter_version": "0.1.0",
+  "capacity_multiplier": 1.5,
+  "analysis_quota_per_site": 25,
+  "required_valid_per_site": 38,
+  "target_valid_records": 152,
+  "max_items_per_author": 2,
+  "published_after": "2026-05-14T15:35:00Z",
+  "published_before": "2026-08-12T15:35:00Z",
+  "sites": [
+    {"name": "stackoverflow", "quota": 38},
+    {"name": "superuser", "quota": 38},
+    {"name": "serverfault", "quota": 38},
+    {"name": "softwareengineering", "quota": 38}
+  ],
+  "request": {
+    "endpoint": "/2.3/questions", "sort": "creation", "order": "desc", "page_size": 100,
+    "max_pages_total": 24, "max_requests": 24, "max_http_attempts": 48,
+    "request_timeout_seconds": 10, "max_total_elapsed_seconds": 240,
+    "max_backoff_wait_seconds": 10, "quota_reserve": 100
+  },
+  "retry": {"max_retries": 2, "base_backoff_seconds": 1, "max_backoff_seconds": 8},
+  "analysis_manifest_hash": "2a516d96f904a4c1a13632797144ab268f88a6616ea8464e81d4639d005ed2e4",
+  "filter_hash": "3d3c89f1213018080c9c06e1d1f0700df689e350ca8651380c43e9e01cf9674c",
+  "compliance_hash": "cd90c904d50c3778a3f456d381496a883a7a64b14e0d3218550d0196d23b4a8f",
+  "compliance_decision": "conditional"
+}

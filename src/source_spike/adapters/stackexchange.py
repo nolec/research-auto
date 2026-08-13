@@ -10,7 +10,6 @@ from src.source_spike.adapters.base import CollectionResult, CollectionStatus, I
 from src.source_spike.protocol import content_sha256
 from src.source_spike.raw_items import IncrementalObservationSelector, author_hash, canonical_text_fingerprint, normalize_text, validate_raw_source_item
 from src.source_spike.stackexchange_html import html_body_to_text, html_title_to_text
-from src.source_spike.stackexchange_smoke_manifest import validate_stackexchange_smoke_manifest
 
 
 @dataclass(frozen=True)
@@ -55,7 +54,8 @@ def parse_stackexchange_question(
     payload: Mapping[str, object], *, site: str, author_secret: bytes, run_id: str,
     adapter_version: str, collected_at: datetime,
 ) -> ParsedQuestion:
-    source_id = str(payload.get("question_id")) if payload.get("question_id") is not None else None
+    question_id = str(payload.get("question_id")) if payload.get("question_id") is not None else None
+    source_id = f"{site}:{question_id}" if question_id is not None else None
     if len(author_secret) < 32 or collected_at.tzinfo is None or not site:
         raise ValueError("invalid Stack Exchange parser configuration")
     body = payload.get("body")
@@ -87,7 +87,7 @@ def parse_stackexchange_question(
         "document_id": f"stackexchange:{source_id}", "source": "stackexchange",
         "source_item_id": source_id, "source_url": str(link), "item_type": "question",
         "author_hash": author_hash("stackexchange", owner_key, author_secret), "community": site,
-        "thread_id": f"{site}:{source_id}", "parent_id": None, "title": title or None,
+        "thread_id": source_id, "parent_id": None, "title": title or None,
         "text": stored, "text_fingerprint": canonical_text_fingerprint(stored), "text_length": len(stored),
         "original_text_length": original_length, "text_truncated": original_length > len(stored),
         "published_at": published, "updated_at": None, "language": None, "engagement": {},
@@ -111,20 +111,22 @@ class StackExchangeQuestionAdapter:
 
     def __init__(self, transport: StackExchangeTransport, *, author_secret: bytes,
                  compliance_record: Mapping[str, object], filter_record: Mapping[str, object],
+                 manifest_validator: Callable[[Mapping[str, object], Mapping[str, object], Mapping[str, object]], list[str]],
                  clock: Callable[[], datetime] = lambda: datetime.now(timezone.utc)) -> None:
         self._transport, self._author_secret = transport, author_secret
-        self._compliance, self._filter, self._clock = dict(compliance_record), dict(filter_record), clock
+        self._compliance, self._filter, self._manifest_validator, self._clock = dict(compliance_record), dict(filter_record), manifest_validator, clock
 
     def collect(self, source_config: Mapping[str, object], target_valid_count: int, *, run_id: str, manifest_version: str) -> CollectionResult:
         started = self._clock(); manifest_hash = content_sha256(source_config); compliance_hash = content_sha256(self._compliance)
-        errors = validate_stackexchange_smoke_manifest(source_config, self._compliance, self._filter)
+        errors = self._manifest_validator(source_config, self._compliance, self._filter)
         if source_config.get("adapter_version") != self.adapter_version or source_config.get("manifest_version") != manifest_version or target_valid_count != source_config.get("target_valid_records") or len(self._author_secret) < 32:
             errors.append("adapter prerequisites mismatch")
         sites = list(cast(Sequence[Mapping[str, object]], source_config.get("sites", [])))
         if errors:
-            return self._result(run_id, manifest_version, target_valid_count, started, (), (), [SegmentResult("site", str(x.get("name")), int(x.get("quota", 0)), 0) for x in sites] or [SegmentResult("source", self.source, target_valid_count, 0)], TerminationReason.PREREQUISITE_FAILED, 0, 0, 0, 0, 0, manifest_hash, compliance_hash, "; ".join(errors))
+            return self._result(run_id, manifest_version, target_valid_count, started, (), (), [SegmentResult("site", str(x.get("name")), int(x.get("quota", 0)), 0, 0, 0, 0) for x in sites] or [SegmentResult("source", self.source, target_valid_count, 0, 0, 0, 0)], TerminationReason.PREREQUISITE_FAILED, 0, 0, 0, 0, 0, manifest_hash, compliance_hash, "; ".join(errors))
         request = cast(Mapping[str, object], source_config["request"]); selector = IncrementalObservationSelector(max_items_per_author=int(source_config["max_items_per_author"]))
         accepted: list[Mapping[str, object]] = []; invalid: list[InvalidItem] = []; counts = {str(x["name"]): 0 for x in sites}
+        site_fetched = {site: 0 for site in counts}; site_processed = {site: 0 for site in counts}; site_rejected = {site: 0 for site in counts}
         requests = successful = attempts = retries = fetched = processed = response_bytes = pages = rate_events = 0; termination = None
         transport_events: list[Mapping[str, object]] = []
         for site_value in sites:
@@ -152,16 +154,16 @@ class StackExchangeQuestionAdapter:
                 if not isinstance(page, StackExchangePage): termination = TerminationReason.TRANSPORT_ERROR; break
                 successful += 1
                 if page.backoff is not None: rate_events += 1
-                pages += 1; payloads = page.to_items(); fetched += len(payloads)
+                pages += 1; payloads = page.to_items(); fetched += len(payloads); site_fetched[site] += len(payloads)
                 for payload in payloads:
                     if counts[site] >= quota: break
-                    processed += 1
+                    processed += 1; site_processed[site] += 1
                     parsed = parse_stackexchange_question(payload, site=site, author_secret=self._author_secret, run_id=run_id, adapter_version=self.adapter_version, collected_at=started)
-                    if parsed.rejection is not None: invalid.append(parsed.rejection); continue
+                    if parsed.rejection is not None: invalid.append(parsed.rejection); site_rejected[site] += 1; continue
                     assert parsed.item is not None
                     rejection = selector.add(parsed.item)
                     if rejection is not None:
-                        invalid.append(InvalidItem(str(parsed.item["source_item_id"]), rejection.reason, rejection.errors or (rejection.reason,))); continue
+                        invalid.append(InvalidItem(str(parsed.item["source_item_id"]), rejection.reason, rejection.errors or (rejection.reason,))); site_rejected[site] += 1; continue
                     accepted.append(parsed.item); counts[site] += 1
                 if counts[site] >= quota: break
                 remaining_request_budget = int(request["max_requests"]) - requests
@@ -172,7 +174,7 @@ class StackExchangeQuestionAdapter:
             if termination is not None: break
         if len(accepted) == target_valid_count and all(counts[str(x["name"])] == int(x["quota"]) for x in sites): termination = TerminationReason.TARGET_REACHED
         elif termination is None: termination = TerminationReason.SOURCE_EXHAUSTED
-        segments = [SegmentResult("site", str(x["name"]), int(x["quota"]), counts[str(x["name"])]) for x in sites]
+        segments = [SegmentResult("site", str(x["name"]), int(x["quota"]), counts[str(x["name"])], site_fetched[str(x["name"])], site_processed[str(x["name"])], site_rejected[str(x["name"])]) for x in sites]
         return self._result(run_id, manifest_version, target_valid_count, started, accepted, invalid, segments, termination, requests, successful, attempts, retries, response_bytes, manifest_hash, compliance_hash, None, fetched, processed, rate_events, transport_events)
 
     def _result(self, run_id, manifest_version, target, started, items, invalid, segments, termination, requests, successful, attempts, retries, response_bytes, manifest_hash, compliance_hash, error_message=None, fetched=0, processed=0, rate_events=0, transport_events=()):

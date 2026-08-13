@@ -154,7 +154,7 @@ class GitHubIssueAdapter:
                 started_at=started_at,
                 items=(),
                 invalid_items=(),
-                segments=(SegmentResult("source", self.source, target_valid_count, 0),),
+                segments=(SegmentResult("source", self.source, target_valid_count, 0, 0, 0, 0),),
                 termination=TerminationReason.PREREQUISITE_FAILED,
                 request_count=0,
                 successful_requests=0,
@@ -177,6 +177,9 @@ class GitHubIssueAdapter:
         accepted: list[Mapping[str, object]] = []
         rejected: list[InvalidItem] = []
         accepted_by_segment = {str(value["name"]): 0 for value in repositories}
+        fetched_by_segment = {name: 0 for name in accepted_by_segment}
+        processed_by_segment = {name: 0 for name in accepted_by_segment}
+        rejected_by_segment = {name: 0 for name in accepted_by_segment}
         request_count = successful_requests = http_attempts = retries = 0
         rate_limit_events = response_bytes = fetched = processed = pages = 0
         transport_events: list[Mapping[str, object]] = []
@@ -262,10 +265,12 @@ class GitHubIssueAdapter:
                 pages += 1
                 payloads = page.to_items()
                 fetched += len(payloads)
+                fetched_by_segment[repository] += len(payloads)
                 for payload in payloads:
                     if accepted_by_segment[repository] >= quota or len(accepted) >= target_valid_count:
                         break
                     processed += 1
+                    processed_by_segment[repository] += 1
                     parsed = parse_github_issue(
                         payload,
                         repository=repository,
@@ -276,6 +281,7 @@ class GitHubIssueAdapter:
                     )
                     if parsed.rejection is not None:
                         rejected.append(parsed.rejection)
+                        rejected_by_segment[repository] += 1
                         continue
                     assert parsed.item is not None
                     if cutoff is not None:
@@ -290,6 +296,7 @@ class GitHubIssueAdapter:
                                     ("published_at is not before the frozen cutoff",),
                                 )
                             )
+                            rejected_by_segment[repository] += 1
                             continue
                     selection_rejection = selector.add(parsed.item)
                     if selection_rejection is not None:
@@ -302,6 +309,7 @@ class GitHubIssueAdapter:
                                 or (selection_rejection.reason.replace("_", " "),),
                             )
                         )
+                        rejected_by_segment[repository] += 1
                         continue
                     accepted.append(parsed.item)
                     accepted_by_segment[repository] += 1
@@ -326,6 +334,9 @@ class GitHubIssueAdapter:
                 str(repository["name"]),
                 int(repository["quota"]),
                 accepted_by_segment[str(repository["name"])],
+                fetched_by_segment[str(repository["name"])],
+                processed_by_segment[str(repository["name"])],
+                rejected_by_segment[str(repository["name"])],
             )
             for repository in repositories
         )

@@ -151,12 +151,15 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["segment_type", "segment_id", "quota", "accepted_item_count"],
+        "required": ["segment_type", "segment_id", "quota", "accepted_item_count", "fetched_item_count", "processed_item_count", "rejected_item_count"],
         "properties": {
           "segment_type": {"type": "string", "minLength": 1},
           "segment_id": {"type": "string", "minLength": 1},
           "quota": {"type": "integer", "minimum": 0},
-          "accepted_item_count": {"type": "integer", "minimum": 0}
+          "accepted_item_count": {"type": "integer", "minimum": 0},
+          "fetched_item_count": {"type": "integer", "minimum": 0},
+          "processed_item_count": {"type": "integer", "minimum": 0},
+          "rejected_item_count": {"type": "integer", "minimum": 0}
         }
       }
     },

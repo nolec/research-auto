@@ -114,7 +114,7 @@ def result(
         accepted_item_count=accepted_count,
         rejected_item_count=rejected_count,
         segment_results=(
-            SegmentResult("repository", "example/project", target, accepted_count),
+            SegmentResult("repository", "example/project", target, accepted_count, accepted_count + rejected_count, accepted_count + rejected_count, rejected_count),
         ),
         manifest_hash="a" * 64,
         compliance_hash="b" * 64,
@@ -137,13 +137,32 @@ def test_result_enforces_source_neutral_segment_and_metric_invariants() -> None:
     collection = result()
 
     assert collection.segment_results == (
-        SegmentResult("repository", "example/project", 1, 1),
+        SegmentResult("repository", "example/project", 1, 1, 1, 1, 0),
     )
     with pytest.raises(ValueError, match="processed_item_count"):
         collection.replace(processed_item_count=2)
     with pytest.raises(ValueError, match="segment accepted counts"):
         collection.replace(
-            segment_results=(SegmentResult("repository", "example/project", 1, 0),)
+            segment_results=(SegmentResult("repository", "example/project", 1, 0, 0, 0, 0),)
+        )
+
+
+def test_segment_result_requires_observed_metrics_instead_of_synthesizing_them() -> None:
+    with pytest.raises(TypeError):
+        SegmentResult("repository", "example/project", 1, 1)
+
+
+def test_result_rejects_segment_metric_totals_that_disagree_with_global_metrics() -> None:
+    with pytest.raises(ValueError, match="segment fetched counts"):
+        result().replace(
+            segment_results=(SegmentResult("repository", "example/project", 1, 1, 2, 1, 0),)
+        )
+    invalid = InvalidItem("2", "short_text", ("too short",))
+    with pytest.raises(ValueError, match="segment processed counts"):
+        result().replace(
+            invalid_items=(invalid,), fetched_item_count=2, processed_item_count=2,
+            rejected_item_count=1,
+            segment_results=(SegmentResult("repository", "example/project", 1, 1, 2, 1, 0),),
         )
 
 
@@ -233,7 +252,7 @@ def test_status_requires_target_and_every_segment_quota() -> None:
     with pytest.raises(ValueError, match="status must be partial"):
         result().replace(
             target_valid_count=2,
-            segment_results=(SegmentResult("repository", "example/project", 2, 1),),
+            segment_results=(SegmentResult("repository", "example/project", 2, 1, 1, 1, 0),),
         )
 
 

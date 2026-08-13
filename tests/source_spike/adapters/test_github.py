@@ -254,6 +254,9 @@ def test_fixture_collection_reaches_global_and_repository_quotas() -> None:
     assert result.termination_reason is TerminationReason.TARGET_REACHED
     assert result.accepted_item_count == 10
     assert [segment.accepted_item_count for segment in result.segment_results] == [5, 5]
+    assert [segment.fetched_item_count for segment in result.segment_results] == [6, 6]
+    assert [segment.processed_item_count for segment in result.segment_results] == [5, 5]
+    assert [segment.rejected_item_count for segment in result.segment_results] == [0, 0]
     assert result.fetched_item_count == 12
     assert result.processed_item_count == 10
     assert result.invalid_items == ()

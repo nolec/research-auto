@@ -89,7 +89,7 @@ def adapter_result(
         accepted_item_count=1 if success else 0,
         rejected_item_count=0,
         segment_results=(
-            SegmentResult("repository", "example/project", target, 1 if success else 0),
+            SegmentResult("repository", "example/project", target, 1 if success else 0, 1 if success else 0, 1 if success else 0, 0),
         ),
         manifest_hash=manifest_hash or content_sha256({}),
         compliance_hash=compliance_hash,

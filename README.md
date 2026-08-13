@@ -20,4 +20,4 @@
 
 ## 현재 상태
 
-Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **100/500**이다. GitHub는 실제 analysis dataset **100/100**과 primary human review **20/20**을 완료했고 secondary review는 **0/5**다. Stack Exchange는 공식 API·safe filter·4개 site quota를 동결하고 실제 smoke **10/10** qualification을 통과했지만 analysis progress에는 아직 포함하지 않는다. 다음 작업은 GitHub 독립 secondary review와 Stack Exchange 100건 analysis manifest 설계다.
+Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **200/500**이다. GitHub와 Stack Exchange는 각각 실제 analysis dataset **100/100**을 확보했다. GitHub primary human review는 **20/20**, secondary는 **0/5**이며, Stack Exchange는 blind packet primary **20건**과 secondary **5건**을 생성했지만 human review는 아직 시작하지 않았다. Stack Exchange 결과는 4개 site를 동일 가중치로 구성한 실험 표본이며 official eligibility는 deferred다.

@@ -10,6 +10,7 @@ from src.source_spike.adapters.stackexchange_http import StackExchangeTransportS
 from src.source_spike.protocol import content_sha256
 from src.source_spike.raw_items import author_hash, validate_raw_source_item
 from src.source_spike.stackexchange_filter import REQUIRED_FIELDS, included_fields_sha256
+from src.source_spike.stackexchange_smoke_manifest import validate_stackexchange_smoke_manifest
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -32,6 +33,8 @@ def test_parser_normalizes_question_license_and_identity() -> None:
     item = result.item
     assert validate_raw_source_item(item) == []
     assert item["item_type"] == "question"
+    assert item["source_item_id"] == "stackoverflow:101"
+    assert item["document_id"] == "stackexchange:stackoverflow:101"
     assert item["text"].startswith("Tool & workflow stops unexpectedly")
     assert item["source_metadata"]["content_license"] == "CC BY-SA 4.0"
     assert item["author_hash"] == author_hash("stackexchange", "stackoverflow:9001", SECRET)
@@ -70,18 +73,20 @@ def test_collection_reaches_global_and_site_quotas() -> None:
     pages = {}
     for site, offset in (("stackoverflow",1000),("superuser",2000),("serverfault",3000),("softwareengineering",4000)):
         pages[(site,1)] = StackExchangePage([question(offset+i, site) for i in range(4)], 1000, False, None, 10000, 9000)
-    adapter = StackExchangeQuestionAdapter(FixtureTransport(pages), author_secret=SECRET, compliance_record=compliance, filter_record=filter_record, clock=lambda: NOW)
+    adapter = StackExchangeQuestionAdapter(FixtureTransport(pages), author_secret=SECRET, compliance_record=compliance, filter_record=filter_record, manifest_validator=validate_stackexchange_smoke_manifest, clock=lambda: NOW)
     result = adapter.collect(config, 10, run_id="run-1", manifest_version="0.1.0")
     assert result.status is CollectionStatus.SUCCESS
     assert result.termination_reason is TerminationReason.TARGET_REACHED
     assert [segment.accepted_item_count for segment in result.segment_results] == [3,3,2,2]
+    assert [segment.fetched_item_count for segment in result.segment_results] == [4,4,4,4]
+    assert [segment.processed_item_count for segment in result.segment_results] == [3,3,2,2]
     assert result.accepted_item_count == 10
 
 
 def test_collection_stops_before_next_request_when_quota_reserve_is_at_risk() -> None:
     config, compliance, filter_record = manifest()
     pages = {("stackoverflow",1): StackExchangePage([question(1000,"stackoverflow")], 100, True, None, 10000, 105)}
-    adapter = StackExchangeQuestionAdapter(FixtureTransport(pages), author_secret=SECRET, compliance_record=compliance, filter_record=filter_record, clock=lambda: NOW)
+    adapter = StackExchangeQuestionAdapter(FixtureTransport(pages), author_secret=SECRET, compliance_record=compliance, filter_record=filter_record, manifest_validator=validate_stackexchange_smoke_manifest, clock=lambda: NOW)
     result = adapter.collect(config, 10, run_id="run-1", manifest_version="0.1.0")
     assert result.status is CollectionStatus.PARTIAL
     assert result.termination_reason is TerminationReason.QUOTA_BUDGET_EXHAUSTED
@@ -124,6 +129,7 @@ def test_collection_accepts_canonical_rate_limit_event_and_counts_it() -> None:
         author_secret=SECRET,
         compliance_record=compliance,
         filter_record=filter_record,
+        manifest_validator=validate_stackexchange_smoke_manifest,
         clock=lambda: NOW,
     )
     result = adapter.collect(config, 10, run_id="run-1", manifest_version="0.1.0")
@@ -152,6 +158,7 @@ def test_collection_stops_before_zero_remaining_http_attempt_call() -> None:
         author_secret=SECRET,
         compliance_record=compliance,
         filter_record=filter_record,
+        manifest_validator=validate_stackexchange_smoke_manifest,
         clock=lambda: NOW,
     )
     result = adapter.collect(config, 10, run_id="run-1", manifest_version="0.1.0")
@@ -179,6 +186,7 @@ def test_collection_stops_before_transport_when_smoke_deadline_is_exhausted() ->
         author_secret=SECRET,
         compliance_record=compliance,
         filter_record=filter_record,
+        manifest_validator=validate_stackexchange_smoke_manifest,
         clock=lambda: next(times),
     )
 

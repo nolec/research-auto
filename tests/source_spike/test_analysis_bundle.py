@@ -81,3 +81,16 @@ def test_bundle_failure_does_not_replace_latest_qualified(tmp_path: Path) -> Non
 
     assert json.loads(latest.read_text())["run_id"] == "previous"
     assert not (tmp_path / "runs/run-100").exists()
+
+
+def test_source_qualification_is_namespaced_and_cannot_override_authority(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="reserved qualification key"):
+        write_run_bundle(
+            tmp_path,
+            run_id="run-100",
+            items=items(),
+            collection_result={"run_id": "run-100", "status": "success", "manifest_hash": "a" * 64},
+            assignments=[],
+            qualified=False,
+            source_qualification={"qualified": True},
+        )

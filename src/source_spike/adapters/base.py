@@ -52,6 +52,9 @@ class SegmentResult:
     segment_id: str
     quota: int
     accepted_item_count: int
+    fetched_item_count: int
+    processed_item_count: int
+    rejected_item_count: int
 
     def __post_init__(self) -> None:
         _validate_non_empty_string(self.segment_type, field="segment_type")
@@ -59,11 +62,18 @@ class SegmentResult:
         for field, value in (
             ("quota", self.quota),
             ("accepted_item_count", self.accepted_item_count),
+            ("fetched_item_count", self.fetched_item_count),
+            ("processed_item_count", self.processed_item_count),
+            ("rejected_item_count", self.rejected_item_count),
         ):
             if isinstance(value, bool) or not isinstance(value, int) or value < 0:
                 raise ValueError(f"{field} must be a non-negative integer")
         if self.accepted_item_count > self.quota:
             raise ValueError("accepted_item_count cannot exceed segment quota")
+        if self.processed_item_count != self.accepted_item_count + self.rejected_item_count:
+            raise ValueError("processed_item_count must equal accepted plus rejected")
+        if self.processed_item_count > self.fetched_item_count:
+            raise ValueError("processed_item_count cannot exceed fetched_item_count")
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -71,6 +81,9 @@ class SegmentResult:
             "segment_id": self.segment_id,
             "quota": self.quota,
             "accepted_item_count": self.accepted_item_count,
+            "fetched_item_count": self.fetched_item_count,
+            "processed_item_count": self.processed_item_count,
+            "rejected_item_count": self.rejected_item_count,
         }
 
 
@@ -293,6 +306,12 @@ class CollectionResult:
             raise ValueError("segment_results must be unique")
         if sum(segment.accepted_item_count for segment in normalized_segments) != item_count:
             raise ValueError("segment accepted counts must equal accepted_item_count")
+        if sum(segment.fetched_item_count for segment in normalized_segments) != self.fetched_item_count:
+            raise ValueError("segment fetched counts must equal fetched_item_count")
+        if sum(segment.processed_item_count for segment in normalized_segments) != self.processed_item_count:
+            raise ValueError("segment processed counts must equal processed_item_count")
+        if sum(segment.rejected_item_count for segment in normalized_segments) != self.rejected_item_count:
+            raise ValueError("segment rejected counts must equal rejected_item_count")
 
         if not isinstance(self.manifest_hash, str) or not _SHA256.fullmatch(
             self.manifest_hash

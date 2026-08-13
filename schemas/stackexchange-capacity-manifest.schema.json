@@ -1,0 +1,13 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","additionalProperties":false,
+  "required":["manifest_version","source","adapter_version","capacity_multiplier","analysis_quota_per_site","required_valid_per_site","target_valid_records","max_items_per_author","published_after","published_before","sites","request","retry","analysis_manifest_hash","filter_hash","compliance_hash","compliance_decision"],
+  "properties":{
+    "manifest_version":{"const":"1.0.0"},"source":{"const":"stackexchange"},"adapter_version":{"const":"0.1.0"},
+    "capacity_multiplier":{"const":1.5},"analysis_quota_per_site":{"const":25},"required_valid_per_site":{"const":38},"target_valid_records":{"const":152},"max_items_per_author":{"const":2},
+    "published_after":{"type":"string","format":"date-time"},"published_before":{"type":"string","format":"date-time"},
+    "sites":{"type":"array","minItems":4,"maxItems":4,"items":{"type":"object","additionalProperties":false,"required":["name","quota"],"properties":{"name":{"enum":["stackoverflow","superuser","serverfault","softwareengineering"]},"quota":{"const":38}}}},
+    "request":{"type":"object","additionalProperties":false,"required":["endpoint","sort","order","page_size","max_pages_total","max_requests","max_http_attempts","request_timeout_seconds","max_total_elapsed_seconds","max_backoff_wait_seconds","quota_reserve"],"properties":{"endpoint":{"const":"/2.3/questions"},"sort":{"const":"creation"},"order":{"const":"desc"},"page_size":{"type":"integer","minimum":1,"maximum":100},"max_pages_total":{"type":"integer","minimum":4},"max_requests":{"type":"integer","minimum":4},"max_http_attempts":{"type":"integer","minimum":4},"request_timeout_seconds":{"type":"number","exclusiveMinimum":0},"max_total_elapsed_seconds":{"type":"number","exclusiveMinimum":0},"max_backoff_wait_seconds":{"type":"number","minimum":0},"quota_reserve":{"type":"integer","minimum":0}}},
+    "retry":{"type":"object","additionalProperties":false,"required":["max_retries","base_backoff_seconds","max_backoff_seconds"],"properties":{"max_retries":{"type":"integer","minimum":0},"base_backoff_seconds":{"type":"number","minimum":0},"max_backoff_seconds":{"type":"number","minimum":0}}},
+    "analysis_manifest_hash":{"type":"string","pattern":"^[a-f0-9]{64}$"},"filter_hash":{"type":"string","pattern":"^[a-f0-9]{64}$"},"compliance_hash":{"type":"string","pattern":"^[a-f0-9]{64}$"},"compliance_decision":{"const":"conditional"}
+  }
+}

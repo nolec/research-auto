@@ -72,6 +72,7 @@ def write_run_bundle(
     assignments: Sequence[object],
     qualified: bool,
     secrets: Sequence[str] = (),
+    source_qualification: Mapping[str, object] | None = None,
 ) -> Path:
     if collection_result.get("run_id") != run_id:
         raise ValueError("collection result run_id mismatch")
@@ -106,6 +107,12 @@ def write_run_bundle(
             "privacy_violation_count": 0,
             "qualified": qualified,
         }
+        if source_qualification:
+            reserved = set(qualification)
+            collision = reserved.intersection(source_qualification)
+            if collision:
+                raise ValueError(f"reserved qualification key: {sorted(collision)[0]}")
+            qualification["source_qualification"] = _json_value(source_qualification)
         _write_json(temporary / "qualification.json", qualification)
         _write_json(
             temporary / "bundle-manifest.json",

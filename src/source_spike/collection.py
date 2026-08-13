@@ -105,7 +105,7 @@ def _failed_result(
         processed_item_count=0,
         accepted_item_count=0,
         rejected_item_count=0,
-        segment_results=(SegmentResult("source", source, target_valid_count, 0),),
+        segment_results=(SegmentResult("source", source, target_valid_count, 0, 0, 0, 0),),
         manifest_hash=manifest_hash,
         compliance_hash=compliance_hash,
     )

@@ -1,6 +1,6 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-12
+> Updated: 2026-08-13
 > Status: Task 1 complete, Task 2 in progress
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
@@ -23,16 +23,16 @@ Freeze the model, prompts, policy, and thresholds before the final evaluation. V
 
 Goal: evaluate five structurally different public sources with at least 100 normalized records per source, then select three V1 sources using measured evidence quality rather than intuition.
 
-Primary progress metric: **100 / 500 valid real observations**
+Primary progress metric: **200 / 500 valid real observations**
 
 | Source | Valid real observations | Target |
 |---|---:|---:|
 | GitHub | 100 | 100 |
-| Stack Exchange | 0 | 100 |
+| Stack Exchange | 100 | 100 |
 | Steam | 0 | 100 |
 | YouTube | 0 | 100 |
 | Reddit | 0 | 100 |
-| **Total** | **100** | **500** |
+| **Total** | **200** | **500** |
 
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
 
@@ -90,13 +90,16 @@ Current real-data progress:
 
 - GitHub smoke qualification: **10 / 10**
 - GitHub analysis-ready observations: **100 / 100 — qualified**
-- Source Spike analysis-ready observations: **100 / 500**
+- Source Spike analysis-ready observations: **200 / 500**
 - GitHub blind primary packet: **20 / 20 — frozen**
 - GitHub blind secondary packet: **5 / 5 — frozen**
 - GitHub primary human labels: **20 / 20 — confirmed**
 - GitHub secondary human labels: **0 / 5**
 - Stack Exchange real smoke: **10 / 10 — qualified**
-- Stack Exchange analysis-ready observations: **0 / 100**
+- Stack Exchange analysis-ready observations: **100 / 100 — qualified**
+- Stack Exchange blind primary packet: **20 / 20 — frozen**
+- Stack Exchange blind secondary packet: **5 / 5 — frozen**
+- Stack Exchange human labels: **0 / 20 primary, 0 / 5 secondary**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
 repository archetypes at 25 records each. The local-only run bundle contains a
@@ -109,10 +112,10 @@ holdout labels will be physically sealed at ingestion. Ingestion revalidates the
 frozen packet and assignment-map hashes, preserves assignment-level context-use audit
 metadata, and rejects incomplete or non-independent reviews. Development reporting
 accepts only schema-valid development labels with 10 unique primary records and five
-independent secondary pairs. Current next action: complete the independent GitHub
-secondary review and freeze the Stack Exchange 100-record analysis manifest. The
-qualified GitHub dataset and confirmed primary labels must not be retuned or silently
-replaced.
+independent secondary pairs. Current next actions are to complete the independent
+GitHub secondary review, obtain Stack Exchange primary and secondary human labels
+from its frozen blind packet, and freeze compliance for the third source. Qualified
+datasets and confirmed labels must not be retuned or silently replaced.
 
 ### M2-B2 — Stack Exchange First Real Data
 
@@ -137,12 +140,19 @@ M2-B2 real smoke status: **10 / 10 — qualified**
 Qualification result: `stackoverflow 3/3`, `superuser 3/3`, `serverfault 2/2`,
 `softwareengineering 2/2`; four requests, no retries or backoffs, final API quota
 remaining 294, content-license completeness PASS, privacy PASS. Smoke records do not
-increase the **100 / 500** analysis progress. The next Stack Exchange milestone is a
-separately frozen 100-record analysis manifest.
+increase analysis progress.
+
+M2-B2 analysis status: **100 / 100 — qualified**. A hash-bound capacity probe
+required `ceil(25 × 1.5) = 38` valid candidates per site and passed at `38/38/38/38`
+without retaining probe records. The qualified balanced sample contains 25 questions
+from each site, license and privacy qualification PASS, and a separate blind packet
+with 20 primary and five secondary assignments. This equal-weight sample must not be
+interpreted as Stack Exchange-wide prevalence; official eligibility remains deferred
+until human labels and site-level results are available.
 
 Adapter implementation sequence:
 
-`fixture parsing ✓ → pagination/deduplication test ✓ → real 10-item smoke ✓ → 100 valid items pending`
+`fixture parsing ✓ → pagination/deduplication test ✓ → real 10-item smoke ✓ → capacity receipt ✓ → 100 valid items ✓ → blind packet ✓`
 
 Do not wait for all five adapters to be complete before the first real smoke test. The main unknown is real source behavior, not the interface architecture.
 
@@ -154,6 +164,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Produce the stratified 20-item GitHub labeling assignment
 - [ ] Freeze compliance decisions for the remaining three candidate sources
 - [x] Freeze Stack Exchange compliance and complete its real 10-record smoke
+- [x] Collect and qualify the balanced Stack Exchange 100-record analysis sample
 - [ ] Implement the remaining three source adapters with fixtures
 - [ ] Add a rerunnable collection CLI and raw-fixture persistence
 - [ ] Collect at least 100 valid records from each source

@@ -11,6 +11,7 @@ from src.source_spike.adapters.stackexchange import StackExchangeQuestionAdapter
 from src.source_spike.adapters.stackexchange_http import HttpStackExchangeTransport
 from src.source_spike.collection import collect_source
 from src.source_spike.local_secret import load_secret
+from src.source_spike.stackexchange_smoke_manifest import validate_stackexchange_smoke_manifest
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -69,7 +70,7 @@ def main() -> int:
     except (ValueError, FileNotFoundError) as error:
         print(f"Stack Exchange real smoke prerequisite failure: {error}"); return 3
     transport=HttpStackExchangeTransport(key=os.environ.get("STACKEXCHANGE_KEY"))
-    adapter=StackExchangeQuestionAdapter(transport, author_secret=secret.secret, compliance_record=compliance, filter_record=filter_record)
+    adapter=StackExchangeQuestionAdapter(transport, author_secret=secret.secret, compliance_record=compliance, filter_record=filter_record, manifest_validator=validate_stackexchange_smoke_manifest)
     result=collect_source(adapter, manifest, int(manifest["target_valid_records"]), manifest_version=str(manifest["manifest_version"]))
     report=build_qualification_report(result, quota_remaining=transport.quota_remaining); write_report(report, DEFAULT_REPORT_PATH)
     segments=" ".join(f"{value.segment_id}={value.accepted_item_count}/{value.quota}" for value in result.segment_results)
