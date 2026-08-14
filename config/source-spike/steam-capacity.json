@@ -1,0 +1,15 @@
+{
+  "manifest_version":"1.0.0","source":"steam","adapter_version":"0.1.0",
+  "capacity_multiplier":1.5,"analysis_quota_per_application":25,"required_valid_per_application":38,
+  "target_valid_records":152,"max_items_per_author":2,
+  "published_after":"2026-05-16T00:00:00Z","published_before":"2026-08-14T00:00:00Z",
+  "applications":[
+    {"appid":730,"name":"Counter-Strike 2","archetype":"free_live_service","quota":38},
+    {"appid":1086940,"name":"Baldur's Gate 3","archetype":"premium_aaa","quota":38},
+    {"appid":413150,"name":"Stardew Valley","archetype":"paid_indie","quota":38},
+    {"appid":431960,"name":"Wallpaper Engine","archetype":"paid_software","quota":38}
+  ],
+  "request":{"endpoint":"/appreviews/{appid}","filter":"recent","language":"english","review_type":"all","purchase_type":"all","filter_offtopic_activity":1,"num_per_page":100,"max_pages_total":16,"max_requests":16,"max_http_attempts":32,"request_timeout_seconds":10,"max_total_elapsed_seconds":240,"min_request_interval_seconds":1},
+  "retry":{"max_retries":2,"base_backoff_seconds":2,"max_backoff_seconds":8},
+  "analysis_manifest_hash":"92f7f2db7693e3e46faaccf7bcf4de48b2bff2cb374196724619692b60189359","compliance_hash":"b48749adedded5716f5414c5a7bb241af9f1fbc93edbe84e9ed07f4cedaefb04","compliance_decision":"conditional"
+}

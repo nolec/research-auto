@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "source", "adapter_version", "target_valid_records", "max_items_per_author", "published_after", "published_before", "applications", "request", "retry", "compliance_ref", "compliance_hash", "compliance_decision"],
+  "properties": {
+    "manifest_version": {"type": "string"},
+    "source": {"const": "steam"},
+    "adapter_version": {"type": "string"},
+    "target_valid_records": {"const": 10},
+    "max_items_per_author": {"const": 2},
+    "published_after": {"type": "string", "format": "date-time"},
+    "published_before": {"type": "string", "format": "date-time"},
+    "applications": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["appid", "name", "archetype", "quota"],
+        "properties": {
+          "appid": {"type": "integer", "minimum": 1},
+          "name": {"type": "string", "minLength": 1},
+          "archetype": {"enum": ["free_live_service", "premium_aaa", "paid_indie", "paid_software"]},
+          "quota": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "request": {
+      "type": "object", "additionalProperties": false,
+      "required": ["endpoint", "filter", "language", "review_type", "purchase_type", "filter_offtopic_activity", "num_per_page", "max_pages_total", "max_requests", "max_http_attempts", "request_timeout_seconds", "max_total_elapsed_seconds", "min_request_interval_seconds"],
+      "properties": {
+        "endpoint": {"const": "/appreviews/{appid}"},
+        "filter": {"const": "recent"},
+        "language": {"const": "english"},
+        "review_type": {"const": "all"},
+        "purchase_type": {"const": "all"},
+        "filter_offtopic_activity": {"const": 1},
+        "num_per_page": {"type": "integer", "minimum": 1, "maximum": 100},
+        "max_pages_total": {"type": "integer", "minimum": 1},
+        "max_requests": {"type": "integer", "minimum": 1},
+        "max_http_attempts": {"type": "integer", "minimum": 1},
+        "request_timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "max_total_elapsed_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "min_request_interval_seconds": {"type": "number", "minimum": 1}
+      }
+    },
+    "retry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["max_retries", "base_backoff_seconds", "max_backoff_seconds"],
+      "properties": {
+        "max_retries": {"type": "integer", "minimum": 0},
+        "base_backoff_seconds": {"type": "number", "minimum": 1},
+        "max_backoff_seconds": {"type": "number", "minimum": 1}
+      }
+    },
+    "compliance_ref": {"const": "compliance/steam.json"},
+    "compliance_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "compliance_decision": {"const": "conditional"}
+  }
+}

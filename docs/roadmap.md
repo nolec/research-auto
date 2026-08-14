@@ -1,6 +1,6 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-13
+> Updated: 2026-08-14
 > Status: Task 1 complete, Task 2 in progress
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
@@ -23,16 +23,16 @@ Freeze the model, prompts, policy, and thresholds before the final evaluation. V
 
 Goal: evaluate five structurally different public sources with at least 100 normalized records per source, then select three V1 sources using measured evidence quality rather than intuition.
 
-Primary progress metric: **200 / 500 valid real observations**
+Primary progress metric: **300 / 500 valid real observations**
 
 | Source | Valid real observations | Target |
 |---|---:|---:|
 | GitHub | 100 | 100 |
 | Stack Exchange | 100 | 100 |
-| Steam | 0 | 100 |
+| Steam | 100 | 100 |
 | YouTube | 0 | 100 |
 | Reddit | 0 | 100 |
-| **Total** | **200** | **500** |
+| **Total** | **300** | **500** |
 
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
 
@@ -90,7 +90,7 @@ Current real-data progress:
 
 - GitHub smoke qualification: **10 / 10**
 - GitHub analysis-ready observations: **100 / 100 — qualified**
-- Source Spike analysis-ready observations: **200 / 500**
+- Source Spike analysis-ready observations: **300 / 500**
 - GitHub blind primary packet: **20 / 20 — frozen**
 - GitHub blind secondary packet: **5 / 5 — frozen**
 - GitHub primary human labels: **20 / 20 — confirmed**
@@ -100,7 +100,20 @@ Current real-data progress:
 - Stack Exchange blind primary packet: **20 / 20 — frozen**
 - Stack Exchange blind secondary packet: **5 / 5 — frozen**
 - Stack Exchange label ingestion and development report CLI: **ready**
-- Stack Exchange human labels: **0 / 20 primary, 0 / 5 secondary**
+- Stack Exchange primary human labels: **20 / 20 — confirmed**
+- Stack Exchange independent secondary human labels: **0 / 5**
+- Steam compliance: **conditional / high-risk — frozen**
+- Steam smoke manifest: **10 records across four product archetypes — frozen**
+- Steam fixture smoke: **10 / 10 — qualified**
+- Steam real smoke: **10 / 10 — qualified**
+- Steam capacity probe: **38 / 38 per application — PASS, retained items 0**
+- Steam analysis-ready observations: **100 / 100 — qualified**
+- Steam labeling assignments: **20 primary / 5 secondary — frozen**
+- Steam blind primary packet: **20 / 20 — frozen**
+- Steam blind secondary packet: **5 / 5 — frozen**
+- Steam offline primary/secondary review handoffs: **ready**
+- Steam primary human labels: **20 / 20 — confirmed submission frozen**
+- Steam independent secondary human labels: **0 / 5**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
 repository archetypes at 25 records each. The local-only run bundle contains a
@@ -114,9 +127,31 @@ frozen packet and assignment-map hashes, preserves assignment-level context-use 
 metadata, and rejects incomplete or non-independent reviews. Development reporting
 accepts only schema-valid development labels with 10 unique primary records and five
 independent secondary pairs. Current next actions are to complete the independent
-GitHub secondary review, obtain Stack Exchange primary and secondary human labels
-from its frozen blind packet, and freeze compliance for the third source. Qualified
+GitHub and Stack Exchange secondary reviews, complete the Steam primary review,
+and freeze compliance for the fourth source. Steam primary labels are complete, but
+canonical ingestion remains blocked on an independent secondary reviewer. Qualified
 datasets and confirmed labels must not be retuned or silently replaced.
+
+### M2-B3 — Steam First Real Data
+
+Steam uses public English reviews from four product archetypes. The official
+Steamworks review endpoint, conditional/high-risk compliance decision, 90-day window,
+and unbiased recommendation/purchase filters are hash-frozen. HTML scraping is excluded.
+
+M2-B3 smoke status: **10 / 10 — qualified**. Four requests produced the required
+`3/3/2/2` sample without retries or rate-limit events; privacy qualification PASS.
+
+M2-B3 analysis status: **100 / 100 — qualified**. The capacity probe passed at
+`38/38/38/38` without retaining review records. The final balanced sample contains
+25 reviews per product archetype and a deterministic 20-item assignment with 10
+development, 10 holdout, and five secondary reviews. Collection fetched 500 payloads,
+processed 328, accepted 100, and rejected 228 (`short_text` 227, `missing_body` 1).
+This is an equal-weight experimental sample, not Steam-wide prevalence, and official
+eligibility remains deferred. Its hash-bound blind packet is frozen at 20 primary and
+five secondary assignments. Separate Korean offline review handoffs are ready; the
+primary file does not request a secondary-independence assertion, while the secondary
+file requires it. Split, document, author, playtime, and internal stratum metadata are
+absent from both public packets.
 
 ### M2-B2 — Stack Exchange First Real Data
 
@@ -167,10 +202,16 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Collect 100 valid GitHub records across four 25-record archetype strata
 - [x] Produce a privacy-qualified, hash-addressed local run bundle
 - [x] Produce the stratified 20-item GitHub labeling assignment
-- [ ] Freeze compliance decisions for the remaining three candidate sources
+- [ ] Freeze compliance decisions for the remaining two candidate sources
 - [x] Freeze Stack Exchange compliance and complete its real 10-record smoke
+- [x] Freeze Steam compliance for official public-review endpoint use only
+- [x] Freeze the Steam four-archetype `3/3/2/2` smoke manifest and 90-day window
+- [x] Complete Steam fixture parsing and valid-count collection at **10 / 10**
+- [x] Complete Steam real API smoke with **10 / 10** valid reviews and privacy PASS
+- [x] Pass the Steam hash-bound capacity probe at **38 / 38** per application
+- [x] Collect and qualify the balanced Steam **100 / 100** analysis sample
 - [x] Collect and qualify the balanced Stack Exchange 100-record analysis sample
-- [ ] Implement the remaining three source adapters with fixtures
+- [ ] Implement the remaining two source adapters with fixtures
 - [ ] Add a rerunnable collection CLI and raw-fixture persistence
 - [ ] Collect at least 100 valid records from each source
 - [ ] Continue remaining sources when one source returns `partial` or `failed`
@@ -183,6 +224,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Add development-only Wilson density and descriptive agreement reporting
 - [x] Reject holdout, duplicate, incomplete, and non-independent development report inputs
 - [x] Connect Stack Exchange packet, ingestion, and development-report CLI surfaces
+- [x] Generate Steam blind primary/secondary packets and separate offline handoffs
 - [x] Gate holdout unsealing on an explicit freeze receipt
 - [ ] Produce accessibility, freshness, identity, continuity, cost, and compliance observations
 - [ ] Complete primary labels for at least 20 records per source and secondary labels for five

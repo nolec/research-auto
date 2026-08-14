@@ -1,0 +1,24 @@
+{
+  "source": "steam",
+  "access_method": "Official Steamworks User Reviews JSON endpoint for public app reviews only; Steam store and community HTML scraping are excluded.",
+  "authentication": "The documented appreviews endpoint requires no user login or Steam Web API key; credentials, cookies, and authenticated account data are excluded.",
+  "official_api": true,
+  "rate_limit": "Use bounded cursor pagination, one request at a time, conservative delays, request and elapsed-time budgets, and immediate termination on throttling or access denial; the reviews documentation publishes no endpoint-specific numeric quota.",
+  "allowed_usage": "Internal source-quality and demand research on public review text only; no user contact, profiling, review solicitation, score manipulation, unsolicited marketing, or inference from private account data.",
+  "raw_text_retention": "Normalized public review text is retained local-only for the experiment; raw SteamID values, profile data, play-history fields, credentials, cookies, developer responses, and full API payloads are not retained.",
+  "redistribution": "Only derived aggregate metrics, source URLs, app identifiers, timestamps, recommendation and purchase-context flags, and non-reversible fingerprints may be shared; review text is not redistributed or used in marketing without reviewer permission.",
+  "deletion_handling": "Remove locally retained text when a review disappears during a bounded refresh or upon a valid removal request; retain only non-reversible aggregate metrics when appropriate.",
+  "attribution": "Every retained observation identifies Steam as the source and preserves the canonical app review URL and app identifier; no Valve or Steam endorsement is implied.",
+  "commercial_use_risk": "high",
+  "robots_or_automated_access_policy": "Use only the programmatic User Reviews endpoint documented by Steamworks; do not scrape Steam HTML, bypass access controls, authenticate users, or continue after throttling or denial.",
+  "decision": "conditional",
+  "checked_at": "2026-08-13T00:00:00Z",
+  "source_references": [
+    "https://partner.steamgames.com/doc/store/getreviews",
+    "https://partner.steamgames.com/doc/store/reviews",
+    "https://steamcommunity.com/dev/apiterms",
+    "https://steamcommunity.com/dev",
+    "https://store.steampowered.com/subscriber_agreement/",
+    "https://store.steampowered.com/privacy_agreement/"
+  ]
+}

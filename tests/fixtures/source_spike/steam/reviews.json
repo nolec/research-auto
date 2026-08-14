@@ -1,0 +1,7 @@
+[
+  {"recommendationid":"1001","author":{"steamid":"76561190000000001","playtime_forever":9000},"review":"After the latest update the game crashes every time I open the inventory, so I cannot continue my saved campaign.","timestamp_created":1786320000,"timestamp_updated":1786320000,"voted_up":false,"votes_up":4,"comment_count":1,"steam_purchase":true,"received_for_free":false,"written_during_early_access":false},
+  {"recommendationid":"1002","author":{"steamid":"76561190000000002"},"review":"The export workflow repeatedly loses my configuration and gives no useful recovery message after restarting the application.","timestamp_created":1786233600,"voted_up":false,"votes_up":2,"comment_count":0,"steam_purchase":false,"received_for_free":true,"written_during_early_access":true},
+  {"recommendationid":"1003","author":{"steamid":"76561190000000003"},"review":"","timestamp_created":1786147200,"voted_up":false},
+  {"recommendationid":"1004","author":{"steamid":"76561190000000004"},"review":"Too short","timestamp_created":1786060800,"voted_up":false},
+  {"author":{"steamid":"76561190000000005"},"review":"This review has enough detail but no recommendation identifier for stable provenance.","timestamp_created":1785974400,"voted_up":false}
+]

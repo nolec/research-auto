@@ -20,4 +20,4 @@
 
 ## 현재 상태
 
-Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **200/500**이다. GitHub와 Stack Exchange는 각각 실제 analysis dataset **100/100**을 확보했다. GitHub primary human review는 **20/20**, secondary는 **0/5**이며, Stack Exchange는 blind packet primary **20건**과 secondary **5건**을 생성했지만 human review는 아직 시작하지 않았다. Stack Exchange 결과는 4개 site를 동일 가중치로 구성한 실험 표본이며 official eligibility는 deferred다.
+Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **300/500**이다. GitHub, Stack Exchange, Steam이 각각 실제 analysis dataset **100/100**을 확보했다. GitHub primary human review는 **20/20**, secondary는 **0/5**이며, Stack Exchange primary도 **20/20** 완료됐지만 독립 secondary는 **0/5**다. Stack Exchange와 Steam 결과는 각각 네 site와 네 product archetype을 동일 가중치로 구성한 실험 표본이며 official eligibility는 deferred다. Steam은 공식 public-review endpoint만 사용하는 conditional/high-risk compliance, 실제 smoke **10/10**, capacity `38/38/38/38`, privacy-qualified analysis **100/100**을 통과했고, hash-frozen primary 20/secondary 5 blind packet과 분리된 오프라인 검토 화면까지 준비됐다. Steam primary human review는 **20/20** 확정됐고 독립 secondary는 **0/5**다. Smoke records는 analysis 진행률에 포함하지 않는다.
