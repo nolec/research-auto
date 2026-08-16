@@ -1,6 +1,6 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-14
+> Updated: 2026-08-17
 > Status: Task 1 complete, Task 2 in progress
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
@@ -30,11 +30,37 @@ Primary progress metric: **300 / 500 valid real observations**
 | GitHub | 100 | 100 |
 | Stack Exchange | 100 | 100 |
 | Steam | 100 | 100 |
-| YouTube | 0 | 100 |
 | Reddit | 0 | 100 |
+| Replacement source (TBD) | 0 | 100 |
 | **Total** | **300** | **500** |
 
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
+
+Last completed source-data checkpoint: `b358b16` (`feat: qualify steam source spike and freeze primary review`).
+The full regression suite passes **324 tests**. Three source datasets are qualified;
+source eligibility remains deferred because every independent secondary review is
+still incomplete.
+
+| Source | Primary review | Independent secondary | Canonical ingestion | Official eligibility |
+|---|---:|---:|---|---|
+| GitHub | 20 / 20 | 0 / 5 | blocked | deferred |
+| Stack Exchange | 20 / 20 | 0 / 5 | blocked | deferred |
+| Steam | 20 / 20 | 0 / 5 | blocked | deferred |
+| YouTube | excluded | unavailable | unavailable | `NOT_ELIGIBLE` |
+| Reddit | not started | not started | unavailable | deferred |
+| Replacement source | not selected | not started | unavailable | deferred |
+
+Immediate execution order:
+
+1. Keep GitHub, Stack Exchange, and Steam thresholds, packets, and primary labels frozen.
+2. Obtain five blind reviews per qualified source from reviewers who have not seen the
+   corresponding primary labels.
+3. Replace YouTube because its 30-day API Data lifecycle and unresolved stable-author
+   policy conflict with the product's frozen 90-day evidence contract.
+4. Freeze compliance for Reddit and one replacement source, then run fixture parsing
+   and a 10-record real smoke before either 100-record run.
+5. Run canonical ingestion, agreement, and development-only reports only after each
+   source's independent secondary packet is complete.
 
 Completed foundation:
 
@@ -127,9 +153,9 @@ frozen packet and assignment-map hashes, preserves assignment-level context-use 
 metadata, and rejects incomplete or non-independent reviews. Development reporting
 accepts only schema-valid development labels with 10 unique primary records and five
 independent secondary pairs. Current next actions are to complete the independent
-GitHub and Stack Exchange secondary reviews, complete the Steam primary review,
-and freeze compliance for the fourth source. Steam primary labels are complete, but
-canonical ingestion remains blocked on an independent secondary reviewer. Qualified
+GitHub, Stack Exchange, and Steam secondary reviews, freeze Reddit compliance, and
+select a policy-compatible replacement for YouTube. All three primary reviews are
+complete, but canonical ingestion remains blocked on independent secondary reviewers. Qualified
 datasets and confirmed labels must not be retuned or silently replaced.
 
 ### M2-B3 — Steam First Real Data
@@ -152,6 +178,19 @@ five secondary assignments. Separate Korean offline review handoffs are ready; t
 primary file does not request a secondary-independence assertion, while the secondary
 file requires it. Split, document, author, playtime, and internal stratum metadata are
 absent from both public packets.
+
+### M2-B4 — YouTube Feasibility · Not eligible
+
+YouTube was evaluated before adapter implementation and rejected under the conservative
+source policy. Non-Authorized API Data must be deleted or refreshed within 30 days,
+which conflicts with the product's frozen 90-day evidence window. Persistent author
+derivation is not explicitly authorized, refresh can change or remove bytes bound to
+review packets, and the project has no executable refresh/purge path.
+
+Decision status: **NOT_ELIGIBLE**. Do not create an API key, fixture, adapter, smoke run,
+or analysis dataset. Re-entry requires official compliance clearance or a verified
+lifecycle that preserves 90-day evidence and author independence without prohibited
+tracking. The next action is to select a replacement source.
 
 ### M2-B2 — Stack Exchange First Real Data
 
@@ -205,6 +244,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [ ] Freeze compliance decisions for the remaining two candidate sources
 - [x] Freeze Stack Exchange compliance and complete its real 10-record smoke
 - [x] Freeze Steam compliance for official public-review endpoint use only
+- [x] Evaluate YouTube lifecycle feasibility and mark it **NOT_ELIGIBLE** before collection
 - [x] Freeze the Steam four-archetype `3/3/2/2` smoke manifest and 90-day window
 - [x] Complete Steam fixture parsing and valid-count collection at **10 / 10**
 - [x] Complete Steam real API smoke with **10 / 10** valid reviews and privacy PASS
@@ -225,6 +265,8 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Reject holdout, duplicate, incomplete, and non-independent development report inputs
 - [x] Connect Stack Exchange packet, ingestion, and development-report CLI surfaces
 - [x] Generate Steam blind primary/secondary packets and separate offline handoffs
+- [x] Complete and freeze Steam primary human review at **20 / 20**
+- [x] Add a machine-readable feasibility gate and freeze the YouTube rejection decision
 - [x] Gate holdout unsealing on an explicit freeze receipt
 - [ ] Produce accessibility, freshness, identity, continuity, cost, and compliance observations
 - [ ] Complete primary labels for at least 20 records per source and secondary labels for five

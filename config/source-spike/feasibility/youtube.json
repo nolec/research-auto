@@ -1,0 +1,130 @@
+{
+  "decision_version": "1.0.0",
+  "source": "youtube",
+  "status": "NOT_ELIGIBLE",
+  "evaluated_at": "2026-08-17T00:00:00Z",
+  "policy_evidence": [
+    {
+      "id": "YT-POLICY-RETENTION",
+      "url": "https://developers.google.com/youtube/terms/developer-policies",
+      "checked_at": "2026-08-17T00:00:00Z",
+      "claim": "Limited Non-Authorized API Data may be stored only as necessary and no longer than 30 days before deletion or refresh."
+    },
+    {
+      "id": "YT-POLICY-IDENTITY",
+      "url": "https://developers.google.com/youtube/terms/developer-policies-guide",
+      "checked_at": "2026-08-17T00:00:00Z",
+      "claim": "The privacy guidance prohibits harvesting, tracking, inferring, deriving, or storing information usable to identify a user without consent."
+    },
+    {
+      "id": "YT-POLICY-DELETION",
+      "url": "https://developers.google.com/youtube/terms/api-services-terms-of-service",
+      "checked_at": "2026-08-17T00:00:00Z",
+      "claim": "API Data must be removed when required by termination or discontinuance, and stored API Data remains subject to the developer policies."
+    },
+    {
+      "id": "PRODUCT-EVIDENCE-CONTRACT",
+      "url": "https://research-auto.local/docs/prd",
+      "checked_at": "2026-08-17T00:00:00Z",
+      "claim": "The product requires a 90-day evidence window, independent authors, and evidence-linked reviewable outputs."
+    }
+  ],
+  "policy_evidence_sha256": "d1297f56538eaa27ab186d18790a57869be0f0c4c58bfbb09fc28f27f97369dc",
+  "product_requirements": {
+    "evidence_window_days": 90,
+    "stable_author_identity_required": true,
+    "immutable_evidence_required": true
+  },
+  "decision_basis_sha256": "4e3c545e75e97f2286d4fe7555e7cb41f10d8a0d5b149762f9e593cc859062da",
+  "data_classes": [
+    {
+      "name": "comment_text",
+      "policy_class": "non_authorized_api_data",
+      "persisted": true,
+      "max_retention_days": 30,
+      "refresh_method": "Re-fetch each comment before day 30; changed or unavailable text cannot preserve the original frozen bytes.",
+      "deletion_method": "Delete local comment text when refresh fails, the comment disappears, or the retention deadline expires.",
+      "stable_across_runs": false,
+      "evidence_ids": ["YT-POLICY-RETENTION", "PRODUCT-EVIDENCE-CONTRACT"]
+    },
+    {
+      "name": "comment_id",
+      "policy_class": "non_authorized_api_data",
+      "persisted": true,
+      "max_retention_days": 30,
+      "refresh_method": "Use the official comments lookup surface to revalidate the identifier before day 30.",
+      "deletion_method": "Delete the identifier when refresh fails or the deadline expires.",
+      "stable_across_runs": true,
+      "evidence_ids": ["YT-POLICY-RETENTION", "YT-POLICY-DELETION"]
+    },
+    {
+      "name": "video_id",
+      "policy_class": "non_authorized_api_data",
+      "persisted": true,
+      "max_retention_days": 30,
+      "refresh_method": "Revalidate the referenced video through the official API before day 30.",
+      "deletion_method": "Delete the identifier when the video is unavailable or the deadline expires.",
+      "stable_across_runs": true,
+      "evidence_ids": ["YT-POLICY-RETENTION", "YT-POLICY-DELETION"]
+    },
+    {
+      "name": "canonical_url",
+      "policy_class": "derived_from_non_authorized_api_data",
+      "persisted": true,
+      "max_retention_days": 30,
+      "refresh_method": "Regenerate the URL only after the video and comment identifiers are revalidated.",
+      "deletion_method": "Delete the URL with its underlying identifiers.",
+      "stable_across_runs": true,
+      "evidence_ids": ["YT-POLICY-RETENTION", "YT-POLICY-DELETION"]
+    },
+    {
+      "name": "author_derived_identifier",
+      "policy_class": "identity_derived_data_permission_unresolved",
+      "persisted": false,
+      "max_retention_days": 30,
+      "refresh_method": null,
+      "deletion_method": "Discard any run-scoped author derivative no later than the API Data deadline.",
+      "stable_across_runs": false,
+      "evidence_ids": ["YT-POLICY-IDENTITY", "PRODUCT-EVIDENCE-CONTRACT"]
+    }
+  ],
+  "required_gates": [
+    {
+      "id": "retention",
+      "status": "fail",
+      "evidence_ids": ["YT-POLICY-RETENTION", "PRODUCT-EVIDENCE-CONTRACT"],
+      "reason": "The 30-day Non-Authorized API Data limit is shorter than the product's required 90-day evidence window."
+    },
+    {
+      "id": "provenance",
+      "status": "fail",
+      "evidence_ids": ["YT-POLICY-RETENTION", "PRODUCT-EVIDENCE-CONTRACT"],
+      "reason": "Refreshing or deleting comment text changes or removes bytes bound to the frozen dataset and review packet hashes."
+    },
+    {
+      "id": "author_independence",
+      "status": "unresolved",
+      "evidence_ids": ["YT-POLICY-IDENTITY", "PRODUCT-EVIDENCE-CONTRACT"],
+      "reason": "The official guidance does not explicitly authorize a persistent cross-run derivative used to track commenter identity."
+    },
+    {
+      "id": "deletion",
+      "status": "unresolved",
+      "evidence_ids": ["YT-POLICY-RETENTION", "YT-POLICY-DELETION"],
+      "reason": "The project has no executable refresh and purge mechanism that can prove deadline compliance for every stored value."
+    },
+    {
+      "id": "reproducibility",
+      "status": "fail",
+      "evidence_ids": ["YT-POLICY-RETENTION", "PRODUCT-EVIDENCE-CONTRACT"],
+      "reason": "A mutable 30-day snapshot cannot currently reproduce a frozen 90-day evidence-linked source-quality experiment."
+    }
+  ],
+  "blockers": [
+    "B1_30_DAY_RETENTION_CONFLICTS_WITH_90_DAY_EVIDENCE",
+    "B2_STABLE_AUTHOR_DERIVATION_NOT_EXPLICITLY_ALLOWED",
+    "B3_REFRESH_CHANGES_OR_REMOVES_FROZEN_EVIDENCE",
+    "B4_NO_EXECUTABLE_DELETION_AND_REFRESH_PATH"
+  ],
+  "next_action": "replace_source"
+}
