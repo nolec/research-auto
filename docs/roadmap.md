@@ -37,7 +37,7 @@ Primary progress metric: **300 / 500 valid real observations**
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
 
 Last completed source-data checkpoint: `b358b16` (`feat: qualify steam source spike and freeze primary review`).
-The full regression suite passes **324 tests**. Three source datasets are qualified;
+The full regression suite passes **339 tests**. Three source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
 
@@ -47,7 +47,7 @@ still incomplete.
 | Stack Exchange | 20 / 20 | 0 / 5 | blocked | deferred |
 | Steam | 20 / 20 | 0 / 5 | blocked | deferred |
 | YouTube | excluded | unavailable | unavailable | `NOT_ELIGIBLE` |
-| Reddit | not started | not started | unavailable | deferred |
+| Reddit | blocked before collection | unavailable | unavailable | `NOT_ELIGIBLE` (authorization unverified) |
 | Replacement source | not selected | not started | unavailable | deferred |
 
 Immediate execution order:
@@ -57,9 +57,11 @@ Immediate execution order:
    corresponding primary labels.
 3. Replace YouTube because its 30-day API Data lifecycle and unresolved stable-author
    policy conflict with the product's frozen 90-day evidence contract.
-4. Freeze compliance for Reddit and one replacement source, then run fixture parsing
-   and a 10-record real smoke before either 100-record run.
-5. Run canonical ingestion, agreement, and development-only reports only after each
+4. Keep Reddit collection blocked while access, commercial reuse, automated-processing,
+   and deletion clearance are unverified; select a replacement source without waiting.
+5. Freeze compliance for the replacement source, then run fixture parsing and a
+   10-record real smoke before its 100-record run.
+6. Run canonical ingestion, agreement, and development-only reports only after each
    source's independent secondary packet is complete.
 
 Completed foundation:
@@ -192,6 +194,20 @@ or analysis dataset. Re-entry requires official compliance clearance or a verifi
 lifecycle that preserves 90-day evidence and author independence without prohibited
 tracking. The next action is to select a replacement source.
 
+### M2-B5 — Reddit Feasibility · Authorization unverified
+
+Reddit is blocked before collection under a conservative engineering gate. Current
+internal calibration and future commercial reuse are evaluated separately, and model
+training/fine-tuning are distinguished from planned embedding, inference extraction,
+and derived-output storage. The repository contains no verified access, commercial
+reuse, or automated-processing authorization, and no executable derivative-deletion
+path.
+
+Decision status: **NOT_ELIGIBLE for current collection and future commercial reuse**.
+This is not a permanent prohibition finding. Compliance routes to
+`seek_compliance_clearance`, while Source Spike execution routes immediately to
+`select_replacement_source`; no Reddit API, fixture, adapter, or smoke work begins.
+
 ### M2-B2 — Stack Exchange First Real Data
 
 Stack Exchange uses questions as the observation unit and treats four sites as smoke
@@ -245,6 +261,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Freeze Stack Exchange compliance and complete its real 10-record smoke
 - [x] Freeze Steam compliance for official public-review endpoint use only
 - [x] Evaluate YouTube lifecycle feasibility and mark it **NOT_ELIGIBLE** before collection
+- [x] Evaluate Reddit dual-horizon feasibility and block collection while authorization is unverified
 - [x] Freeze the Steam four-archetype `3/3/2/2` smoke manifest and 90-day window
 - [x] Complete Steam fixture parsing and valid-count collection at **10 / 10**
 - [x] Complete Steam real API smoke with **10 / 10** valid reviews and privacy PASS

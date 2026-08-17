@@ -4,6 +4,7 @@ import copy
 
 from src.source_spike.feasibility import (
     decision_basis_sha256,
+    decision_integrity_sha256,
     policy_evidence_sha256,
     validate_feasibility_decision,
 )
@@ -11,7 +12,7 @@ from src.source_spike.feasibility import (
 
 def decision() -> dict:
     value = {
-        "decision_version": "1.0.0",
+        "decision_version": "2.0.0",
         "source": "example",
         "status": "PASS",
         "evaluated_at": "2026-08-17T00:00:00Z",
@@ -21,6 +22,11 @@ def decision() -> dict:
                 "url": "https://example.com/policy",
                 "checked_at": "2026-08-17T00:00:00Z",
                 "claim": "Stored public API data may be retained for the experiment.",
+                "effective_at": "2026-01-01",
+                "section": "Retention",
+                "captured_excerpt": "Public API data may be retained for this experiment.",
+                "captured_excerpt_sha256": "",
+                "manual_revalidation_due_at": "2026-11-17T00:00:00Z",
             }
         ],
         "policy_evidence_sha256": "",
@@ -28,6 +34,44 @@ def decision() -> dict:
             "evidence_window_days": 90,
             "stable_author_identity_required": True,
             "immutable_evidence_required": True,
+        },
+        "intended_use": {
+            "current": {
+                "purpose": "internal_source_calibration",
+                "commercial_operation": False,
+                "persistent_storage": True,
+                "cross_run_author_identity": True,
+            },
+            "future": {
+                "purpose": "commercial_demand_intelligence_product",
+                "commercial_operation": True,
+                "reuse_current_raw_data": "desired_but_not_assumed",
+            },
+            "ai_processing": {
+                "model_training": "not_used",
+                "fine_tuning": "not_used",
+                "embedding_or_indexing": "planned",
+                "llm_inference_extraction": "planned",
+                "derived_output_storage": "planned",
+            },
+        },
+        "authorization_status": "verified",
+        "evaluation_profile": {
+            "id": "example-v1",
+            "required_gate_ids": [
+                "retention", "provenance", "author_independence", "deletion", "reproducibility"
+            ],
+            "required_data_roles": [
+                "content", "source_item_identity", "container_identity", "canonical_location", "author_identity"
+            ],
+            "horizon_gate_ids": {
+                "current_collection": [
+                    "retention", "provenance", "author_independence", "deletion", "reproducibility"
+                ],
+                "future_commercial_reuse": [
+                    "retention", "provenance", "author_independence", "deletion", "reproducibility"
+                ],
+            },
         },
         "data_classes": [
             {
@@ -40,12 +84,12 @@ def decision() -> dict:
                 "stable_across_runs": name == "author_derived_identifier",
                 "evidence_ids": ["policy-1"],
             }
-            for name in (
-                "comment_text",
-                "comment_id",
-                "video_id",
-                "canonical_url",
-                "author_derived_identifier",
+            for name, role in (
+                ("comment_text", "content"),
+                ("comment_id", "source_item_identity"),
+                ("video_id", "container_identity"),
+                ("canonical_url", "canonical_location"),
+                ("author_derived_identifier", "author_identity"),
             )
         ],
         "required_gates": [
@@ -59,13 +103,36 @@ def decision() -> dict:
             )
         ],
         "blockers": [],
+        "recheck_conditions": [],
+        "eligibility": {
+            "current_collection": "PASS",
+            "future_commercial_reuse": "PASS",
+        },
         "next_action": "implement_adapter",
+        "operational_next_action": "implement_adapter",
+        "supersedes_decision_sha256": None,
+        "decision_integrity_sha256": "",
     }
+    for item in value["policy_evidence"]:
+        item["captured_excerpt_sha256"] = __import__("hashlib").sha256(
+            item["captured_excerpt"].encode("utf-8")
+        ).hexdigest()
+    for item, role in zip(value["data_classes"], value["evaluation_profile"]["required_data_roles"]):
+        item["role"] = role
     value["policy_evidence_sha256"] = policy_evidence_sha256(value["policy_evidence"])
     value["decision_basis_sha256"] = decision_basis_sha256(
-        value["policy_evidence"], value["product_requirements"]
+        value["policy_evidence"], value["product_requirements"], value["intended_use"]
     )
+    value["decision_integrity_sha256"] = decision_integrity_sha256(value)
     return value
+
+
+def refresh_hashes(value: dict) -> None:
+    value["policy_evidence_sha256"] = policy_evidence_sha256(value["policy_evidence"])
+    value["decision_basis_sha256"] = decision_basis_sha256(
+        value["policy_evidence"], value["product_requirements"], value["intended_use"]
+    )
+    value["decision_integrity_sha256"] = decision_integrity_sha256(value)
 
 
 def test_valid_pass_decision_has_no_errors() -> None:
@@ -103,7 +170,7 @@ def test_missing_required_data_class_is_rejected() -> None:
     value = decision()
     value["data_classes"] = value["data_classes"][:-1]
 
-    assert "required data class set mismatch" in validate_feasibility_decision(value)
+    assert "required data role set mismatch" in validate_feasibility_decision(value)
 
 
 def test_short_retention_without_refresh_cannot_pass_retention_gate() -> None:
@@ -138,3 +205,139 @@ def test_schema_rejects_unknown_fields() -> None:
     value["silent_override"] = True
 
     assert any("silent_override" in error for error in validate_feasibility_decision(value))
+
+
+def test_decision_integrity_covers_verdict_and_routing() -> None:
+    value = decision()
+    value["eligibility"]["future_commercial_reuse"] = "NOT_ELIGIBLE"
+    value["next_action"] = "seek_compliance_clearance"
+
+    assert "decision integrity hash mismatch" in validate_feasibility_decision(value)
+
+
+def test_unverified_authorization_cannot_implement_adapter() -> None:
+    value = decision()
+    value["authorization_status"] = "unverified"
+    value["decision_integrity_sha256"] = decision_integrity_sha256(value)
+
+    assert "unverified authorization cannot route to adapter implementation" in validate_feasibility_decision(value)
+
+
+def test_duplicate_data_role_is_rejected() -> None:
+    value = decision()
+    value["data_classes"][1]["role"] = "content"
+    value["decision_integrity_sha256"] = decision_integrity_sha256(value)
+
+    assert "required data role set mismatch" in validate_feasibility_decision(value)
+
+
+def test_not_eligible_status_requires_at_least_one_ineligible_horizon() -> None:
+    value = decision()
+    value["status"] = "NOT_ELIGIBLE"
+    value["blockers"] = ["TEMPORARY_BLOCKER"]
+    value["required_gates"][0]["status"] = "unresolved"
+    value["next_action"] = "seek_compliance_clearance"
+    value["recheck_conditions"] = ["Verify the temporary authorization blocker."]
+    refresh_hashes(value)
+
+    assert "NOT_ELIGIBLE requires an ineligible horizon" in validate_feasibility_decision(value)
+
+
+def test_ineligible_current_collection_cannot_route_to_adapter() -> None:
+    value = decision()
+    value["status"] = "NOT_ELIGIBLE"
+    value["eligibility"]["current_collection"] = "NOT_ELIGIBLE"
+    value["blockers"] = ["CURRENT_COLLECTION_BLOCKED"]
+    value["required_gates"][0]["status"] = "unresolved"
+    value["next_action"] = "seek_compliance_clearance"
+    value["operational_next_action"] = "implement_adapter"
+    value["recheck_conditions"] = ["Clear current collection authorization."]
+    refresh_hashes(value)
+
+    assert "ineligible current collection cannot route to adapter" in validate_feasibility_decision(value)
+
+
+def test_evidence_revalidation_deadline_cannot_precede_evaluation() -> None:
+    value = decision()
+    value["policy_evidence"][0]["manual_revalidation_due_at"] = "2026-08-16T23:59:59Z"
+    refresh_hashes(value)
+
+    assert any(
+        "policy evidence revalidation deadline has expired" in error
+        for error in validate_feasibility_decision(value)
+    )
+
+
+def test_unverified_authorization_cannot_pass_current_collection() -> None:
+    value = decision()
+    value["status"] = "NOT_ELIGIBLE"
+    value["authorization_status"] = "unverified"
+    value["eligibility"]["future_commercial_reuse"] = "NOT_ELIGIBLE"
+    value["required_gates"][0]["status"] = "unresolved"
+    value["blockers"] = ["AUTHORIZATION_UNVERIFIED"]
+    value["next_action"] = "seek_compliance_clearance"
+    value["recheck_conditions"] = ["Verify collection authorization."]
+    refresh_hashes(value)
+
+    errors = validate_feasibility_decision(value)
+    assert "unverified authorization cannot pass current collection" in errors
+    assert "unverified authorization cannot route to adapter" in errors
+
+
+def test_horizon_cannot_pass_with_unresolved_mapped_gate() -> None:
+    value = decision()
+    value["required_gates"][0]["status"] = "unresolved"
+    refresh_hashes(value)
+
+    errors = validate_feasibility_decision(value)
+    assert "current_collection cannot pass with unresolved or failed gates" in errors
+    assert "future_commercial_reuse cannot pass with unresolved or failed gates" in errors
+
+
+def add_future_only_gate(value: dict, *, map_to_future: bool) -> None:
+    value["required_gates"].append(
+        {
+            "id": "future_only",
+            "status": "unresolved",
+            "evidence_ids": ["policy-1"],
+            "reason": "Future commercial permission remains unresolved for this example.",
+        }
+    )
+    value["evaluation_profile"]["required_gate_ids"].append("future_only")
+    if map_to_future:
+        value["evaluation_profile"]["horizon_gate_ids"]["future_commercial_reuse"] = [
+            "future_only"
+        ]
+    value["status"] = "NOT_ELIGIBLE"
+    value["eligibility"]["future_commercial_reuse"] = "NOT_ELIGIBLE"
+    value["blockers"] = ["FUTURE_PERMISSION_UNRESOLVED"]
+    value["next_action"] = "seek_compliance_clearance"
+    value["recheck_conditions"] = ["Verify future commercial permission."]
+
+
+def test_every_required_gate_must_be_assigned_to_a_horizon() -> None:
+    value = decision()
+    add_future_only_gate(value, map_to_future=False)
+    value["eligibility"]["current_collection"] = "NOT_ELIGIBLE"
+    value["operational_next_action"] = "select_replacement_source"
+    refresh_hashes(value)
+
+    assert "required gates must be assigned to at least one horizon" in validate_feasibility_decision(value)
+
+
+def test_horizon_must_pass_when_all_mapped_gates_pass() -> None:
+    value = decision()
+    add_future_only_gate(value, map_to_future=True)
+    value["eligibility"]["current_collection"] = "NOT_ELIGIBLE"
+    value["operational_next_action"] = "select_replacement_source"
+    refresh_hashes(value)
+
+    assert "current_collection must pass when all mapped gates pass" in validate_feasibility_decision(value)
+
+
+def test_current_pass_future_not_eligible_is_valid_when_gate_sets_diverge() -> None:
+    value = decision()
+    add_future_only_gate(value, map_to_future=True)
+    refresh_hashes(value)
+
+    assert validate_feasibility_decision(value) == []

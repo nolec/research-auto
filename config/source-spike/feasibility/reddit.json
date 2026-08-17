@@ -1,0 +1,157 @@
+{
+  "decision_version": "2.0.0",
+  "source": "reddit",
+  "status": "NOT_ELIGIBLE",
+  "evaluated_at": "2026-08-17T00:00:00Z",
+  "policy_evidence": [
+    {
+      "id": "REDDIT-ACCESS",
+      "url": "https://support.reddithelp.com/hc/en-us/articles/14945211791892-Developer-Platform-Accessing-Reddit-Data",
+      "checked_at": "2026-08-17T00:00:00Z",
+      "claim": "Reddit identifies Reddit for Researchers as the official authorized avenue for research using Reddit data.",
+      "effective_at": null,
+      "section": "Reddit for Researchers",
+      "captured_excerpt": "The official authorized avenue for research using Reddit data is Reddit for Researchers.",
+      "captured_excerpt_sha256": "e499cb34ba5972b6cb4582793da75efdbe2d94703bb45bdf9c240e344e425844",
+      "manual_revalidation_due_at": "2026-11-17T00:00:00Z"
+    },
+    {
+      "id": "REDDIT-COMMERCIAL",
+      "url": "https://redditinc.com/policies/developer-terms",
+      "checked_at": "2026-08-17T00:00:00Z",
+      "claim": "Commercial use of Reddit Services and Data requires express permission or a separate written agreement.",
+      "effective_at": "2024-09-24",
+      "section": "4.1 Commercial Use Restrictions",
+      "captured_excerpt": "Commercial use requires express permission or approval in writing from Reddit.",
+      "captured_excerpt_sha256": "83185ed216926eda050080d053da55f8c3635ed77870834eac5b4c6a8c412820",
+      "manual_revalidation_due_at": "2026-11-17T00:00:00Z"
+    },
+    {
+      "id": "REDDIT-AI",
+      "url": "https://redditinc.com/policies/developer-terms",
+      "checked_at": "2026-08-17T00:00:00Z",
+      "claim": "The terms restrict using Reddit Data to train machine-learning or artificial-intelligence models without permission, but this does not by itself resolve inference use.",
+      "effective_at": "2024-09-24",
+      "section": "Restrictions",
+      "captured_excerpt": "Training machine-learning or artificial-intelligence models with Reddit Data requires permission.",
+      "captured_excerpt_sha256": "b346f5a9b62a3734e6fe678d31f81322dd0a533361fbc8b9b3989aa90906484a",
+      "manual_revalidation_due_at": "2026-11-17T00:00:00Z"
+    },
+    {
+      "id": "REDDIT-DPA",
+      "url": "https://redditinc.com/policies/developer-dpa",
+      "checked_at": "2026-08-17T00:00:00Z",
+      "claim": "The Developer DPA requires deletion of applicable Reddit Personal Data and derivatives through an automated process within the stated deadline.",
+      "effective_at": "2024-03-04",
+      "section": "Deletion",
+      "captured_excerpt": "Applicable Reddit Personal Data and derivatives must be deleted through automated means.",
+      "captured_excerpt_sha256": "1169438c7de3789cc45eb31d6a348a95368dc3c4ecc153eee2cad39a59201483",
+      "manual_revalidation_due_at": "2026-11-17T00:00:00Z"
+    },
+    {
+      "id": "PRODUCT-EVIDENCE-CONTRACT",
+      "url": "https://research-auto.local/docs/prd",
+      "checked_at": "2026-08-17T00:00:00Z",
+      "claim": "The product requires a 90-day evidence window, stable independent-author checks, and reviewable derived outputs.",
+      "effective_at": "2026-08-17",
+      "section": "Evidence contract",
+      "captured_excerpt": "The product requires a 90-day window and stable independent-author checks.",
+      "captured_excerpt_sha256": "bea2b1af25ffcdb4012cb69929f9dc76f807a062240b43ac79fc4f3d79833c38",
+      "manual_revalidation_due_at": "2026-11-17T00:00:00Z"
+    }
+  ],
+  "policy_evidence_sha256": "7b901a9a6bc4dc94c089c95d321df2971872c8be40186928a2da6ced52b4d2b5",
+  "product_requirements": {
+    "evidence_window_days": 90,
+    "stable_author_identity_required": true,
+    "immutable_evidence_required": true
+  },
+  "intended_use": {
+    "current": {
+      "purpose": "internal_source_calibration",
+      "commercial_operation": false,
+      "persistent_storage": true,
+      "cross_run_author_identity": true
+    },
+    "future": {
+      "purpose": "commercial_demand_intelligence_product",
+      "commercial_operation": true,
+      "reuse_current_raw_data": "desired_but_not_assumed"
+    },
+    "ai_processing": {
+      "model_training": "not_used",
+      "fine_tuning": "not_used",
+      "embedding_or_indexing": "planned",
+      "llm_inference_extraction": "planned",
+      "derived_output_storage": "planned"
+    }
+  },
+  "authorization_status": "unverified",
+  "decision_basis_sha256": "dd11966ee96c077bf65e0a897141217be73262163d0caddd5cd4d57d57e4f6ee",
+  "evaluation_profile": {
+    "id": "reddit-v1",
+    "required_gate_ids": ["access_authorization", "current_use", "future_commercial_reuse", "automated_processing", "retention", "provenance", "author_independence", "deletion", "reproducibility"],
+    "required_data_roles": ["content", "source_item_identity", "container_identity", "canonical_location", "author_identity"],
+    "horizon_gate_ids": {
+      "current_collection": ["access_authorization", "current_use", "automated_processing", "retention", "provenance", "author_independence", "deletion", "reproducibility"],
+      "future_commercial_reuse": ["access_authorization", "future_commercial_reuse", "automated_processing", "retention", "provenance", "author_independence", "deletion", "reproducibility"]
+    }
+  },
+  "data_classes": [
+    {
+      "name": "post_or_comment_text", "role": "content", "policy_class": "reddit_data", "persisted": true,
+      "max_retention_days": null, "refresh_method": null, "deletion_method": "Delete text and derived references when required.",
+      "stable_across_runs": false, "evidence_ids": ["REDDIT-DPA", "PRODUCT-EVIDENCE-CONTRACT"]
+    },
+    {
+      "name": "thing_id", "role": "source_item_identity", "policy_class": "reddit_data", "persisted": true,
+      "max_retention_days": null, "refresh_method": null, "deletion_method": "Delete the source identifier with the source record.",
+      "stable_across_runs": true, "evidence_ids": ["REDDIT-DPA"]
+    },
+    {
+      "name": "subreddit_or_thread_id", "role": "container_identity", "policy_class": "reddit_data", "persisted": true,
+      "max_retention_days": null, "refresh_method": null, "deletion_method": "Delete the container identifier with the source record.",
+      "stable_across_runs": true, "evidence_ids": ["REDDIT-DPA"]
+    },
+    {
+      "name": "canonical_url", "role": "canonical_location", "policy_class": "derived_reddit_data", "persisted": true,
+      "max_retention_days": null, "refresh_method": null, "deletion_method": "Delete the URL with its source identifiers.",
+      "stable_across_runs": true, "evidence_ids": ["REDDIT-DPA"]
+    },
+    {
+      "name": "author_derived_identifier", "role": "author_identity", "policy_class": "derived_personal_data_unresolved", "persisted": true,
+      "max_retention_days": null, "refresh_method": null, "deletion_method": "Delete the author derivative and dependent records when required.",
+      "stable_across_runs": true, "evidence_ids": ["REDDIT-DPA", "PRODUCT-EVIDENCE-CONTRACT"]
+    }
+  ],
+  "required_gates": [
+    {"id": "access_authorization", "status": "unresolved", "evidence_ids": ["REDDIT-ACCESS"], "reason": "No Reddit for Researchers or other applicable access authorization is recorded."},
+    {"id": "current_use", "status": "unresolved", "evidence_ids": ["REDDIT-ACCESS"], "reason": "The internal calibration path has not been matched to a verified Reddit authorization."},
+    {"id": "future_commercial_reuse", "status": "unresolved", "evidence_ids": ["REDDIT-COMMERCIAL"], "reason": "No written commercial reuse permission is recorded for the future product."},
+    {"id": "automated_processing", "status": "unresolved", "evidence_ids": ["REDDIT-AI"], "reason": "Training is not planned, but inference, indexing, and derived-output permissions remain unverified."},
+    {"id": "retention", "status": "unresolved", "evidence_ids": ["REDDIT-DPA", "PRODUCT-EVIDENCE-CONTRACT"], "reason": "The applicable lifecycle for every retained Reddit data class has not been established."},
+    {"id": "provenance", "status": "unresolved", "evidence_ids": ["REDDIT-DPA", "PRODUCT-EVIDENCE-CONTRACT"], "reason": "Deletion propagation may remove evidence required by a frozen review packet."},
+    {"id": "author_independence", "status": "unresolved", "evidence_ids": ["REDDIT-DPA", "PRODUCT-EVIDENCE-CONTRACT"], "reason": "Persistent cross-run author derivation has not been cleared for this use."},
+    {"id": "deletion", "status": "fail", "evidence_ids": ["REDDIT-DPA"], "reason": "The project has no executable Reddit deletion propagation mechanism for data and derivatives."},
+    {"id": "reproducibility", "status": "unresolved", "evidence_ids": ["REDDIT-DPA", "PRODUCT-EVIDENCE-CONTRACT"], "reason": "Reproducibility cannot be guaranteed until deletion and retention behavior is defined."}
+  ],
+  "blockers": [
+    "B1_ACCESS_AUTHORIZATION_UNVERIFIED",
+    "B2_COMMERCIAL_REUSE_PERMISSION_UNVERIFIED",
+    "B3_AUTOMATED_PROCESSING_PERMISSION_UNVERIFIED",
+    "B4_NO_EXECUTABLE_DERIVATIVE_DELETION_PATH"
+  ],
+  "recheck_conditions": [
+    "Record applicable Reddit access authorization and its permitted use scope.",
+    "Record written commercial and automated-processing permissions or authoritative exclusions.",
+    "Implement and test deletion propagation for Reddit data and derived outputs."
+  ],
+  "eligibility": {
+    "current_collection": "NOT_ELIGIBLE",
+    "future_commercial_reuse": "NOT_ELIGIBLE"
+  },
+  "next_action": "seek_compliance_clearance",
+  "operational_next_action": "select_replacement_source",
+  "supersedes_decision_sha256": null,
+  "decision_integrity_sha256": "c74fc600a993a3f63c6d7805b9d873ed38fe0392e68b03d2addc2c9b4bb37b79"
+}

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from hashlib import sha256
 from pathlib import Path
 from typing import Mapping, Sequence
@@ -15,20 +16,6 @@ _SCHEMA = json.loads(
     .read_text(encoding="utf-8")
 )
 _VALIDATOR = Draft202012Validator(_SCHEMA, format_checker=FORMAT_CHECKER)
-_REQUIRED_GATES = {
-    "retention",
-    "provenance",
-    "author_independence",
-    "deletion",
-    "reproducibility",
-}
-_REQUIRED_DATA_CLASSES = {
-    "comment_text",
-    "comment_id",
-    "video_id",
-    "canonical_url",
-    "author_derived_identifier",
-}
 
 
 def policy_evidence_sha256(evidence: Sequence[Mapping[str, object]]) -> str:
@@ -39,14 +26,28 @@ def policy_evidence_sha256(evidence: Sequence[Mapping[str, object]]) -> str:
 
 
 def decision_basis_sha256(
-    evidence: Sequence[Mapping[str, object]], requirements: Mapping[str, object]
+    evidence: Sequence[Mapping[str, object]],
+    requirements: Mapping[str, object],
+    intended_use: Mapping[str, object],
 ) -> str:
     encoded = json.dumps(
-        {"policy_evidence": evidence, "product_requirements": requirements},
+        {
+            "policy_evidence": evidence,
+            "product_requirements": requirements,
+            "intended_use": intended_use,
+        },
         ensure_ascii=False,
         allow_nan=False,
         separators=(",", ":"),
         sort_keys=True,
+    ).encode("utf-8")
+    return sha256(encoded).hexdigest()
+
+
+def decision_integrity_sha256(value: Mapping[str, object]) -> str:
+    payload = {key: item for key, item in value.items() if key != "decision_integrity_sha256"}
+    encoded = json.dumps(
+        payload, ensure_ascii=False, allow_nan=False, separators=(",", ":"), sort_keys=True
     ).encode("utf-8")
     return sha256(encoded).hexdigest()
 
@@ -73,20 +74,40 @@ def validate_feasibility_decision(value: Mapping[str, object]) -> list[str]:
         errors.append("policy evidence ids must be unique")
     if policy_evidence_sha256(evidence) != value["policy_evidence_sha256"]:
         errors.append("policy evidence hash mismatch")
+    evaluated_at = datetime.fromisoformat(str(value["evaluated_at"]).replace("Z", "+00:00"))
+    for item in evidence:
+        excerpt = str(item["captured_excerpt"])
+        if sha256(excerpt.encode("utf-8")).hexdigest() != item["captured_excerpt_sha256"]:
+            errors.append(f"{item['id']}: captured excerpt hash mismatch")
+        revalidation_due_at = datetime.fromisoformat(
+            str(item["manual_revalidation_due_at"]).replace("Z", "+00:00")
+        )
+        if revalidation_due_at < evaluated_at:
+            errors.append(f"{item['id']}: policy evidence revalidation deadline has expired")
 
     requirements = value["product_requirements"]
     assert isinstance(requirements, Mapping)
-    if decision_basis_sha256(evidence, requirements) != value["decision_basis_sha256"]:
+    intended_use = value["intended_use"]
+    assert isinstance(intended_use, Mapping)
+    if decision_basis_sha256(evidence, requirements, intended_use) != value["decision_basis_sha256"]:
         errors.append("decision basis hash mismatch")
+    if decision_integrity_sha256(value) != value["decision_integrity_sha256"]:
+        errors.append("decision integrity hash mismatch")
 
     data_classes = value["data_classes"]
     gates = value["required_gates"]
     assert isinstance(data_classes, list) and isinstance(gates, list)
     data_by_name = {str(item["name"]): item for item in data_classes}
     gate_by_id = {str(item["id"]): item for item in gates}
-    if len(data_by_name) != len(data_classes) or set(data_by_name) != _REQUIRED_DATA_CLASSES:
-        errors.append("required data class set mismatch")
-    if len(gate_by_id) != len(gates) or set(gate_by_id) != _REQUIRED_GATES:
+    profile = value["evaluation_profile"]
+    assert isinstance(profile, Mapping)
+    required_roles = set(profile["required_data_roles"])
+    observed_roles = [str(item["role"]) for item in data_classes]
+    if len(data_by_name) != len(data_classes):
+        errors.append("data class names must be unique")
+    if len(observed_roles) != len(set(observed_roles)) or set(observed_roles) != required_roles:
+        errors.append("required data role set mismatch")
+    if len(gate_by_id) != len(gates) or set(gate_by_id) != set(profile["required_gate_ids"]):
         errors.append("required gate set mismatch")
 
     known_evidence = set(evidence_ids)
@@ -103,7 +124,7 @@ def validate_feasibility_decision(value: Mapping[str, object]) -> list[str]:
                 errors.append("retention gate cannot pass without a refresh path")
                 break
 
-    author = data_by_name.get("author_derived_identifier")
+    author = next((item for item in data_classes if item["role"] == "author_identity"), None)
     author_gate = gate_by_id.get("author_independence")
     if (
         requirements["stable_author_identity_required"] is True
@@ -118,8 +139,34 @@ def validate_feasibility_decision(value: Mapping[str, object]) -> list[str]:
     blockers = value["blockers"]
     assert isinstance(blockers, list)
     all_pass = all(item["status"] == "pass" for item in gates)
+    eligibility = value["eligibility"]
+    assert isinstance(eligibility, Mapping)
+    horizon_gate_ids = profile["horizon_gate_ids"]
+    assert isinstance(horizon_gate_ids, Mapping)
+    assigned_gate_ids = {
+        gate_id for mapped_gate_ids in horizon_gate_ids.values() for gate_id in mapped_gate_ids
+    }
+    if set(profile["required_gate_ids"]) - assigned_gate_ids:
+        errors.append("required gates must be assigned to at least one horizon")
+    for horizon, mapped_gate_ids in horizon_gate_ids.items():
+        unknown_gate_ids = set(mapped_gate_ids) - set(gate_by_id)
+        if unknown_gate_ids:
+            errors.append(f"{horizon}: horizon references unknown gates")
+            continue
+        mapped_gates_pass = all(
+            gate_by_id[gate_id]["status"] == "pass" for gate_id in mapped_gate_ids
+        )
+        if eligibility[horizon] == "PASS" and not mapped_gates_pass:
+            errors.append(f"{horizon} cannot pass with unresolved or failed gates")
+        if (
+            value["authorization_status"] == "verified"
+            and eligibility[horizon] == "NOT_ELIGIBLE"
+            and mapped_gates_pass
+        ):
+            errors.append(f"{horizon} must pass when all mapped gates pass")
+    both_eligible = all(item == "PASS" for item in eligibility.values())
     if status == "PASS":
-        if not all_pass:
+        if not all_pass or not both_eligible:
             errors.append("PASS requires every required gate to pass")
         if blockers:
             errors.append("PASS cannot retain blockers")
@@ -132,4 +179,21 @@ def validate_feasibility_decision(value: Mapping[str, object]) -> list[str]:
             errors.append("NOT_ELIGIBLE cannot route to adapter implementation")
         if all_pass:
             errors.append("NOT_ELIGIBLE requires a failed or unresolved gate")
+        if both_eligible:
+            errors.append("NOT_ELIGIBLE requires an ineligible horizon")
+    current_eligible = eligibility["current_collection"] == "PASS"
+    operational_action = value["operational_next_action"]
+    if not current_eligible and operational_action == "implement_adapter":
+        errors.append("ineligible current collection cannot route to adapter")
+    if current_eligible and operational_action != "implement_adapter":
+        errors.append("eligible current collection must route to adapter")
+    if value["authorization_status"] == "unverified":
+        if current_eligible:
+            errors.append("unverified authorization cannot pass current collection")
+        if operational_action == "implement_adapter":
+            errors.append("unverified authorization cannot route to adapter")
+        if value["next_action"] == "implement_adapter":
+            errors.append("unverified authorization cannot route to adapter implementation")
+    if value["next_action"] == "seek_compliance_clearance" and not value["recheck_conditions"]:
+        errors.append("compliance clearance requires a recheck condition")
     return errors

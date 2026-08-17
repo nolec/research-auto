@@ -13,9 +13,17 @@
     "policy_evidence_sha256",
     "product_requirements",
     "decision_basis_sha256",
+    "decision_integrity_sha256",
+    "intended_use",
+    "authorization_status",
+    "evaluation_profile",
     "data_classes",
     "required_gates",
     "blockers",
+    "recheck_conditions",
+    "eligibility",
+    "operational_next_action",
+    "supersedes_decision_sha256",
     "next_action"
   ],
   "properties": {
@@ -29,17 +37,79 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "url", "checked_at", "claim"],
+        "required": ["id", "url", "checked_at", "claim", "effective_at", "section", "captured_excerpt", "captured_excerpt_sha256", "manual_revalidation_due_at"],
         "properties": {
           "id": {"type": "string", "minLength": 1},
           "url": {"type": "string", "format": "uri"},
           "checked_at": {"type": "string", "format": "date-time"},
-          "claim": {"type": "string", "minLength": 20}
+          "claim": {"type": "string", "minLength": 20},
+          "effective_at": {"type": ["string", "null"], "format": "date"},
+          "section": {"type": "string", "minLength": 1},
+          "captured_excerpt": {"type": "string", "minLength": 20, "maxLength": 500, "description": "Captured policy wording or concise summary; its hash verifies only this stored text, not the live source."},
+          "captured_excerpt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "manual_revalidation_due_at": {"type": "string", "format": "date-time"}
         }
       }
     },
     "policy_evidence_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "decision_basis_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "decision_integrity_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "authorization_status": {"enum": ["verified", "unverified"]},
+    "supersedes_decision_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+    "intended_use": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current", "future", "ai_processing"],
+      "properties": {
+        "current": {
+          "type": "object", "additionalProperties": false,
+          "required": ["purpose", "commercial_operation", "persistent_storage", "cross_run_author_identity"],
+          "properties": {
+            "purpose": {"type": "string", "minLength": 1},
+            "commercial_operation": {"type": "boolean"},
+            "persistent_storage": {"type": "boolean"},
+            "cross_run_author_identity": {"type": "boolean"}
+          }
+        },
+        "future": {
+          "type": "object", "additionalProperties": false,
+          "required": ["purpose", "commercial_operation", "reuse_current_raw_data"],
+          "properties": {
+            "purpose": {"type": "string", "minLength": 1},
+            "commercial_operation": {"type": "boolean"},
+            "reuse_current_raw_data": {"enum": ["not_planned", "desired_but_not_assumed", "required"]}
+          }
+        },
+        "ai_processing": {
+          "type": "object", "additionalProperties": false,
+          "required": ["model_training", "fine_tuning", "embedding_or_indexing", "llm_inference_extraction", "derived_output_storage"],
+          "properties": {
+            "model_training": {"enum": ["not_used", "planned"]},
+            "fine_tuning": {"enum": ["not_used", "planned"]},
+            "embedding_or_indexing": {"enum": ["not_used", "planned"]},
+            "llm_inference_extraction": {"enum": ["not_used", "planned"]},
+            "derived_output_storage": {"enum": ["not_used", "planned"]}
+          }
+        }
+      }
+    },
+    "evaluation_profile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "required_gate_ids", "required_data_roles", "horizon_gate_ids"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "required_gate_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "required_data_roles": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "horizon_gate_ids": {
+          "type": "object", "additionalProperties": false,
+          "required": ["current_collection", "future_commercial_reuse"],
+          "properties": {
+            "current_collection": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+            "future_commercial_reuse": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+          }
+        }
+      }
+    },
     "product_requirements": {
       "type": "object",
       "additionalProperties": false,
@@ -56,9 +126,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name", "policy_class", "persisted", "max_retention_days", "refresh_method", "deletion_method", "stable_across_runs", "evidence_ids"],
+        "required": ["name", "role", "policy_class", "persisted", "max_retention_days", "refresh_method", "deletion_method", "stable_across_runs", "evidence_ids"],
         "properties": {
           "name": {"type": "string", "minLength": 1},
+          "role": {"type": "string", "minLength": 1},
           "policy_class": {"type": "string", "minLength": 1},
           "persisted": {"type": "boolean"},
           "max_retention_days": {"type": ["integer", "null"], "minimum": 1},
@@ -85,6 +156,16 @@
       }
     },
     "blockers": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "recheck_conditions": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "eligibility": {
+      "type": "object", "additionalProperties": false,
+      "required": ["current_collection", "future_commercial_reuse"],
+      "properties": {
+        "current_collection": {"enum": ["PASS", "NOT_ELIGIBLE"]},
+        "future_commercial_reuse": {"enum": ["PASS", "NOT_ELIGIBLE"]}
+      }
+    },
+    "operational_next_action": {"enum": ["implement_adapter", "select_replacement_source", "none"]},
     "next_action": {"enum": ["implement_adapter", "replace_source", "seek_compliance_clearance"]}
   }
 }

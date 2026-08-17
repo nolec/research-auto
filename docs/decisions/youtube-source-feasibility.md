@@ -37,3 +37,10 @@ independence를 정책에 맞게 유지하는 검증 가능한 lifecycle이 마�
 
 Machine-readable authority:
 `config/source-spike/feasibility/youtube.json`
+
+## Decision lineage
+
+Version 2 adds dual-horizon usage, evidence traceability, and whole-decision integrity.
+It supersedes canonical v1 digest
+`65419f96c7858d5455b01305270c1afd529d9ed460f0cb81e7314bc092a214a3` without
+changing the original data-class names, blocking gate meanings, verdict, or route.

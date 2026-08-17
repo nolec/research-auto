@@ -22,6 +22,17 @@ def test_youtube_decision_is_valid_and_not_eligible() -> None:
     assert decision["source"] == "youtube"
     assert decision["status"] == "NOT_ELIGIBLE"
     assert decision["next_action"] == "replace_source"
+    assert decision["decision_version"] == "2.0.0"
+    assert decision["supersedes_decision_sha256"] == (
+        "65419f96c7858d5455b01305270c1afd529d9ed460f0cb81e7314bc092a214a3"
+    )
+    assert [item["name"] for item in decision["data_classes"]] == [
+        "comment_text",
+        "comment_id",
+        "video_id",
+        "canonical_url",
+        "author_derived_identifier",
+    ]
 
 
 def test_youtube_decision_preserves_all_blocking_boundaries() -> None:

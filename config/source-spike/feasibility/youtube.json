@@ -1,5 +1,5 @@
 {
-  "decision_version": "1.0.0",
+  "decision_version": "2.0.0",
   "source": "youtube",
   "status": "NOT_ELIGIBLE",
   "evaluated_at": "2026-08-17T00:00:00Z",
@@ -8,37 +8,88 @@
       "id": "YT-POLICY-RETENTION",
       "url": "https://developers.google.com/youtube/terms/developer-policies",
       "checked_at": "2026-08-17T00:00:00Z",
-      "claim": "Limited Non-Authorized API Data may be stored only as necessary and no longer than 30 days before deletion or refresh."
+      "claim": "Limited Non-Authorized API Data may be stored only as necessary and no longer than 30 days before deletion or refresh.",
+      "effective_at": null,
+      "section": "III.E.4",
+      "captured_excerpt": "Limited Non-Authorized API Data may be stored no longer than 30 days before deletion or refresh.",
+      "captured_excerpt_sha256": "d824d18fcabe450b05157ec4e025e8b7a7a64a53c656e8687ef9004e315920fb",
+      "manual_revalidation_due_at": "2026-11-17T00:00:00Z"
     },
     {
       "id": "YT-POLICY-IDENTITY",
       "url": "https://developers.google.com/youtube/terms/developer-policies-guide",
       "checked_at": "2026-08-17T00:00:00Z",
-      "claim": "The privacy guidance prohibits harvesting, tracking, inferring, deriving, or storing information usable to identify a user without consent."
+      "claim": "The privacy guidance prohibits harvesting, tracking, inferring, deriving, or storing information usable to identify a user without consent.",
+      "effective_at": null,
+      "section": "Privacy guidance",
+      "captured_excerpt": "The guidance restricts deriving or storing information usable to identify a user without consent.",
+      "captured_excerpt_sha256": "d3a06dfbe223660435439609096e872b0339faccb9920a7951dfa3e3e9eec824",
+      "manual_revalidation_due_at": "2026-11-17T00:00:00Z"
     },
     {
       "id": "YT-POLICY-DELETION",
       "url": "https://developers.google.com/youtube/terms/api-services-terms-of-service",
       "checked_at": "2026-08-17T00:00:00Z",
-      "claim": "API Data must be removed when required by termination or discontinuance, and stored API Data remains subject to the developer policies."
+      "claim": "API Data must be removed when required by termination or discontinuance, and stored API Data remains subject to the developer policies.",
+      "effective_at": null,
+      "section": "Termination",
+      "captured_excerpt": "Stored API Data remains subject to developer policies and removal requirements.",
+      "captured_excerpt_sha256": "fc4b6d9d531282903eb80d1b308d59afa65540ba614d9d4a3357f16bdf17789e",
+      "manual_revalidation_due_at": "2026-11-17T00:00:00Z"
     },
     {
       "id": "PRODUCT-EVIDENCE-CONTRACT",
       "url": "https://research-auto.local/docs/prd",
       "checked_at": "2026-08-17T00:00:00Z",
-      "claim": "The product requires a 90-day evidence window, independent authors, and evidence-linked reviewable outputs."
+      "claim": "The product requires a 90-day evidence window, independent authors, and evidence-linked reviewable outputs.",
+      "effective_at": "2026-08-17",
+      "section": "Evidence contract",
+      "captured_excerpt": "The product requires a 90-day evidence window and stable independent-author checks.",
+      "captured_excerpt_sha256": "2bf0900b477b7a1fbbeac2ccec6e411e5417a8a8f01447a55e69f5861e5de2a9",
+      "manual_revalidation_due_at": "2026-11-17T00:00:00Z"
     }
   ],
-  "policy_evidence_sha256": "d1297f56538eaa27ab186d18790a57869be0f0c4c58bfbb09fc28f27f97369dc",
+  "policy_evidence_sha256": "e4dc3753b5d2a07595d95414e3b9b5d4d0d0a0362c75ac8b885eac63d6d6294b",
   "product_requirements": {
     "evidence_window_days": 90,
     "stable_author_identity_required": true,
     "immutable_evidence_required": true
   },
-  "decision_basis_sha256": "4e3c545e75e97f2286d4fe7555e7cb41f10d8a0d5b149762f9e593cc859062da",
+  "intended_use": {
+    "current": {
+      "purpose": "internal_source_calibration",
+      "commercial_operation": false,
+      "persistent_storage": true,
+      "cross_run_author_identity": true
+    },
+    "future": {
+      "purpose": "commercial_demand_intelligence_product",
+      "commercial_operation": true,
+      "reuse_current_raw_data": "desired_but_not_assumed"
+    },
+    "ai_processing": {
+      "model_training": "not_used",
+      "fine_tuning": "not_used",
+      "embedding_or_indexing": "planned",
+      "llm_inference_extraction": "planned",
+      "derived_output_storage": "planned"
+    }
+  },
+  "authorization_status": "unverified",
+  "evaluation_profile": {
+    "id": "youtube-v1",
+    "required_gate_ids": ["retention", "provenance", "author_independence", "deletion", "reproducibility"],
+    "required_data_roles": ["content", "source_item_identity", "container_identity", "canonical_location", "author_identity"],
+    "horizon_gate_ids": {
+      "current_collection": ["retention", "provenance", "author_independence", "deletion", "reproducibility"],
+      "future_commercial_reuse": ["retention", "provenance", "author_independence", "deletion", "reproducibility"]
+    }
+  },
+  "decision_basis_sha256": "74c6ef5d6fc25509cae5043669de4fd9922a394656e53250e53b91b3eca78e6d",
   "data_classes": [
     {
       "name": "comment_text",
+      "role": "content",
       "policy_class": "non_authorized_api_data",
       "persisted": true,
       "max_retention_days": 30,
@@ -49,6 +100,7 @@
     },
     {
       "name": "comment_id",
+      "role": "source_item_identity",
       "policy_class": "non_authorized_api_data",
       "persisted": true,
       "max_retention_days": 30,
@@ -59,6 +111,7 @@
     },
     {
       "name": "video_id",
+      "role": "container_identity",
       "policy_class": "non_authorized_api_data",
       "persisted": true,
       "max_retention_days": 30,
@@ -69,6 +122,7 @@
     },
     {
       "name": "canonical_url",
+      "role": "canonical_location",
       "policy_class": "derived_from_non_authorized_api_data",
       "persisted": true,
       "max_retention_days": 30,
@@ -79,6 +133,7 @@
     },
     {
       "name": "author_derived_identifier",
+      "role": "author_identity",
       "policy_class": "identity_derived_data_permission_unresolved",
       "persisted": false,
       "max_retention_days": 30,
@@ -126,5 +181,15 @@
     "B3_REFRESH_CHANGES_OR_REMOVES_FROZEN_EVIDENCE",
     "B4_NO_EXECUTABLE_DELETION_AND_REFRESH_PATH"
   ],
-  "next_action": "replace_source"
+  "recheck_conditions": [
+    "Obtain written lifecycle and stable-author clearance or implement a compliant refresh and purge path."
+  ],
+  "eligibility": {
+    "current_collection": "NOT_ELIGIBLE",
+    "future_commercial_reuse": "NOT_ELIGIBLE"
+  },
+  "next_action": "replace_source",
+  "operational_next_action": "select_replacement_source",
+  "supersedes_decision_sha256": "65419f96c7858d5455b01305270c1afd529d9ed460f0cb81e7314bc092a214a3",
+  "decision_integrity_sha256": "2490751cb1c77f758f4af8cc2a037855bb8b174dd6b30147d42d8995ffa1b8a6"
 }
