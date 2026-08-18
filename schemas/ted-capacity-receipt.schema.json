@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "run_sequence", "status", "termination_reason", "started_at", "finished_at", "elapsed_ms", "capacity_manifest_hash", "feasibility_hash", "compliance_hash", "required_per_stratum", "retained_items", "raw_text_persisted", "raw_author_persisted", "strata", "transport", "pagination"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "run_id": {"type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"},
+    "run_sequence": {"type": "integer", "minimum": 1},
+    "status": {"enum": ["PASS", "FAIL"]},
+    "termination_reason": {"enum": ["capacity_reached", "prerequisite_failed", "request_budget_exhausted", "attempt_budget_exhausted", "deadline_exhausted", "response_byte_budget_exhausted", "pagination_repeated", "source_exhausted", "transport_failed", "quality_threshold_failed", "quota_unmet", "receipt_validation_failed"]},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": "string", "format": "date-time"},
+    "elapsed_ms": {"type": "integer", "minimum": 0},
+    "capacity_manifest_hash": {"$ref": "#/$defs/hash"},
+    "feasibility_hash": {"$ref": "#/$defs/hash"},
+    "compliance_hash": {"$ref": "#/$defs/hash"},
+    "required_per_stratum": {"const": 38},
+    "retained_items": {"const": 0},
+    "raw_text_persisted": {"const": 0},
+    "raw_author_persisted": {"const": 0},
+    "strata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["software_and_information_systems", "business_services", "health_and_social_services", "repair_and_maintenance_services"],
+      "properties": {
+        "software_and_information_systems": {"$ref": "#/$defs/stratum"},
+        "business_services": {"$ref": "#/$defs/stratum"},
+        "health_and_social_services": {"$ref": "#/$defs/stratum"},
+        "repair_and_maintenance_services": {"$ref": "#/$defs/stratum"}
+      }
+    },
+    "transport": {"$ref": "#/$defs/transport"},
+    "pagination": {"$ref": "#/$defs/pagination"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "nonnegative_integer": {"type": "integer", "minimum": 0},
+    "ratio": {"type": "number", "minimum": 0, "maximum": 1},
+    "rejection_counts": {
+      "type": "object",
+      "propertyNames": {"enum": ["invalid_field_shape", "missing_notice_id", "missing_procedure_id", "missing_buyer_id", "missing_text", "outside_window", "wrong_notice_scope", "wrong_cpv_stratum", "change_notice", "duplicate_notice", "duplicate_procedure", "buyer_limit_exceeded"]},
+      "additionalProperties": {"$ref": "#/$defs/nonnegative_integer"}
+    },
+    "stratum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fetched", "processed", "accepted", "rejected", "rejection_reason_counts", "procedure_completeness", "buyer_completeness", "text_completeness", "acceptance_yield", "capacity_pass"],
+      "properties": {
+        "fetched": {"$ref": "#/$defs/nonnegative_integer"},
+        "processed": {"$ref": "#/$defs/nonnegative_integer"},
+        "accepted": {"$ref": "#/$defs/nonnegative_integer"},
+        "rejected": {"$ref": "#/$defs/nonnegative_integer"},
+        "rejection_reason_counts": {"$ref": "#/$defs/rejection_counts"},
+        "procedure_completeness": {"$ref": "#/$defs/ratio"},
+        "buyer_completeness": {"$ref": "#/$defs/ratio"},
+        "text_completeness": {"$ref": "#/$defs/ratio"},
+        "acceptance_yield": {"$ref": "#/$defs/ratio"},
+        "capacity_pass": {"type": "boolean"}
+      }
+    },
+    "transport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logical_requests", "http_attempts", "retries", "rate_limit_events", "transport_errors", "response_bytes", "max_logical_requests", "max_http_attempts", "deadline_seconds", "max_response_bytes", "deadline_exhausted"],
+      "properties": {
+        "logical_requests": {"$ref": "#/$defs/nonnegative_integer"},
+        "http_attempts": {"$ref": "#/$defs/nonnegative_integer"},
+        "retries": {"$ref": "#/$defs/nonnegative_integer"},
+        "rate_limit_events": {"$ref": "#/$defs/nonnegative_integer"},
+        "transport_errors": {"$ref": "#/$defs/nonnegative_integer"},
+        "response_bytes": {"$ref": "#/$defs/nonnegative_integer"},
+        "max_logical_requests": {"type": "integer", "minimum": 1},
+        "max_http_attempts": {"type": "integer", "minimum": 1},
+        "deadline_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "max_response_bytes": {"type": "integer", "minimum": 1},
+        "deadline_exhausted": {"type": "boolean"}
+      }
+    },
+    "pagination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pages_observed", "unique_page_signatures", "repeated_page_signatures", "total_count_change_events", "source_exhausted", "mode", "interpretation"],
+      "properties": {
+        "pages_observed": {"$ref": "#/$defs/nonnegative_integer"},
+        "unique_page_signatures": {"$ref": "#/$defs/nonnegative_integer"},
+        "repeated_page_signatures": {"$ref": "#/$defs/nonnegative_integer"},
+        "total_count_change_events": {"$ref": "#/$defs/nonnegative_integer"},
+        "source_exhausted": {"type": "boolean"},
+        "mode": {"const": "PAGE_NUMBER"},
+        "interpretation": {"const": "single_run_capacity_only"}
+      }
+    }
+  }
+}
