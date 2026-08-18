@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from src.source_spike.adapters.ted_http import (
     HttpResponse,
     HttpTedTransport,
@@ -189,3 +191,64 @@ def test_manifest_transport_contract_matches_official_openapi() -> None:
     assert value["base_url"] == "https://api.ted.europa.eu"
     assert value["endpoint"] == "/v3/notices/search"
     assert value["check_query_syntax"] is False
+
+
+def test_syntax_validation_surface_forces_check_mode_and_minimal_fields() -> None:
+    captured = {}
+
+    def execute(request, timeout, max_bytes):
+        captured["body"] = json.loads(request.data)
+        return HttpResponse(200, {}, fixture_bytes())
+
+    result = HttpTedTransport(execute=execute).validate_query_syntax(
+        query="publication-date = 20260817 SORT BY publication-date DESC",
+        max_http_attempts=2,
+        request_timeout_seconds=10,
+        deadline_seconds=30,
+        max_response_bytes=2_097_152,
+        max_retries=1,
+        base_backoff_seconds=1,
+        max_backoff_seconds=4,
+    )
+
+    assert isinstance(result, TedTransportSuccess)
+    assert captured["body"]["checkQuerySyntax"] is True
+    assert captured["body"]["fields"] == ["publication-number"]
+    assert captured["body"]["page"] == 1
+    assert captured["body"]["limit"] == 1
+    assert captured["body"]["paginationMode"] == "PAGE_NUMBER"
+
+
+@pytest.mark.parametrize(
+    "unexpected",
+    (
+        {"querySyntaxError": {"message": "invalid SORT BY"}},
+        {"unexpected": "extension"},
+    ),
+)
+def test_syntax_validation_rejects_unknown_success_wrapper_fields(
+    unexpected: dict[str, object],
+) -> None:
+    payload = {
+        "notices": [],
+        "totalNoticeCount": 0,
+        "timedOut": False,
+        **unexpected,
+    }
+    result = HttpTedTransport(
+        execute=lambda request, timeout, max_bytes: HttpResponse(
+            200, {}, json.dumps(payload).encode("utf-8")
+        )
+    ).validate_query_syntax(
+        query="broken SORT BY query",
+        max_http_attempts=1,
+        request_timeout_seconds=10,
+        deadline_seconds=30,
+        max_response_bytes=10_000,
+        max_retries=0,
+        base_backoff_seconds=1,
+        max_backoff_seconds=4,
+    )
+
+    assert isinstance(result, TedTransportFailure)
+    assert result.error_code == "unexpected_syntax_wrapper"

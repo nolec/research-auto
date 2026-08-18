@@ -128,6 +128,7 @@ class HttpTedTransport:
         max_retries: int,
         base_backoff_seconds: float,
         max_backoff_seconds: float,
+        reject_unknown_wrapper_fields: bool = False,
     ) -> TedTransportSuccess | TedTransportFailure:
         body = json.dumps(
             {
@@ -200,6 +201,7 @@ class HttpTedTransport:
                         attempt=attempt,
                         response_bytes=response_bytes,
                         events=events,
+                        reject_unknown_wrapper_fields=reject_unknown_wrapper_fields,
                     )
                 retryable = response.status_code in _RETRYABLE_STATUSES
                 retry_after = _header_integer(response.headers, "Retry-After")
@@ -243,6 +245,36 @@ class HttpTedTransport:
             self._sleep(delay)
         raise AssertionError("unreachable")
 
+    def validate_query_syntax(
+        self,
+        *,
+        query: str,
+        max_http_attempts: int,
+        request_timeout_seconds: float,
+        deadline_seconds: float,
+        max_response_bytes: int,
+        max_retries: int,
+        base_backoff_seconds: float,
+        max_backoff_seconds: float,
+    ) -> TedTransportSuccess | TedTransportFailure:
+        return self.fetch_notices(
+            query=query,
+            fields=("publication-number",),
+            page=1,
+            page_size=1,
+            scope="ALL",
+            check_query_syntax=True,
+            pagination_mode="PAGE_NUMBER",
+            max_http_attempts=max_http_attempts,
+            request_timeout_seconds=request_timeout_seconds,
+            deadline_seconds=deadline_seconds,
+            max_response_bytes=max_response_bytes,
+            max_retries=max_retries,
+            base_backoff_seconds=base_backoff_seconds,
+            max_backoff_seconds=max_backoff_seconds,
+            reject_unknown_wrapper_fields=True,
+        )
+
     @staticmethod
     def _parse_success(
         body: bytes,
@@ -252,6 +284,7 @@ class HttpTedTransport:
         attempt: int,
         response_bytes: int,
         events: Sequence[Mapping[str, object]],
+        reject_unknown_wrapper_fields: bool = False,
     ) -> TedTransportSuccess | TedTransportFailure:
         try:
             payload = json.loads(body, parse_constant=_reject_non_finite)
@@ -262,6 +295,16 @@ class HttpTedTransport:
         if not isinstance(payload, Mapping):
             return TedTransportFailure(
                 "malformed_wrapper", attempt, attempt - 1, response_bytes, tuple(events)
+            )
+        if reject_unknown_wrapper_fields and not set(payload).issubset(
+            {"notices", "totalNoticeCount", "timedOut", "iterationNextToken"}
+        ):
+            return TedTransportFailure(
+                "unexpected_syntax_wrapper",
+                attempt,
+                attempt - 1,
+                response_bytes,
+                tuple(events),
             )
         notices = payload.get("notices")
         total = payload.get("totalNoticeCount")
