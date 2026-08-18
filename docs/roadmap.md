@@ -1,6 +1,6 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-17
+> Updated: 2026-08-18
 > Status: Task 1 complete, Task 2 in progress
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
@@ -31,13 +31,13 @@ Primary progress metric: **300 / 500 valid real observations**
 | Stack Exchange | 100 | 100 |
 | Steam | 100 | 100 |
 | Reddit | 0 | 100 |
-| Replacement source (TBD) | 0 | 100 |
+| TED | 0 | 100 |
 | **Total** | **300** | **500** |
 
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
 
 Last completed source-data checkpoint: `b358b16` (`feat: qualify steam source spike and freeze primary review`).
-The full regression suite passes **339 tests**. Three source datasets are qualified;
+The full regression suite passes **346 tests**. Three source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
 
@@ -48,19 +48,19 @@ still incomplete.
 | Steam | 20 / 20 | 0 / 5 | blocked | deferred |
 | YouTube | excluded | unavailable | unavailable | `NOT_ELIGIBLE` |
 | Reddit | blocked before collection | unavailable | unavailable | `NOT_ELIGIBLE` (authorization unverified) |
-| Replacement source | not selected | not started | unavailable | deferred |
+| TED | feasibility passed | not started | unavailable | capacity probe required |
 
 Immediate execution order:
 
 1. Keep GitHub, Stack Exchange, and Steam thresholds, packets, and primary labels frozen.
 2. Obtain five blind reviews per qualified source from reviewers who have not seen the
    corresponding primary labels.
-3. Replace YouTube because its 30-day API Data lifecycle and unresolved stable-author
-   policy conflict with the product's frozen 90-day evidence contract.
+3. Replace YouTube with the TED candidate because YouTube's 30-day API Data lifecycle and
+   unresolved stable-author policy conflict with the frozen 90-day evidence contract.
 4. Keep Reddit collection blocked while access, commercial reuse, automated-processing,
-   and deletion clearance are unverified; select a replacement source without waiting.
-5. Freeze compliance for the replacement source, then run fixture parsing and a
-   10-record real smoke before its 100-record run.
+   and deletion clearance are unverified; select a separate fifth source if it stays blocked.
+5. Run the non-persistent TED capacity probe. Only a passing receipt may route to fixture
+   parsing and a 10-record real smoke before its 100-record run.
 6. Run canonical ingestion, agreement, and development-only reports only after each
    source's independent secondary packet is complete.
 
@@ -142,6 +142,10 @@ Current real-data progress:
 - Steam offline primary/secondary review handoffs: **ready**
 - Steam primary human labels: **20 / 20 — confirmed submission frozen**
 - Steam independent secondary human labels: **0 / 5**
+- TED current-collection feasibility: **PASS**
+- TED future-commercial-reuse feasibility: **PASS**
+- TED machine-readable next action: **`probe_capacity`**
+- TED capacity probe: **pending**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
 repository archetypes at 25 records each. The local-only run bundle contains a
@@ -155,8 +159,8 @@ frozen packet and assignment-map hashes, preserves assignment-level context-use 
 metadata, and rejects incomplete or non-independent reviews. Development reporting
 accepts only schema-valid development labels with 10 unique primary records and five
 independent secondary pairs. Current next actions are to complete the independent
-GitHub, Stack Exchange, and Steam secondary reviews, freeze Reddit compliance, and
-select a policy-compatible replacement for YouTube. All three primary reviews are
+GitHub, Stack Exchange, and Steam secondary reviews and run the non-persistent TED
+capacity probe. All three primary reviews are
 complete, but canonical ingestion remains blocked on independent secondary reviewers. Qualified
 datasets and confirmed labels must not be retuned or silently replaced.
 
@@ -208,6 +212,21 @@ This is not a permanent prohibition finding. Compliance routes to
 `seek_compliance_clearance`, while Source Spike execution routes immediately to
 `select_replacement_source`; no Reddit API, fixture, adapter, or smoke work begins.
 
+### M2-B6 — TED Replacement Feasibility · Passed
+
+TED is the preferred replacement candidate for the YouTube source slot. Its official
+Search API permits anonymous access to published procurement notices for analysis and reuse,
+and the legal notice permits commercial and non-commercial reuse unless otherwise stated.
+The frozen contract excludes direct contact fields, attachments, unpublished notices, model
+training, and fine-tuning.
+
+Decision status: **PASS for current collection and future commercial reuse**. The
+machine-readable route is deliberately `probe_capacity`, not `implement_adapter`. The next
+step is an aggregate-only, non-persistent capacity probe that verifies procedure and buyer
+identifier completeness plus coverage quotas. Fixture, adapter, and smoke implementation
+remain blocked until that receipt passes. Smoke data will not increase the **300 / 500**
+analysis-ready progress metric.
+
 ### M2-B2 — Stack Exchange First Real Data
 
 Stack Exchange uses questions as the observation unit and treats four sites as smoke
@@ -257,7 +276,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Collect 100 valid GitHub records across four 25-record archetype strata
 - [x] Produce a privacy-qualified, hash-addressed local run bundle
 - [x] Produce the stratified 20-item GitHub labeling assignment
-- [ ] Freeze compliance decisions for the remaining two candidate sources
+- [x] Freeze TED dual-horizon feasibility and route it through a capacity probe
 - [x] Freeze Stack Exchange compliance and complete its real 10-record smoke
 - [x] Freeze Steam compliance for official public-review endpoint use only
 - [x] Evaluate YouTube lifecycle feasibility and mark it **NOT_ELIGIBLE** before collection
@@ -268,7 +287,8 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Pass the Steam hash-bound capacity probe at **38 / 38** per application
 - [x] Collect and qualify the balanced Steam **100 / 100** analysis sample
 - [x] Collect and qualify the balanced Stack Exchange 100-record analysis sample
-- [ ] Implement the remaining two source adapters with fixtures
+- [ ] Pass the TED non-persistent capacity probe
+- [ ] Implement the remaining source adapters with fixtures
 - [ ] Add a rerunnable collection CLI and raw-fixture persistence
 - [ ] Collect at least 100 valid records from each source
 - [ ] Continue remaining sources when one source returns `partial` or `failed`

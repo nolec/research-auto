@@ -170,13 +170,15 @@ def validate_feasibility_decision(value: Mapping[str, object]) -> list[str]:
             errors.append("PASS requires every required gate to pass")
         if blockers:
             errors.append("PASS cannot retain blockers")
-        if value["next_action"] != "implement_adapter":
-            errors.append("PASS must route to adapter implementation")
+        if value["next_action"] not in {"probe_capacity", "implement_adapter"}:
+            errors.append("PASS must route to capacity probe or adapter implementation")
     else:
         if not blockers:
             errors.append("NOT_ELIGIBLE requires at least one blocker")
         if value["next_action"] == "implement_adapter":
             errors.append("NOT_ELIGIBLE cannot route to adapter implementation")
+        if value["next_action"] == "probe_capacity":
+            errors.append("NOT_ELIGIBLE cannot route to capacity probe")
         if all_pass:
             errors.append("NOT_ELIGIBLE requires a failed or unresolved gate")
         if both_eligible:
@@ -185,15 +187,23 @@ def validate_feasibility_decision(value: Mapping[str, object]) -> list[str]:
     operational_action = value["operational_next_action"]
     if not current_eligible and operational_action == "implement_adapter":
         errors.append("ineligible current collection cannot route to adapter")
-    if current_eligible and operational_action != "implement_adapter":
-        errors.append("eligible current collection must route to adapter")
+    if not current_eligible and operational_action == "probe_capacity":
+        errors.append("ineligible current collection cannot route to capacity probe")
+    if current_eligible and operational_action not in {"probe_capacity", "implement_adapter"}:
+        errors.append("eligible current collection must route to capacity probe or adapter")
+    if (value["next_action"] == "probe_capacity") != (operational_action == "probe_capacity"):
+        errors.append("capacity probe routing must be consistent")
     if value["authorization_status"] == "unverified":
         if current_eligible:
             errors.append("unverified authorization cannot pass current collection")
         if operational_action == "implement_adapter":
             errors.append("unverified authorization cannot route to adapter")
+        if operational_action == "probe_capacity":
+            errors.append("unverified authorization cannot route to capacity probe")
         if value["next_action"] == "implement_adapter":
             errors.append("unverified authorization cannot route to adapter implementation")
+        if value["next_action"] == "probe_capacity":
+            errors.append("unverified authorization cannot route to capacity probe")
     if value["next_action"] == "seek_compliance_clearance" and not value["recheck_conditions"]:
         errors.append("compliance clearance requires a recheck condition")
     return errors

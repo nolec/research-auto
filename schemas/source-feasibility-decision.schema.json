@@ -165,7 +165,7 @@
         "future_commercial_reuse": {"enum": ["PASS", "NOT_ELIGIBLE"]}
       }
     },
-    "operational_next_action": {"enum": ["implement_adapter", "select_replacement_source", "none"]},
-    "next_action": {"enum": ["implement_adapter", "replace_source", "seek_compliance_clearance"]}
+    "operational_next_action": {"enum": ["probe_capacity", "implement_adapter", "select_replacement_source", "none"]},
+    "next_action": {"enum": ["probe_capacity", "implement_adapter", "replace_source", "seek_compliance_clearance"]}
   }
 }

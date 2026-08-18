@@ -1,0 +1,152 @@
+{
+  "decision_version": "2.0.0",
+  "source": "ted",
+  "status": "PASS",
+  "evaluated_at": "2026-08-18T00:00:00Z",
+  "policy_evidence": [
+    {
+      "id": "TED-SEARCH-API",
+      "url": "https://docs.ted.europa.eu/api/latest/search.html",
+      "checked_at": "2026-08-18T00:00:00Z",
+      "claim": "The official Search API provides anonymous system access to published procurement notices for analysis and reuse, including use by commercial organisations.",
+      "effective_at": null,
+      "section": "Search API",
+      "captured_excerpt": "Published notices are anonymously accessible for analysis and reuse by systems, researchers, developers, and commercial organisations.",
+      "captured_excerpt_sha256": "7e8126d65acfeda30274b48bd410236554cf7a5915cfba16fd918d568aab21a5",
+      "manual_revalidation_due_at": "2026-11-18T00:00:00Z"
+    },
+    {
+      "id": "TED-LEGAL-REUSE",
+      "url": "https://ted.europa.eu/en/legal-notice",
+      "checked_at": "2026-08-18T00:00:00Z",
+      "claim": "The TED legal notice permits commercial and non-commercial reuse of published procurement notices unless otherwise stated and dedicates SIMAP metadata to CC0.",
+      "effective_at": null,
+      "section": "Copyright notice",
+      "captured_excerpt": "Published procurement notices may be freely reused commercially or non-commercially; SIMAP metadata is dedicated to the public domain under CC0.",
+      "captured_excerpt_sha256": "8e3d46af02c5f47b4b636b8a89849dd50cee66cc4f24732c2be3da6c87a2ccc5",
+      "manual_revalidation_due_at": "2026-11-18T00:00:00Z"
+    },
+    {
+      "id": "TED-LEGAL-RIGHTS",
+      "url": "https://ted.europa.eu/en/legal-notice",
+      "checked_at": "2026-08-18T00:00:00Z",
+      "claim": "The TED legal notice warns that identifiable private individuals and third-party works can require additional rights, so contact fields are excluded from collection.",
+      "effective_at": null,
+      "section": "Copyright notice",
+      "captured_excerpt": "Identifiable private individuals and third-party works may require additional rights, so direct contact fields are outside this source contract.",
+      "captured_excerpt_sha256": "969853bc2e75586d15962e5bea45bcc8df63112a95dc10a6ca5336b2e54f3121",
+      "manual_revalidation_due_at": "2026-11-18T00:00:00Z"
+    },
+    {
+      "id": "TED-EFORMS-IDENTIFIERS",
+      "url": "https://docs.ted.europa.eu/eforms/latest/schema/identifiers.html",
+      "checked_at": "2026-08-18T00:00:00Z",
+      "claim": "The official eForms schema defines stable notice, procedure, organisation, and buyer-reference identifiers that can support provenance and independence checks.",
+      "effective_at": null,
+      "section": "Identifiers",
+      "captured_excerpt": "The schema defines notice, procedure, organisation, and buyer-reference identifiers for published procurement data.",
+      "captured_excerpt_sha256": "1b7ae94f88e7f65619ddb902b2c7a344980fa311a05fe19d3e54c62e74d60f17",
+      "manual_revalidation_due_at": "2026-11-18T00:00:00Z"
+    },
+    {
+      "id": "PRODUCT-EVIDENCE-CONTRACT",
+      "url": "https://research-auto.local/docs/prd",
+      "checked_at": "2026-08-18T00:00:00Z",
+      "claim": "The product requires a 90-day evidence window, stable independent-author checks, immutable provenance, and reviewable derived outputs.",
+      "effective_at": "2026-08-18",
+      "section": "Evidence contract",
+      "captured_excerpt": "The product requires a 90-day window, stable independence checks, immutable provenance, and reviewable derived outputs.",
+      "captured_excerpt_sha256": "d5bd160768dd9b20a80720c960d22aef0e21ec854fb741bf068b52de5f850169",
+      "manual_revalidation_due_at": "2026-11-18T00:00:00Z"
+    }
+  ],
+  "policy_evidence_sha256": "7d416701e9af63090c076ab9ccbe5f6d32770dc0350c5b10938a7762df664c9c",
+  "product_requirements": {
+    "evidence_window_days": 90,
+    "stable_author_identity_required": true,
+    "immutable_evidence_required": true
+  },
+  "intended_use": {
+    "current": {
+      "purpose": "internal_source_calibration",
+      "commercial_operation": false,
+      "persistent_storage": true,
+      "cross_run_author_identity": true
+    },
+    "future": {
+      "purpose": "commercial_demand_intelligence_product",
+      "commercial_operation": true,
+      "reuse_current_raw_data": "required"
+    },
+    "ai_processing": {
+      "model_training": "not_used",
+      "fine_tuning": "not_used",
+      "embedding_or_indexing": "planned",
+      "llm_inference_extraction": "planned",
+      "derived_output_storage": "planned"
+    }
+  },
+  "authorization_status": "verified",
+  "decision_basis_sha256": "0721f464e535d235c324ac59af6ba5dd9cd563f67656b8d875b0b84a65ed7e3e",
+  "evaluation_profile": {
+    "id": "ted-v1",
+    "required_gate_ids": ["access_authorization", "current_use", "future_commercial_reuse", "automated_processing", "retention", "provenance", "author_independence", "deletion", "reproducibility"],
+    "required_data_roles": ["content", "source_item_identity", "container_identity", "canonical_location", "author_identity"],
+    "horizon_gate_ids": {
+      "current_collection": ["access_authorization", "current_use", "automated_processing", "retention", "provenance", "author_independence", "deletion", "reproducibility"],
+      "future_commercial_reuse": ["access_authorization", "future_commercial_reuse", "automated_processing", "retention", "provenance", "author_independence", "deletion", "reproducibility"]
+    }
+  },
+  "data_classes": [
+    {
+      "name": "notice_title_and_description", "role": "content", "policy_class": "published_procurement_notice", "persisted": true,
+      "max_retention_days": null, "refresh_method": "Refetch the published notice through the anonymous Search API.", "deletion_method": "Delete normalized text and dependent derived outputs from local storage.",
+      "stable_across_runs": false, "evidence_ids": ["TED-SEARCH-API", "TED-LEGAL-REUSE", "TED-LEGAL-RIGHTS"]
+    },
+    {
+      "name": "notice_identifier", "role": "source_item_identity", "policy_class": "public_metadata", "persisted": true,
+      "max_retention_days": null, "refresh_method": "Refetch by the published notice identifier.", "deletion_method": "Delete the notice identifier with the local source record.",
+      "stable_across_runs": true, "evidence_ids": ["TED-LEGAL-REUSE", "TED-EFORMS-IDENTIFIERS"]
+    },
+    {
+      "name": "procedure_identifier", "role": "container_identity", "policy_class": "public_metadata", "persisted": true,
+      "max_retention_days": null, "refresh_method": "Refetch notices associated with the procedure identifier.", "deletion_method": "Delete the procedure identifier with the local source record.",
+      "stable_across_runs": true, "evidence_ids": ["TED-LEGAL-REUSE", "TED-EFORMS-IDENTIFIERS"]
+    },
+    {
+      "name": "canonical_notice_url", "role": "canonical_location", "policy_class": "public_metadata", "persisted": true,
+      "max_retention_days": null, "refresh_method": "Regenerate from the published notice identifier.", "deletion_method": "Delete the URL with the local source record.",
+      "stable_across_runs": true, "evidence_ids": ["TED-SEARCH-API", "TED-LEGAL-REUSE"]
+    },
+    {
+      "name": "buyer_organisation_derived_identifier", "role": "author_identity", "policy_class": "derived_public_metadata", "persisted": true,
+      "max_retention_days": null, "refresh_method": "Recompute from allowlisted official buyer identifiers using the fixed project secret.", "deletion_method": "Delete the derived identifier and dependent records from local storage.",
+      "stable_across_runs": true, "evidence_ids": ["TED-LEGAL-REUSE", "TED-EFORMS-IDENTIFIERS", "PRODUCT-EVIDENCE-CONTRACT"]
+    }
+  ],
+  "required_gates": [
+    {"id": "access_authorization", "status": "pass", "evidence_ids": ["TED-SEARCH-API"], "reason": "The published-notice Search API is officially documented as anonymous and openly accessible to systems and data reusers."},
+    {"id": "current_use", "status": "pass", "evidence_ids": ["TED-SEARCH-API", "TED-LEGAL-REUSE"], "reason": "Internal source calibration is within the documented analysis and reuse purposes for published notices."},
+    {"id": "future_commercial_reuse", "status": "pass", "evidence_ids": ["TED-SEARCH-API", "TED-LEGAL-REUSE"], "reason": "Published procurement notices may be commercially reused and the API explicitly identifies commercial added-value services as users."},
+    {"id": "automated_processing", "status": "pass", "evidence_ids": ["TED-SEARCH-API", "TED-LEGAL-REUSE"], "reason": "The API is intended for system-based analysis and reuse, while model training and fine-tuning remain outside the intended use."},
+    {"id": "retention", "status": "pass", "evidence_ids": ["TED-LEGAL-REUSE", "TED-LEGAL-RIGHTS"], "reason": "The allowed notice and metadata classes have no stated maximum retention period and direct contact fields are excluded."},
+    {"id": "provenance", "status": "pass", "evidence_ids": ["TED-SEARCH-API", "TED-EFORMS-IDENTIFIERS", "PRODUCT-EVIDENCE-CONTRACT"], "reason": "Published notice identifiers, procedure identifiers, and canonical notice locations support reproducible source provenance."},
+    {"id": "author_independence", "status": "pass", "evidence_ids": ["TED-EFORMS-IDENTIFIERS", "PRODUCT-EVIDENCE-CONTRACT"], "reason": "Allowlisted official buyer organisation identifiers can produce stable keyed hashes without retaining contact identities."},
+    {"id": "deletion", "status": "pass", "evidence_ids": ["TED-LEGAL-RIGHTS", "PRODUCT-EVIDENCE-CONTRACT"], "reason": "All persisted source classes have an explicit local deletion method and direct personal contact fields are outside the contract."},
+    {"id": "reproducibility", "status": "pass", "evidence_ids": ["TED-SEARCH-API", "TED-EFORMS-IDENTIFIERS", "PRODUCT-EVIDENCE-CONTRACT"], "reason": "Versioned API documentation, stable identifiers, canonical locations, and refresh paths preserve reproducibility for the allowed fields."}
+  ],
+  "blockers": [],
+  "recheck_conditions": [
+    "Revalidate the TED Search API and legal notice before the recorded deadline.",
+    "Re-evaluate feasibility before collecting direct contact fields, attachments, or non-published notices.",
+    "Re-evaluate feasibility if model training or fine-tuning enters the intended use."
+  ],
+  "eligibility": {
+    "current_collection": "PASS",
+    "future_commercial_reuse": "PASS"
+  },
+  "next_action": "probe_capacity",
+  "operational_next_action": "probe_capacity",
+  "supersedes_decision_sha256": null,
+  "decision_integrity_sha256": "56aced820da7dd0a54f75f833d194fa12d899a855d1ea15a8c4fe101c3c2cf47"
+}

@@ -139,6 +139,39 @@ def test_valid_pass_decision_has_no_errors() -> None:
     assert validate_feasibility_decision(decision()) == []
 
 
+def test_valid_pass_decision_can_route_through_capacity_probe() -> None:
+    value = decision()
+    value["next_action"] = "probe_capacity"
+    value["operational_next_action"] = "probe_capacity"
+    refresh_hashes(value)
+
+    assert validate_feasibility_decision(value) == []
+
+
+def test_capacity_probe_route_must_be_consistent() -> None:
+    value = decision()
+    value["next_action"] = "probe_capacity"
+    refresh_hashes(value)
+
+    assert "capacity probe routing must be consistent" in validate_feasibility_decision(value)
+
+
+def test_ineligible_decision_cannot_route_to_capacity_probe() -> None:
+    value = decision()
+    value["status"] = "NOT_ELIGIBLE"
+    value["eligibility"]["current_collection"] = "NOT_ELIGIBLE"
+    value["required_gates"][0]["status"] = "unresolved"
+    value["blockers"] = ["CURRENT_COLLECTION_BLOCKED"]
+    value["next_action"] = "probe_capacity"
+    value["operational_next_action"] = "probe_capacity"
+    value["recheck_conditions"] = ["Clear current collection authorization."]
+    refresh_hashes(value)
+
+    errors = validate_feasibility_decision(value)
+    assert "NOT_ELIGIBLE cannot route to capacity probe" in errors
+    assert "ineligible current collection cannot route to capacity probe" in errors
+
+
 def test_unresolved_gate_cannot_pass() -> None:
     value = decision()
     value["required_gates"][2]["status"] = "unresolved"
