@@ -32,6 +32,7 @@ _WINDOW = {
     "from_inclusive": True,
     "before_exclusive": True,
 }
+_SELECTION = {"max_items_per_buyer": 2}
 _FIELDS = (
     "publication-number",
     "notice-identifier",
@@ -77,7 +78,7 @@ _RETRY = {
     "max_backoff_seconds": 4,
 }
 _QUERY_KEYS = (
-    "api", "window", "notice_scope", "fields", "forbidden_contact_fields",
+    "api", "window", "selection", "notice_scope", "fields", "forbidden_contact_fields",
     "sort", "strata", "thresholds", "pagination", "retry", "privacy",
 )
 
@@ -167,6 +168,10 @@ def validate_ted_capacity_manifest(
         errors.append("query dates must match the declared exclusive window")
     if window_sha256(window) != manifest["window_hash"]:
         errors.append("window hash mismatch")
+
+    selection = cast(Mapping[str, object], manifest["selection"])
+    if dict(selection) != _SELECTION:
+        errors.append("TED selection contract mismatch")
 
     strata = cast(Sequence[Mapping[str, object]], manifest["strata"])
     for value, (name, priority, prefix) in zip(strata, _STRATA, strict=True):

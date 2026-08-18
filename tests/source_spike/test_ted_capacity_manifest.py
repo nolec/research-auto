@@ -44,6 +44,17 @@ def test_committed_ted_capacity_manifest_is_frozen_and_valid() -> None:
     }
     assert manifest["window"]["published_from"] == "2026-05-20T00:00:00Z"
     assert manifest["window"]["published_before"] == "2026-08-18T00:00:00Z"
+    assert manifest["selection"] == {"max_items_per_buyer": 2}
+
+
+def test_buyer_limit_cannot_change_and_be_rehashed() -> None:
+    manifest, feasibility = load()
+    changed = copy.deepcopy(manifest)
+    changed["selection"] = {"max_items_per_buyer": 3}
+    refresh_hashes(changed)
+
+    errors = validate_ted_capacity_manifest(changed, feasibility)
+    assert "TED selection contract mismatch" in errors
 
 
 def test_strata_priority_query_and_quota_are_exact() -> None:

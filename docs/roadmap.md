@@ -36,8 +36,9 @@ Primary progress metric: **300 / 500 valid real observations**
 
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
 
-Last completed execution checkpoint: `cfec4d5` (`feat: freeze ted capacity probe contract`).
-The full regression suite passes **355 tests**. Three source datasets are qualified;
+Latest implementation checkpoint: TED official Search API transport and synthetic
+wrapper fixture are implemented on top of the frozen capacity contract. The full
+regression suite passes **365 tests**. Three source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
 
@@ -48,7 +49,7 @@ still incomplete.
 | Steam | 20 / 20 | 0 / 5 | blocked | deferred |
 | YouTube | excluded | unavailable | unavailable | `NOT_ELIGIBLE` |
 | Reddit | blocked before collection | unavailable | unavailable | `NOT_ELIGIBLE` (authorization unverified) |
-| TED | feasibility passed | not started | unavailable | capacity probe required |
+| TED | feasibility passed | transport/fixture ready | unavailable | capacity probe required |
 
 Immediate execution order:
 
@@ -59,8 +60,9 @@ Immediate execution order:
    unresolved stable-author policy conflict with the frozen 90-day evidence contract.
 4. Keep Reddit collection blocked while access, commercial reuse, automated-processing,
    and deletion clearance are unverified; select a separate fifth source if it stays blocked.
-5. Run the non-persistent TED capacity probe. Only a passing receipt may route to fixture
-   parsing and a 10-record real smoke before its 100-record run.
+5. Run the non-persistent TED capacity probe using the official Search API transport.
+   Only a passing aggregate receipt may route to notice parsing and a 10-record real
+   smoke before its 100-record run.
 6. Run canonical ingestion, agreement, and development-only reports only after each
    source's independent secondary packet is complete.
 
@@ -148,6 +150,10 @@ Current real-data progress:
 - TED capacity manifest/query contract: **frozen and validated**
 - TED probe allocation: **38 candidates × 4 CPV strata = 152 required unique candidates**
 - TED probe window: **2026-05-20 inclusive → 2026-08-18 exclusive — frozen**
+- TED official Search API transport: **implemented and regression-tested**
+- TED synthetic multilingual response fixture: **ready; contains no real notice data**
+- TED bounded retry, response-byte, deadline, and malformed-response handling: **ready**
+- TED aggregate-only capacity executor/receipt: **pending**
 - TED capacity probe: **pending**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
@@ -224,11 +230,11 @@ The frozen contract excludes direct contact fields, attachments, unpublished not
 training, and fine-tuning.
 
 Decision status: **PASS for current collection and future commercial reuse**. The
-machine-readable route is deliberately `probe_capacity`, not `implement_adapter`. The next
-step is an aggregate-only, non-persistent capacity probe that verifies procedure and buyer
-identifier completeness plus coverage quotas. Fixture, adapter, and smoke implementation
-remain blocked until that receipt passes. Smoke data will not increase the **300 / 500**
-analysis-ready progress metric.
+machine-readable route remains `probe_capacity`, not analysis collection. The official
+Search API transport and synthetic OpenAPI-shaped fixture are now implemented solely to
+support an aggregate-only, non-persistent capacity probe. Notice parsing, candidate
+persistence, and smoke execution remain blocked until that receipt passes. Smoke data will
+not increase the **300 / 500** analysis-ready progress metric.
 
 The capacity probe contract is now frozen before network execution. It requires 38 unique
 candidates in each of four CPV strata (`48`, `79`, `85`, `50`), for 152 candidates total,
@@ -236,8 +242,11 @@ using the fixed 90-day window and deterministic sort. API fields, contact-field 
 privacy behavior, quality thresholds, pagination, retry limits, and request budgets are
 hash-bound and validated against immutable values. The validator rejects feasibility drift,
 query/window drift, field-policy weakening, and threshold or budget rehashing before any
-request is made. The next implementation unit is the non-persistent probe executor and its
-aggregate receipt; it must not retain candidate records.
+request is made. The transport targets the official `/v3/notices/search` endpoint, executes
+the query rather than syntax-checking it, preserves multilingual wrapper data only in memory,
+and fails closed on malformed or non-finite JSON. The next implementation unit is the
+non-persistent probe executor and its aggregate receipt; it must enforce total-run request,
+deadline, and byte budgets without retaining candidate records.
 
 ### M2-B2 — Stack Exchange First Real Data
 
@@ -290,6 +299,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Produce the stratified 20-item GitHub labeling assignment
 - [x] Freeze TED dual-horizon feasibility and route it through a capacity probe
 - [x] Freeze the TED capacity allocation, query, privacy, threshold, and request-budget contract
+- [x] Implement the TED official Search API transport and synthetic response fixture
 - [x] Freeze Stack Exchange compliance and complete its real 10-record smoke
 - [x] Freeze Steam compliance for official public-review endpoint use only
 - [x] Evaluate YouTube lifecycle feasibility and mark it **NOT_ELIGIBLE** before collection

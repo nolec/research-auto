@@ -1,0 +1,10 @@
+{
+  "fixture_kind": "synthetic_official_shape",
+  "api_version": "3",
+  "spec_url": "https://api.ted.europa.eu/api-v3.yaml",
+  "spec_sha256": "292e90a17b0a974bca6c72368df7714bfa535041dda98f230a9910f54426be25",
+  "request_schema": "PublicExpertSearchRequestV1",
+  "response_schema": "ExpertSearchResponse",
+  "checked_at": "2026-08-18T00:00:00Z",
+  "contains_real_notice_data": false
+}

@@ -1,0 +1,30 @@
+{
+  "notices": [
+    {
+      "publication-number": "000001-2026",
+      "notice-identifier": "notice-1",
+      "procedure-identifier": "procedure-1",
+      "publication-date": "20260601",
+      "notice-type": "cn-standard",
+      "form-type": "competition",
+      "classification-cpv": ["48000000"],
+      "buyer-identifier": ["buyer-1"],
+      "notice-title": {"eng": ["Synthetic software tender"]},
+      "description-proc": {"eng": ["Synthetic fixture content for transport contract testing only."]}
+    },
+    {
+      "publication-number": "000002-2026",
+      "notice-identifier": "notice-2",
+      "procedure-identifier": "procedure-2",
+      "publication-date": "20260602",
+      "notice-type": "cn-standard",
+      "form-type": "competition",
+      "classification-cpv": ["48000000"],
+      "buyer-identifier": ["buyer-2"],
+      "notice-title": {"fra": ["Appel d'offres synthétique"]},
+      "description-proc": {"fra": ["Contenu synthétique utilisé uniquement pour tester le contrat de transport."]}
+    }
+  ],
+  "totalNoticeCount": 5,
+  "timedOut": false
+}
