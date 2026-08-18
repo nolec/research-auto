@@ -36,8 +36,8 @@ Primary progress metric: **300 / 500 valid real observations**
 
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
 
-Last completed source-data checkpoint: `b358b16` (`feat: qualify steam source spike and freeze primary review`).
-The full regression suite passes **346 tests**. Three source datasets are qualified;
+Last completed execution checkpoint: `cfec4d5` (`feat: freeze ted capacity probe contract`).
+The full regression suite passes **355 tests**. Three source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
 
@@ -145,6 +145,9 @@ Current real-data progress:
 - TED current-collection feasibility: **PASS**
 - TED future-commercial-reuse feasibility: **PASS**
 - TED machine-readable next action: **`probe_capacity`**
+- TED capacity manifest/query contract: **frozen and validated**
+- TED probe allocation: **38 candidates × 4 CPV strata = 152 required unique candidates**
+- TED probe window: **2026-05-20 inclusive → 2026-08-18 exclusive — frozen**
 - TED capacity probe: **pending**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
@@ -227,6 +230,15 @@ identifier completeness plus coverage quotas. Fixture, adapter, and smoke implem
 remain blocked until that receipt passes. Smoke data will not increase the **300 / 500**
 analysis-ready progress metric.
 
+The capacity probe contract is now frozen before network execution. It requires 38 unique
+candidates in each of four CPV strata (`48`, `79`, `85`, `50`), for 152 candidates total,
+using the fixed 90-day window and deterministic sort. API fields, contact-field exclusions,
+privacy behavior, quality thresholds, pagination, retry limits, and request budgets are
+hash-bound and validated against immutable values. The validator rejects feasibility drift,
+query/window drift, field-policy weakening, and threshold or budget rehashing before any
+request is made. The next implementation unit is the non-persistent probe executor and its
+aggregate receipt; it must not retain candidate records.
+
 ### M2-B2 — Stack Exchange First Real Data
 
 Stack Exchange uses questions as the observation unit and treats four sites as smoke
@@ -277,6 +289,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Produce a privacy-qualified, hash-addressed local run bundle
 - [x] Produce the stratified 20-item GitHub labeling assignment
 - [x] Freeze TED dual-horizon feasibility and route it through a capacity probe
+- [x] Freeze the TED capacity allocation, query, privacy, threshold, and request-budget contract
 - [x] Freeze Stack Exchange compliance and complete its real 10-record smoke
 - [x] Freeze Steam compliance for official public-review endpoint use only
 - [x] Evaluate YouTube lifecycle feasibility and mark it **NOT_ELIGIBLE** before collection
