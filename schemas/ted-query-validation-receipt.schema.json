@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "validation_contract_version", "transport_version", "run_id", "status", "termination_reason", "started_at", "finished_at", "elapsed_ms", "capacity_manifest_hash", "feasibility_hash", "compliance_hash", "generator_version", "query_set_sha256", "request_contract", "budget", "retained_queries", "retained_response_bodies", "strata", "metrics"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "validation_contract_version": {"const": "1.0.0"},
+    "transport_version": {"const": "ted-http/1.0.0"},
+    "run_id": {"type": "string", "format": "uuid"},
+    "status": {"enum": ["PASS", "FAIL"]},
+    "termination_reason": {"type": "string", "minLength": 1},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": "string", "format": "date-time"},
+    "elapsed_ms": {"type": "integer", "minimum": 0},
+    "capacity_manifest_hash": {"$ref": "#/$defs/hash"},
+    "feasibility_hash": {"$ref": "#/$defs/hash"},
+    "compliance_hash": {"$ref": "#/$defs/hash"},
+    "generator_version": {"const": "1.0.0"},
+    "query_set_sha256": {"$ref": "#/$defs/hash"},
+    "request_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["endpoint", "method", "check_query_syntax", "fields", "page", "limit", "scope", "pagination_mode", "request_shape_sha256"],
+      "properties": {
+        "endpoint": {"const": "/v3/notices/search"},
+        "method": {"const": "POST"},
+        "check_query_syntax": {"const": true},
+        "fields": {"const": ["publication-number"]},
+        "page": {"const": 1},
+        "limit": {"const": 1},
+        "scope": {"const": "ALL"},
+        "pagination_mode": {"const": "PAGE_NUMBER"},
+        "request_shape_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_logical_requests", "max_http_attempts", "deadline_seconds", "max_response_bytes"],
+      "properties": {
+        "max_logical_requests": {"type": "integer", "minimum": 1},
+        "max_http_attempts": {"type": "integer", "minimum": 1},
+        "deadline_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "max_response_bytes": {"type": "integer", "minimum": 1}
+      }
+    },
+    "retained_queries": {"const": 0},
+    "retained_response_bodies": {"const": 0},
+    "strata": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stratum", "query_sha256", "syntax_valid", "error_code"],
+        "properties": {
+          "stratum": {"enum": ["software_and_information_systems", "business_services", "health_and_social_services", "repair_and_maintenance_services"]},
+          "query_sha256": {"$ref": "#/$defs/hash"},
+          "syntax_valid": {"type": "boolean"},
+          "error_code": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logical_requests", "http_attempts", "retries", "response_bytes"],
+      "properties": {
+        "logical_requests": {"type": "integer", "minimum": 0},
+        "http_attempts": {"type": "integer", "minimum": 0},
+        "retries": {"type": "integer", "minimum": 0},
+        "response_bytes": {"type": "integer", "minimum": 0}
+      }
+    }
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

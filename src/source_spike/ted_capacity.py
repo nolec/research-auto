@@ -467,6 +467,49 @@ def validate_capacity_receipt(
     return errors
 
 
+def validate_query_validation_preflight(
+    receipt: Mapping[str, object],
+    *,
+    capacity_manifest_hash: str,
+    feasibility_hash: str,
+    compliance_hash: str,
+    query_set_sha256: str,
+) -> list[str]:
+    from src.source_spike.ted_query_validation import validate_validation_receipt
+
+    errors = validate_validation_receipt(
+        receipt,
+        capacity_manifest_hash=capacity_manifest_hash,
+        feasibility_hash=feasibility_hash,
+        compliance_hash=compliance_hash,
+        query_set_sha256=query_set_sha256,
+    )
+    if receipt.get("status") != "PASS":
+        errors.append("query validation receipt is not PASS")
+    if receipt.get("capacity_manifest_hash") != capacity_manifest_hash:
+        errors.append("query validation capacity manifest hash mismatch")
+    if receipt.get("query_set_sha256") != query_set_sha256:
+        errors.append("query validation query set hash mismatch")
+    if receipt.get("budget") != {
+        "max_logical_requests": 4,
+        "max_http_attempts": 8,
+        "deadline_seconds": 30,
+        "max_response_bytes": 2_097_152,
+    }:
+        errors.append("query validation budget contract mismatch")
+    strata = receipt.get("strata")
+    names = tuple(
+        value.get("stratum") if isinstance(value, Mapping) else None
+        for value in strata
+    ) if isinstance(strata, list) else ()
+    if names != _EXPECTED_STRATA or not isinstance(strata, list) or not all(
+        isinstance(value, Mapping) and value.get("syntax_valid") is True
+        for value in strata
+    ):
+        errors.append("query validation receipt strata mismatch")
+    return errors
+
+
 class TedSelectionState:
     def __init__(
         self,

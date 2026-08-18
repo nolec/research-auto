@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import json
+from pathlib import Path
 
 import pytest
 
@@ -13,7 +14,53 @@ from src.source_spike.ted_capacity import (
     build_stratum_summary,
     measure_notice,
     validate_capacity_receipt,
+    validate_query_validation_preflight,
 )
+
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def test_capacity_preflight_requires_matching_four_stratum_pass_receipt() -> None:
+    from src.source_spike.adapters.ted_http import TedPage, TedTransportSuccess
+    from src.source_spike.ted_query_validation import build_validation_receipt, run_query_validation
+
+    class Transport:
+        def validate_query_syntax(self, **kwargs):
+            return TedTransportSuccess(TedPage((), 0, 1, False, "d" * 64, None), 1, 0, 10)
+
+    manifest = json.loads((ROOT / "config/source-spike/ted-capacity.json").read_text())
+    result = run_query_validation(manifest, Transport())
+    receipt = build_validation_receipt(
+        result,
+        run_id="12345678-1234-4234-8234-123456789abc",
+        started_at="2026-08-18T09:00:00Z",
+        finished_at="2026-08-18T09:00:01Z",
+        elapsed_ms=1000,
+        capacity_manifest_hash="a" * 64,
+        feasibility_hash="c" * 64,
+        compliance_hash="e" * 64,
+    )
+
+    assert validate_query_validation_preflight(
+        receipt,
+        capacity_manifest_hash="a" * 64,
+        feasibility_hash="c" * 64,
+        compliance_hash="e" * 64,
+        query_set_sha256=result.query_set_sha256,
+    ) == []
+
+    receipt["status"] = "FAIL"
+    receipt["strata"].pop()
+    errors = validate_query_validation_preflight(
+        receipt,
+        capacity_manifest_hash="a" * 64,
+        feasibility_hash="c" * 64,
+        compliance_hash="e" * 64,
+        query_set_sha256=result.query_set_sha256,
+    )
+    assert "query validation receipt is not PASS" in errors
+    assert "query validation receipt strata mismatch" in errors
 
 
 def valid_notice(**overrides: object) -> dict[str, object]:
