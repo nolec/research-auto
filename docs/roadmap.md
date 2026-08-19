@@ -57,6 +57,9 @@ still incomplete.
 | Reddit | blocked before collection | unavailable | unavailable | `NOT_ELIGIBLE` (authorization unverified) |
 | TED | feasibility passed | executor/receipt ready | unavailable | capacity probe required |
 | Naver Blog Search | access smoke passed | unavailable | unavailable | blocked for persistent evidence use |
+| CFPB complaints | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
+| CPSC SaferProducts | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
+| Wikimedia Phabricator | preferred candidate | unavailable | unavailable | capacity probe required |
 
 Immediate execution order:
 
@@ -82,6 +85,10 @@ Immediate execution order:
    redesigned transient-discovery path that persists no API result content.
 7. Run canonical ingestion, agreement, and development-only reports only after each
    source's independent secondary packet is complete.
+8. Use Wikimedia Phabricator as the fifth-source capacity candidate. CFPB and CPSC remain
+   excluded from the frozen five-source experiment because their public records cannot
+   establish stable cross-run author independence. Do not implement a Phabricator adapter
+   until a separate aggregate-only capacity plan is frozen and passes.
 
 Completed foundation:
 
@@ -305,6 +312,25 @@ separate transient discovery adapter may be evaluated only if it stores no API r
 uses NAVER results solely to locate canonical originals, and evaluates those originals under
 their own access and reuse rules. Future commercial operation remains a separate horizon.
 
+### M2-B8 — Fifth Persistent Source Shortlist · Phabricator selected for capacity
+
+The fixed three-candidate comparison evaluated CFPB complaints, CPSC SaferProducts, and
+Wikimedia Phabricator without collecting a corpus. CFPB and CPSC provide unusually strong
+public complaint data and reuse paths, but neither publishes a stable submitter identifier;
+a report or complaint ID cannot prove distinct authors under the frozen contract.
+
+Wikimedia Phabricator is the only candidate that preserves official API access, persistent
+reuse with attribution, canonical task identity, timestamps, and stable public author
+identity. It is selected only for an aggregate-only capacity probe. Its similarity to GitHub
+and probable lack of direct money signals remain explicit source-value risks to measure, not
+reasons to weaken the feasibility gate.
+
+Decision status: **PREFERRED CAPACITY CANDIDATE, NOT YET QUALIFIED**. Freeze a separate
+four-project capacity contract before network execution. Do not create an adapter, fixture,
+smoke corpus, or analysis dataset as part of this shortlist decision.
+
+Decision record: [`decisions/fifth-source-shortlist.md`](decisions/fifth-source-shortlist.md)
+
 ### M2-B2 — Stack Exchange First Real Data
 
 Stack Exchange uses questions as the observation unit and treats four sites as smoke
@@ -366,6 +392,8 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Evaluate YouTube lifecycle feasibility and mark it **NOT_ELIGIBLE** before collection
 - [x] Evaluate Reddit dual-horizon feasibility and block collection while authorization is unverified
 - [x] Verify Naver Blog Search credentials with a non-persistent access smoke and block persistent collection pending scope clearance or transient-path redesign
+- [x] Compare CFPB, CPSC, and Wikimedia Phabricator under the frozen fifth-source feasibility gate
+- [x] Select Wikimedia Phabricator for a separate aggregate-only capacity plan
 - [x] Freeze the Steam four-archetype `3/3/2/2` smoke manifest and 90-day window
 - [x] Complete Steam fixture parsing and valid-count collection at **10 / 10**
 - [x] Complete Steam real API smoke with **10 / 10** valid reviews and privacy PASS
