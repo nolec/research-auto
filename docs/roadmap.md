@@ -39,7 +39,10 @@ Smoke collections are reported separately and do not increase this table unless 
 Latest implementation checkpoint: TED official Search API transport, synthetic
 wrapper fixture, bounded four-stratum query-syntax validation, aggregate-only
 capacity executor primitives, and exact receipt validation are implemented on top
-of the frozen capacity contract. The full regression suite passes **420 tests**.
+of the frozen capacity contract. The first real syntax-validation run failed closed
+on TED's rejection of the frozen two-field sort, and the aggregate FAIL receipt now
+preserves the original `http_400` termination. The full regression suite passes
+**430 tests**.
 Three source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
@@ -62,10 +65,12 @@ Immediate execution order:
    unresolved stable-author policy conflict with the frozen 90-day evidence contract.
 4. Keep Reddit collection blocked while access, commercial reuse, automated-processing,
    and deletion clearance are unverified; select a separate fifth source if it stays blocked.
-5. Run the bounded TED query-syntax validation against all four frozen strata without
-   persisting raw queries or response bodies. Only a complete four-stratum PASS may
-   route to the non-persistent capacity probe. Only a passing aggregate receipt may
-   then route to notice parsing and a 10-record real smoke before its 100-record run.
+5. Revise and re-freeze the TED sort and syntax-success wrapper contract using the
+   observed official API behavior, then rerun bounded four-stratum syntax validation
+   without persisting raw queries or response bodies. Only a complete four-stratum
+   PASS may route to the non-persistent capacity probe. Only a passing aggregate
+   receipt may then route to notice parsing and a 10-record real smoke before its
+   100-record run.
 6. Run canonical ingestion, agreement, and development-only reports only after each
    source's independent secondary packet is complete.
 
@@ -157,7 +162,9 @@ Current real-data progress:
 - TED synthetic multilingual response fixture: **ready; contains no real notice data**
 - TED bounded retry, response-byte, deadline, and malformed-response handling: **ready**
 - TED four-stratum query generator and bounded syntax validator: **implemented and regression-tested**
-- TED real query-syntax validation: **pending**
+- TED first real query-syntax validation: **FAIL — frozen two-field sort rejected with `http_400`**
+- TED observed syntax-success wrapper: **HTTP 200 with nullable `totalNoticeCount`; contract revision required**
+- TED partial FAIL receipt: **qualified; original transport error preserved**
 - TED aggregate-only capacity executor/receipt: **implemented and regression-tested**
 - TED receipt privacy and numeric-boundary validation: **qualified**
 - TED capacity probe: **pending**
@@ -241,7 +248,11 @@ Search API transport, synthetic OpenAPI-shaped fixture, bounded query-syntax val
 aggregate-only executor primitives, and exact receipt validator are now implemented solely
 to support a non-persistent capacity probe. The syntax validator deterministically builds
 and hashes all four frozen stratum queries, requires the exact stable sort, fails closed on
-unexpected success-wrapper fields, and retains no query text in its result. The receipt is
+unexpected success-wrapper fields, and retains no query text in its result. The first real
+run failed at the first stratum because TED rejected the frozen per-field direction syntax
+after the first `DESC`; a single-field descending sort reached the syntax-success HTTP 200
+path, where `totalNoticeCount` was nullable. These observations require an explicit contract
+revision rather than an implicit runtime fallback. The receipt is
 UUID/hash-bound, rejects raw-field expansion and non-finite numeric
 values, and retains zero notice text or author identifiers. Notice persistence and smoke
 execution remain blocked until an actual probe receipt passes. Smoke data will
@@ -258,8 +269,9 @@ the query rather than syntax-checking it, preserves multilingual wrapper data on
 and fails closed on malformed or non-finite JSON. The aggregate-only execution state,
 selection/deduplication rules, pagination continuity checks, shared request/deadline/byte
 budgets, and PASS/FAIL receipt contract are implemented and regression-tested. The next
-milestone is to obtain a complete real four-stratum syntax-validation PASS, then execute the
-non-persistent capacity probe and preserve only its validated aggregate receipt.
+milestone is to revise and re-freeze the deterministic sort and nullable syntax-success
+wrapper contract, obtain a complete real four-stratum syntax-validation PASS, then execute
+the non-persistent capacity probe and preserve only its validated aggregate receipt.
 
 ### M2-B2 — Stack Exchange First Real Data
 
@@ -314,6 +326,8 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Freeze the TED capacity allocation, query, privacy, threshold, and request-budget contract
 - [x] Implement the TED official Search API transport and synthetic response fixture
 - [x] Implement deterministic TED query generation and bounded four-stratum syntax validation
+- [x] Execute the first real TED syntax validation and preserve its aggregate FAIL receipt
+- [x] Qualify partial FAIL receipts to preserve the original transport termination
 - [x] Implement the TED aggregate-only capacity executor and exact PASS/FAIL receipt validation
 - [x] Freeze Stack Exchange compliance and complete its real 10-record smoke
 - [x] Freeze Steam compliance for official public-review endpoint use only

@@ -333,7 +333,11 @@ def validate_validation_receipt(
     ) or request.get("request_shape_sha256") != _canonical_hash(_REQUEST_CONTRACT):
         errors.append("request contract mismatch")
     strata = receipt.get("strata")
-    if isinstance(strata, list) and all(isinstance(value, Mapping) for value in strata):
+    if (
+        isinstance(strata, list)
+        and len(strata) == len(_EXPECTED_STRATA)
+        and all(isinstance(value, Mapping) for value in strata)
+    ):
         observed_query_set_hash = _canonical_hash([
             {
                 "stratum": value.get("stratum"),

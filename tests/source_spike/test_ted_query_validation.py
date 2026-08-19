@@ -125,6 +125,33 @@ def test_partial_failure_fails_closed_without_validating_later_strata() -> None:
     assert len(transport.calls) == 2
 
 
+def test_partial_failure_receipt_preserves_original_error() -> None:
+    result = run_query_validation(
+        manifest(),
+        RecordingTransport([TedTransportFailure("http_400", 1, 0, 222)]),
+    )
+    receipt = build_validation_receipt(
+        result,
+        run_id="12345678-1234-4234-8234-123456789abc",
+        started_at="2026-08-18T09:00:00Z",
+        finished_at="2026-08-18T09:00:01Z",
+        elapsed_ms=1000,
+        capacity_manifest_hash="a" * 64,
+        feasibility_hash="b" * 64,
+        compliance_hash="c" * 64,
+    )
+
+    assert receipt["status"] == "FAIL"
+    assert receipt["termination_reason"] == "http_400"
+    assert validate_validation_receipt(
+        receipt,
+        capacity_manifest_hash="a" * 64,
+        feasibility_hash="b" * 64,
+        compliance_hash="c" * 64,
+        query_set_sha256=result.query_set_sha256,
+    ) == []
+
+
 def test_global_attempt_budget_stops_before_next_query() -> None:
     retried = TedTransportSuccess(
         TedPage((), 0, 1, False, "b" * 64, None),
