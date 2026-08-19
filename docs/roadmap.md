@@ -331,9 +331,12 @@ Decision status: **ANONYMOUS API SHAPE PREFLIGHT FAILED — CAPACITY BLOCKED**. 
 one-request run received HTTP 200 with Conduit error `ERR-INVALID-SESSION`, classified as
 `authentication_required`. It observed no tasks, made no canonical checks, and persisted no
 query, response body, task text, username, or PHID. The validated local aggregate receipt is
-ignored by Git under `artifacts/source-spike/`. Do not create an adapter, fixture, smoke
-corpus, analysis dataset, or API token as part of this path. Re-entry requires a separate
-decision explicitly authorizing token-based access and its secret lifecycle.
+ignored by Git under `artifacts/source-spike/`. Receipt integrity is hardened so the shared
+response-byte budget covers both API and canonical reads, while PASS validation requires exact
+wrapper/cursor shape and consistent observed-task, canonical-check, and request counts. Do not
+create an adapter, fixture, smoke corpus, analysis dataset, or API token as part of this path.
+Re-entry requires a separate decision explicitly authorizing token-based access and its secret
+lifecycle.
 
 Decision record: [`decisions/fifth-source-shortlist.md`](decisions/fifth-source-shortlist.md)
 
@@ -401,6 +404,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Compare CFPB, CPSC, and Wikimedia Phabricator under the frozen fifth-source feasibility gate
 - [x] Select Wikimedia Phabricator for a separate aggregate-only capacity plan
 - [x] Execute the bounded Wikimedia Phabricator anonymous API shape preflight and preserve its validated `authentication_required` FAIL receipt
+- [x] Harden the Phabricator preflight shared byte budget and PASS receipt consistency gate
 - [ ] Decide whether token-based Wikimedia Phabricator access is authorized and worth pursuing
 - [x] Freeze the Steam four-archetype `3/3/2/2` smoke manifest and 90-day window
 - [x] Complete Steam fixture parsing and valid-count collection at **10 / 10**

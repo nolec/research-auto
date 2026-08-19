@@ -142,6 +142,19 @@ def test_byte_budget_and_zero_request_pass_are_rejected() -> None:
     assert receipt["termination_reason"] == "no_request_executed"
 
 
+def test_canonical_response_bytes_share_the_frozen_budget() -> None:
+    receipt = execute_preflight(
+        api_response=StaticResponse(200, response_payload()),
+        canonical_responses=[StaticResponse(200, b"x" * 1_048_577)],
+        limits=PreflightLimits(),
+        clock=lambda: NOW,
+    )
+
+    assert receipt["status"] == "FAIL"
+    assert receipt["termination_reason"] == "response_byte_budget_exhausted"
+    assert receipt["response_bytes"] > receipt["limits"]["max_response_bytes"]
+
+
 def test_receipt_validation_rejects_privacy_and_metric_tampering() -> None:
     receipt = execute_preflight(
         api_response=StaticResponse(200, response_payload()),
@@ -155,3 +168,26 @@ def test_receipt_validation_rejects_privacy_and_metric_tampering() -> None:
     errors = validate_preflight_receipt(receipt)
     assert "persisted sensitive fields must remain zero" in errors
     assert "completeness metrics must be finite" in errors
+
+
+def test_receipt_validation_rejects_inconsistent_pass_evidence() -> None:
+    receipt = execute_preflight(
+        api_response=StaticResponse(200, response_payload()),
+        canonical_responses=[StaticResponse(200, b"")],
+        limits=PreflightLimits(),
+        clock=lambda: NOW,
+    )
+    receipt["shape"] = {
+        "wrapper_exact": False,
+        "cursor_present": False,
+        "cursor_after_key_present": False,
+    }
+    receipt["canonical_checks"] = 0
+    receipt["canonical_successes"] = 0
+    receipt["request_count"] = 2
+
+    errors = validate_preflight_receipt(receipt)
+
+    assert "PASS requires exact wrapper and cursor shape" in errors
+    assert "PASS requires one canonical check per observed task" in errors
+    assert "request count must equal API plus canonical checks" in errors

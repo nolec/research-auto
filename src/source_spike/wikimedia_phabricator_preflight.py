@@ -101,7 +101,9 @@ def execute_preflight(
 ) -> dict[str, object]:
     now = clock()
     request_count = (1 if api_response is not None else 0) + len(canonical_responses)
-    response_bytes = len(api_response.body) if api_response is not None else 0
+    response_bytes = (len(api_response.body) if api_response is not None else 0) + sum(
+        len(response.body) for response in canonical_responses
+    )
     receipt = _base_receipt(
         limits=limits, now=now, request_count=request_count, response_bytes=response_bytes
     )
@@ -222,16 +224,36 @@ def validate_preflight_receipt(value: Mapping[str, object]) -> list[str]:
             errors.append("PASS requires observed tasks")
         if isinstance(completeness, Mapping) and any(metric != 1.0 for metric in completeness.values()):
             errors.append("PASS requires complete required fields")
+        shape = value.get("shape")
+        if not isinstance(shape, Mapping) or any(
+            shape.get(name) is not True
+            for name in ("wrapper_exact", "cursor_present", "cursor_after_key_present")
+        ):
+            errors.append("PASS requires exact wrapper and cursor shape")
+        observed_task_count = int(value.get("observed_task_count", 0))
+        canonical_checks = int(value.get("canonical_checks", 0))
+        if canonical_checks != observed_task_count:
+            errors.append("PASS requires one canonical check per observed task")
         if value.get("canonical_checks") != value.get("canonical_successes"):
             errors.append("PASS requires canonical anonymous reads")
+        if int(value.get("request_count", 0)) != 1 + canonical_checks:
+            errors.append("request count must equal API plus canonical checks")
+        limits = value.get("limits")
+        if isinstance(limits, Mapping) and int(value.get("response_bytes", 0)) > int(
+            limits.get("max_response_bytes", 0)
+        ):
+            errors.append("PASS exceeds response-byte budget")
     return sorted(set(errors))
 
 
-def fetch_static_response(request: Request, limits: PreflightLimits) -> StaticResponse:
+def fetch_static_response(
+    request: Request, limits: PreflightLimits, *, max_read_bytes: int | None = None
+) -> StaticResponse:
     context = ssl.create_default_context(cafile=certifi.where())
+    read_limit = limits.max_response_bytes if max_read_bytes is None else max_read_bytes
     try:
         with urlopen(request, timeout=limits.timeout_seconds, context=context) as response:
-            body = response.read(limits.max_response_bytes + 1)
+            body = response.read(read_limit + 1)
             return StaticResponse(response.status, body)
     except HTTPError as error:
         return StaticResponse(error.code, b"")
@@ -259,6 +281,12 @@ def run_live_preflight(
                 for item in data:
                     task_id = cast(Mapping[str, object], item).get("id")
                     if isinstance(task_id, int) and task_id > 0:
+                        consumed_bytes = len(api_response.body) + sum(
+                            len(response.body) for response in canonical_responses
+                        )
+                        remaining_bytes = limits.max_response_bytes - consumed_bytes
+                        if remaining_bytes <= 0:
+                            break
                         canonical_responses.append(
                             fetch_static_response(
                                 Request(
@@ -267,8 +295,11 @@ def run_live_preflight(
                                     method="GET",
                                 ),
                                 limits,
+                                max_read_bytes=remaining_bytes,
                             )
                         )
+                        if len(canonical_responses[-1].body) > remaining_bytes:
+                            break
         except (KeyError, TypeError, json.JSONDecodeError):
             pass
     return execute_preflight(
