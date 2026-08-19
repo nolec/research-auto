@@ -1,6 +1,6 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-18
+> Updated: 2026-08-19
 > Status: Task 1 complete, Task 2 in progress
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
@@ -32,6 +32,7 @@ Primary progress metric: **300 / 500 valid real observations**
 | Steam | 100 | 100 |
 | Reddit | 0 | 100 |
 | TED | 0 | 100 |
+| Naver Blog Search | 0 | blocked |
 | **Total** | **300** | **500** |
 
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
@@ -55,6 +56,7 @@ still incomplete.
 | YouTube | excluded | unavailable | unavailable | `NOT_ELIGIBLE` |
 | Reddit | blocked before collection | unavailable | unavailable | `NOT_ELIGIBLE` (authorization unverified) |
 | TED | feasibility passed | executor/receipt ready | unavailable | capacity probe required |
+| Naver Blog Search | access smoke passed | unavailable | unavailable | blocked for persistent evidence use |
 
 Immediate execution order:
 
@@ -71,7 +73,14 @@ Immediate execution order:
    PASS may route to the non-persistent capacity probe. Only a passing aggregate
    receipt may then route to notice parsing and a 10-record real smoke before its
    100-record run.
-6. Run canonical ingestion, agreement, and development-only reports only after each
+6. Keep Naver Blog Search blocked from the persistent Source Spike path after the
+   credentialed access smoke. This is not a finding that non-commercial API calls are
+   prohibited. The blocker is narrower: the official terms authorize search-result
+   presentation but do not expressly authorize this product's separate corpus storage,
+   automated extraction, and durable evidence outputs; they prohibit storage and processing
+   outside the permitted API purpose. Re-entry requires written scope confirmation or a
+   redesigned transient-discovery path that persists no API result content.
+7. Run canonical ingestion, agreement, and development-only reports only after each
    source's independent secondary packet is complete.
 
 Completed foundation:
@@ -273,6 +282,29 @@ milestone is to revise and re-freeze the deterministic sort and nullable syntax-
 wrapper contract, obtain a complete real four-stratum syntax-validation PASS, then execute
 the non-persistent capacity probe and preserve only its validated aggregate receipt.
 
+### M2-B7 — Naver Blog Search Feasibility · Persistent use blocked
+
+Naver Blog Search was evaluated as a possible replacement for Reddit. Project-local API
+credentials were registered and a non-persistent one-item access smoke returned HTTP 200
+with the required result fields. No credentials, query text, response body, or result item
+were persisted by the smoke.
+
+The current official NAVER API terms do not clearly authorize this product's evidence
+contract. General condition 7.3 prohibits copying, storage (including caching), processing,
+distribution, and third-party provision outside the permitted API scope. Search-specific
+condition 2.1 describes faithful, independent exposure of search results, but does not grant
+an explicit right to build a separate persistent analysis corpus. Result rights remain with
+NAVER or the original rightsholder. This conclusion is about persistent evidence use, not
+about ordinary non-commercial API calls. The API is also migrating from NAVER Developers to
+NAVER API HUB, with the legacy Search API scheduled to end on 2027-06-30.
+
+Decision status: **BLOCKED for the current persistent Source Spike design**. Do not create a
+stored smoke corpus or analysis dataset. Re-entry requires authoritative scope confirmation
+for persistent storage, automated extraction/indexing, and derived-output retention. A
+separate transient discovery adapter may be evaluated only if it stores no API result text,
+uses NAVER results solely to locate canonical originals, and evaluates those originals under
+their own access and reuse rules. Future commercial operation remains a separate horizon.
+
 ### M2-B2 — Stack Exchange First Real Data
 
 Stack Exchange uses questions as the observation unit and treats four sites as smoke
@@ -333,6 +365,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Freeze Steam compliance for official public-review endpoint use only
 - [x] Evaluate YouTube lifecycle feasibility and mark it **NOT_ELIGIBLE** before collection
 - [x] Evaluate Reddit dual-horizon feasibility and block collection while authorization is unverified
+- [x] Verify Naver Blog Search credentials with a non-persistent access smoke and block persistent collection pending scope clearance or transient-path redesign
 - [x] Freeze the Steam four-archetype `3/3/2/2` smoke manifest and 90-day window
 - [x] Complete Steam fixture parsing and valid-count collection at **10 / 10**
 - [x] Complete Steam real API smoke with **10 / 10** valid reviews and privacy PASS
