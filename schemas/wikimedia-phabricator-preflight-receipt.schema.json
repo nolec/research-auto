@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/wikimedia-phabricator-preflight-receipt.schema.json",
+  "title": "Wikimedia Phabricator API Shape Preflight Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "source", "run_id", "started_at", "finished_at", "status",
+    "termination_reason", "observed_task_count", "completeness", "shape",
+    "request_count", "response_bytes", "canonical_checks", "canonical_successes",
+    "limits", "privacy"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "source": {"const": "wikimedia_phabricator"},
+    "run_id": {"type": "string", "format": "uuid"},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["PASS", "FAIL"]},
+    "termination_reason": {
+      "enum": [
+        "shape_qualified", "no_request_executed", "authentication_required",
+        "http_error", "response_byte_budget_exhausted", "malformed_response",
+        "unexpected_wrapper", "empty_result", "sample_limit_exceeded",
+        "required_field_incomplete", "cursor_shape_missing",
+        "canonical_anonymous_read_failed"
+      ]
+    },
+    "observed_task_count": {"type": "integer", "minimum": 0, "maximum": 5},
+    "completeness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_id", "created_timestamp", "author_phid", "public_visibility"],
+      "properties": {
+        "task_id": {"type": "number", "minimum": 0, "maximum": 1},
+        "created_timestamp": {"type": "number", "minimum": 0, "maximum": 1},
+        "author_phid": {"type": "number", "minimum": 0, "maximum": 1},
+        "public_visibility": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "shape": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wrapper_exact", "cursor_present", "cursor_after_key_present"],
+      "properties": {
+        "wrapper_exact": {"type": "boolean"},
+        "cursor_present": {"type": "boolean"},
+        "cursor_after_key_present": {"type": "boolean"}
+      }
+    },
+    "request_count": {"type": "integer", "minimum": 0, "maximum": 6},
+    "response_bytes": {"type": "integer", "minimum": 0},
+    "canonical_checks": {"type": "integer", "minimum": 0, "maximum": 5},
+    "canonical_successes": {"type": "integer", "minimum": 0, "maximum": 5},
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sample_size", "timeout_seconds", "max_response_bytes"],
+      "properties": {
+        "sample_size": {"const": 5},
+        "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 30},
+        "max_response_bytes": {"type": "integer", "minimum": 1, "maximum": 1048576}
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "persisted_task_text", "persisted_usernames", "persisted_author_identifiers",
+        "persisted_queries", "persisted_response_bodies"
+      ],
+      "properties": {
+        "persisted_task_text": {"const": 0},
+        "persisted_usernames": {"const": 0},
+        "persisted_author_identifiers": {"const": 0},
+        "persisted_queries": {"const": 0},
+        "persisted_response_bodies": {"const": 0}
+      }
+    }
+  }
+}

@@ -59,7 +59,7 @@ still incomplete.
 | Naver Blog Search | access smoke passed | unavailable | unavailable | blocked for persistent evidence use |
 | CFPB complaints | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
 | CPSC SaferProducts | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
-| Wikimedia Phabricator | preferred candidate | unavailable | unavailable | capacity probe required |
+| Wikimedia Phabricator | anonymous preflight failed | unavailable | unavailable | blocked (`authentication_required`) |
 
 Immediate execution order:
 
@@ -85,10 +85,12 @@ Immediate execution order:
    redesigned transient-discovery path that persists no API result content.
 7. Run canonical ingestion, agreement, and development-only reports only after each
    source's independent secondary packet is complete.
-8. Use Wikimedia Phabricator as the fifth-source capacity candidate. CFPB and CPSC remain
+8. Keep Wikimedia Phabricator capacity work blocked after the anonymous Conduit preflight
+   returned HTTP 200 with `ERR-INVALID-SESSION`. CFPB and CPSC remain
    excluded from the frozen five-source experiment because their public records cannot
-   establish stable cross-run author independence. Do not implement a Phabricator adapter
-   until a separate aggregate-only capacity plan is frozen and passes.
+   establish stable cross-run author independence. Do not create or use an API token as an
+   implicit fallback; token-based access requires a separate authorization and secret-lifecycle
+   decision before any new plan.
 
 Completed foundation:
 
@@ -325,9 +327,13 @@ identity. It is selected only for an aggregate-only capacity probe. Its similari
 and probable lack of direct money signals remain explicit source-value risks to measure, not
 reasons to weaken the feasibility gate.
 
-Decision status: **PREFERRED CAPACITY CANDIDATE, NOT YET QUALIFIED**. Freeze a separate
-four-project capacity contract before network execution. Do not create an adapter, fixture,
-smoke corpus, or analysis dataset as part of this shortlist decision.
+Decision status: **ANONYMOUS API SHAPE PREFLIGHT FAILED — CAPACITY BLOCKED**. The bounded
+one-request run received HTTP 200 with Conduit error `ERR-INVALID-SESSION`, classified as
+`authentication_required`. It observed no tasks, made no canonical checks, and persisted no
+query, response body, task text, username, or PHID. The validated local aggregate receipt is
+ignored by Git under `artifacts/source-spike/`. Do not create an adapter, fixture, smoke
+corpus, analysis dataset, or API token as part of this path. Re-entry requires a separate
+decision explicitly authorizing token-based access and its secret lifecycle.
 
 Decision record: [`decisions/fifth-source-shortlist.md`](decisions/fifth-source-shortlist.md)
 
@@ -394,6 +400,8 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Verify Naver Blog Search credentials with a non-persistent access smoke and block persistent collection pending scope clearance or transient-path redesign
 - [x] Compare CFPB, CPSC, and Wikimedia Phabricator under the frozen fifth-source feasibility gate
 - [x] Select Wikimedia Phabricator for a separate aggregate-only capacity plan
+- [x] Execute the bounded Wikimedia Phabricator anonymous API shape preflight and preserve its validated `authentication_required` FAIL receipt
+- [ ] Decide whether token-based Wikimedia Phabricator access is authorized and worth pursuing
 - [x] Freeze the Steam four-archetype `3/3/2/2` smoke manifest and 90-day window
 - [x] Complete Steam fixture parsing and valid-count collection at **10 / 10**
 - [x] Complete Steam real API smoke with **10 / 10** valid reviews and privacy PASS
