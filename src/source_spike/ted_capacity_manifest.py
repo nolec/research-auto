@@ -22,7 +22,6 @@ _STRATA = (
 )
 _SORT = (
     {"field": "publication-date", "direction": "DESC"},
-    {"field": "publication-number", "direction": "ASC"},
 )
 _WINDOW = {
     "published_from": "2026-05-20T00:00:00Z",

@@ -5,7 +5,7 @@
   "required": ["schema_version", "validation_contract_version", "transport_version", "run_id", "status", "termination_reason", "started_at", "finished_at", "elapsed_ms", "capacity_manifest_hash", "feasibility_hash", "compliance_hash", "generator_version", "query_set_sha256", "request_contract", "budget", "retained_queries", "retained_response_bodies", "strata", "metrics"],
   "properties": {
     "schema_version": {"const": 1},
-    "validation_contract_version": {"const": "1.0.0"},
+    "validation_contract_version": {"enum": ["1.0.0", "1.1.0"]},
     "transport_version": {"const": "ted-http/1.0.0"},
     "run_id": {"type": "string", "format": "uuid"},
     "status": {"enum": ["PASS", "FAIL"]},
@@ -16,7 +16,7 @@
     "capacity_manifest_hash": {"$ref": "#/$defs/hash"},
     "feasibility_hash": {"$ref": "#/$defs/hash"},
     "compliance_hash": {"$ref": "#/$defs/hash"},
-    "generator_version": {"const": "1.0.0"},
+    "generator_version": {"enum": ["1.0.0", "1.1.0"]},
     "query_set_sha256": {"$ref": "#/$defs/hash"},
     "request_contract": {
       "type": "object",

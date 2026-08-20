@@ -37,13 +37,15 @@ Primary progress metric: **300 / 500 valid real observations**
 
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
 
-Latest implementation checkpoint: TED official Search API transport, synthetic
-wrapper fixture, bounded four-stratum query-syntax validation, aggregate-only
-capacity executor primitives, and exact receipt validation are implemented on top
-of the frozen capacity contract. The first real syntax-validation run failed closed
-on TED's rejection of the frozen two-field sort, and the aggregate FAIL receipt now
-preserves the original `http_400` termination. The full regression suite passes
-**430 tests**.
+Latest implementation checkpoint: TED official Search API transport, synthetic wrapper
+fixture, bounded four-stratum query-syntax validation, aggregate-only capacity primitives,
+and exact receipt validation are implemented. Contract version 1.1.0 freezes the observed
+compatible single-field `publication-date DESC` sort and accepts nullable
+`totalNoticeCount` only during syntax checking. The real bounded validation passed all four
+strata with four requests, zero retries, 324 response bytes, and no retained query or response
+body. Historical 1.0 receipts remain independently verifiable, while capacity execution accepts
+only the current 1.1 validation/generator pair and matching hashes. The full regression suite
+passes **445 tests**.
 Three source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
@@ -55,7 +57,7 @@ still incomplete.
 | Steam | 20 / 20 | 0 / 5 | blocked | deferred |
 | YouTube | excluded | unavailable | unavailable | `NOT_ELIGIBLE` |
 | Reddit | blocked before collection | unavailable | unavailable | `NOT_ELIGIBLE` (authorization unverified) |
-| TED | feasibility passed | executor/receipt ready | unavailable | capacity probe required |
+| TED | syntax validation 4 / 4 passed | capacity primitives ready | unavailable | capacity probe required |
 | Naver Blog Search | access smoke passed | unavailable | unavailable | blocked for persistent evidence use |
 | CFPB complaints | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
 | CPSC SaferProducts | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
@@ -70,12 +72,9 @@ Immediate execution order:
    unresolved stable-author policy conflict with the frozen 90-day evidence contract.
 4. Keep Reddit collection blocked while access, commercial reuse, automated-processing,
    and deletion clearance are unverified; select a separate fifth source if it stays blocked.
-5. Revise and re-freeze the TED sort and syntax-success wrapper contract using the
-   observed official API behavior, then rerun bounded four-stratum syntax validation
-   without persisting raw queries or response bodies. Only a complete four-stratum
-   PASS may route to the non-persistent capacity probe. Only a passing aggregate
-   receipt may then route to notice parsing and a 10-record real smoke before its
-   100-record run.
+5. Connect the qualified TED four-stratum syntax receipt to the non-persistent capacity
+   execution path. Only a passing aggregate capacity receipt may route to notice parsing
+   and a 10-record real smoke before its 100-record run.
 6. Keep Naver Blog Search blocked from the persistent Source Spike path after the
    credentialed access smoke. This is not a finding that non-commercial API calls are
    prohibited. The blocker is narrower: the official terms authorize search-result
@@ -180,8 +179,10 @@ Current real-data progress:
 - TED synthetic multilingual response fixture: **ready; contains no real notice data**
 - TED bounded retry, response-byte, deadline, and malformed-response handling: **ready**
 - TED four-stratum query generator and bounded syntax validator: **implemented and regression-tested**
-- TED first real query-syntax validation: **FAIL — frozen two-field sort rejected with `http_400`**
-- TED observed syntax-success wrapper: **HTTP 200 with nullable `totalNoticeCount`; contract revision required**
+- TED initial query-syntax validation: **historical FAIL — two-field sort rejected with `http_400`**
+- TED revised query contract: **single-field `publication-date DESC`, version 1.1.0 — frozen**
+- TED real query-syntax validation: **4 / 4 PASS — zero retries, aggregate-only receipt qualified**
+- TED receipt compatibility: **historical 1.0 validation preserved; capacity gate requires 1.1**
 - TED partial FAIL receipt: **qualified; original transport error preserved**
 - TED aggregate-only capacity executor/receipt: **implemented and regression-tested**
 - TED receipt privacy and numeric-boundary validation: **qualified**
@@ -268,9 +269,10 @@ to support a non-persistent capacity probe. The syntax validator deterministical
 and hashes all four frozen stratum queries, requires the exact stable sort, fails closed on
 unexpected success-wrapper fields, and retains no query text in its result. The first real
 run failed at the first stratum because TED rejected the frozen per-field direction syntax
-after the first `DESC`; a single-field descending sort reached the syntax-success HTTP 200
-path, where `totalNoticeCount` was nullable. These observations require an explicit contract
-revision rather than an implicit runtime fallback. The receipt is
+after the first `DESC`. That run remains historical aggregate-only evidence. Contract version
+1.1.0 now freezes the observed-compatible single-field descending sort and accepts nullable
+`totalNoticeCount` only for syntax checking. The subsequent bounded run passed all four strata.
+The receipt is
 UUID/hash-bound, rejects raw-field expansion and non-finite numeric
 values, and retains zero notice text or author identifiers. Notice persistence and smoke
 execution remain blocked until an actual probe receipt passes. Smoke data will
@@ -287,9 +289,8 @@ the query rather than syntax-checking it, preserves multilingual wrapper data on
 and fails closed on malformed or non-finite JSON. The aggregate-only execution state,
 selection/deduplication rules, pagination continuity checks, shared request/deadline/byte
 budgets, and PASS/FAIL receipt contract are implemented and regression-tested. The next
-milestone is to revise and re-freeze the deterministic sort and nullable syntax-success
-wrapper contract, obtain a complete real four-stratum syntax-validation PASS, then execute
-the non-persistent capacity probe and preserve only its validated aggregate receipt.
+milestone is to connect the qualified syntax receipt to the non-persistent capacity execution
+path and preserve only its validated aggregate PASS/FAIL receipt.
 
 ### M2-B7 — Naver Blog Search Feasibility · Persistent use blocked
 
@@ -412,7 +413,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Pass the Steam hash-bound capacity probe at **38 / 38** per application
 - [x] Collect and qualify the balanced Steam **100 / 100** analysis sample
 - [x] Collect and qualify the balanced Stack Exchange 100-record analysis sample
-- [ ] Pass TED real query-syntax validation for all four frozen strata
+- [x] Pass TED real query-syntax validation for all four frozen strata
 - [ ] Pass the TED non-persistent capacity probe
 - [ ] Implement the remaining source adapters with fixtures
 - [ ] Add a rerunnable collection CLI and raw-fixture persistence

@@ -24,8 +24,8 @@ from src.source_spike.protocol import content_sha256
 from src.source_spike.ted_capacity_manifest import validate_ted_capacity_manifest
 
 
-QUERY_GENERATOR_VERSION = "1.0.0"
-VALIDATION_CONTRACT_VERSION = "1.0.0"
+QUERY_GENERATOR_VERSION = "1.1.0"
+VALIDATION_CONTRACT_VERSION = "1.1.0"
 TRANSPORT_VERSION = "ted-http/1.0.0"
 _ROOT = Path(__file__).resolve().parents[2]
 _RECEIPT_SCHEMA = json.loads(
@@ -40,9 +40,8 @@ _EXPECTED_STRATA = (
 )
 _EXPECTED_SORT = (
     ("publication-date", "DESC"),
-    ("publication-number", "ASC"),
 )
-_SORT_CLAUSE = "SORT BY publication-date DESC, publication-number ASC"
+_SORT_CLAUSE = "SORT BY publication-date DESC"
 _REQUEST_CONTRACT = {
     "endpoint": "/v3/notices/search",
     "method": "POST",
@@ -53,6 +52,7 @@ _REQUEST_CONTRACT = {
     "scope": "ALL",
     "pagination_mode": "PAGE_NUMBER",
 }
+_SUPPORTED_VERSION_PAIRS = frozenset({("1.0.0", "1.0.0"), ("1.1.0", "1.1.0")})
 
 
 @dataclass(frozen=True)
@@ -319,6 +319,12 @@ def validate_validation_receipt(
             key=lambda value: tuple(map(str, value.absolute_path)),
         )
     ]
+    version_pair = (
+        receipt.get("validation_contract_version"),
+        receipt.get("generator_version"),
+    )
+    if version_pair not in _SUPPORTED_VERSION_PAIRS:
+        errors.append("validation and generator version pair mismatch")
     for key, expected, label in (
         ("capacity_manifest_hash", capacity_manifest_hash, "capacity manifest hash"),
         ("feasibility_hash", feasibility_hash, "feasibility hash"),

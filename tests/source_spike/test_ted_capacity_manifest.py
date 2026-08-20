@@ -112,7 +112,7 @@ def test_window_allocation_sort_and_budgets_cannot_drift() -> None:
     changed = copy.deepcopy(manifest)
     changed["allocation"]["required_unique_per_stratum"] = 37
     changed["window"]["published_from"] = "2026-05-21T00:00:00Z"
-    changed["sort"] = [{"field": "publication-date", "direction": "DESC"}]
+    changed["sort"] = [{"field": "publication-date", "direction": "ASC"}]
     changed["pagination"]["max_http_attempts_total"] = 11
     refresh_hashes(changed)
 

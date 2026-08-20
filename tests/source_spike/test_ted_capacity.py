@@ -63,6 +63,40 @@ def test_capacity_preflight_requires_matching_four_stratum_pass_receipt() -> Non
     assert "query validation receipt strata mismatch" in errors
 
 
+def test_capacity_preflight_rejects_historical_receipt_versions() -> None:
+    from src.source_spike.adapters.ted_http import TedPage, TedTransportSuccess
+    from src.source_spike.ted_query_validation import build_validation_receipt, run_query_validation
+
+    class Transport:
+        def validate_query_syntax(self, **kwargs):
+            return TedTransportSuccess(TedPage((), 0, 1, False, "d" * 64, None), 1, 0, 10)
+
+    manifest = json.loads((ROOT / "config/source-spike/ted-capacity.json").read_text())
+    result = run_query_validation(manifest, Transport())
+    receipt = build_validation_receipt(
+        result,
+        run_id="12345678-1234-4234-8234-123456789abc",
+        started_at="2026-08-18T09:00:00Z",
+        finished_at="2026-08-18T09:00:01Z",
+        elapsed_ms=1000,
+        capacity_manifest_hash="a" * 64,
+        feasibility_hash="c" * 64,
+        compliance_hash="e" * 64,
+    )
+    receipt["validation_contract_version"] = "1.0.0"
+    receipt["generator_version"] = "1.0.0"
+
+    errors = validate_query_validation_preflight(
+        receipt,
+        capacity_manifest_hash="a" * 64,
+        feasibility_hash="c" * 64,
+        compliance_hash="e" * 64,
+        query_set_sha256=result.query_set_sha256,
+    )
+
+    assert "capacity preflight requires TED query contract 1.1.0" in errors
+
+
 def valid_notice(**overrides: object) -> dict[str, object]:
     value: dict[str, object] = {
         "notice-identifier": "notice-1",

@@ -4,7 +4,7 @@
   "additionalProperties": false,
   "required": ["manifest_version", "source", "feasibility_hash", "api", "allocation", "allocation_hash", "window", "window_hash", "selection", "notice_scope", "fields", "forbidden_contact_fields", "sort", "strata", "thresholds", "pagination", "retry", "privacy", "query_contract_hash"],
   "properties": {
-    "manifest_version": {"const": "1.0.0"},
+    "manifest_version": {"const": "1.1.0"},
     "source": {"const": "ted"},
     "feasibility_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "api": {"type": "object", "additionalProperties": false, "required": ["version", "base_url", "endpoint", "method", "authentication", "scope", "pagination_mode", "check_query_syntax"], "properties": {"version": {"const": "3.0"}, "base_url": {"const": "https://api.ted.europa.eu"}, "endpoint": {"const": "/v3/notices/search"}, "method": {"const": "POST"}, "authentication": {"const": "none"}, "scope": {"const": "ALL"}, "pagination_mode": {"const": "PAGE_NUMBER"}, "check_query_syntax": {"const": false}}},

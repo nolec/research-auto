@@ -61,7 +61,7 @@ def test_query_set_is_deterministic_and_contains_frozen_sort_order() -> None:
     ]
     assert all(
         candidate.query.endswith(
-            " SORT BY publication-date DESC, publication-number ASC"
+            " SORT BY publication-date DESC"
         )
         for candidate in first.candidates
     )
@@ -72,8 +72,7 @@ def test_query_set_is_deterministic_and_contains_frozen_sort_order() -> None:
 def test_query_generator_rejects_sort_or_stratum_drift() -> None:
     sort_drift = manifest()
     sort_drift["sort"] = [
-        {"field": "publication-number", "direction": "ASC"},
-        {"field": "publication-date", "direction": "DESC"},
+        {"field": "publication-date", "direction": "ASC"},
     ]
     with pytest.raises(ValueError, match="sort contract"):
         build_query_set(sort_drift)
@@ -227,6 +226,41 @@ def test_validation_receipt_rejects_incomplete_or_drifted_pass() -> None:
 
     assert any("strata" in error for error in errors)
     assert any("request contract" in error for error in errors)
+
+
+def test_validation_receipt_preserves_historical_version_pairs_only() -> None:
+    result = run_query_validation(manifest(), RecordingTransport())
+    receipt = build_validation_receipt(
+        result,
+        run_id="12345678-1234-4234-8234-123456789abc",
+        started_at="2026-08-18T09:00:00Z",
+        finished_at="2026-08-18T09:00:01Z",
+        elapsed_ms=1000,
+        capacity_manifest_hash="a" * 64,
+        feasibility_hash="b" * 64,
+        compliance_hash="c" * 64,
+    )
+    receipt["validation_contract_version"] = "1.0.0"
+    receipt["generator_version"] = "1.0.0"
+
+    historical_errors = validate_validation_receipt(
+        receipt,
+        capacity_manifest_hash="a" * 64,
+        feasibility_hash="b" * 64,
+        compliance_hash="c" * 64,
+        query_set_sha256=result.query_set_sha256,
+    )
+    receipt["generator_version"] = "1.1.0"
+    mixed_errors = validate_validation_receipt(
+        receipt,
+        capacity_manifest_hash="a" * 64,
+        feasibility_hash="b" * 64,
+        compliance_hash="c" * 64,
+        query_set_sha256=result.query_set_sha256,
+    )
+
+    assert historical_errors == []
+    assert "validation and generator version pair mismatch" in mixed_errors
 
 
 def test_validation_receipt_rejects_stratum_hash_drift_and_budget_overrun() -> None:

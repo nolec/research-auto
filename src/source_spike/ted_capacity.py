@@ -484,6 +484,11 @@ def validate_query_validation_preflight(
         compliance_hash=compliance_hash,
         query_set_sha256=query_set_sha256,
     )
+    if (
+        receipt.get("validation_contract_version") != "1.1.0"
+        or receipt.get("generator_version") != "1.1.0"
+    ):
+        errors.append("capacity preflight requires TED query contract 1.1.0")
     if receipt.get("status") != "PASS":
         errors.append("query validation receipt is not PASS")
     if receipt.get("capacity_manifest_hash") != capacity_manifest_hash:

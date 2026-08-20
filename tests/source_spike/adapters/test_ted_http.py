@@ -219,6 +219,46 @@ def test_syntax_validation_surface_forces_check_mode_and_minimal_fields() -> Non
     assert captured["body"]["paginationMode"] == "PAGE_NUMBER"
 
 
+def test_syntax_validation_accepts_nullable_total_without_weakening_data_fetch() -> None:
+    nullable_wrapper = json.dumps(
+        {"notices": [], "totalNoticeCount": None, "timedOut": False}
+    ).encode("utf-8")
+    transport = HttpTedTransport(
+        execute=lambda request, timeout, max_bytes: HttpResponse(200, {}, nullable_wrapper)
+    )
+
+    syntax_result = transport.validate_query_syntax(
+        query="publication-date = 20260817 SORT BY publication-date DESC",
+        max_http_attempts=1,
+        request_timeout_seconds=10,
+        deadline_seconds=30,
+        max_response_bytes=10_000,
+        max_retries=0,
+        base_backoff_seconds=1,
+        max_backoff_seconds=4,
+    )
+    data_result = transport.fetch_notices(
+        query="publication-date = 20260817 SORT BY publication-date DESC",
+        fields=("publication-number",),
+        page=1,
+        page_size=1,
+        scope="ALL",
+        check_query_syntax=False,
+        pagination_mode="PAGE_NUMBER",
+        max_http_attempts=1,
+        request_timeout_seconds=10,
+        deadline_seconds=30,
+        max_response_bytes=10_000,
+        max_retries=0,
+        base_backoff_seconds=1,
+        max_backoff_seconds=4,
+    )
+
+    assert isinstance(syntax_result, TedTransportSuccess)
+    assert isinstance(data_result, TedTransportFailure)
+    assert data_result.error_code == "malformed_wrapper"
+
+
 @pytest.mark.parametrize(
     "unexpected",
     (

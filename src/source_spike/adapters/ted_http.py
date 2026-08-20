@@ -129,6 +129,7 @@ class HttpTedTransport:
         base_backoff_seconds: float,
         max_backoff_seconds: float,
         reject_unknown_wrapper_fields: bool = False,
+        allow_nullable_total: bool = False,
     ) -> TedTransportSuccess | TedTransportFailure:
         body = json.dumps(
             {
@@ -202,6 +203,7 @@ class HttpTedTransport:
                         response_bytes=response_bytes,
                         events=events,
                         reject_unknown_wrapper_fields=reject_unknown_wrapper_fields,
+                        allow_nullable_total=allow_nullable_total,
                     )
                 retryable = response.status_code in _RETRYABLE_STATUSES
                 retry_after = _header_integer(response.headers, "Retry-After")
@@ -273,6 +275,7 @@ class HttpTedTransport:
             base_backoff_seconds=base_backoff_seconds,
             max_backoff_seconds=max_backoff_seconds,
             reject_unknown_wrapper_fields=True,
+            allow_nullable_total=True,
         )
 
     @staticmethod
@@ -285,6 +288,7 @@ class HttpTedTransport:
         response_bytes: int,
         events: Sequence[Mapping[str, object]],
         reject_unknown_wrapper_fields: bool = False,
+        allow_nullable_total: bool = False,
     ) -> TedTransportSuccess | TedTransportFailure:
         try:
             payload = json.loads(body, parse_constant=_reject_non_finite)
@@ -310,12 +314,13 @@ class HttpTedTransport:
         total = payload.get("totalNoticeCount")
         timed_out = payload.get("timedOut")
         token = payload.get("iterationNextToken")
+        normalized_total = 0 if allow_nullable_total and total is None else total
         if (
             not isinstance(notices, list)
             or any(not isinstance(notice, Mapping) for notice in notices)
-            or isinstance(total, bool)
-            or not isinstance(total, int)
-            or total < 0
+            or isinstance(normalized_total, bool)
+            or not isinstance(normalized_total, int)
+            or normalized_total < 0
             or not isinstance(timed_out, bool)
             or (token is not None and not isinstance(token, str))
         ):
@@ -329,9 +334,9 @@ class HttpTedTransport:
         copied_notices = json.loads(json.dumps(notices, ensure_ascii=False, allow_nan=False))
         page_value = TedPage(
             notices=tuple(copied_notices),
-            total_notice_count=total,
+            total_notice_count=normalized_total,
             page_number=page,
-            has_more=page * page_size < total,
+            has_more=page * page_size < normalized_total,
             payload_signature=_signature(copied_notices),
             iteration_next_token=token,
         )
