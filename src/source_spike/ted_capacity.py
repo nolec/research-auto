@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import json
 import math
+import re
 from collections import Counter
 from dataclasses import dataclass
 from datetime import date, datetime
@@ -515,33 +516,14 @@ def validate_query_validation_preflight(
     return errors
 
 
-class TedSelectionState:
-    def __init__(
-        self,
-        *,
-        published_from: str,
-        published_before: str,
-        allowed_notice_types: frozenset[str],
-        form_type: str,
-        cpv_prefix: str,
-        max_items_per_buyer: int,
-    ) -> None:
-        self._published_from = _parse_yyyymmdd(published_from)
-        self._published_before = _parse_yyyymmdd(published_before)
-        if self._published_from is None or self._published_before is None:
-            raise ValueError("selection window must use valid YYYYMMDD dates")
-        self._allowed_notice_types = allowed_notice_types
-        self._form_type = form_type
-        self._cpv_prefix = cpv_prefix
+class TedIdentityState:
+    def __init__(self, *, max_items_per_buyer: int) -> None:
         self._max_items_per_buyer = max_items_per_buyer
         self._notice_ids: set[str] = set()
         self._procedure_ids: set[str] = set()
         self._buyer_counts: Counter[str] = Counter()
 
     def select(self, measurement: TedNoticeMeasurement) -> TedSelectionDecision:
-        rejection_reason = self._eligibility_rejection(measurement)
-        if rejection_reason is not None:
-            return TedSelectionDecision(False, rejection_reason)
         assert measurement.notice_id is not None
         assert measurement.procedure_id is not None
         if measurement.notice_id in self._notice_ids:
@@ -555,6 +537,36 @@ class TedSelectionState:
         self._procedure_ids.add(measurement.procedure_id)
         self._buyer_counts.update(buyers)
         return TedSelectionDecision(True, None)
+
+
+class TedSelectionState:
+    def __init__(
+        self,
+        *,
+        published_from: str,
+        published_before: str,
+        allowed_notice_types: frozenset[str],
+        form_type: str,
+        cpv_prefix: str,
+        max_items_per_buyer: int,
+        identity_state: TedIdentityState | None = None,
+    ) -> None:
+        self._published_from = _parse_yyyymmdd(published_from)
+        self._published_before = _parse_yyyymmdd(published_before)
+        if self._published_from is None or self._published_before is None:
+            raise ValueError("selection window must use valid YYYYMMDD dates")
+        self._allowed_notice_types = allowed_notice_types
+        self._form_type = form_type
+        self._cpv_prefix = cpv_prefix
+        self._identity_state = identity_state or TedIdentityState(
+            max_items_per_buyer=max_items_per_buyer
+        )
+
+    def select(self, measurement: TedNoticeMeasurement) -> TedSelectionDecision:
+        rejection_reason = self._eligibility_rejection(measurement)
+        if rejection_reason is not None:
+            return TedSelectionDecision(False, rejection_reason)
+        return self._identity_state.select(measurement)
 
     def _eligibility_rejection(self, measurement: TedNoticeMeasurement) -> str | None:
         if not measurement.shape_valid:
@@ -589,10 +601,14 @@ class TedSelectionState:
 
 
 def _parse_yyyymmdd(value: str | None) -> date | None:
-    if value is None or len(value) != 8 or not value.isascii() or not value.isdecimal():
+    if value is None or not value.isascii():
         return None
     try:
-        return datetime.strptime(value, "%Y%m%d").date()
+        if len(value) == 8 and value.isdecimal():
+            return datetime.strptime(value, "%Y%m%d").date()
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}[+-]\d{2}:\d{2}", value):
+            return datetime.strptime(value, "%Y-%m-%d%z").date()
+        return None
     except ValueError:
         return None
 

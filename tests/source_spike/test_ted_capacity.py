@@ -264,6 +264,25 @@ def test_selection_rejects_ineligible_measurements_with_stable_reason(
     assert decision.rejection_reason == reason
 
 
+def test_selection_accepts_ted_publication_date_with_numeric_offset() -> None:
+    decision = selection_state().select(
+        measure_notice(valid_notice(**{"publication-date": "2026-06-01+02:00"}))
+    )
+
+    assert decision.accepted is True
+    assert decision.rejection_reason is None
+
+
+@pytest.mark.parametrize("value", ("2026-06-01+99:99", "2026-06-01+24:00"))
+def test_selection_rejects_invalid_numeric_offset(value: str) -> None:
+    decision = selection_state().select(
+        measure_notice(valid_notice(**{"publication-date": value}))
+    )
+
+    assert decision.accepted is False
+    assert decision.rejection_reason == "outside_window"
+
+
 def test_selection_deduplicates_notice_then_procedure_in_observation_order() -> None:
     state = selection_state()
 

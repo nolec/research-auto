@@ -261,22 +261,27 @@ and the legal notice permits commercial and non-commercial reuse unless otherwis
 The frozen contract excludes direct contact fields, attachments, unpublished notices, model
 training, and fine-tuning.
 
-Decision status: **PASS for current collection and future commercial reuse**. The
+Decision status: **CAPACITY PASS for current collection and future commercial reuse**. The
 machine-readable route remains `probe_capacity`, not analysis collection. The official
 Search API transport, synthetic OpenAPI-shaped fixture, bounded query-syntax validator,
-aggregate-only executor primitives, and exact receipt validator are now implemented solely
-to support a non-persistent capacity probe. The syntax validator deterministically builds
-and hashes all four frozen stratum queries, requires the exact stable sort, fails closed on
-unexpected success-wrapper fields, and retains no query text in its result. The first real
-run failed at the first stratum because TED rejected the frozen per-field direction syntax
-after the first `DESC`. That run remains historical aggregate-only evidence. Contract version
-1.1.0 now freezes the observed-compatible single-field descending sort and accepts nullable
-`totalNoticeCount` only for syntax checking. The subsequent bounded run passed all four strata.
-The receipt is
-UUID/hash-bound, rejects raw-field expansion and non-finite numeric
-values, and retains zero notice text or author identifiers. Notice persistence and smoke
-execution remain blocked until an actual probe receipt passes. Smoke data will
-not increase the **300 / 500** analysis-ready progress metric.
+aggregate-only executor, and exact receipt validator are implemented. The syntax validator
+deterministically builds and hashes all four frozen stratum queries, requires the exact stable
+sort, fails closed on unexpected success-wrapper fields, and retains no query text. Contract
+version 1.1.0 freezes the observed-compatible single-field descending sort and accepts nullable
+`totalNoticeCount` only for syntax checking. The qualified syntax receipt now gates every
+capacity request by exact stratum order and query hash.
+
+The first capacity execution exposed the live API publication-date boundary
+(`YYYY-MM-DD±HH:MM`) and terminated at the shared response-byte budget with zero accepted
+records; this remains historical aggregate-only evidence. After adding strict support for that
+shape, the runner was tightened so notice, procedure, and buyer limits are shared across all
+four strata rather than reset at each stratum. The replacement bounded run
+`6c4c5ecc-15e3-4a49-9087-0d07f2b8319b` passed at **38 / 38 / 38 / 38** while rejecting five
+cross-stratum duplicate notices and one cross-stratum buyer-limit collision. It used four
+logical requests and four HTTP attempts, no retries, rate-limit events, transport errors,
+repeated pages, or deadline exhaustion, and retained zero notice text or author identifiers.
+Smoke execution is now unblocked; smoke records will not increase the **300 / 500**
+analysis-ready progress metric.
 
 The capacity probe contract is now frozen before network execution. It requires 38 unique
 candidates in each of four CPV strata (`48`, `79`, `85`, `50`), for 152 candidates total,
@@ -288,9 +293,9 @@ request is made. The transport targets the official `/v3/notices/search` endpoin
 the query rather than syntax-checking it, preserves multilingual wrapper data only in memory,
 and fails closed on malformed or non-finite JSON. The aggregate-only execution state,
 selection/deduplication rules, pagination continuity checks, shared request/deadline/byte
-budgets, and PASS/FAIL receipt contract are implemented and regression-tested. The next
-milestone is to connect the qualified syntax receipt to the non-persistent capacity execution
-path and preserve only its validated aggregate PASS/FAIL receipt.
+budgets, qualified-query identity gate, and PASS/FAIL receipt contract are implemented,
+regression-tested, and live-qualified. The next milestone is to freeze the TED smoke manifest
+and run **10 / 10** before analysis collection.
 
 ### M2-B7 — Naver Blog Search Feasibility · Persistent use blocked
 
