@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0.0",
+  "status": "AUTHORIZED",
+  "operational_next_action": "run_smoke",
+  "capacity_run_id": "6c4c5ecc-15e3-4a49-9087-0d07f2b8319b",
+  "capacity_receipt_sha256": "26ac33d4bd6a081fdad8a2b50d328fec19b11354581ade3fb61eb9aaf08ecd71",
+  "capacity_manifest_hash": "2a3187860010c616c52074afea040731055dbcabefba22065f383db111ed6495",
+  "feasibility_hash": "9f9fcdd92cd15b0a5d8bc0cbd5f94dc413967559f17a5b40118f2b1b2a57539e",
+  "compliance_hash": "0721f464e535d235c324ac59af6ba5dd9cd563f67656b8d875b0b84a65ed7e3e",
+  "query_set_sha256": "071d56288426b67b446fa74571545ed484e99e02f09d4c52d0d0ae1eade10963",
+  "authorized_at": "2026-08-22T00:00:00Z"
+}

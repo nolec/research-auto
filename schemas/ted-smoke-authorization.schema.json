@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "operational_next_action", "capacity_run_id", "capacity_receipt_sha256", "capacity_manifest_hash", "feasibility_hash", "compliance_hash", "query_set_sha256", "authorized_at"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"}, "status": {"const": "AUTHORIZED"},
+    "operational_next_action": {"const": "run_smoke"}, "capacity_run_id": {"type": "string", "minLength": 1},
+    "capacity_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "capacity_manifest_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "feasibility_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "compliance_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "query_set_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "authorized_at": {"type": "string", "format": "date-time"}
+  }
+}

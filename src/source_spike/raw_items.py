@@ -53,6 +53,7 @@ _ALLOWED_METADATA_PATHS = {
     "youtube": {"can_reply", "is_public", "video_id"},
     "reddit": {"link_flair_text", "locked", "over_18", "stickied", "subreddit"},
     "hackernews": {"dead", "deleted", "type"},
+    "ted": set(),
 }
 
 

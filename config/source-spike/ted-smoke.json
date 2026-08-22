@@ -1,0 +1,24 @@
+{
+  "manifest_version": "1.0.0",
+  "source": "ted",
+  "adapter_version": "0.1.0",
+  "target_valid_records": 10,
+  "capacity_manifest_hash": "2a3187860010c616c52074afea040731055dbcabefba22065f383db111ed6495",
+  "feasibility_hash": "9f9fcdd92cd15b0a5d8bc0cbd5f94dc413967559f17a5b40118f2b1b2a57539e",
+  "compliance_hash": "0721f464e535d235c324ac59af6ba5dd9cd563f67656b8d875b0b84a65ed7e3e",
+  "query_set_sha256": "071d56288426b67b446fa74571545ed484e99e02f09d4c52d0d0ae1eade10963",
+  "canonical_url_template": "https://ted.europa.eu/en/notice/-/detail/{publication-number}",
+  "max_items_per_buyer": 2,
+  "compound_buyer_identity_version": "ted-buyers-v1",
+  "strata": [
+    {"name": "software_and_information_systems", "cpv_prefix": "48", "quota": 3},
+    {"name": "business_services", "cpv_prefix": "79", "quota": 3},
+    {"name": "health_and_social_services", "cpv_prefix": "85", "quota": 2},
+    {"name": "repair_and_maintenance_services", "cpv_prefix": "50", "quota": 2}
+  ],
+  "request": {"page_size": 100, "max_pages_per_stratum": 2, "max_logical_requests": 8, "max_http_attempts": 16, "deadline_seconds": 45, "max_response_bytes": 10485760, "request_timeout_seconds": 10},
+  "retry": {"max_retries_per_logical_request": 1, "base_backoff_seconds": 1, "max_backoff_seconds": 4},
+  "window": {"published_from": "2026-05-20T00:00:00Z", "published_before": "2026-08-18T00:00:00Z", "query_from_date": "20260520", "query_to_date": "20260817", "from_inclusive": true, "before_exclusive": true},
+  "fields": ["publication-number", "notice-identifier", "procedure-identifier", "publication-date", "notice-type", "form-type", "classification-cpv", "buyer-identifier", "notice-title", "description-proc", "change-notice-version-identifier"],
+  "privacy": {"persist_raw_payloads": false, "persist_raw_items": false, "persist_raw_buyer_ids": false, "persist_author_hashes": false}
+}

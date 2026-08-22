@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["manifest_version", "source", "target_valid_records", "strata", "request", "fields", "privacy"],
+  "properties": {
+    "manifest_version": {"const": "1.0.0"}, "source": {"const": "ted"},
+    "target_valid_records": {"const": 10}, "strata": {"type": "array", "minItems": 4, "maxItems": 4},
+    "request": {"type": "object"}, "fields": {"type": "array"}, "privacy": {"type": "object"}
+  }
+}

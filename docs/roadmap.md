@@ -172,7 +172,7 @@ Current real-data progress:
 - Steam independent secondary human labels: **0 / 5**
 - TED current-collection feasibility: **PASS**
 - TED future-commercial-reuse feasibility: **PASS**
-- TED next action: **freeze smoke manifest and run 10 / 10**
+- TED smoke authorization/manifest: **hash-bound and frozen**
 - TED capacity manifest/query contract: **frozen and validated**
 - TED probe allocation: **38 candidates × 4 CPV strata = 152 required unique candidates**
 - TED probe window: **2026-05-20 inclusive → 2026-08-18 exclusive — frozen**
@@ -188,6 +188,9 @@ Current real-data progress:
 - TED aggregate-only capacity executor/receipt: **implemented and regression-tested**
 - TED receipt privacy and numeric-boundary validation: **qualified**
 - TED capacity probe: **38 / 38 / 38 / 38 — PASS, retained items 0**
+- TED real smoke: **10 / 10 — qualified at 3 / 3 / 2 / 2, privacy PASS**
+- TED smoke qualification schema: **frozen; authorization, references, transport, provenance, and privacy validated**
+- TED analysis-ready observations: **0 / 100**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
 repository archetypes at 25 records each. The local-only run bundle contains a
@@ -201,8 +204,8 @@ frozen packet and assignment-map hashes, preserves assignment-level context-use 
 metadata, and rejects incomplete or non-independent reviews. Development reporting
 accepts only schema-valid development labels with 10 unique primary records and five
 independent secondary pairs. Current next actions are to complete the independent
-GitHub, Stack Exchange, and Steam secondary reviews and freeze the TED smoke manifest
-before running its 10-record real smoke. All three primary reviews are
+GitHub, Stack Exchange, and Steam secondary reviews and run the TED 100-record analysis
+collection after its qualified real smoke. All three primary reviews are
 complete, but canonical ingestion remains blocked on independent secondary reviewers. Qualified
 datasets and confirmed labels must not be retuned or silently replaced.
 
@@ -281,7 +284,10 @@ four strata rather than reset at each stratum. The replacement bounded run
 cross-stratum duplicate notices and one cross-stratum buyer-limit collision. It used four
 logical requests and four HTTP attempts, no retries, rate-limit events, transport errors,
 repeated pages, or deadline exhaustion, and retained zero notice text or author identifiers.
-Smoke execution is now unblocked; smoke records will not increase the **300 / 500**
+The hash-bound authorization and smoke manifest then qualified a **10 / 10** live smoke at
+the frozen `3 / 3 / 2 / 2` quotas. Four logical requests and four attempts reached
+`target_reached` with zero retries, rate-limit events, transport errors, retained items,
+raw text, or raw author persistence. Smoke records do not increase the **300 / 500**
 analysis-ready progress metric.
 
 The capacity probe contract is now frozen before network execution. It requires 38 unique
@@ -295,8 +301,14 @@ the query rather than syntax-checking it, preserves multilingual wrapper data on
 and fails closed on malformed or non-finite JSON. The aggregate-only execution state,
 selection/deduplication rules, pagination continuity checks, shared request/deadline/byte
 budgets, qualified-query identity gate, and PASS/FAIL receipt contract are implemented,
-regression-tested, and live-qualified. The next milestone is to freeze the TED smoke manifest
-and run **10 / 10** before analysis collection.
+regression-tested, and live-qualified. The smoke authorization, exact receipt binding,
+manifest, notice parser, compound-buyer hashing, global deduplication, individual-buyer
+limit, and aggregate-only qualification report are also regression-tested and live-qualified.
+The smoke reuses the capacity selection contract for publication window, notice/form scope,
+CPV stratum, change-notice exclusion, global notice/procedure deduplication, and buyer limits.
+The final qualification artifact is schema-valid and binds the smoke, capacity, and
+authorization hashes before it can be persisted as PASS.
+The next TED milestone is the separate **100 / 100** analysis collection.
 
 ### M2-B7 — Naver Blog Search Feasibility · Persistent use blocked
 
@@ -421,6 +433,8 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Collect and qualify the balanced Stack Exchange 100-record analysis sample
 - [x] Pass TED real query-syntax validation for all four frozen strata
 - [x] Pass the TED non-persistent capacity probe at **38 / 38 / 38 / 38** with zero retained items
+- [x] Freeze the TED smoke authorization and exact `3/3/2/2` manifest
+- [x] Complete TED real API smoke with **10 / 10** valid notices and privacy PASS
 - [ ] Implement the remaining source adapters with fixtures
 - [ ] Add a rerunnable collection CLI and raw-fixture persistence
 - [ ] Collect at least 100 valid records from each source

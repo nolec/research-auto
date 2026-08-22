@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "status", "termination_reason", "target", "accepted", "strata", "accepted_refs", "transport", "provenance", "raw_text_persisted", "raw_author_persisted", "retained_items"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["PASS", "PARTIAL", "FAIL"]},
+    "termination_reason": {"type": "string", "minLength": 1},
+    "target": {"const": 10},
+    "accepted": {"type": "integer", "minimum": 0, "maximum": 10},
+    "strata": {
+      "type": "object", "additionalProperties": false,
+      "required": ["software_and_information_systems", "business_services", "health_and_social_services", "repair_and_maintenance_services"],
+      "properties": {
+        "software_and_information_systems": {"type": "integer", "minimum": 0, "maximum": 3},
+        "business_services": {"type": "integer", "minimum": 0, "maximum": 3},
+        "health_and_social_services": {"type": "integer", "minimum": 0, "maximum": 2},
+        "repair_and_maintenance_services": {"type": "integer", "minimum": 0, "maximum": 2}
+      }
+    },
+    "accepted_refs": {
+      "type": "array", "maxItems": 10,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["source_item_id", "source_url", "published_at"],
+        "properties": {
+          "source_item_id": {"type": "string", "minLength": 1},
+          "source_url": {"type": "string", "format": "uri", "pattern": "^https://ted\\.europa\\.eu/en/notice/-/detail/.+$"},
+          "published_at": {"type": "string", "format": "date-time"}
+        }
+      }
+    },
+    "transport": {
+      "type": "object", "additionalProperties": false,
+      "required": ["logical_requests", "http_attempts", "retries", "rate_limit_events", "transport_errors", "response_bytes", "max_logical_requests", "max_http_attempts", "deadline_seconds", "max_response_bytes"],
+      "properties": {
+        "logical_requests": {"type": "integer", "minimum": 0, "maximum": 8},
+        "http_attempts": {"type": "integer", "minimum": 0, "maximum": 16},
+        "retries": {"type": "integer", "minimum": 0},
+        "rate_limit_events": {"type": "integer", "minimum": 0},
+        "transport_errors": {"type": "integer", "minimum": 0},
+        "response_bytes": {"type": "integer", "minimum": 0, "maximum": 10485760},
+        "max_logical_requests": {"const": 8}, "max_http_attempts": {"const": 16},
+        "deadline_seconds": {"const": 45}, "max_response_bytes": {"const": 10485760}
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["manifest_hash", "capacity_manifest_hash", "authorization_hash"],
+      "properties": {
+        "manifest_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "capacity_manifest_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "authorization_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "raw_text_persisted": {"const": 0}, "raw_author_persisted": {"const": 0}, "retained_items": {"const": 0}
+  }
+}
