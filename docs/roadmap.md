@@ -1,6 +1,6 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-19
+> Updated: 2026-08-22
 > Status: Task 1 complete, Task 2 in progress
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
@@ -38,14 +38,15 @@ Primary progress metric: **300 / 500 valid real observations**
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
 
 Latest implementation checkpoint: TED official Search API transport, synthetic wrapper
-fixture, bounded four-stratum query-syntax validation, aggregate-only capacity primitives,
-and exact receipt validation are implemented. Contract version 1.1.0 freezes the observed
-compatible single-field `publication-date DESC` sort and accepts nullable
-`totalNoticeCount` only during syntax checking. The real bounded validation passed all four
-strata with four requests, zero retries, 324 response bytes, and no retained query or response
-body. Historical 1.0 receipts remain independently verifiable, while capacity execution accepts
-only the current 1.1 validation/generator pair and matching hashes. The full regression suite
-passes **445 tests**.
+fixture, bounded four-stratum query-syntax validation, aggregate-only capacity executor,
+global notice/procedure/buyer independence ledger, and exact receipt validation are
+implemented. Contract version 1.1.0 freezes the observed-compatible single-field
+`publication-date DESC` sort and accepts nullable `totalNoticeCount` only during syntax
+checking. The qualified query receipt gated the final bounded capacity run, which passed at
+**38 / 38 / 38 / 38** with four requests, zero retries, zero transport errors, and no retained
+notice text or author identifiers. Historical 1.0 receipts remain independently verifiable,
+while capacity execution accepts only the current 1.1 validation/generator pair and matching
+hashes. The full regression suite passes **453 tests**.
 Three source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
@@ -57,7 +58,7 @@ still incomplete.
 | Steam | 20 / 20 | 0 / 5 | blocked | deferred |
 | YouTube | excluded | unavailable | unavailable | `NOT_ELIGIBLE` |
 | Reddit | blocked before collection | unavailable | unavailable | `NOT_ELIGIBLE` (authorization unverified) |
-| TED | syntax validation 4 / 4 passed | capacity primitives ready | unavailable | capacity probe required |
+| TED | unavailable | unavailable | unavailable | capacity passed; smoke pending |
 | Naver Blog Search | access smoke passed | unavailable | unavailable | blocked for persistent evidence use |
 | CFPB complaints | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
 | CPSC SaferProducts | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
@@ -72,9 +73,9 @@ Immediate execution order:
    unresolved stable-author policy conflict with the frozen 90-day evidence contract.
 4. Keep Reddit collection blocked while access, commercial reuse, automated-processing,
    and deletion clearance are unverified; select a separate fifth source if it stays blocked.
-5. Connect the qualified TED four-stratum syntax receipt to the non-persistent capacity
-   execution path. Only a passing aggregate capacity receipt may route to notice parsing
-   and a 10-record real smoke before its 100-record run.
+5. Freeze the TED smoke manifest and qualification contract, then run a 10-record real
+   smoke before its 100-record analysis run. The non-persistent capacity prerequisite has
+   passed at **38 / 38 / 38 / 38**.
 6. Keep Naver Blog Search blocked from the persistent Source Spike path after the
    credentialed access smoke. This is not a finding that non-commercial API calls are
    prohibited. The blocker is narrower: the official terms authorize search-result
@@ -171,7 +172,7 @@ Current real-data progress:
 - Steam independent secondary human labels: **0 / 5**
 - TED current-collection feasibility: **PASS**
 - TED future-commercial-reuse feasibility: **PASS**
-- TED machine-readable next action: **`probe_capacity`**
+- TED next action: **freeze smoke manifest and run 10 / 10**
 - TED capacity manifest/query contract: **frozen and validated**
 - TED probe allocation: **38 candidates × 4 CPV strata = 152 required unique candidates**
 - TED probe window: **2026-05-20 inclusive → 2026-08-18 exclusive — frozen**
@@ -186,7 +187,7 @@ Current real-data progress:
 - TED partial FAIL receipt: **qualified; original transport error preserved**
 - TED aggregate-only capacity executor/receipt: **implemented and regression-tested**
 - TED receipt privacy and numeric-boundary validation: **qualified**
-- TED capacity probe: **pending**
+- TED capacity probe: **38 / 38 / 38 / 38 — PASS, retained items 0**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
 repository archetypes at 25 records each. The local-only run bundle contains a
@@ -200,8 +201,8 @@ frozen packet and assignment-map hashes, preserves assignment-level context-use 
 metadata, and rejects incomplete or non-independent reviews. Development reporting
 accepts only schema-valid development labels with 10 unique primary records and five
 independent secondary pairs. Current next actions are to complete the independent
-GitHub, Stack Exchange, and Steam secondary reviews and run the non-persistent TED
-capacity probe. All three primary reviews are
+GitHub, Stack Exchange, and Steam secondary reviews and freeze the TED smoke manifest
+before running its 10-record real smoke. All three primary reviews are
 complete, but canonical ingestion remains blocked on independent secondary reviewers. Qualified
 datasets and confirmed labels must not be retuned or silently replaced.
 
@@ -419,7 +420,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Collect and qualify the balanced Steam **100 / 100** analysis sample
 - [x] Collect and qualify the balanced Stack Exchange 100-record analysis sample
 - [x] Pass TED real query-syntax validation for all four frozen strata
-- [ ] Pass the TED non-persistent capacity probe
+- [x] Pass the TED non-persistent capacity probe at **38 / 38 / 38 / 38** with zero retained items
 - [ ] Implement the remaining source adapters with fixtures
 - [ ] Add a rerunnable collection CLI and raw-fixture persistence
 - [ ] Collect at least 100 valid records from each source
