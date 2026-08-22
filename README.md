@@ -20,4 +20,4 @@
 
 ## 현재 상태
 
-Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **400/500**이다. GitHub, Stack Exchange, Steam, TED가 각각 실제 analysis dataset **100/100**을 확보했다. TED는 네 CPV strata를 25건씩 구성하고 contact redaction 및 residual scan을 통과했으며, deterministic primary 20/secondary 5 labeling assignment까지 생성됐다. 기존 GitHub, Stack Exchange, Steam primary human review는 각각 **20/20** 완료됐지만 독립 secondary는 모두 **0/5**다. 모든 source의 official eligibility는 secondary review와 canonical ingestion 전까지 deferred다. Smoke records는 analysis 진행률에 포함하지 않는다.
+Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **400/500**이다. GitHub, Stack Exchange, Steam, TED가 각각 실제 analysis dataset **100/100**을 확보했다. TED는 네 CPV strata를 25건씩 구성하고 contact redaction 및 residual scan을 통과했으며, hash-frozen primary 20/secondary 5 blind packet과 서로 격리된 로컬 handoff까지 준비됐다. 기존 GitHub, Stack Exchange, Steam primary human review는 각각 **20/20** 완료됐지만 독립 secondary는 모두 **0/5**다. TED human review는 primary **0/20**, secondary **0/5**다. 모든 source의 official eligibility는 secondary review와 canonical ingestion 전까지 deferred다. Smoke records는 analysis 진행률에 포함하지 않는다.

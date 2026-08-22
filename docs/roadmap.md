@@ -44,7 +44,7 @@ four frozen CPV strata. Contact redaction removed one observed contact candidate
 contact scanning passed, and no raw buyer identifiers or payloads were retained. The local
 authorization is mode `0600` and exactly bound to the qualified smoke receipt. A deterministic
 20-item labeling sample with 10 development, 10 holdout, and five secondary assignments is
-ready. The full regression suite passes **475 tests**. Four source datasets are qualified;
+ready. The full regression suite passes **478 tests**. Four source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
 
@@ -55,7 +55,7 @@ still incomplete.
 | Steam | 20 / 20 | 0 / 5 | blocked | deferred |
 | YouTube | excluded | unavailable | unavailable | `NOT_ELIGIBLE` |
 | Reddit | blocked before collection | unavailable | unavailable | `NOT_ELIGIBLE` (authorization unverified) |
-| TED | packet pending | 0 / 5 | pending | analysis qualified; eligibility deferred |
+| TED | 0 / 20 (packet ready) | 0 / 5 (handoff ready) | blocked | analysis qualified; eligibility deferred |
 | Naver Blog Search | access smoke passed | unavailable | unavailable | blocked for persistent evidence use |
 | CFPB complaints | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
 | CPSC SaferProducts | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
@@ -70,9 +70,9 @@ Immediate execution order:
    unresolved stable-author policy conflict with the frozen 90-day evidence contract.
 4. Keep Reddit collection blocked while access, commercial reuse, automated-processing,
    and deletion clearance are unverified; select a separate fifth source if it stays blocked.
-5. Freeze the TED smoke manifest and qualification contract, then run a 10-record real
-   smoke before its 100-record analysis run. The non-persistent capacity prerequisite has
-   passed at **38 / 38 / 38 / 38**.
+5. Complete TED primary review from its isolated 20-item handoff and send only the separate
+   five-item secondary handoff to an independent reviewer; keep ingestion/report blocked
+   until both submissions exist.
 6. Keep Naver Blog Search blocked from the persistent Source Spike path after the
    credentialed access smoke. This is not a finding that non-commercial API calls are
    prohibited. The blocker is narrower: the official terms authorize search-result
@@ -192,6 +192,9 @@ Current real-data progress:
 - TED publication-date normalization: **100 / 100 preserved as UTC calendar-date midnight**
 - TED contact privacy qualification: **PASS — 1 contact candidate redacted, residual 0**
 - TED labeling assignments: **20 primary / 5 secondary — deterministic and frozen**
+- TED blind packet: **primary 20 / secondary 5 — hash-frozen and idempotent**
+- TED external handoffs: **primary and secondary isolated by exact two-file allowlists**
+- TED human review: **primary 0 / 20, independent secondary 0 / 5**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
 repository archetypes at 25 records each. The local-only run bundle contains a
@@ -205,8 +208,8 @@ frozen packet and assignment-map hashes, preserves assignment-level context-use 
 metadata, and rejects incomplete or non-independent reviews. Development reporting
 accepts only schema-valid development labels with 10 unique primary records and five
 independent secondary pairs. Current next actions are to complete the independent
-GitHub, Stack Exchange, and Steam secondary reviews, prepare the TED blind review handoff,
-and select the fifth analysis source. All three existing primary reviews are
+GitHub, Stack Exchange, and Steam secondary reviews, complete the TED primary/secondary
+reviews from their isolated handoffs, and select the fifth analysis source. All three existing primary reviews are
 complete, but canonical ingestion remains blocked on independent secondary reviewers. Qualified
 datasets and confirmed labels must not be retuned or silently replaced.
 
@@ -438,6 +441,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Freeze the TED smoke authorization and exact `3/3/2/2` manifest
 - [x] Complete TED real API smoke with **10 / 10** valid notices and privacy PASS
 - [x] Collect and qualify the balanced TED **100 / 100** analysis sample
+- [x] Generate the TED hash-frozen primary 20/secondary 5 blind packet and isolated handoffs
 - [ ] Implement the remaining source adapters with fixtures
 - [ ] Add a rerunnable collection CLI and raw-fixture persistence
 - [ ] Collect at least 100 valid records from each source
@@ -452,6 +456,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Reject holdout, duplicate, incomplete, and non-independent development report inputs
 - [x] Connect Stack Exchange packet, ingestion, and development-report CLI surfaces
 - [x] Generate Steam blind primary/secondary packets and separate offline handoffs
+- [x] Generate TED blind primary/secondary packets with allowlisted isolated offline handoffs
 - [x] Complete and freeze Steam primary human review at **20 / 20**
 - [x] Add a machine-readable feasibility gate and freeze the YouTube rejection decision
 - [x] Gate holdout unsealing on an explicit freeze receipt
