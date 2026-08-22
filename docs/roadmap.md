@@ -23,7 +23,7 @@ Freeze the model, prompts, policy, and thresholds before the final evaluation. V
 
 Goal: evaluate five structurally different public sources with at least 100 normalized records per source, then select three V1 sources using measured evidence quality rather than intuition.
 
-Primary progress metric: **300 / 500 valid real observations**
+Primary progress metric: **400 / 500 valid real observations**
 
 | Source | Valid real observations | Target |
 |---|---:|---:|
@@ -31,23 +31,20 @@ Primary progress metric: **300 / 500 valid real observations**
 | Stack Exchange | 100 | 100 |
 | Steam | 100 | 100 |
 | Reddit | 0 | 100 |
-| TED | 0 | 100 |
+| TED | 100 | 100 |
 | Naver Blog Search | 0 | blocked |
-| **Total** | **300** | **500** |
+| **Total** | **400** | **500** |
 
 Smoke collections are reported separately and do not increase this table unless they follow the frozen analysis manifest and strata.
 
-Latest implementation checkpoint: TED official Search API transport, synthetic wrapper
-fixture, bounded four-stratum query-syntax validation, aggregate-only capacity executor,
-global notice/procedure/buyer independence ledger, and exact receipt validation are
-implemented. Contract version 1.1.0 freezes the observed-compatible single-field
-`publication-date DESC` sort and accepts nullable `totalNoticeCount` only during syntax
-checking. The qualified query receipt gated the final bounded capacity run, which passed at
-**38 / 38 / 38 / 38** with four requests, zero retries, zero transport errors, and no retained
-notice text or author identifiers. Historical 1.0 receipts remain independently verifiable,
-while capacity execution accepts only the current 1.1 validation/generator pair and matching
-hashes. The full regression suite passes **453 tests**.
-Three source datasets are qualified;
+Latest implementation checkpoint: TED passed official Search API syntax validation,
+aggregate-only capacity, real smoke, and the final privacy-qualified analysis run. The
+analysis dataset contains **100 / 100** valid notices balanced at 25 records across each of
+four frozen CPV strata. Contact redaction removed one observed contact candidate, residual
+contact scanning passed, and no raw buyer identifiers or payloads were retained. The local
+authorization is mode `0600` and exactly bound to the qualified smoke receipt. A deterministic
+20-item labeling sample with 10 development, 10 holdout, and five secondary assignments is
+ready. The full regression suite passes **475 tests**. Four source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
 
@@ -58,7 +55,7 @@ still incomplete.
 | Steam | 20 / 20 | 0 / 5 | blocked | deferred |
 | YouTube | excluded | unavailable | unavailable | `NOT_ELIGIBLE` |
 | Reddit | blocked before collection | unavailable | unavailable | `NOT_ELIGIBLE` (authorization unverified) |
-| TED | unavailable | unavailable | unavailable | capacity passed; smoke pending |
+| TED | packet pending | 0 / 5 | pending | analysis qualified; eligibility deferred |
 | Naver Blog Search | access smoke passed | unavailable | unavailable | blocked for persistent evidence use |
 | CFPB complaints | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
 | CPSC SaferProducts | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
@@ -146,7 +143,7 @@ Current real-data progress:
 
 - GitHub smoke qualification: **10 / 10**
 - GitHub analysis-ready observations: **100 / 100 — qualified**
-- Source Spike analysis-ready observations: **300 / 500**
+- Source Spike analysis-ready observations: **400 / 500**
 - GitHub blind primary packet: **20 / 20 — frozen**
 - GitHub blind secondary packet: **5 / 5 — frozen**
 - GitHub primary human labels: **20 / 20 — confirmed**
@@ -190,7 +187,11 @@ Current real-data progress:
 - TED capacity probe: **38 / 38 / 38 / 38 — PASS, retained items 0**
 - TED real smoke: **10 / 10 — qualified at 3 / 3 / 2 / 2, privacy PASS**
 - TED smoke qualification schema: **frozen; authorization, references, transport, provenance, and privacy validated**
-- TED analysis-ready observations: **0 / 100**
+- TED analysis authorization: **local-only, mode `0600`, exact smoke receipt binding PASS**
+- TED analysis-ready observations: **100 / 100 — qualified at 25 / 25 / 25 / 25**
+- TED publication-date normalization: **100 / 100 preserved as UTC calendar-date midnight**
+- TED contact privacy qualification: **PASS — 1 contact candidate redacted, residual 0**
+- TED labeling assignments: **20 primary / 5 secondary — deterministic and frozen**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
 repository archetypes at 25 records each. The local-only run bundle contains a
@@ -204,8 +205,8 @@ frozen packet and assignment-map hashes, preserves assignment-level context-use 
 metadata, and rejects incomplete or non-independent reviews. Development reporting
 accepts only schema-valid development labels with 10 unique primary records and five
 independent secondary pairs. Current next actions are to complete the independent
-GitHub, Stack Exchange, and Steam secondary reviews and run the TED 100-record analysis
-collection after its qualified real smoke. All three primary reviews are
+GitHub, Stack Exchange, and Steam secondary reviews, prepare the TED blind review handoff,
+and select the fifth analysis source. All three existing primary reviews are
 complete, but canonical ingestion remains blocked on independent secondary reviewers. Qualified
 datasets and confirmed labels must not be retuned or silently replaced.
 
@@ -308,7 +309,8 @@ The smoke reuses the capacity selection contract for publication window, notice/
 CPV stratum, change-notice exclusion, global notice/procedure deduplication, and buyer limits.
 The final qualification artifact is schema-valid and binds the smoke, capacity, and
 authorization hashes before it can be persisted as PASS.
-The next TED milestone is the separate **100 / 100** analysis collection.
+TED analysis is qualified at **100 / 100**. Its next milestone is a blind primary/secondary
+review handoff followed by the same gated canonical-ingestion process used for other sources.
 
 ### M2-B7 — Naver Blog Search Feasibility · Persistent use blocked
 
@@ -435,6 +437,7 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Pass the TED non-persistent capacity probe at **38 / 38 / 38 / 38** with zero retained items
 - [x] Freeze the TED smoke authorization and exact `3/3/2/2` manifest
 - [x] Complete TED real API smoke with **10 / 10** valid notices and privacy PASS
+- [x] Collect and qualify the balanced TED **100 / 100** analysis sample
 - [ ] Implement the remaining source adapters with fixtures
 - [ ] Add a rerunnable collection CLI and raw-fixture persistence
 - [ ] Collect at least 100 valid records from each source

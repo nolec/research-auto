@@ -1,0 +1,7 @@
+[
+  {"input": "Contact jane@example.com", "redactions": 1},
+  {"input": "Call +44 20 7946 0958", "redactions": 1},
+  {"input": "Call 01012345678", "redactions": 1},
+  {"input": "Call (02) 1234-5678", "redactions": 1},
+  {"input": "CPV 48000000 on 20260816 notice 566482-2026", "redactions": 0}
+]

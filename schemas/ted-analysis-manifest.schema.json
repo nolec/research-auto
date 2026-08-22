@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object",
+  "required": ["manifest_version", "source", "adapter_version", "target_valid_records", "strata", "request", "retry", "window", "fields", "privacy", "retention", "redaction_policy_version", "redaction_test_corpus_sha256", "language_selection_version"],
+  "properties": {
+    "manifest_version": {"const": "1.0.0"}, "source": {"const": "ted"}, "target_valid_records": {"const": 100},
+    "strata": {"type": "array", "minItems": 4, "maxItems": 4}, "request": {"type": "object"}, "retry": {"type": "object"},
+    "redaction_test_corpus_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -44,6 +44,7 @@ class TerminationReason(StrEnum):
     SMOKE_DEADLINE_EXHAUSTED = "smoke_deadline_exhausted"
     BACKOFF_BUDGET_EXHAUSTED = "backoff_budget_exhausted"
     QUOTA_BUDGET_EXHAUSTED = "quota_budget_exhausted"
+    PRIVACY_FAILURE = "privacy_failure"
 
 
 @dataclass(frozen=True)
