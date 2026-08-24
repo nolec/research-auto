@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-22
-> Status: Task 1 complete, Task 2 in progress
+> Updated: 2026-08-24
+> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 calibration slice in progress
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
 
@@ -19,9 +19,9 @@ Freeze the model, prompts, policy, and thresholds before the final evaluation. V
 - [x] Human audit and four-week success criteria
 - [x] Contract validation tests
 
-### Task 2 — Source Spike · In progress
+### Task 2 — Source Spike · Frozen at 400 / 500
 
-Goal: evaluate five structurally different public sources with at least 100 normalized records per source, then select three V1 sources using measured evidence quality rather than intuition.
+Original goal: evaluate five structurally different public sources with at least 100 normalized records per source, then select three V1 sources using measured evidence quality rather than intuition. The fifth-source search is now deferred: four qualified archetypes and 400 real observations are sufficient to test whether the downstream product path produces useful structured evidence. Source selection remains unfinished and no source has official eligibility.
 
 Primary progress metric: **400 / 500 valid real observations**
 
@@ -43,8 +43,8 @@ analysis dataset contains **100 / 100** valid notices balanced at 25 records acr
 four frozen CPV strata. Contact redaction removed one observed contact candidate, residual
 contact scanning passed, and no raw buyer identifiers or payloads were retained. The local
 authorization is mode `0600` and exactly bound to the qualified smoke receipt. A deterministic
-20-item labeling sample with 10 development, 10 holdout, and five secondary assignments is
-ready. The full regression suite passes **478 tests**. Four source datasets are qualified;
+20-item labeling sample with 10 development, 10 source-spike-reserved, and five secondary assignments is
+ready. The full regression suite passes **490 tests**. Four source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
 
@@ -55,34 +55,35 @@ still incomplete.
 | Steam | 20 / 20 | 0 / 5 | blocked | deferred |
 | YouTube | excluded | unavailable | unavailable | `NOT_ELIGIBLE` |
 | Reddit | blocked before collection | unavailable | unavailable | `NOT_ELIGIBLE` (authorization unverified) |
-| TED | 0 / 20 (packet ready) | 0 / 5 (handoff ready) | blocked | analysis qualified; eligibility deferred |
+| TED | 20 / 20 | 0 / 5 (handoff ready) | blocked | analysis qualified; eligibility deferred |
 | Naver Blog Search | access smoke passed | unavailable | unavailable | blocked for persistent evidence use |
 | CFPB complaints | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
 | CPSC SaferProducts | feasibility reviewed | unavailable | unavailable | `NOT_ELIGIBLE` (no public author identity) |
 | Wikimedia Phabricator | anonymous preflight failed | unavailable | unavailable | blocked (`authentication_required`) |
 
-Immediate execution order:
+Immediate execution order after the product-scope correction:
 
-1. Keep GitHub, Stack Exchange, and Steam thresholds, packets, and primary labels frozen.
-2. Obtain five blind reviews per qualified source from reviewers who have not seen the
-   corresponding primary labels.
-3. Replace YouTube with the TED candidate because YouTube's 30-day API Data lifecycle and
-   unresolved stable-author policy conflict with the frozen 90-day evidence contract.
-4. Keep Reddit collection blocked while access, commercial reuse, automated-processing,
-   and deletion clearance are unverified; select a separate fifth source if it stays blocked.
-5. Complete TED primary review from its isolated 20-item handoff and send only the separate
-   five-item secondary handoff to an independent reviewer; keep ingestion/report blocked
-   until both submissions exist.
-6. Keep Naver Blog Search blocked from the persistent Source Spike path after the
+1. Keep all four qualified datasets, packets, thresholds, and confirmed primary labels frozen.
+2. Treat the original 10-per-source `holdout` assignment as `source_spike_reserved`: it has
+   already been exposed during human review and is not an independent extractor evaluation set.
+3. Use only the 40 development-calibration records for the first extraction slice, with
+   inference documents and human gold physically separated at the public API boundary.
+4. Freeze an inference profile and run the first real structured extraction only after its
+   model, prompt, schema, request budget, and secret policy are explicit.
+5. Continue independent secondary reviews as a parallel Source Spike workstream; they remain
+   mandatory for canonical source-quality reporting but no longer block Task 3 calibration.
+6. Keep the fifth-source search deferred until the downstream vertical slice shows that more
+   source diversity is a real bottleneck. Reddit and Wikimedia Phabricator remain blocked.
+7. Keep Naver Blog Search blocked from the persistent Source Spike path after the
    credentialed access smoke. This is not a finding that non-commercial API calls are
    prohibited. The blocker is narrower: the official terms authorize search-result
    presentation but do not expressly authorize this product's separate corpus storage,
    automated extraction, and durable evidence outputs; they prohibit storage and processing
    outside the permitted API purpose. Re-entry requires written scope confirmation or a
    redesigned transient-discovery path that persists no API result content.
-7. Run canonical ingestion, agreement, and development-only reports only after each
+8. Run canonical ingestion, agreement, and development-only reports only after each
    source's independent secondary packet is complete.
-8. Keep Wikimedia Phabricator capacity work blocked after the anonymous Conduit preflight
+9. Keep Wikimedia Phabricator capacity work blocked after the anonymous Conduit preflight
    returned HTTP 200 with `ERR-INVALID-SESSION`. CFPB and CPSC remain
    excluded from the frozen five-source experiment because their public records cannot
    establish stable cross-run author independence. Do not create or use an API token as an
@@ -96,7 +97,7 @@ Completed foundation:
 - [x] Common privacy-safe `RawSourceItem` contract
 - [x] Observation-unit selection, normalization, deduplication, and author hashing rules
 - [x] Deterministic 20-item screening sample per source
-- [x] Development/holdout split of 10/10 per source
+- [x] Development/source-spike-reserved assignment of 10/10 per source
 - [x] Five double-review assignments per source
 - [x] Human-label schema and labeling guide
 - [x] Minimal source adapter and collection-result contracts
@@ -194,23 +195,24 @@ Current real-data progress:
 - TED labeling assignments: **20 primary / 5 secondary — deterministic and frozen**
 - TED blind packet: **primary 20 / secondary 5 — hash-frozen and idempotent**
 - TED external handoffs: **primary and secondary isolated by exact two-file allowlists**
-- TED human review: **primary 0 / 20, independent secondary 0 / 5**
+- TED human review: **primary 20 / 20 confirmed, independent secondary 0 / 5**
 
 GitHub analysis qualification uses a frozen `published_before` boundary and four
 repository archetypes at 25 records each. The local-only run bundle contains a
 dataset hash, privacy qualification, and a deterministic 20-item labeling sample
-with 10 development, 10 holdout, and five double-review assignments.
+with 10 development, 10 source-spike-reserved, and five double-review assignments.
 
 The local-only blind review bundle is hash-frozen against the qualified GitHub
-dataset. Development and holdout identities remain in the internal map only; the
-holdout labels will be physically sealed at ingestion. Ingestion revalidates the
+dataset. Development and source-spike-reserved identities remain in the internal map only;
+reserved labels remain physically sealed at ingestion. They preserve Source Spike audit
+history but are not an independent Task 3 evaluation set because their documents and primary
+judgments were exposed during human review. Ingestion revalidates the
 frozen packet and assignment-map hashes, preserves assignment-level context-use audit
 metadata, and rejects incomplete or non-independent reviews. Development reporting
 accepts only schema-valid development labels with 10 unique primary records and five
-independent secondary pairs. Current next actions are to complete the independent
-GitHub, Stack Exchange, and Steam secondary reviews, complete the TED primary/secondary
-reviews from their isolated handoffs, and select the fifth analysis source. All three existing primary reviews are
-complete, but canonical ingestion remains blocked on independent secondary reviewers. Qualified
+independent secondary pairs. Current parallel Source Spike action is to complete the
+independent GitHub, Stack Exchange, Steam, and TED secondary reviews. All four primary reviews
+are complete, but canonical ingestion remains blocked on independent secondary reviewers. Qualified
 datasets and confirmed labels must not be retuned or silently replaced.
 
 ### M2-B3 — Steam First Real Data
@@ -457,26 +459,49 @@ Do not wait for all five adapters to be complete before the first real smoke tes
 - [x] Connect Stack Exchange packet, ingestion, and development-report CLI surfaces
 - [x] Generate Steam blind primary/secondary packets and separate offline handoffs
 - [x] Generate TED blind primary/secondary packets with allowlisted isolated offline handoffs
+- [x] Complete and freeze GitHub primary human review at **20 / 20**
+- [x] Complete and freeze Stack Exchange primary human review at **20 / 20**
 - [x] Complete and freeze Steam primary human review at **20 / 20**
+- [x] Complete and freeze TED primary human review at **20 / 20**
 - [x] Add a machine-readable feasibility gate and freeze the YouTube rejection decision
 - [x] Gate holdout unsealing on an explicit freeze receipt
 - [ ] Produce accessibility, freshness, identity, continuity, cost, and compliance observations
-- [ ] Complete primary labels for at least 20 records per source and secondary labels for five
+- [ ] Complete five independent secondary labels for each of the four qualified sources
 - [ ] Calculate problem, money, usable-evidence, and noise densities with agreement statistics
 - [ ] Apply the preregistered selection gate and document the three selected V1 sources
 
-Task 2 is complete only when the result table, labeled dataset, source decision, and reproducible collection artifacts all exist. A failed source must not stop the other source experiments.
+Task 2 is frozen rather than complete. Its remaining completion conditions are independent
+secondary reviews, canonical source-quality reports, and a documented V1 source decision.
+The fifth 100-record source is deferred pending evidence that the Task 3 product path needs it.
 
 From M2-A onward, test count is a safety signal rather than the progress metric. Every implementation update must report smoke records separately from analysis-ready observations by source and the total out of 500.
 
 ## Following milestones
 
-### Task 3 — Problem and evidence extraction
+### Task 3 — Problem and evidence extraction · Calibration foundation in progress
 
-- [ ] Define structured extraction output and prompt versioning
-- [ ] Build extraction for the three selected sources
-- [ ] Evaluate against the Task 2 development set without opening the holdout
-- [ ] Freeze an extractor candidate and report holdout precision/error classes
+Current code checkpoint:
+
+- [x] Build a deterministic 40-record development projection at 10 records per qualified source
+- [x] Separate the gold-free inference corpus from the human-label sidecar at the public API boundary
+- [x] Verify qualified dataset hashes, frozen packet hashes, assignment membership, and label types
+- [x] Define the minimal structured extraction result with observation type, actor, problem,
+      context, consequence, verbatim evidence span, P/M/E signals, confidence, and abstention
+- [x] Reject gold-contaminated inference input, malformed labels, inconsistent money signals,
+      invalid observation types, unknown documents, and non-verbatim evidence spans
+- [x] Pass the deterministic 40-record fixture E2E and the full **490-test** regression suite
+- [ ] Freeze the first real inference profile: provider/model, prompt version, schema version,
+      request and cost ceilings, retries, secret handling, and raw-response retention
+- [ ] Run actual structured extraction on the 40 development-calibration records
+- [ ] Report coverage and P/E diagnostics separately from a gold-hidden structured-field audit
+- [ ] Require the calibration gate before expanding extraction beyond the 40-record slice
+- [ ] After extractor freeze, select a new untouched evaluation sample from the 320 unassigned
+      records; do not claim independent performance from the source-spike-reserved assignments
+
+The current implementation is a fixture-backed contract slice, not a working demand extractor.
+It proves that the four qualified datasets can be projected into a gold-free input corpus and that
+candidate structured outputs can be validated. It does not yet call a model, emit real problem
+extractions, cluster problems, or generate Opportunity Cards.
 
 ### Task 4 — Problem clustering and evidence independence
 

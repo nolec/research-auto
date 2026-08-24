@@ -20,4 +20,6 @@
 
 ## 현재 상태
 
-Task 1 Opportunity Card 계약은 완료됐다. 현재 Task 2 Source Spike를 진행 중이며, 분석용 실제 유효 레코드 진행률은 **400/500**이다. GitHub, Stack Exchange, Steam, TED가 각각 실제 analysis dataset **100/100**을 확보했다. TED는 네 CPV strata를 25건씩 구성하고 contact redaction 및 residual scan을 통과했으며, hash-frozen primary 20/secondary 5 blind packet과 서로 격리된 로컬 handoff까지 준비됐다. 기존 GitHub, Stack Exchange, Steam primary human review는 각각 **20/20** 완료됐지만 독립 secondary는 모두 **0/5**다. TED human review는 primary **0/20**, secondary **0/5**다. 모든 source의 official eligibility는 secondary review와 canonical ingestion 전까지 deferred다. Smoke records는 analysis 진행률에 포함하지 않는다.
+Task 1 Opportunity Card 계약은 완료됐다. Task 2 Source Spike는 GitHub, Stack Exchange, Steam, TED에서 각각 실제 analysis dataset **100/100**, 총 **400/500**을 확보한 상태로 동결했다. 네 source의 primary human review는 모두 **20/20** 완료됐고 독립 secondary는 각각 **0/5**라 official eligibility와 canonical source-quality report는 아직 deferred다. 기존 source-spike holdout은 이미 검토 과정에 노출됐으므로 extractor의 독립 평가셋이 아니라 `source_spike_reserved` 이력으로 취급한다.
+
+Task 3는 calibration foundation을 시작했다. 현재 코드는 네 source에서 development 10건씩 총 40건을 deterministic하게 projection하고, gold-free inference corpus와 human-label sidecar를 분리하며, 구조화 extraction 결과의 observation type, evidence span, P/M/E, money 정합성, confidence, abstention을 검증한다. Fixture E2E와 전체 **490 tests**는 통과했지만 실제 모델 호출, 실제 문제 추출, clustering, Opportunity Card, TOP 20은 아직 구현되지 않았다. 따라서 현재 제품은 데이터 수집·계약 검증에는 사용할 수 있지만 사업 기회 탐지 제품으로 실제 사용할 수 있는 상태는 아니다.
