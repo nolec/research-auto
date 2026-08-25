@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-08-24
-> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 calibration slice in progress
+> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 deterministic baseline implemented
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
 
@@ -44,7 +44,7 @@ four frozen CPV strata. Contact redaction removed one observed contact candidate
 contact scanning passed, and no raw buyer identifiers or payloads were retained. The local
 authorization is mode `0600` and exactly bound to the qualified smoke receipt. A deterministic
 20-item labeling sample with 10 development, 10 source-spike-reserved, and five secondary assignments is
-ready. The full regression suite passes **490 tests**. Four source datasets are qualified;
+ready. The full regression suite passes **498 tests**. Four source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
 
@@ -489,19 +489,30 @@ Current code checkpoint:
       context, consequence, verbatim evidence span, P/M/E signals, confidence, and abstention
 - [x] Reject gold-contaminated inference input, malformed labels, inconsistent money signals,
       invalid observation types, unknown documents, and non-verbatim evidence spans
-- [x] Pass the deterministic 40-record fixture E2E and the full **490-test** regression suite
+- [x] Pass the deterministic 40-record fixture E2E and the full **498-test** regression suite
+- [x] Implement the gold-isolated deterministic `rule_v1` benchmark over the frozen
+      development corpus with contract validation, abstention accounting, and a hashed receipt
+- [x] Prevent keyword-substring false positives and classify problem and money signals
+      independently while preserving a verbatim evidence span
+- [x] Dry-run `rule_v1` on all 40 development records: 40 valid outputs, 22 abstentions,
+      seven money positives, and zero invalid outputs
 - [ ] Freeze the first real inference profile: provider/model, prompt version, schema version,
       request and cost ceilings, retries, secret handling, and raw-response retention
 - [ ] Run actual structured extraction on the 40 development-calibration records
+- [ ] Compare the first model-backed extractor against `rule_v1` using the physically separate
+      development gold sidecar; report P/M/E coverage and error classes without opening a new holdout
 - [ ] Report coverage and P/E diagnostics separately from a gold-hidden structured-field audit
 - [ ] Require the calibration gate before expanding extraction beyond the 40-record slice
 - [ ] After extractor freeze, select a new untouched evaluation sample from the 320 unassigned
       records; do not claim independent performance from the source-spike-reserved assignments
 
-The current implementation is a fixture-backed contract slice, not a working demand extractor.
-It proves that the four qualified datasets can be projected into a gold-free input corpus and that
-candidate structured outputs can be validated. It does not yet call a model, emit real problem
-extractions, cluster problems, or generate Opportunity Cards.
+The current implementation is a working deterministic calibration baseline, not yet a useful
+demand extractor. It projects the four qualified datasets into a gold-free 40-record corpus,
+emits contract-valid rule-based outputs, records abstentions and hashes, and keeps human gold
+physically separate. It does not yet call a model, produce semantically reliable structured
+problem extraction, cluster problems, or generate Opportunity Cards. The next product bottleneck
+is therefore the frozen model-backed extraction profile and its measured comparison with `rule_v1`,
+not additional source infrastructure.
 
 ### Task 4 — Problem clustering and evidence independence
 
