@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/baseline-calibration-artifacts.schema.json",
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "sourceCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["github", "stackexchange", "steam", "ted"],
+      "properties": {
+        "github": {"const": 10}, "stackexchange": {"const": 10},
+        "steam": {"const": 10}, "ted": {"const": 10}
+      }
+    },
+    "sourceHashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["github", "stackexchange", "steam", "ted"],
+      "properties": {
+        "github": {"$ref": "#/$defs/sha256"}, "stackexchange": {"$ref": "#/$defs/sha256"},
+        "steam": {"$ref": "#/$defs/sha256"}, "ted": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "implementationFiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemas/baseline-calibration-artifacts.schema.json",
+        "src/extraction/baseline_calibration.py",
+        "src/extraction/baseline_manifest.py",
+        "src/extraction/baseline_provenance.py",
+        "src/extraction/calibration_evaluator.py",
+        "src/extraction/development_slice.py",
+        "src/extraction/rule_baseline.py"
+      ],
+      "properties": {
+        "schemas/baseline-calibration-artifacts.schema.json": {"$ref": "#/$defs/sha256"},
+        "src/extraction/baseline_calibration.py": {"$ref": "#/$defs/sha256"},
+        "src/extraction/baseline_manifest.py": {"$ref": "#/$defs/sha256"},
+        "src/extraction/baseline_provenance.py": {"$ref": "#/$defs/sha256"},
+        "src/extraction/calibration_evaluator.py": {"$ref": "#/$defs/sha256"},
+        "src/extraction/development_slice.py": {"$ref": "#/$defs/sha256"},
+        "src/extraction/rule_baseline.py": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "metric": {
+      "type": "object", "additionalProperties": false,
+      "required": ["tp", "fp", "tn", "fn", "predicted_positive", "actual_positive", "precision", "recall"],
+      "properties": {
+        "tp": {"type": "integer", "minimum": 0}, "fp": {"type": "integer", "minimum": 0},
+        "tn": {"type": "integer", "minimum": 0}, "fn": {"type": "integer", "minimum": 0},
+        "predicted_positive": {"type": "integer", "minimum": 0}, "actual_positive": {"type": "integer", "minimum": 0},
+        "precision": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "recall": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+      }
+    },
+    "signalMetrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["problem_signal", "money_signal", "usable_evidence"],
+      "properties": {
+        "problem_signal": {"$ref": "#/$defs/metric"},
+        "money_signal": {"$ref": "#/$defs/metric"},
+        "usable_evidence": {"$ref": "#/$defs/metric"}
+      }
+    },
+    "sourceMetric": {
+      "type": "object", "additionalProperties": false,
+      "required": ["input_count", "coverage", "abstention_count", "invalid_count", "problem_signal", "money_signal", "usable_evidence"],
+      "properties": {
+        "input_count": {"const": 10}, "coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "abstention_count": {"type": "integer", "minimum": 0}, "invalid_count": {"type": "integer", "minimum": 0},
+        "problem_signal": {"$ref": "#/$defs/metric"}, "money_signal": {"$ref": "#/$defs/metric"},
+        "usable_evidence": {"$ref": "#/$defs/metric"}
+      }
+    },
+    "sourceMetrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["github", "stackexchange", "steam", "ted"],
+      "properties": {
+        "github": {"$ref": "#/$defs/sourceMetric"}, "stackexchange": {"$ref": "#/$defs/sourceMetric"},
+        "steam": {"$ref": "#/$defs/sourceMetric"}, "ted": {"$ref": "#/$defs/sourceMetric"}
+      }
+    },
+    "preflightReceipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "status", "artifact_custody", "manifest_id", "manifest_sha256", "source_counts", "source_dataset_sha256", "source_qualification_sha256", "source_packet_manifest_sha256", "selected_count", "packet_validation", "source_spike_reserved_emitted", "inference_corpus_sha256", "gold_sidecar_sha256", "implementation_bundle_sha256", "implementation_files"],
+      "properties": {
+        "schema_version": {"const": "baseline-preflight-receipt/v1"}, "status": {"const": "qualified"},
+        "artifact_custody": {"const": "local_ignored"}, "manifest_id": {"type": "string", "minLength": 1},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"}, "source_counts": {"$ref": "#/$defs/sourceCounts"},
+        "source_dataset_sha256": {"$ref": "#/$defs/sourceHashes"}, "selected_count": {"const": 40},
+        "source_qualification_sha256": {"$ref": "#/$defs/sourceHashes"},
+        "source_packet_manifest_sha256": {"$ref": "#/$defs/sourceHashes"},
+        "packet_validation": {"const": "PASS"}, "source_spike_reserved_emitted": {"const": 0},
+        "inference_corpus_sha256": {"$ref": "#/$defs/sha256"}, "gold_sidecar_sha256": {"$ref": "#/$defs/sha256"},
+        "implementation_bundle_sha256": {"$ref": "#/$defs/sha256"},
+        "implementation_files": {"$ref": "#/$defs/implementationFiles"}
+      }
+    },
+    "runReceipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "variant_id", "status", "implementation_bundle_sha256", "preflight_receipt_sha256", "inference_corpus_sha256", "input_count", "output_count", "valid_count", "invalid_count", "abstention_count", "output_sha256", "outputs_persisted", "reverification_requires_local_custody"],
+      "properties": {
+        "schema_version": {"const": "baseline-run-receipt/v1"}, "variant_id": {"const": "rule_v1"}, "status": {"const": "success"},
+        "implementation_bundle_sha256": {"$ref": "#/$defs/sha256"}, "preflight_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "inference_corpus_sha256": {"$ref": "#/$defs/sha256"}, "input_count": {"const": 40}, "output_count": {"const": 40},
+        "valid_count": {"const": 40}, "invalid_count": {"type": "integer", "minimum": 0}, "abstention_count": {"type": "integer", "minimum": 0},
+        "output_sha256": {"$ref": "#/$defs/sha256"}, "outputs_persisted": {"const": false},
+        "reverification_requires_local_custody": {"const": true}
+      }
+    },
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "variant_id", "input_count", "coverage", "abstention_count", "invalid_count", "metrics", "source_metrics"],
+      "properties": {
+        "schema_version": {"const": "baseline-metrics/v1"}, "variant_id": {"const": "rule_v1"}, "input_count": {"const": 40},
+        "coverage": {"type": "number", "minimum": 0, "maximum": 1}, "abstention_count": {"type": "integer", "minimum": 0},
+        "invalid_count": {"type": "integer", "minimum": 0}, "metrics": {"$ref": "#/$defs/signalMetrics"},
+        "source_metrics": {"$ref": "#/$defs/sourceMetrics"}
+      }
+    },
+    "evaluationReceipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "variant_id", "status", "implementation_bundle_sha256", "preflight_receipt_sha256", "upstream_run_receipt_sha256", "inference_corpus_sha256", "gold_sidecar_sha256", "metrics_sha256", "input_count", "outputs_persisted", "reverification_requires_local_custody"],
+      "properties": {
+        "schema_version": {"const": "baseline-evaluation-receipt/v1"}, "variant_id": {"const": "rule_v1"}, "status": {"const": "success"},
+        "implementation_bundle_sha256": {"$ref": "#/$defs/sha256"}, "preflight_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "upstream_run_receipt_sha256": {"$ref": "#/$defs/sha256"}, "inference_corpus_sha256": {"$ref": "#/$defs/sha256"},
+        "gold_sidecar_sha256": {"$ref": "#/$defs/sha256"}, "metrics_sha256": {"$ref": "#/$defs/sha256"},
+        "input_count": {"const": 40}, "outputs_persisted": {"const": false}, "reverification_requires_local_custody": {"const": true}
+      }
+    },
+    "bundleManifest": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "status", "implementation_bundle_sha256", "files", "bundle_sha256"],
+      "properties": {
+        "schema_version": {"const": "baseline-artifact-bundle/v1"}, "status": {"const": "complete"},
+        "implementation_bundle_sha256": {"$ref": "#/$defs/sha256"}, "bundle_sha256": {"$ref": "#/$defs/sha256"},
+        "files": {
+          "type": "object", "additionalProperties": false,
+          "required": ["preflight-receipt.json", "baseline-run-receipt.json", "baseline-metrics.json", "baseline-evaluation-receipt.json"],
+          "properties": {
+            "preflight-receipt.json": {"$ref": "#/$defs/sha256"}, "baseline-run-receipt.json": {"$ref": "#/$defs/sha256"},
+            "baseline-metrics.json": {"$ref": "#/$defs/sha256"}, "baseline-evaluation-receipt.json": {"$ref": "#/$defs/sha256"}
+          }
+        }
+      }
+    }
+  }
+}

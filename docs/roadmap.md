@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-24
-> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 baseline evaluator implemented
+> Updated: 2026-08-25
+> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 provenance-bound baseline bundle generator implemented
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
 
@@ -44,7 +44,7 @@ four frozen CPV strata. Contact redaction removed one observed contact candidate
 contact scanning passed, and no raw buyer identifiers or payloads were retained. The local
 authorization is mode `0600` and exactly bound to the qualified smoke receipt. A deterministic
 20-item labeling sample with 10 development, 10 source-spike-reserved, and five secondary assignments is
-ready. The full regression suite passes **508 tests** with one intentional local-custody
+ready. The full regression suite passes **518 tests** with one intentional local-custody
 integration skip. Four source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
@@ -490,7 +490,7 @@ Current code checkpoint:
       context, consequence, verbatim evidence span, P/M/E signals, confidence, and abstention
 - [x] Reject gold-contaminated inference input, malformed labels, inconsistent money signals,
       invalid observation types, unknown documents, and non-verbatim evidence spans
-- [x] Pass the deterministic 40-record fixture E2E and the full **508-test** regression suite
+- [x] Pass the deterministic 40-record fixture E2E and the full **518-test** regression suite
 - [x] Implement the gold-isolated deterministic `rule_v1` benchmark over the frozen
       development corpus with contract validation, abstention accounting, and a hashed receipt
 - [x] Prevent keyword-substring false positives and classify problem and money signals
@@ -504,6 +504,16 @@ Current code checkpoint:
       `local_ignored` custody, path containment, exact source set, and required file types
 - [x] Separate fresh-clone fixture validation from the opt-in real 40-record integration run;
       `RESEARCH_AUTO_RUN_LOCAL_ARTIFACT_TESTS=1` enables the local-custody projection check
+- [x] Bind `rule_v1` to a frozen seven-file implementation hash bundle and persist the
+      file-level hash mapping for independent provenance inspection
+- [x] Bind the preflight receipt to the source manifest, qualification snapshots, validated
+      packet manifests, source quotas, inference corpus, and physically separate gold sidecar
+- [x] Define recursive exact-allowlist schemas for preflight, run, metrics, evaluation, and
+      bundle-manifest artifacts while persisting no raw source text, author, URL, or prediction rows
+- [x] Write the aggregate metric bundle through a same-filesystem temporary directory and atomic
+      rename; make identical reruns idempotent and reject conflicting existing bundles
+- [x] Require explicit local-custody opt-in and record `outputs_persisted=false` plus
+      `reverification_requires_local_custody=true`
 - [ ] Evaluate the frozen 40-record `rule_v1` run against the physically separate development
       gold sidecar and persist the baseline metric receipt
 - [ ] Freeze absolute and baseline-relative calibration thresholds before any model call
@@ -523,8 +533,9 @@ emits contract-valid rule-based outputs, records abstentions and hashes, keeps h
 physically separate, and can evaluate a hash-bound frozen run without silently dropping duplicate
 documents. It does not yet call a model, produce semantically reliable structured problem
 extraction, cluster problems, or generate Opportunity Cards. The immediate bottleneck is the
-actual `rule_v1` baseline metric receipt and calibration-gate freeze; provider/model selection and
-model-backed extraction follow those checkpoints, not additional source infrastructure.
+approved code checkpoint commit, followed by generation and verification of the actual `rule_v1`
+baseline metric bundle. Calibration-gate freeze, provider/model selection, and model-backed
+extraction follow those checkpoints, not additional source infrastructure.
 
 ### Task 4 — Problem clustering and evidence independence
 

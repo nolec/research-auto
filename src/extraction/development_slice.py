@@ -88,6 +88,8 @@ class _Projection:
     gold: tuple[dict[str, object], ...]
     source_counts: dict[str, int]
     source_dataset_hashes: dict[str, str]
+    source_qualification_hashes: dict[str, str]
+    source_packet_manifest_hashes: dict[str, str]
     reserved_ids: frozenset[str]
 
 
@@ -104,6 +106,14 @@ def _digest(value: object) -> str:
         value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
     ).encode("utf-8")
     return sha256(payload).hexdigest()
+
+
+def _load_json_snapshot(path: Path) -> tuple[dict[str, object], str]:
+    raw = path.read_bytes()
+    value = json.loads(raw)
+    if not isinstance(value, dict):
+        raise ValueError(f"JSON snapshot must contain an object: {path}")
+    return value, sha256(raw).hexdigest()
 
 
 def _validate_gold_label(source: str, value: Mapping[str, object]) -> None:
@@ -127,16 +137,19 @@ def _project_development(
     gold: list[dict[str, object]] = []
     source_counts: dict[str, int] = {}
     source_dataset_hashes: dict[str, str] = {}
+    source_qualification_hashes: dict[str, str] = {}
+    source_packet_manifest_hashes: dict[str, str] = {}
     reserved_ids: set[str] = set()
 
     for source in sorted(sources):
         paths = sources[source]
-        qualification = json.loads(
-            (paths.qualified_run / "qualification.json").read_text(encoding="utf-8")
-        )
+        qualification_path = paths.qualified_run / "qualification.json"
+        qualification, qualification_hash = _load_json_snapshot(qualification_path)
         if qualification.get("qualified") is not True:
             raise ValueError(f"{source} run is not qualified")
-        validate_review_packet_bundle(paths.review_root, qualification)
+        packet_manifest = validate_review_packet_bundle(paths.review_root, qualification)
+        source_qualification_hashes[source] = qualification_hash
+        source_packet_manifest_hashes[source] = _digest(packet_manifest)
 
         items = _load_jsonl(paths.qualified_run / "raw-source-items.jsonl")
         observed_hash = dataset_sha256(items)
@@ -208,6 +221,8 @@ def _project_development(
         tuple(gold),
         source_counts,
         source_dataset_hashes,
+        source_qualification_hashes,
+        source_packet_manifest_hashes,
         frozenset(reserved_ids),
     )
 
@@ -229,6 +244,8 @@ def build_development_inference(
         "split_policy": "development_calibration_only",
         "independent_evaluation_status": "not_available",
         "source_dataset_sha256": projection.source_dataset_hashes,
+        "source_qualification_sha256": projection.source_qualification_hashes,
+        "source_packet_manifest_sha256": projection.source_packet_manifest_hashes,
         "inference_corpus_sha256": _digest(projection.inference),
         "packet_validation": "PASS",
     }
@@ -245,6 +262,8 @@ def build_development_gold_sidecar(
         "split_policy": "development_calibration_only",
         "independent_evaluation_status": "not_available",
         "source_dataset_sha256": projection.source_dataset_hashes,
+        "source_qualification_sha256": projection.source_qualification_hashes,
+        "source_packet_manifest_sha256": projection.source_packet_manifest_hashes,
         "gold_sidecar_sha256": _digest(projection.gold),
         "packet_validation": "PASS",
     }

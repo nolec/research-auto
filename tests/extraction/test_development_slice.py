@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import json
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
 
 from src.extraction.development_slice import (
     SourceArtifacts,
+    _load_json_snapshot,
     build_development_gold_sidecar,
     build_development_inference,
     validate_extraction,
@@ -21,6 +23,13 @@ SOURCES = ("github", "stackexchange", "steam", "ted")
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _canonical_digest(value: object) -> str:
+    payload = json.dumps(
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    return sha256(payload).hexdigest()
 
 
 def _source_artifacts(root: Path, source: str) -> SourceArtifacts:
@@ -126,9 +135,55 @@ def test_build_development_slice_separates_inference_and_gold(tmp_path: Path) ->
     assert inference.receipt["source_spike_reserved_emitted"] == 0
     assert inference.receipt["split_policy"] == "development_calibration_only"
     assert inference.receipt["independent_evaluation_status"] == "not_available"
+    assert inference.receipt["source_qualification_sha256"] == {
+        source: sha256(
+            (artifacts[source].qualified_run / "qualification.json").read_bytes()
+        ).hexdigest()
+        for source in SOURCES
+    }
+    assert inference.receipt["source_packet_manifest_sha256"] == {
+        source: _canonical_digest(
+            json.loads(
+                (
+                    artifacts[source].review_root
+                    / "packet/bundle-manifest.json"
+                ).read_text()
+            )
+        )
+        for source in SOURCES
+    }
+    assert gold.receipt["source_qualification_sha256"] == inference.receipt[
+        "source_qualification_sha256"
+    ]
+    assert gold.receipt["source_packet_manifest_sha256"] == inference.receipt[
+        "source_packet_manifest_sha256"
+    ]
     assert "backend_gold_exposed" not in inference.receipt
     assert not hasattr(inference, "gold_sidecar")
     assert not hasattr(gold, "inference_corpus")
+
+
+def test_json_snapshot_parses_and_hashes_the_same_single_read(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    path = tmp_path / "qualification.json"
+    raw = b'{"qualified":true,"run_id":"one"}\n'
+    path.write_bytes(raw)
+    original = Path.read_bytes
+    reads = 0
+
+    def counted(candidate: Path) -> bytes:
+        nonlocal reads
+        if candidate == path:
+            reads += 1
+        return original(candidate)
+
+    monkeypatch.setattr(Path, "read_bytes", counted)
+    value, fingerprint = _load_json_snapshot(path)
+
+    assert value == {"qualified": True, "run_id": "one"}
+    assert fingerprint == sha256(raw).hexdigest()
+    assert reads == 1
 
 
 def test_build_development_slice_is_deterministic(tmp_path: Path) -> None:
