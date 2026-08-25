@@ -1,0 +1,27 @@
+{
+  "schema_version": "development-baseline-manifest/v1",
+  "manifest_id": "development-baseline-v1",
+  "artifact_custody": "local_ignored",
+  "sources": {
+    "github": {
+      "qualified_run": "artifacts/source-spike/github-analysis/runs/ff2ac41d-73bb-4593-9e3e-9aa3a93369dd",
+      "review_root": "artifacts/source-spike/github-analysis/runs/ff2ac41d-73bb-4593-9e3e-9aa3a93369dd/review",
+      "primary_submission": "artifacts/source-spike/github-analysis/runs/ff2ac41d-73bb-4593-9e3e-9aa3a93369dd/review/submissions/primary.jsonl"
+    },
+    "stackexchange": {
+      "qualified_run": "artifacts/source-spike/stackexchange-analysis/runs/7d8d22f8-e918-4ebb-b520-45321b497576",
+      "review_root": "artifacts/source-spike/stackexchange-analysis/runs/7d8d22f8-e918-4ebb-b520-45321b497576/review",
+      "primary_submission": "artifacts/source-spike/stackexchange-analysis/runs/7d8d22f8-e918-4ebb-b520-45321b497576/review/submissions/primary.jsonl"
+    },
+    "steam": {
+      "qualified_run": "artifacts/source-spike/steam-analysis/runs/36f5bfed-1a0b-45c7-86ea-aff73409d3c2",
+      "review_root": "artifacts/source-spike/steam-analysis/runs/36f5bfed-1a0b-45c7-86ea-aff73409d3c2/review",
+      "primary_submission": "artifacts/source-spike/steam-analysis/runs/36f5bfed-1a0b-45c7-86ea-aff73409d3c2/review/handoff/primary-submission.jsonl"
+    },
+    "ted": {
+      "qualified_run": "artifacts/source-spike/ted-analysis/runs/f9543a82-3c60-4f9f-8af3-9672b290bd09",
+      "review_root": "artifacts/source-spike/ted-analysis/runs/f9543a82-3c60-4f9f-8af3-9672b290bd09/review",
+      "primary_submission": "artifacts/source-spike/ted-analysis/runs/f9543a82-3c60-4f9f-8af3-9672b290bd09/review/handoff-primary/primary-submission.jsonl"
+    }
+  }
+}

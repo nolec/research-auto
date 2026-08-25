@@ -44,7 +44,8 @@ four frozen CPV strata. Contact redaction removed one observed contact candidate
 contact scanning passed, and no raw buyer identifiers or payloads were retained. The local
 authorization is mode `0600` and exactly bound to the qualified smoke receipt. A deterministic
 20-item labeling sample with 10 development, 10 source-spike-reserved, and five secondary assignments is
-ready. The full regression suite passes **503 tests**. Four source datasets are qualified;
+ready. The full regression suite passes **508 tests** with one intentional local-custody
+integration skip. Four source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
 
@@ -489,7 +490,7 @@ Current code checkpoint:
       context, consequence, verbatim evidence span, P/M/E signals, confidence, and abstention
 - [x] Reject gold-contaminated inference input, malformed labels, inconsistent money signals,
       invalid observation types, unknown documents, and non-verbatim evidence spans
-- [x] Pass the deterministic 40-record fixture E2E and the full **503-test** regression suite
+- [x] Pass the deterministic 40-record fixture E2E and the full **508-test** regression suite
 - [x] Implement the gold-isolated deterministic `rule_v1` benchmark over the frozen
       development corpus with contract validation, abstention accounting, and a hashed receipt
 - [x] Prevent keyword-substring false positives and classify problem and money signals
@@ -499,6 +500,10 @@ Current code checkpoint:
 - [x] Implement a frozen-run-bound calibration evaluator with corpus/gold/output hash checks,
       duplicate and membership rejection, P/M/usable-evidence confusion matrices,
       quality-constrained coverage, invalid/abstention accounting, and source breakdowns
+- [x] Freeze a repository-relative four-source artifact manifest and validate its
+      `local_ignored` custody, path containment, exact source set, and required file types
+- [x] Separate fresh-clone fixture validation from the opt-in real 40-record integration run;
+      `RESEARCH_AUTO_RUN_LOCAL_ARTIFACT_TESTS=1` enables the local-custody projection check
 - [ ] Evaluate the frozen 40-record `rule_v1` run against the physically separate development
       gold sidecar and persist the baseline metric receipt
 - [ ] Freeze absolute and baseline-relative calibration thresholds before any model call
