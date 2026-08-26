@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-08-26
-> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 count-aware calibration gate implemented and review-approved
+> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 calibration gate frozen at Checkpoint f694a2c
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
 
@@ -490,7 +490,7 @@ Current code checkpoint:
       context, consequence, verbatim evidence span, P/M/E signals, confidence, and abstention
 - [x] Reject gold-contaminated inference input, malformed labels, inconsistent money signals,
       invalid observation types, unknown documents, and non-verbatim evidence spans
-- [x] Pass the deterministic 40-record fixture E2E and the full **549-test** regression suite
+- [x] Pass the deterministic 40-record fixture E2E and the full **551-test** regression suite
 - [x] Implement the gold-isolated deterministic `rule_v1` benchmark over the frozen
       development corpus with contract validation, abstention accounting, and a hashed receipt
 - [x] Prevent keyword-substring false positives and classify problem and money signals
@@ -523,7 +523,8 @@ Current code checkpoint:
 - [x] Implement local-only blind semantic-audit custody with exact evidence-positive membership,
       private atomic packet creation, assignment/packet/submission hash verification, aggregate-only
       receipts, candidate-run binding, expiry enforcement, and raw-row non-persistence
-- [ ] Generate the immutable gate freeze receipt against the clean committed Checkpoint B SHA
+- [x] Atomically publish and independently verify the immutable gate freeze receipt against
+      clean Checkpoint `f694a2c`, including config, baseline, and commit-blob implementation hashes
 - [x] Freeze absolute and baseline-relative calibration thresholds before any model call
 - [ ] Freeze the first real inference profile: provider/model, prompt version, schema version,
       request and cost ceilings, retries, secret handling, and raw-response retention
@@ -544,8 +545,9 @@ documents. The gate now binds candidate run and evaluator receipts to recomputed
 complete diagnostics for GitHub, Stack Exchange, Steam, and TED, and blocks expansion until every
 evidence-positive extraction has a valid blind semantic audit. It does not yet call a model, produce semantically reliable structured problem
 extraction, cluster problems, or generate Opportunity Cards. The actual `rule_v1` aggregate
-baseline bundle is now frozen. The immediate bottleneck is generating the immutable gate freeze
-receipt from the clean committed Checkpoint B SHA. Provider/model selection and model-backed extraction follow that checkpoint,
+baseline bundle and calibration gate are now frozen. The immediate bottleneck is freezing the first
+real inference profile: provider/model, prompt/schema versions, budgets, retries, secrets, and
+raw-response retention. Model-backed extraction follows that checkpoint,
 not additional source infrastructure.
 
 ### Task 4 — Problem clustering and evidence independence
