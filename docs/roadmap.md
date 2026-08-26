@@ -514,8 +514,9 @@ Current code checkpoint:
       rename; make identical reruns idempotent and reject conflicting existing bundles
 - [x] Require explicit local-custody opt-in and record `outputs_persisted=false` plus
       `reverification_requires_local_custody=true`
-- [ ] Evaluate the frozen 40-record `rule_v1` run against the physically separate development
-      gold sidecar and persist the baseline metric receipt
+- [x] Evaluate the frozen 40-record `rule_v1` run against the physically separate development
+      gold sidecar and persist the aggregate-only baseline metric bundle: coverage 14/40,
+      Problem P/R 100%/30.3%, Money P/R 75%/33.3%, Evidence P/R 100%/42.4%, invalid 0
 - [ ] Freeze absolute and baseline-relative calibration thresholds before any model call
 - [ ] Freeze the first real inference profile: provider/model, prompt version, schema version,
       request and cost ceilings, retries, secret handling, and raw-response retention
@@ -532,10 +533,10 @@ demand extractor. It projects the four qualified datasets into a gold-free 40-re
 emits contract-valid rule-based outputs, records abstentions and hashes, keeps human gold
 physically separate, and can evaluate a hash-bound frozen run without silently dropping duplicate
 documents. It does not yet call a model, produce semantically reliable structured problem
-extraction, cluster problems, or generate Opportunity Cards. The immediate bottleneck is the
-approved code checkpoint commit, followed by generation and verification of the actual `rule_v1`
-baseline metric bundle. Calibration-gate freeze, provider/model selection, and model-backed
-extraction follow those checkpoints, not additional source infrastructure.
+extraction, cluster problems, or generate Opportunity Cards. The actual `rule_v1` aggregate
+baseline bundle is now frozen. The immediate bottleneck is the count-aware calibration-gate policy
+and freeze receipt. Provider/model selection and model-backed extraction follow those checkpoints,
+not additional source infrastructure.
 
 ### Task 4 — Problem clustering and evidence independence
 
