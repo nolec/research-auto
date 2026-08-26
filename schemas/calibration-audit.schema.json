@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "aggregateReceipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "status", "candidate_run_sha256", "packet_sha256", "assignment_sha256", "submission_sha256", "reviewer_id", "audited_count", "supported_count", "unsupported_count", "raw_rows_persisted"],
+      "properties": {
+        "schema_version": {"const": "calibration-audit-aggregate/v1"},
+        "status": {"const": "complete"},
+        "candidate_run_sha256": {"$ref": "#/$defs/sha256"},
+        "packet_sha256": {"$ref": "#/$defs/sha256"},
+        "assignment_sha256": {"$ref": "#/$defs/sha256"},
+        "submission_sha256": {"$ref": "#/$defs/sha256"},
+        "reviewer_id": {"type": "string", "minLength": 1},
+        "audited_count": {"type": "integer", "minimum": 0},
+        "supported_count": {"type": "integer", "minimum": 0},
+        "unsupported_count": {"type": "integer", "minimum": 0},
+        "raw_rows_persisted": {"const": false}
+      }
+    }
+  }
+}

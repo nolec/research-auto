@@ -40,3 +40,6 @@ __pycache__/
 
 # Local-only sanitized source-spike qualification artifacts
 artifacts/source-spike/
+
+# Local-only model calibration audit handoffs and submissions
+artifacts/extraction/calibration/audit-local/

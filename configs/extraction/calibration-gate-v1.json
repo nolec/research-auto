@@ -1,0 +1,30 @@
+{
+  "schema_version": "calibration-gate/v1",
+  "gate_id": "calibration-gate-v1",
+  "baseline": {
+    "implementation_bundle_sha256": "555d9a2e0881d2ea7d92b9882de34b7d6fa1a1d85ad9da616f28775f99acaa98",
+    "bundle_sha256": "68f9b4ff3bda6bf2ecd820c0bb5016bacd9bb0962898a8de93dd4007509d9efc",
+    "metrics_sha256": "07ee4a0a14d9d7e3a10ad1f2a483777cec7d13e00caa2ba5822225dedccf1fde"
+  },
+  "thresholds": {
+    "problem_min_predicted_positive": 10,
+    "problem_precision_percent": 85,
+    "evidence_min_predicted_positive": 14,
+    "evidence_precision_percent": 85,
+    "macro_min_tp_sum": 31,
+    "evidence_min_tp": 14,
+    "covered_min_count": 14,
+    "invalid_max_count": 0,
+    "audit_min_count": 14,
+    "unsupported_max_percent": 5
+  },
+  "diagnostics": {
+    "required_sources": ["github", "stackexchange", "steam", "ted"],
+    "money_min_predicted_positive": 4,
+    "money_min_tp": 3,
+    "money_precision_percent": 75,
+    "source_coverage_warning_percent": 20,
+    "source_precision_min_denominator": 3
+  },
+  "model_calls": 0
+}

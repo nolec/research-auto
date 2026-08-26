@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "gate_id", "baseline", "thresholds", "diagnostics", "model_calls"],
+  "properties": {
+    "schema_version": {"const": "calibration-gate/v1"},
+    "gate_id": {"const": "calibration-gate-v1"},
+    "model_calls": {"const": 0},
+    "baseline": {
+      "type": "object", "additionalProperties": false,
+      "required": ["implementation_bundle_sha256", "bundle_sha256", "metrics_sha256"],
+      "properties": {
+        "implementation_bundle_sha256": {"$ref": "#/$defs/sha256"},
+        "bundle_sha256": {"$ref": "#/$defs/sha256"},
+        "metrics_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "thresholds": {
+      "type": "object", "additionalProperties": false,
+      "required": ["problem_min_predicted_positive", "problem_precision_percent", "evidence_min_predicted_positive", "evidence_precision_percent", "macro_min_tp_sum", "evidence_min_tp", "covered_min_count", "invalid_max_count", "audit_min_count", "unsupported_max_percent"],
+      "properties": {
+        "problem_min_predicted_positive": {"const": 10},
+        "problem_precision_percent": {"const": 85},
+        "evidence_min_predicted_positive": {"const": 14},
+        "evidence_precision_percent": {"const": 85},
+        "macro_min_tp_sum": {"const": 31},
+        "evidence_min_tp": {"const": 14},
+        "covered_min_count": {"const": 14},
+        "invalid_max_count": {"const": 0},
+        "audit_min_count": {"const": 14},
+        "unsupported_max_percent": {"const": 5}
+      }
+    },
+    "diagnostics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["required_sources", "money_min_predicted_positive", "money_min_tp", "money_precision_percent", "source_coverage_warning_percent", "source_precision_min_denominator"],
+      "properties": {
+        "required_sources": {"const": ["github", "stackexchange", "steam", "ted"]},
+        "money_min_predicted_positive": {"const": 4},
+        "money_min_tp": {"const": 3},
+        "money_precision_percent": {"const": 75},
+        "source_coverage_warning_percent": {"const": 20},
+        "source_precision_min_denominator": {"const": 3}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "implementationFiles": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemas/calibration-audit.schema.json", "schemas/calibration-gate.schema.json", "src/extraction/calibration_audit.py", "src/extraction/calibration_gate.py"],
+      "properties": {
+        "schemas/calibration-audit.schema.json": {"$ref": "#/$defs/sha256"},
+        "schemas/calibration-gate.schema.json": {"$ref": "#/$defs/sha256"},
+        "src/extraction/calibration_audit.py": {"$ref": "#/$defs/sha256"},
+        "src/extraction/calibration_gate.py": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "freezeReceipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "gate_id", "status", "code_commit_sha", "baseline_implementation_bundle_sha256", "baseline_bundle_sha256", "baseline_metrics_sha256", "config_sha256", "implementation_files", "thresholds", "model_calls"],
+      "properties": {
+        "schema_version": {"const": "calibration-gate-freeze/v1"},
+        "gate_id": {"const": "calibration-gate-v1"},
+        "status": {"const": "frozen"},
+        "code_commit_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "baseline_implementation_bundle_sha256": {"$ref": "#/$defs/sha256"},
+        "baseline_bundle_sha256": {"$ref": "#/$defs/sha256"},
+        "baseline_metrics_sha256": {"$ref": "#/$defs/sha256"},
+        "config_sha256": {"$ref": "#/$defs/sha256"},
+        "implementation_files": {"$ref": "#/$defs/implementationFiles"},
+        "thresholds": {"type": "object"},
+        "model_calls": {"const": 0}
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-25
-> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 provenance-bound baseline bundle generator implemented
+> Updated: 2026-08-26
+> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 count-aware calibration gate implemented and review-approved
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
 
@@ -490,7 +490,7 @@ Current code checkpoint:
       context, consequence, verbatim evidence span, P/M/E signals, confidence, and abstention
 - [x] Reject gold-contaminated inference input, malformed labels, inconsistent money signals,
       invalid observation types, unknown documents, and non-verbatim evidence spans
-- [x] Pass the deterministic 40-record fixture E2E and the full **518-test** regression suite
+- [x] Pass the deterministic 40-record fixture E2E and the full **549-test** regression suite
 - [x] Implement the gold-isolated deterministic `rule_v1` benchmark over the frozen
       development corpus with contract validation, abstention accounting, and a hashed receipt
 - [x] Prevent keyword-substring false positives and classify problem and money signals
@@ -517,7 +517,14 @@ Current code checkpoint:
 - [x] Evaluate the frozen 40-record `rule_v1` run against the physically separate development
       gold sidecar and persist the aggregate-only baseline metric bundle: coverage 14/40,
       Problem P/R 100%/30.3%, Money P/R 75%/33.3%, Evidence P/R 100%/42.4%, invalid 0
-- [ ] Freeze absolute and baseline-relative calibration thresholds before any model call
+- [x] Implement and review-approve the count-aware calibration gate with frozen absolute
+      thresholds, baseline provenance binding, exact four-source diagnostics, integer audit
+      boundaries, and fail-closed candidate run/report/count verification
+- [x] Implement local-only blind semantic-audit custody with exact evidence-positive membership,
+      private atomic packet creation, assignment/packet/submission hash verification, aggregate-only
+      receipts, candidate-run binding, expiry enforcement, and raw-row non-persistence
+- [ ] Generate the immutable gate freeze receipt against the clean committed Checkpoint B SHA
+- [x] Freeze absolute and baseline-relative calibration thresholds before any model call
 - [ ] Freeze the first real inference profile: provider/model, prompt version, schema version,
       request and cost ceilings, retries, secret handling, and raw-response retention
 - [ ] Run actual structured extraction on the 40 development-calibration records
@@ -528,14 +535,17 @@ Current code checkpoint:
 - [ ] After extractor freeze, select a new untouched evaluation sample from the 320 unassigned
       records; do not claim independent performance from the source-spike-reserved assignments
 
-The current implementation is a working deterministic calibration baseline, not yet a useful
+The current implementation is a working deterministic calibration baseline and a review-approved
+count-aware gate, not yet a useful
 demand extractor. It projects the four qualified datasets into a gold-free 40-record corpus,
 emits contract-valid rule-based outputs, records abstentions and hashes, keeps human gold
 physically separate, and can evaluate a hash-bound frozen run without silently dropping duplicate
-documents. It does not yet call a model, produce semantically reliable structured problem
+documents. The gate now binds candidate run and evaluator receipts to recomputed hashes, requires
+complete diagnostics for GitHub, Stack Exchange, Steam, and TED, and blocks expansion until every
+evidence-positive extraction has a valid blind semantic audit. It does not yet call a model, produce semantically reliable structured problem
 extraction, cluster problems, or generate Opportunity Cards. The actual `rule_v1` aggregate
-baseline bundle is now frozen. The immediate bottleneck is the count-aware calibration-gate policy
-and freeze receipt. Provider/model selection and model-backed extraction follow those checkpoints,
+baseline bundle is now frozen. The immediate bottleneck is generating the immutable gate freeze
+receipt from the clean committed Checkpoint B SHA. Provider/model selection and model-backed extraction follow that checkpoint,
 not additional source infrastructure.
 
 ### Task 4 — Problem clustering and evidence independence
