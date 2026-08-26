@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import json
+import os
 from hashlib import sha256
 from pathlib import Path
 
 import pytest
 
 from src.extraction.calibration_gate import (
+    _write_immutable,
     build_freeze_receipt,
     evaluate_gate,
     load_gate_config,
@@ -283,3 +285,36 @@ def test_evaluate_cli_writes_once_and_freeze_rejects_wrong_checkpoint(
     ]) == 1
     assert not freeze.exists()
     assert "does not match HEAD" in capsys.readouterr().err
+
+
+def test_immutable_writer_preserves_concurrently_created_destination(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    destination = tmp_path / "freeze.json"
+    destination.write_bytes(b"existing\n")
+    original_exists = Path.exists
+
+    def hide_destination(path: Path) -> bool:
+        if path == destination:
+            return False
+        return original_exists(path)
+
+    monkeypatch.setattr(Path, "exists", hide_destination)
+    with pytest.raises(FileExistsError):
+        _write_immutable(destination, {"status": "frozen"})
+    assert destination.read_bytes() == b"existing\n"
+
+
+def test_immutable_writer_cleans_temporary_file_when_publish_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    destination = tmp_path / "freeze.json"
+
+    def fail_publish(source: Path, target: Path) -> None:
+        raise OSError("injected publish failure")
+
+    monkeypatch.setattr(os, "link", fail_publish)
+    with pytest.raises(OSError, match="injected"):
+        _write_immutable(destination, {"status": "frozen"})
+    assert not destination.exists()
+    assert list(tmp_path.iterdir()) == []

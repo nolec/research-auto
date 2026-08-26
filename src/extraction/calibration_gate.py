@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
+import tempfile
 from hashlib import sha256
 from pathlib import Path
 from typing import Mapping, Sequence
@@ -258,14 +260,33 @@ def build_freeze_receipt(
 
 
 def _write_immutable(path: Path, value: object) -> None:
-    if path.exists():
-        raise FileExistsError(f"refusing to overwrite existing receipt: {path}")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
+    payload = (
         json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-        + "\n",
-        encoding="utf-8",
+        + "\n"
+    ).encode("utf-8")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}-", dir=path.parent
     )
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "wb") as stream:
+            stream.write(payload)
+            stream.flush()
+            os.fsync(stream.fileno())
+        try:
+            os.link(temporary, path)
+        except FileExistsError as error:
+            raise FileExistsError(
+                f"refusing to overwrite existing receipt: {path}"
+            ) from error
+        directory = os.open(path.parent, os.O_RDONLY)
+        try:
+            os.fsync(directory)
+        finally:
+            os.close(directory)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def _confirmed_checkpoint(repo_root: Path, expected: str) -> None:
