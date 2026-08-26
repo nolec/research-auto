@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-08-26
-> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 calibration gate frozen at Checkpoint f694a2c
+> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 calibration gate frozen and review-approved at Checkpoint f694a2c
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
 
@@ -523,8 +523,8 @@ Current code checkpoint:
 - [x] Implement local-only blind semantic-audit custody with exact evidence-positive membership,
       private atomic packet creation, assignment/packet/submission hash verification, aggregate-only
       receipts, candidate-run binding, expiry enforcement, and raw-row non-persistence
-- [x] Atomically publish and independently verify the immutable gate freeze receipt against
-      clean Checkpoint `f694a2c`, including config, baseline, and commit-blob implementation hashes
+- [x] Atomically publish, independently verify, and code-review approve the immutable gate freeze
+      receipt against clean Checkpoint `f694a2c`, including config, baseline, and commit-blob hashes
 - [x] Freeze absolute and baseline-relative calibration thresholds before any model call
 - [ ] Freeze the first real inference profile: provider/model, prompt version, schema version,
       request and cost ceilings, retries, secret handling, and raw-response retention
