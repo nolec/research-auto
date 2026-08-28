@@ -14,7 +14,10 @@ from src.extraction.model_runner import (
     OperationalModelError,
     ProviderContractError,
 )
-from src.extraction.openai_responses import OpenAIResponsesTransport
+from src.extraction.openai_responses import (
+    OpenAIResponsesTransport,
+    build_response_request_body,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -94,6 +97,7 @@ def test_transport_uses_strict_responses_schema_without_persisting_source_url() 
 
     request = observed["request"]
     body = json.loads(request.data)
+    assert body == build_response_request_body(DOCUMENT, PROFILE)
     assert request.full_url == "https://api.openai.com/v1/responses"
     assert request.headers["Authorization"] == "Bearer top-secret"
     assert body["model"] == "gpt-5.6"

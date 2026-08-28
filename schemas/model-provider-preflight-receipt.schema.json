@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "termination_reason", "profile_sha256",
+    "prompt_sha256", "output_schema_sha256", "requested_model",
+    "synthetic_document_sha256", "preflight_policy_sha256", "claim_sha256",
+    "resolved_model", "request_count", "retry_count", "unknown_usage_request_count",
+    "input_tokens", "output_tokens", "observed_cost_usd",
+    "conservative_cost_upper_bound_usd", "metric_claim_before",
+    "metric_claim_after", "metric_claim_unchanged", "structured_output_valid",
+    "raw_response_persisted", "structured_output_persisted",
+    "request_id_persisted", "secret_persisted"
+  ],
+  "properties": {
+    "schema_version": {"const": "model-provider-preflight-receipt/v1"},
+    "status": {"enum": ["PASS", "CONTRACT_FAIL", "PREREQUISITE_FAIL", "OPERATIONAL_EXHAUSTED", "PUBLICATION_FAIL", "ALREADY_CONSUMED", "METRIC_CLAIM_DRIFT", "INTERNAL_FAIL"]},
+    "termination_reason": {"type": "string", "minLength": 1},
+    "profile_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "output_schema_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "requested_model": {"type": "string", "minLength": 1},
+    "synthetic_document_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "preflight_policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "claim_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "resolved_model": {"type": ["string", "null"]},
+    "request_count": {"type": "integer", "minimum": 0, "maximum": 3},
+    "retry_count": {"type": "integer", "minimum": 0, "maximum": 2},
+    "unknown_usage_request_count": {"type": "integer", "minimum": 0, "maximum": 3},
+    "input_tokens": {"type": "integer", "minimum": 0},
+    "output_tokens": {"type": "integer", "minimum": 0},
+    "observed_cost_usd": {"type": ["number", "null"], "minimum": 0},
+    "conservative_cost_upper_bound_usd": {"type": "number", "minimum": 0, "maximum": 0.1},
+    "metric_claim_before": {"$ref": "#/$defs/fileSnapshot"},
+    "metric_claim_after": {"$ref": "#/$defs/fileSnapshot"},
+    "metric_claim_unchanged": {"type": "boolean"},
+    "structured_output_valid": {"type": "boolean"},
+    "raw_response_persisted": {"const": false},
+    "structured_output_persisted": {"const": false},
+    "request_id_persisted": {"const": false},
+    "secret_persisted": {"const": false}
+  },
+  "$defs": {
+    "fileSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exists", "sha256", "mode", "size", "mtime_ns"],
+      "properties": {
+        "exists": {"type": "boolean"},
+        "sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "mode": {"type": ["integer", "null"]},
+        "size": {"type": ["integer", "null"], "minimum": 0},
+        "mtime_ns": {"type": ["integer", "null"], "minimum": 0}
+      }
+    }
+  }
+}

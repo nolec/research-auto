@@ -20,6 +20,38 @@ _ENDPOINT = "https://api.openai.com/v1/responses"
 _RETRYABLE_STATUS = frozenset({429, 500, 502, 503, 504})
 
 
+def build_response_request_body(
+    document: Mapping[str, object], profile: InferenceProfile
+) -> dict[str, object]:
+    source_input = {
+        field: document[field]
+        for field in ("document_id", "source", "title", "text", "published_at")
+    }
+    return {
+        "model": profile.model,
+        "reasoning": {"effort": profile.reasoning_effort},
+        "input": [
+            {"role": "system", "content": profile.prompt_text},
+            {
+                "role": "user",
+                "content": json.dumps(
+                    source_input, ensure_ascii=False, separators=(",", ":")
+                ),
+            },
+        ],
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "problem_evidence_extraction",
+                "strict": True,
+                "schema": profile.output_schema,
+            }
+        },
+        "max_output_tokens": profile.max_output_tokens,
+        "store": False,
+    }
+
+
 class OpenAIResponsesTransport:
     def __init__(
         self,
@@ -61,31 +93,7 @@ class OpenAIResponsesTransport:
     def __call__(
         self, document: dict[str, object], profile: InferenceProfile
     ) -> ModelCallResult:
-        source_input = {
-            field: document[field]
-            for field in ("document_id", "source", "title", "text", "published_at")
-        }
-        body = {
-            "model": profile.model,
-            "reasoning": {"effort": profile.reasoning_effort},
-            "input": [
-                {"role": "system", "content": profile.prompt_text},
-                {
-                    "role": "user",
-                    "content": json.dumps(source_input, ensure_ascii=False, separators=(",", ":")),
-                },
-            ],
-            "text": {
-                "format": {
-                    "type": "json_schema",
-                    "name": "problem_evidence_extraction",
-                    "strict": True,
-                    "schema": profile.output_schema,
-                }
-            },
-            "max_output_tokens": profile.max_output_tokens,
-            "store": False,
-        }
+        body = build_response_request_body(document, profile)
         request = Request(
             _ENDPOINT,
             data=json.dumps(body, ensure_ascii=False, separators=(",", ":")).encode(

@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-08-28
-> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 model-calibration execution path review-approved; bounded API preflight pending
+> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 bounded provider-preflight implementation complete; live preflight pending
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
 
@@ -534,7 +534,10 @@ Current code checkpoint:
       aggregate-only success/failure receipts, request/token/cost accounting, and explicit unknown-usage handling
 - [x] Reject caller-selected or injected calibration ledgers and consume the single metric-run claim
       before the first provider request
-- [ ] Run a bounded provider-contract preflight without consuming the canonical 40-record metric-run claim
+- [x] Implement the bounded synthetic provider-contract preflight with a separate atomic claim,
+      three-attempt operational ceiling, conservative $0.10 cost bound, metric-claim drift detection,
+      aggregate-only receipt, and status-specific CLI exit codes
+- [ ] Execute the bounded provider-contract preflight without consuming the canonical 40-record metric-run claim
 - [ ] Run actual structured extraction on the 40 development-calibration records
 - [ ] Compare the first model-backed extractor against `rule_v1` using the physically separate
       development gold sidecar; report P/M/E coverage and error classes without opening a new holdout
@@ -555,9 +558,10 @@ strict Responses transport, and one-shot calibration runner are implemented with
 run custody and fail-closed usage/cost receipts. The code does not yet complete a real provider
 call, produce semantically reliable structured problem
 extraction, cluster problems, or generate Opportunity Cards. The actual `rule_v1` aggregate
-baseline bundle and calibration gate are frozen. The immediate bottleneck is a bounded external
-provider-contract preflight followed by the single authorized 40-record model calibration run,
-not additional source infrastructure. The full suite passes **585 tests** with one intentional
+baseline bundle and calibration gate are frozen. The bounded provider-preflight executor is now
+implemented but has not made a live API call. The immediate bottleneck is its single authorized
+live execution followed by the single authorized 40-record model calibration run, not additional
+source infrastructure. The full suite passes **606 tests** with one intentional
 local-custody integration skip.
 
 ### Task 4 — Problem clustering and evidence independence
