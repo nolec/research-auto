@@ -1,0 +1,5 @@
+Extract only claims directly supported by the supplied source document.
+Return one object that conforms to the provided JSON Schema.
+Use exact character offsets for evidence_quote.
+Do not infer economic impact from inconvenience, ownership, or platform context.
+If no supported extraction is possible, abstain and leave every inferred field null.

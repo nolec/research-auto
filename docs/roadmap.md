@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-26
-> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 calibration gate frozen and review-approved at Checkpoint f694a2c
+> Updated: 2026-08-28
+> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 model-calibration execution path review-approved; bounded API preflight pending
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
 
@@ -526,8 +526,15 @@ Current code checkpoint:
 - [x] Atomically publish, independently verify, and code-review approve the immutable gate freeze
       receipt against clean Checkpoint `f694a2c`, including config, baseline, and commit-blob hashes
 - [x] Freeze absolute and baseline-relative calibration thresholds before any model call
-- [ ] Freeze the first real inference profile: provider/model, prompt version, schema version,
+- [x] Freeze the first real inference profile: provider/model, prompt version, schema version,
       request and cost ceilings, retries, secret handling, and raw-response retention
+- [x] Implement the strict OpenAI Responses transport with frozen prompt/schema hashes,
+      sanitized structured output, bounded retries, resolved-model validation, and no raw-response persistence
+- [x] Implement the one-shot 40-record model runner with repository-local atomic run custody,
+      aggregate-only success/failure receipts, request/token/cost accounting, and explicit unknown-usage handling
+- [x] Reject caller-selected or injected calibration ledgers and consume the single metric-run claim
+      before the first provider request
+- [ ] Run a bounded provider-contract preflight without consuming the canonical 40-record metric-run claim
 - [ ] Run actual structured extraction on the 40 development-calibration records
 - [ ] Compare the first model-backed extractor against `rule_v1` using the physically separate
       development gold sidecar; report P/M/E coverage and error classes without opening a new holdout
@@ -536,19 +543,22 @@ Current code checkpoint:
 - [ ] After extractor freeze, select a new untouched evaluation sample from the 320 unassigned
       records; do not claim independent performance from the source-spike-reserved assignments
 
-The current implementation is a working deterministic calibration baseline and a review-approved
-count-aware gate, not yet a useful
-demand extractor. It projects the four qualified datasets into a gold-free 40-record corpus,
+The current implementation is a working deterministic calibration baseline, a review-approved
+count-aware gate, and a review-approved model-execution path, but not yet a useful demand extractor.
+It projects the four qualified datasets into a gold-free 40-record corpus,
 emits contract-valid rule-based outputs, records abstentions and hashes, keeps human gold
 physically separate, and can evaluate a hash-bound frozen run without silently dropping duplicate
 documents. The gate now binds candidate run and evaluator receipts to recomputed hashes, requires
 complete diagnostics for GitHub, Stack Exchange, Steam, and TED, and blocks expansion until every
-evidence-positive extraction has a valid blind semantic audit. It does not yet call a model, produce semantically reliable structured problem
+evidence-positive extraction has a valid blind semantic audit. The frozen OpenAI GPT-5.6 profile,
+strict Responses transport, and one-shot calibration runner are implemented with canonical local
+run custody and fail-closed usage/cost receipts. The code does not yet complete a real provider
+call, produce semantically reliable structured problem
 extraction, cluster problems, or generate Opportunity Cards. The actual `rule_v1` aggregate
-baseline bundle and calibration gate are now frozen. The immediate bottleneck is freezing the first
-real inference profile: provider/model, prompt/schema versions, budgets, retries, secrets, and
-raw-response retention. Model-backed extraction follows that checkpoint,
-not additional source infrastructure.
+baseline bundle and calibration gate are frozen. The immediate bottleneck is a bounded external
+provider-contract preflight followed by the single authorized 40-record model calibration run,
+not additional source infrastructure. The full suite passes **585 tests** with one intentional
+local-custody integration skip.
 
 ### Task 4 — Problem clustering and evidence independence
 

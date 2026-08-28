@@ -20,6 +20,8 @@ ETHOS.md
 PROMPT_COMMON.md
 PROMPT_COMMON_LEAN.md
 prompts/
+!configs/extraction/prompts/
+!configs/extraction/prompts/*.txt
 run
 
 # OMC support documentation and scripts

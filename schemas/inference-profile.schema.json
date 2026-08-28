@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-auto.local/schemas/inference-profile.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "profile_id", "provider", "api", "model",
+    "model_resolution_policy", "reasoning_effort", "structured_output",
+    "prompt", "extraction_schema", "source_policy", "experiment",
+    "limits", "pricing", "retention", "secret"
+  ],
+  "properties": {
+    "schema_version": {"const": "inference-profile/v1"},
+    "profile_id": {"const": "openai-gpt-5.6-accuracy-v1"},
+    "provider": {"const": "openai"},
+    "api": {"const": "responses"},
+    "model": {"const": "gpt-5.6"},
+    "model_resolution_policy": {"const": "record_response_model"},
+    "reasoning_effort": {"enum": ["low", "medium", "high"]},
+    "structured_output": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "strict"],
+      "properties": {"type": {"const": "json_schema"}, "strict": {"const": true}}
+    },
+    "prompt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["version", "path", "sha256"],
+      "properties": {
+        "version": {"const": "problem-evidence-v1"},
+        "path": {"const": "configs/extraction/prompts/problem-evidence-v1.txt"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "extraction_schema": {
+      "type": "object", "additionalProperties": false,
+      "required": ["version", "path", "sha256"],
+      "properties": {
+        "version": {"const": "extraction-v0.1"},
+        "path": {"const": "schemas/model-extraction-output.schema.json"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "source_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_role", "sources"],
+      "properties": {
+        "source_role": {"const": "calibration_source"},
+        "sources": {
+          "type": "array", "prefixItems": [
+            {"const": "github"}, {"const": "stackexchange"},
+            {"const": "steam"}, {"const": "ted"}
+          ], "items": false, "minItems": 4, "maxItems": 4
+        }
+      }
+    },
+    "experiment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["max_profiles", "max_metric_runs", "allow_metric_failure_fallback", "allow_calibration_retuning"],
+      "properties": {
+        "max_profiles": {"const": 1},
+        "max_metric_runs": {"const": 1},
+        "allow_metric_failure_fallback": {"const": false},
+        "allow_calibration_retuning": {"const": false}
+      }
+    },
+    "limits": {
+      "type": "object", "additionalProperties": false,
+      "required": ["input_count", "max_retries_per_document", "max_cost_usd", "max_wall_seconds", "max_output_tokens"],
+      "properties": {
+        "input_count": {"const": 40},
+        "max_retries_per_document": {"const": 2},
+        "max_cost_usd": {"const": 5},
+        "max_wall_seconds": {"const": 1800},
+        "max_output_tokens": {"type": "integer", "minimum": 128, "maximum": 4096}
+      }
+    },
+    "pricing": {
+      "type": "object", "additionalProperties": false,
+      "required": ["currency", "input_usd_per_million", "output_usd_per_million"],
+      "properties": {
+        "currency": {"const": "USD"},
+        "input_usd_per_million": {"const": 4},
+        "output_usd_per_million": {"const": 20}
+      }
+    },
+    "retention": {
+      "type": "object", "additionalProperties": false,
+      "required": ["persist_raw_response", "persist_source_text", "persist_request_id", "persist_sanitized_outputs"],
+      "properties": {
+        "persist_raw_response": {"const": false},
+        "persist_source_text": {"const": false},
+        "persist_request_id": {"const": false},
+        "persist_sanitized_outputs": {"const": false}
+      }
+    },
+    "secret": {
+      "type": "object", "additionalProperties": false,
+      "required": ["environment_variable", "persist_value"],
+      "properties": {
+        "environment_variable": {"const": "OPENAI_API_KEY"},
+        "persist_value": {"const": false}
+      }
+    }
+  }
+}

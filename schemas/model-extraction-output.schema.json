@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "document_id", "observation_type", "actor", "problem", "context",
+    "consequence", "evidence_quote", "evidence_start", "evidence_end",
+    "problem_signal", "money_signal", "money_signal_type", "usable_evidence",
+    "confidence", "abstention_reason"
+  ],
+  "properties": {
+    "document_id": {"type": "string"},
+    "observation_type": {
+      "type": ["string", "null"],
+      "enum": ["user_problem", "product_feedback", "procurement_requirement", null]
+    },
+    "actor": {"type": ["string", "null"]},
+    "problem": {"type": ["string", "null"]},
+    "context": {"type": ["string", "null"]},
+    "consequence": {"type": ["string", "null"]},
+    "evidence_quote": {"type": ["string", "null"]},
+    "evidence_start": {"type": ["integer", "null"], "minimum": 0},
+    "evidence_end": {"type": ["integer", "null"], "minimum": 0},
+    "problem_signal": {"type": ["boolean", "null"]},
+    "money_signal": {"type": ["boolean", "null"]},
+    "money_signal_type": {
+      "type": ["string", "null"],
+      "enum": [
+        "purchase", "subscription", "outsourcing", "labor_cost", "loss",
+        "willingness_to_pay", "price_complaint", "replacement_search", null
+      ]
+    },
+    "usable_evidence": {"type": ["boolean", "null"]},
+    "confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "abstention_reason": {"type": ["string", "null"]}
+  }
+}

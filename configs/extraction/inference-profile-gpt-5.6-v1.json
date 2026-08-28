@@ -1,0 +1,49 @@
+{
+  "schema_version": "inference-profile/v1",
+  "profile_id": "openai-gpt-5.6-accuracy-v1",
+  "provider": "openai",
+  "api": "responses",
+  "model": "gpt-5.6",
+  "model_resolution_policy": "record_response_model",
+  "reasoning_effort": "medium",
+  "structured_output": {"type": "json_schema", "strict": true},
+  "prompt": {
+    "version": "problem-evidence-v1",
+    "path": "configs/extraction/prompts/problem-evidence-v1.txt",
+    "sha256": "442519c34a9ee768bfa9e392e61c0cba0b7b37ab045aacbf5b52c94cd76771c9"
+  },
+  "extraction_schema": {
+    "version": "extraction-v0.1",
+    "path": "schemas/model-extraction-output.schema.json",
+    "sha256": "43316f59d84ea622e0b4715185005dc86d3fd2bb224c2a447571794e9be53979"
+  },
+  "source_policy": {
+    "source_role": "calibration_source",
+    "sources": ["github", "stackexchange", "steam", "ted"]
+  },
+  "experiment": {
+    "max_profiles": 1,
+    "max_metric_runs": 1,
+    "allow_metric_failure_fallback": false,
+    "allow_calibration_retuning": false
+  },
+  "limits": {
+    "input_count": 40,
+    "max_retries_per_document": 2,
+    "max_cost_usd": 5,
+    "max_wall_seconds": 1800,
+    "max_output_tokens": 1200
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_usd_per_million": 4,
+    "output_usd_per_million": 20
+  },
+  "retention": {
+    "persist_raw_response": false,
+    "persist_source_text": false,
+    "persist_request_id": false,
+    "persist_sanitized_outputs": false
+  },
+  "secret": {"environment_variable": "OPENAI_API_KEY", "persist_value": false}
+}
