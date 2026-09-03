@@ -547,6 +547,9 @@ Current code checkpoint:
       three-attempt operational ceiling, conservative $0.10 cost bound, metric-claim drift detection,
       aggregate-only receipt, active/orphan claim distinction, hash-bound terminal artifacts,
       and status-specific CLI exit codes
+- [x] Build and review a deterministic, fixture-only Opportunity Card vertical slice: conservative
+      evidence grouping, Evidence/Actionability decisions, eligibility-gated ranking, schema-valid
+      JSON, and evidence-linked Markdown with fixture provenance
 - [ ] Execute the bounded provider-contract preflight without consuming the canonical 40-record metric-run claim
 - [ ] Run actual structured extraction on the 40 development-calibration records
 - [ ] Compare the first model-backed extractor against `rule_v1` using the physically separate
@@ -566,15 +569,17 @@ complete diagnostics for GitHub, Stack Exchange, Steam, and TED, and blocks expa
 evidence-positive extraction has a valid blind semantic audit. The frozen OpenAI GPT-5.6 profile,
 strict Responses transport, and one-shot calibration runner are implemented with canonical local
 run custody and fail-closed usage/cost receipts. The code does not yet complete a real provider
-call, produce semantically reliable structured problem
-extraction, cluster problems, or generate Opportunity Cards. The actual `rule_v1` aggregate
-baseline bundle and calibration gate are frozen. The bounded provider-preflight executor is now
-implemented but has not made a live API call. The immediate bottleneck is its single authorized
-live execution followed by the single authorized 40-record model calibration run, not additional
-source infrastructure. The full suite passes **617 tests** with one intentional
+call or produce semantically reliable structured problem extraction from real source data. The
+code now has a deterministic fixture-only vertical slice for clustering, policy, ranking, and
+Opportunity Card rendering; it proves contract composition only, not model quality, source quality,
+or user value. The actual `rule_v1` aggregate baseline bundle and calibration gate are frozen. The
+bounded provider-preflight executor is now implemented but has not made a live API call. The
+immediate operational bottleneck is its single authorized live execution followed by the single
+authorized 40-record model calibration run, while the fixture slice can expose product-contract
+defects without consuming either claim. The full suite passes **626 tests** with one intentional
 local-custody integration skip. This regression count does not make the product output available;
-product capability remains `PRODUCT_OUTPUT_NOT_AVAILABLE` until clustering, decision policy,
-ranking, and Opportunity Card generation form an evidence-backed end-to-end path.
+product capability remains `PRODUCT_OUTPUT_NOT_AVAILABLE` until model-backed clustering, decision
+policy, ranking, and Opportunity Card generation form an evidence-backed end-to-end path.
 
 ### Task 4 — Problem clustering and evidence independence
 
