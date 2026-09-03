@@ -504,8 +504,8 @@ Current code checkpoint:
       development corpus with contract validation, abstention accounting, and a hashed receipt
 - [x] Prevent keyword-substring false positives and classify problem and money signals
       independently while preserving a verbatim evidence span
-- [x] Dry-run `rule_v1` on all 40 development records: 40 valid outputs, 22 abstentions,
-      seven money positives, and zero invalid outputs
+- [x] Dry-run `rule_v1` on all 40 development records: 40 valid outputs, 26 abstentions,
+      four money positives, and zero invalid outputs
 - [x] Implement a frozen-run-bound calibration evaluator with corpus/gold/output hash checks,
       duplicate and membership rejection, P/M/usable-evidence confusion matrices,
       quality-constrained coverage, invalid/abstention accounting, and source breakdowns
