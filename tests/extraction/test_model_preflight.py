@@ -153,6 +153,241 @@ def test_preflight_blocks_second_execution_before_transport() -> None:
     assert calls == 1
 
 
+def test_preflight_reports_orphaned_claim_without_calling_transport(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    real_publish = model_preflight._publish
+
+    def interrupt_publication(_receipt: dict[str, object]) -> dict[str, object]:
+        raise SystemExit("simulated process interruption")
+
+    monkeypatch.setattr(model_preflight, "_publish", interrupt_publication)
+    with pytest.raises(SystemExit, match="process interruption"):
+        execute_provider_preflight(
+            PROFILE,
+            lambda document, _profile: ModelCallResult(
+                _valid_output(document), "gpt-5.6", 10, 10, "hidden"
+            ),
+        )
+
+    monkeypatch.setattr(model_preflight, "_publish", real_publish)
+    monkeypatch.setattr(model_preflight, "_process_is_alive", lambda _pid: False)
+    calls = 0
+
+    def transport(*_args: object) -> ModelCallResult:
+        nonlocal calls
+        calls += 1
+        raise AssertionError("orphan recovery must not call the provider")
+
+    receipt = execute_provider_preflight(PROFILE, transport)
+
+    assert receipt["status"] == "ORPHANED_CLAIM"
+    assert receipt["termination_reason"] == "preflight_claim_without_terminal_artifact"
+    assert calls == 0
+
+
+def test_preflight_reports_live_claim_as_in_progress(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    real_publish = model_preflight._publish
+
+    def interrupt_publication(_receipt: dict[str, object]) -> dict[str, object]:
+        raise SystemExit("leave active claim")
+
+    monkeypatch.setattr(model_preflight, "_publish", interrupt_publication)
+    with pytest.raises(SystemExit, match="active claim"):
+        execute_provider_preflight(
+            PROFILE,
+            lambda document, _profile: ModelCallResult(
+                _valid_output(document), "gpt-5.6", 10, 10, "hidden"
+            ),
+        )
+    monkeypatch.setattr(model_preflight, "_publish", real_publish)
+    monkeypatch.setattr(model_preflight, "_process_is_alive", lambda _pid: True)
+
+    result = execute_provider_preflight(
+        PROFILE,
+        lambda *_args: pytest.fail("active claim must not call the provider twice"),
+    )
+
+    assert result["status"] == "IN_PROGRESS"
+    assert result["termination_reason"] == "preflight_execution_in_progress"
+
+
+def test_preflight_rejects_receipt_not_bound_to_existing_claim() -> None:
+    transport = lambda document, _profile: ModelCallResult(  # noqa: E731
+        _valid_output(document), "gpt-5.6", 10, 10, "hidden"
+    )
+    assert execute_provider_preflight(PROFILE, transport)["status"] == "PASS"
+    receipt_path = model_preflight._RECEIPT_PATH
+    receipt = json.loads(receipt_path.read_text())
+    receipt["claim_sha256"] = "0" * 64
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+
+    result = execute_provider_preflight(PROFILE, transport)
+
+    assert result["status"] == "CONTRACT_FAIL"
+    assert result["termination_reason"] == "terminal_artifact_claim_mismatch"
+
+
+def test_preflight_replays_hash_bound_publication_failure_without_provider_call(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    real_atomic_create = model_preflight._atomic_create
+
+    def fail_receipt(path: Path, value: dict[str, object]) -> None:
+        if path == model_preflight._RECEIPT_PATH:
+            raise OSError("disk failure")
+        real_atomic_create(path, value)
+
+    monkeypatch.setattr(model_preflight, "_atomic_create", fail_receipt)
+    first = execute_provider_preflight(
+        PROFILE,
+        lambda document, _profile: ModelCallResult(
+            _valid_output(document), "gpt-5.6", 10, 10, "hidden"
+        ),
+    )
+    assert first["status"] == "PUBLICATION_FAIL"
+    monkeypatch.setattr(model_preflight, "_atomic_create", real_atomic_create)
+
+    calls = 0
+
+    def transport(*_args: object) -> ModelCallResult:
+        nonlocal calls
+        calls += 1
+        raise AssertionError("terminal publication failure must not call the provider")
+
+    replay = execute_provider_preflight(PROFILE, transport)
+
+    assert replay["status"] == "PUBLICATION_FAIL"
+    assert replay["termination_reason"] == "receipt_publication_failed"
+    assert calls == 0
+
+
+def test_preflight_rejects_conflicting_terminal_artifacts() -> None:
+    transport = lambda document, _profile: ModelCallResult(  # noqa: E731
+        _valid_output(document), "gpt-5.6", 10, 10, "hidden"
+    )
+    receipt = execute_provider_preflight(PROFILE, transport)
+    model_preflight._PUBLICATION_FAILURE_PATH.write_text(
+        json.dumps(
+            {
+                "schema_version": "model-provider-preflight-publication-failure/v1",
+                "status": "PUBLICATION_FAIL",
+                "failure_stage": "publication",
+                "termination_reason": "receipt_publication_failed",
+                "claim_sha256": receipt["claim_sha256"],
+                "receipt_sha256": "0" * 64,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = execute_provider_preflight(PROFILE, transport)
+
+    assert result["status"] == "CONTRACT_FAIL"
+    assert result["termination_reason"] == "conflicting_terminal_artifacts"
+
+
+def test_preflight_rejects_publication_marker_not_bound_to_claim(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    real_atomic_create = model_preflight._atomic_create
+
+    def fail_receipt(path: Path, value: dict[str, object]) -> None:
+        if path == model_preflight._RECEIPT_PATH:
+            raise OSError("disk failure")
+        real_atomic_create(path, value)
+
+    monkeypatch.setattr(model_preflight, "_atomic_create", fail_receipt)
+    execute_provider_preflight(
+        PROFILE,
+        lambda document, _profile: ModelCallResult(
+            _valid_output(document), "gpt-5.6", 10, 10, "hidden"
+        ),
+    )
+    marker = json.loads(model_preflight._PUBLICATION_FAILURE_PATH.read_text())
+    marker["claim_sha256"] = "0" * 64
+    model_preflight._PUBLICATION_FAILURE_PATH.write_text(
+        json.dumps(marker), encoding="utf-8"
+    )
+    monkeypatch.setattr(model_preflight, "_atomic_create", real_atomic_create)
+
+    result = execute_provider_preflight(
+        PROFILE,
+        lambda *_args: pytest.fail("invalid marker must not call the provider"),
+    )
+
+    assert result["status"] == "CONTRACT_FAIL"
+    assert result["termination_reason"] == "terminal_artifact_claim_mismatch"
+
+
+def test_preflight_rejects_malformed_publication_marker_receipt_digest(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    real_atomic_create = model_preflight._atomic_create
+
+    def fail_receipt(path: Path, value: dict[str, object]) -> None:
+        if path == model_preflight._RECEIPT_PATH:
+            raise OSError("disk failure")
+        real_atomic_create(path, value)
+
+    monkeypatch.setattr(model_preflight, "_atomic_create", fail_receipt)
+    execute_provider_preflight(
+        PROFILE,
+        lambda document, _profile: ModelCallResult(
+            _valid_output(document), "gpt-5.6", 10, 10, "hidden"
+        ),
+    )
+    marker = json.loads(model_preflight._PUBLICATION_FAILURE_PATH.read_text())
+    marker["receipt_sha256"] = "not-a-sha256"
+    model_preflight._PUBLICATION_FAILURE_PATH.write_text(
+        json.dumps(marker), encoding="utf-8"
+    )
+    monkeypatch.setattr(model_preflight, "_atomic_create", real_atomic_create)
+
+    result = execute_provider_preflight(
+        PROFILE,
+        lambda *_args: pytest.fail("invalid marker must not call the provider"),
+    )
+
+    assert result["status"] == "CONTRACT_FAIL"
+    assert result["termination_reason"] == "terminal_artifact_claim_mismatch"
+
+
+def test_preflight_rejects_mismatched_publication_failure_stage_and_reason(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    real_atomic_create = model_preflight._atomic_create
+
+    def fail_receipt(path: Path, value: dict[str, object]) -> None:
+        if path == model_preflight._RECEIPT_PATH:
+            raise OSError("disk failure")
+        real_atomic_create(path, value)
+
+    monkeypatch.setattr(model_preflight, "_atomic_create", fail_receipt)
+    execute_provider_preflight(
+        PROFILE,
+        lambda document, _profile: ModelCallResult(
+            _valid_output(document), "gpt-5.6", 10, 10, "hidden"
+        ),
+    )
+    marker = json.loads(model_preflight._PUBLICATION_FAILURE_PATH.read_text())
+    marker["failure_stage"] = "validation"
+    model_preflight._PUBLICATION_FAILURE_PATH.write_text(
+        json.dumps(marker), encoding="utf-8"
+    )
+    monkeypatch.setattr(model_preflight, "_atomic_create", real_atomic_create)
+
+    result = execute_provider_preflight(
+        PROFILE,
+        lambda *_args: pytest.fail("invalid marker must not call the provider"),
+    )
+
+    assert result["status"] == "CONTRACT_FAIL"
+    assert result["termination_reason"] == "terminal_artifact_claim_mismatch"
+
+
 def test_preflight_cost_ceiling_stops_before_transport() -> None:
     calls = 0
 
@@ -258,6 +493,8 @@ def test_preflight_writes_publication_failure_marker(
     assert receipt["status"] == "PUBLICATION_FAIL"
     marker = json.loads(model_preflight._PUBLICATION_FAILURE_PATH.read_text())
     assert marker["status"] == "PUBLICATION_FAIL"
+    assert marker["claim_sha256"] == receipt["claim_sha256"]
+    assert marker["termination_reason"] == "receipt_publication_failed"
     assert model_preflight._PUBLICATION_FAILURE_PATH.stat().st_mode & 0o777 == 0o600
 
 
@@ -281,6 +518,8 @@ def test_publish_distinguishes_receipt_validation_failure() -> None:
         ("ALREADY_CONSUMED", 6),
         ("METRIC_CLAIM_DRIFT", 7),
         ("INTERNAL_FAIL", 8),
+        ("ORPHANED_CLAIM", 9),
+        ("IN_PROGRESS", 10),
     ],
 )
 def test_preflight_cli_exit_codes(
@@ -295,7 +534,35 @@ def test_preflight_cli_exit_codes(
     monkeypatch.setattr(
         model_preflight,
         "execute_provider_preflight",
-        lambda _profile, _transport: {"status": status},
+        lambda _profile, _transport: {
+            "status": status,
+            "termination_reason": "test_reason",
+        },
     )
 
     assert model_preflight.main() == exit_code
+
+
+def test_preflight_cli_exposes_publication_failure_reason(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.setattr(model_preflight, "load_inference_profile", lambda _path: PROFILE)
+    monkeypatch.setattr(
+        model_preflight.OpenAIResponsesTransport,
+        "from_environment",
+        lambda _profile: object(),
+    )
+    monkeypatch.setattr(
+        model_preflight,
+        "execute_provider_preflight",
+        lambda _profile, _transport: {
+            "status": "PUBLICATION_FAIL",
+            "termination_reason": "receipt_validation_failed",
+        },
+    )
+
+    assert model_preflight.main() == 5
+    assert json.loads(capsys.readouterr().out) == {
+        "status": "PUBLICATION_FAIL",
+        "termination_reason": "receipt_validation_failed",
+    }

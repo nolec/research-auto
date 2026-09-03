@@ -22,4 +22,15 @@
 
 Task 1 Opportunity Card 계약은 완료됐다. Task 2 Source Spike는 GitHub, Stack Exchange, Steam, TED에서 각각 실제 analysis dataset **100/100**, 총 **400/500**을 확보한 상태로 동결했다. 네 source의 primary human review는 모두 **20/20** 완료됐고 독립 secondary는 각각 **0/5**라 official eligibility와 canonical source-quality report는 아직 deferred다. 기존 source-spike holdout은 이미 검토 과정에 노출됐으므로 extractor의 독립 평가셋이 아니라 `source_spike_reserved` 이력으로 취급한다.
 
-Task 3는 deterministic calibration baseline, evaluator, provenance-bound metric bundle generator와 count-aware calibration gate에 더해 첫 OpenAI GPT-5.6 inference profile, strict Responses transport, one-shot 40-record calibration runner, synthetic bounded provider-preflight executor까지 구현됐다. preflight는 별도 atomic claim, 최대 3회 operational attempt, 보수적 $0.10 비용 상한, metric claim 불변 검증, aggregate-only receipt와 상태별 CLI exit code를 강제한다. 실제 `rule_v1` 40건 aggregate bundle은 implementation hash `555d9a2e…caa98`로 동결됐고 valid 40, invalid 0, abstention 26, coverage 35%이며 Problem precision/recall은 100%/30.3%, Money는 75%/33.3%, usable evidence는 100%/42.4%다. 전체 **606 tests**가 통과하며 local integration 1건은 기본 실행에서 의도적으로 skip된다. 아직 실제 OpenAI provider preflight와 40건 모델 추출은 실행하지 않았고, clustering, Opportunity Card, TOP 20도 구현 전이다.
+Task 3는 deterministic calibration baseline, evaluator, provenance-bound metric bundle generator와 count-aware calibration gate에 더해 첫 OpenAI GPT-5.6 inference profile, strict Responses transport, one-shot 40-record calibration runner, synthetic bounded provider-preflight executor까지 구현됐다. preflight는 별도 atomic claim, active/orphan 판별, 최대 3회 operational attempt, 보수적 $0.10 비용 상한, metric claim 불변 검증, hash-bound aggregate-only terminal artifact와 상태별 CLI exit code를 강제한다. 실제 `rule_v1` 40건 aggregate bundle은 implementation hash `555d9a2e…caa98`로 동결됐고 valid 40, invalid 0, abstention 26, coverage 35%이며 Problem precision/recall은 100%/30.3%, Money는 75%/33.3%, usable evidence는 100%/42.4%다.
+
+현재 상태는 단일 완성도 백분율이 아니라 다음 네 축으로 판단한다.
+
+| 축 | 상태 | 근거 |
+|---|---|---|
+| Infrastructure | `READY` | 로컬 계약·baseline·gate·provider 실행 경로와 전체 회귀 테스트가 준비됨 |
+| Operational validation | `UNVERIFIED` | 실제 OpenAI provider preflight와 40건 모델 추출을 실행하지 않음 |
+| Product capability | `PRODUCT_OUTPUT_NOT_AVAILABLE` | clustering, Opportunity Card, TOP 20이 구현되지 않음 |
+| Evaluation evidence | `NOT_STARTED` | frozen four-week evaluation과 human audit을 실행하지 않음 |
+
+전체 **617 tests**가 통과하며 local integration 1건은 기본 실행에서 의도적으로 skip된다. 이 수치는 구현된 계약의 회귀 신호이며 제품 완성도 백분율이 아니다.

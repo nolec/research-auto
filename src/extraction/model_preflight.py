@@ -147,6 +147,8 @@ def _publication_failure(
         "schema_version": "model-provider-preflight-publication-failure/v1",
         "status": "PUBLICATION_FAIL",
         "failure_stage": failure_stage,
+        "termination_reason": termination_reason,
+        "claim_sha256": receipt.get("claim_sha256"),
         "receipt_sha256": _digest_bytes(
             json.dumps(receipt, sort_keys=True, separators=(",", ":")).encode()
         ),
@@ -157,6 +159,112 @@ def _publication_failure(
         pass
     receipt["status"] = "PUBLICATION_FAIL"
     receipt["termination_reason"] = termination_reason
+    return receipt
+
+
+def _read_mapping(path: Path) -> dict[str, object] | None:
+    try:
+        value = json.loads(path.read_text())
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        return None
+    if not isinstance(value, dict):
+        return None
+    return value
+
+
+def _process_is_alive(pid: int) -> bool:
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
+def _is_sha256(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(character in "0123456789abcdef" for character in value)
+    )
+
+
+def _existing_claim_result(
+    claim: Mapping[str, object],
+    receipt: dict[str, object],
+) -> dict[str, object]:
+    persisted_claim = _read_mapping(_CLAIM_PATH)
+    expected_contract = dict(claim)
+    expected_contract.pop("owner_pid", None)
+    persisted_contract = dict(persisted_claim or {})
+    owner_pid = persisted_contract.pop("owner_pid", None)
+    if (
+        persisted_claim is None
+        or isinstance(owner_pid, bool)
+        or not isinstance(owner_pid, int)
+        or owner_pid <= 0
+        or persisted_contract != expected_contract
+    ):
+        receipt["status"] = "CONTRACT_FAIL"
+        receipt["termination_reason"] = "persisted_claim_mismatch"
+        return receipt
+    persisted_claim_hash = _digest_bytes(_canonical_bytes(persisted_claim))
+    receipt["claim_sha256"] = persisted_claim_hash
+
+    has_receipt = _RECEIPT_PATH.exists()
+    has_failure = _PUBLICATION_FAILURE_PATH.exists()
+    if has_receipt and has_failure:
+        receipt["status"] = "CONTRACT_FAIL"
+        receipt["termination_reason"] = "conflicting_terminal_artifacts"
+        return receipt
+    if has_receipt:
+        persisted_receipt = _read_mapping(_RECEIPT_PATH)
+        try:
+            if persisted_receipt is None:
+                raise ValidationError("receipt is not a JSON object")
+            Draft202012Validator(_SCHEMA).validate(persisted_receipt)
+        except ValidationError:
+            receipt["status"] = "CONTRACT_FAIL"
+            receipt["termination_reason"] = "terminal_artifact_invalid"
+            return receipt
+        if persisted_receipt.get("claim_sha256") != persisted_claim_hash:
+            receipt["status"] = "CONTRACT_FAIL"
+            receipt["termination_reason"] = "terminal_artifact_claim_mismatch"
+            return receipt
+        receipt["status"] = "ALREADY_CONSUMED"
+        receipt["termination_reason"] = "preflight_claim_exists"
+        return receipt
+    if has_failure:
+        marker = _read_mapping(_PUBLICATION_FAILURE_PATH)
+        if (
+            marker is None
+            or marker.get("schema_version")
+            != "model-provider-preflight-publication-failure/v1"
+            or marker.get("status") != "PUBLICATION_FAIL"
+            or (
+                marker.get("failure_stage"),
+                marker.get("termination_reason"),
+            )
+            not in {
+                ("validation", "receipt_validation_failed"),
+                ("publication", "receipt_publication_failed"),
+            }
+            or marker.get("claim_sha256") != persisted_claim_hash
+            or not _is_sha256(marker.get("receipt_sha256"))
+        ):
+            receipt["status"] = "CONTRACT_FAIL"
+            receipt["termination_reason"] = "terminal_artifact_claim_mismatch"
+            return receipt
+        receipt["status"] = "PUBLICATION_FAIL"
+        receipt["termination_reason"] = marker["termination_reason"]
+        return receipt
+    if _process_is_alive(owner_pid):
+        receipt["status"] = "IN_PROGRESS"
+        receipt["termination_reason"] = "preflight_execution_in_progress"
+        return receipt
+    receipt["status"] = "ORPHANED_CLAIM"
+    receipt["termination_reason"] = "preflight_claim_without_terminal_artifact"
     return receipt
 
 
@@ -175,6 +283,7 @@ def execute_provider_preflight(
     policy_hash = _digest_bytes(_canonical_bytes(policy))
     claim = {
         "schema_version": "model-provider-preflight-claim/v1",
+        "owner_pid": os.getpid(),
         "profile_sha256": profile.profile_sha256,
         "prompt_sha256": profile.prompt_sha256,
         "output_schema_sha256": profile.output_schema_sha256,
@@ -197,9 +306,7 @@ def execute_provider_preflight(
     try:
         _atomic_create(_CLAIM_PATH, claim)
     except FileExistsError:
-        receipt["status"] = "ALREADY_CONSUMED"
-        receipt["termination_reason"] = "preflight_claim_exists"
-        return receipt
+        return _existing_claim_result(claim, receipt)
 
     resolved_model: str | None = None
     output_valid = False
@@ -307,6 +414,8 @@ _EXIT_CODES = {
     "ALREADY_CONSUMED": 6,
     "METRIC_CLAIM_DRIFT": 7,
     "INTERNAL_FAIL": 8,
+    "ORPHANED_CLAIM": 9,
+    "IN_PROGRESS": 10,
 }
 
 
@@ -317,7 +426,15 @@ def main() -> int:
     except ValueError:
         return 3
     receipt = execute_provider_preflight(profile, transport)
-    print(json.dumps({"status": receipt["status"]}, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "status": receipt["status"],
+                "termination_reason": receipt["termination_reason"],
+            },
+            sort_keys=True,
+        )
+    )
     return _EXIT_CODES[str(receipt["status"])]
 
 

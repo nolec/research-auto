@@ -1,7 +1,16 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-08-28
+> Updated: 2026-09-03
 > Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 bounded provider-preflight implementation complete; live preflight pending
+
+| Readiness axis | Current state |
+|---|---|
+| Infrastructure | `READY` |
+| Operational validation | `UNVERIFIED` |
+| Product capability | `PRODUCT_OUTPUT_NOT_AVAILABLE` |
+| Evaluation evidence | `NOT_STARTED` |
+
+Test counts below are historical regression checkpoints, not a product-completeness metric.
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
 
@@ -536,7 +545,8 @@ Current code checkpoint:
       before the first provider request
 - [x] Implement the bounded synthetic provider-contract preflight with a separate atomic claim,
       three-attempt operational ceiling, conservative $0.10 cost bound, metric-claim drift detection,
-      aggregate-only receipt, and status-specific CLI exit codes
+      aggregate-only receipt, active/orphan claim distinction, hash-bound terminal artifacts,
+      and status-specific CLI exit codes
 - [ ] Execute the bounded provider-contract preflight without consuming the canonical 40-record metric-run claim
 - [ ] Run actual structured extraction on the 40 development-calibration records
 - [ ] Compare the first model-backed extractor against `rule_v1` using the physically separate
@@ -546,7 +556,7 @@ Current code checkpoint:
 - [ ] After extractor freeze, select a new untouched evaluation sample from the 320 unassigned
       records; do not claim independent performance from the source-spike-reserved assignments
 
-The current implementation is a working deterministic calibration baseline, a review-approved
+The current infrastructure is a working deterministic calibration baseline, a review-approved
 count-aware gate, and a review-approved model-execution path, but not yet a useful demand extractor.
 It projects the four qualified datasets into a gold-free 40-record corpus,
 emits contract-valid rule-based outputs, records abstentions and hashes, keeps human gold
@@ -561,8 +571,10 @@ extraction, cluster problems, or generate Opportunity Cards. The actual `rule_v1
 baseline bundle and calibration gate are frozen. The bounded provider-preflight executor is now
 implemented but has not made a live API call. The immediate bottleneck is its single authorized
 live execution followed by the single authorized 40-record model calibration run, not additional
-source infrastructure. The full suite passes **606 tests** with one intentional
-local-custody integration skip.
+source infrastructure. The full suite passes **617 tests** with one intentional
+local-custody integration skip. This regression count does not make the product output available;
+product capability remains `PRODUCT_OUTPUT_NOT_AVAILABLE` until clustering, decision policy,
+ranking, and Opportunity Card generation form an evidence-backed end-to-end path.
 
 ### Task 4 — Problem clustering and evidence independence
 

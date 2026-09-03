@@ -15,7 +15,7 @@
   ],
   "properties": {
     "schema_version": {"const": "model-provider-preflight-receipt/v1"},
-    "status": {"enum": ["PASS", "CONTRACT_FAIL", "PREREQUISITE_FAIL", "OPERATIONAL_EXHAUSTED", "PUBLICATION_FAIL", "ALREADY_CONSUMED", "METRIC_CLAIM_DRIFT", "INTERNAL_FAIL"]},
+    "status": {"enum": ["PASS", "CONTRACT_FAIL", "PREREQUISITE_FAIL", "OPERATIONAL_EXHAUSTED", "PUBLICATION_FAIL", "ALREADY_CONSUMED", "METRIC_CLAIM_DRIFT", "INTERNAL_FAIL", "ORPHANED_CLAIM", "IN_PROGRESS"]},
     "termination_reason": {"type": "string", "minLength": 1},
     "profile_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
