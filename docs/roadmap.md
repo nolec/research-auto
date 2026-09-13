@@ -1,11 +1,11 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-09-03
-> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 bounded provider-preflight implementation complete; live preflight pending
+> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 bounded provider-preflight implementation complete; live preflight pending; promotion candidate hard-blocked pending authoritative producers
 
 | Readiness axis | Current state |
 |---|---|
-| Infrastructure | `READY` |
+| Calibration infrastructure | `READY` |
 | Operational validation | `UNVERIFIED` |
 | Product capability | `PRODUCT_OUTPUT_NOT_AVAILABLE` |
 | Evaluation evidence | `NOT_STARTED` |
@@ -53,7 +53,7 @@ four frozen CPV strata. Contact redaction removed one observed contact candidate
 contact scanning passed, and no raw buyer identifiers or payloads were retained. The local
 authorization is mode `0600` and exactly bound to the qualified smoke receipt. A deterministic
 20-item labeling sample with 10 development, 10 source-spike-reserved, and five secondary assignments is
-ready. The full regression suite passes **518 tests** with one intentional local-custody
+ready. At this Task 2 checkpoint, the full regression suite passed **518 tests** with one intentional local-custody
 integration skip. Four source datasets are qualified;
 source eligibility remains deferred because every independent secondary review is
 still incomplete.
@@ -583,8 +583,9 @@ or user value. The actual `rule_v1` aggregate baseline bundle and calibration ga
 bounded provider-preflight executor is now implemented but has not made a live API call. The
 immediate operational bottleneck is its single authorized live execution followed by the single
 authorized 40-record model calibration run, while the fixture slice can expose product-contract
-defects without consuming either claim. The full suite passes **626 tests** with one intentional
-local-custody integration skip. This regression count does not make the product output available;
+defects without consuming either claim. The current collection contains **635 tests** with one intentional
+local-custody integration skip; the full suite was not rerun for this documentation update. This
+test inventory count does not make the product output available;
 product capability remains `PRODUCT_OUTPUT_NOT_AVAILABLE` until model-backed clustering, decision
 policy, ranking, and Opportunity Card generation form an evidence-backed end-to-end path with a
 PASS promotion receipt. Independent secondary reviews remain mandatory for that promotion even
