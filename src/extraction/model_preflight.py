@@ -121,6 +121,10 @@ def _base_receipt(
         "metric_claim_after": dict(before),
         "metric_claim_unchanged": True,
         "structured_output_valid": False,
+        "semantic_sanity_valid": False,
+        "calibration_scope": "development_only",
+        "source_eligibility_required": False,
+        "product_promotion_allowed": False,
         "raw_response_persisted": False,
         "structured_output_persisted": False,
         "request_id_persisted": False,
@@ -279,6 +283,10 @@ def execute_provider_preflight(
         "max_attempts": _MAX_ATTEMPTS,
         "max_cost_usd": _MAX_COST_USD,
         "retry_class": "operational_only",
+        "calibration_scope": "development_only",
+        "source_eligibility_required": False,
+        "semantic_sanity_required": True,
+        "product_promotion_allowed": False,
     }
     policy_hash = _digest_bytes(_canonical_bytes(policy))
     claim = {
@@ -310,6 +318,7 @@ def execute_provider_preflight(
 
     resolved_model: str | None = None
     output_valid = False
+    semantic_sanity_valid = False
     for attempt in range(_MAX_ATTEMPTS):
         receipt["request_count"] = int(receipt["request_count"]) + 1
         try:
@@ -378,12 +387,24 @@ def execute_provider_preflight(
         receipt["input_tokens"] = int(receipt["input_tokens"]) + result.input_tokens
         receipt["output_tokens"] = int(receipt["output_tokens"]) + result.output_tokens
         output_valid = True
+        semantic_sanity_valid = (
+            result.output.get("problem_signal") is True
+            and result.output.get("usable_evidence") is True
+            and result.output.get("abstention_reason") is None
+            and isinstance(result.output.get("evidence_quote"), str)
+            and bool(result.output.get("evidence_quote"))
+        )
+        if not semantic_sanity_valid:
+            receipt["status"] = "CONTRACT_FAIL"
+            receipt["termination_reason"] = "semantic_sanity_failed"
+            break
         receipt["status"] = "PASS"
         receipt["termination_reason"] = "contract_validated"
         break
 
     receipt["resolved_model"] = resolved_model
     receipt["structured_output_valid"] = output_valid
+    receipt["semantic_sanity_valid"] = semantic_sanity_valid
     unknown = int(receipt["unknown_usage_request_count"])
     if unknown:
         receipt["observed_cost_usd"] = None

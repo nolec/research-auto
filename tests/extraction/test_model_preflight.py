@@ -93,6 +93,10 @@ def test_preflight_retries_operational_errors_and_preserves_metric_claim(
     assert receipt["request_count"] == 3
     assert receipt["retry_count"] == 2
     assert receipt["metric_claim_unchanged"] is True
+    assert receipt["semantic_sanity_valid"] is True
+    assert receipt["calibration_scope"] == "development_only"
+    assert receipt["source_eligibility_required"] is False
+    assert receipt["product_promotion_allowed"] is False
     assert metric_claim.read_text() == "frozen metric claim"
     assert receipt["conservative_cost_upper_bound_usd"] <= 0.10
     assert len(str(receipt["synthetic_document_sha256"])) == 64
@@ -121,14 +125,19 @@ def test_preflight_does_not_retry_contract_failure() -> None:
     assert attempts == 1
 
 
-def test_preflight_accepts_schema_valid_abstention() -> None:
+def test_preflight_rejects_schema_valid_but_semantically_empty_abstention() -> None:
     def transport(document: dict[str, object], _profile: object) -> ModelCallResult:
         output = {key: None for key in _valid_output(document)}
         output["document_id"] = document["document_id"]
         output["abstention_reason"] = "insufficient evidence"
         return ModelCallResult(output, "gpt-5.6", 10, 10, "hidden")
 
-    assert execute_provider_preflight(PROFILE, transport)["status"] == "PASS"
+    receipt = execute_provider_preflight(PROFILE, transport)
+
+    assert receipt["status"] == "CONTRACT_FAIL"
+    assert receipt["termination_reason"] == "semantic_sanity_failed"
+    assert receipt["structured_output_valid"] is True
+    assert receipt["semantic_sanity_valid"] is False
 
 
 def test_preflight_rejects_invalid_evidence_span() -> None:

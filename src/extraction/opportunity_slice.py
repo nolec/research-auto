@@ -16,6 +16,9 @@ from src.contracts.validation import validate_contract
 
 _ROOT = Path(__file__).resolve().parents[2]
 _CARD_SCHEMA = json.loads((_ROOT / "schemas" / "opportunity-card.schema.json").read_text())
+_PROMOTION_SCHEMA = json.loads(
+    (_ROOT / "schemas" / "opportunity-promotion-receipt.schema.json").read_text()
+)
 _POLICY_VERSION = "deterministic-vertical-slice-v1"
 _FIXTURE_SOURCE_VERSIONS = {"fixture": "deterministic-v1"}
 _FIXTURE_TIME = "2026-09-03T00:00:00Z"
@@ -23,6 +26,20 @@ _FIXTURE_TIME = "2026-09-03T00:00:00Z"
 
 def _stable_id(prefix: str, value: str) -> str:
     return f"{prefix}-{sha256(value.encode()).hexdigest()[:16]}"
+
+
+def _canonical_digest(value: object) -> str:
+    return sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+
+
+def _is_sha256(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(character in "0123456789abcdef" for character in value)
+    )
 
 
 def _require_string(value: object, name: str) -> str:
@@ -268,6 +285,142 @@ def build_vertical_slice(
         _build_card(problem_key, values)
         for problem_key, values in sorted(_grouped_observations(observations).items())
     ]
+
+
+def evaluate_product_promotion(
+    cards: Sequence[Mapping[str, object]],
+    reviews: Sequence[Mapping[str, object]],
+    *,
+    model_run_receipt: Mapping[str, object],
+    card_generation_receipt: Mapping[str, object],
+    source_eligibility_receipts: Mapping[str, Mapping[str, object]],
+) -> dict[str, object]:
+    """Fail closed until model provenance, source eligibility, and review value agree."""
+    reasons: set[str] = {"authoritative_producers_unavailable"}
+    cards_hash = _canonical_digest(cards)
+    reviews_hash = _canonical_digest(reviews)
+    model_run_hash = _canonical_digest(model_run_receipt)
+    generation_hash = _canonical_digest(card_generation_receipt)
+    eligibility_hashes = {
+        source: _canonical_digest(receipt)
+        for source, receipt in sorted(source_eligibility_receipts.items())
+    }
+    card_ids = [card.get("card_id") for card in cards]
+    if len(cards) < 3:
+        reasons.add("insufficient_reviewed_cards")
+    if any(
+        card.get("model_version") == "fixture-only"
+        or card.get("prompt_version") == "fixture-only"
+        or card.get("policy_version") != "model-backed-promotion-v1"
+        for card in cards
+    ):
+        reasons.add("fixture_only_provenance")
+
+    required_sources = {
+        source
+        for card in cards
+        for source in (
+            card.get("source_versions", {}).keys()
+            if isinstance(card.get("source_versions"), Mapping)
+            else ()
+        )
+    }
+    model_sources = model_run_receipt.get("sources")
+    model_run_valid = (
+        model_run_receipt.get("schema_version")
+        == "model-calibration-run-receipt/v1"
+        and model_run_receipt.get("status") == "success"
+        and _is_sha256(model_run_receipt.get("output_sha256"))
+        and isinstance(model_sources, list)
+        and bool(model_sources)
+        and all(isinstance(source, str) and source for source in model_sources)
+        and isinstance(model_run_receipt.get("valid_count"), int)
+        and not isinstance(model_run_receipt.get("valid_count"), bool)
+        and int(model_run_receipt.get("valid_count", 0)) >= 3
+        and model_run_receipt.get("invalid_count") == 0
+    )
+    if not model_run_valid:
+        reasons.add("model_run_receipt_invalid")
+    elif set(model_sources) != required_sources:
+        reasons.add("card_sources_model_run_mismatch")
+
+    generation_valid = (
+        card_generation_receipt.get("schema_version")
+        == "model-backed-card-generation-receipt/v1"
+        and card_generation_receipt.get("status") == "success"
+        and _is_sha256(card_generation_receipt.get("model_run_receipt_sha256"))
+        and _is_sha256(card_generation_receipt.get("cards_sha256"))
+    )
+    if not generation_valid:
+        reasons.add("card_generation_receipt_invalid")
+    else:
+        if card_generation_receipt.get("model_run_receipt_sha256") != model_run_hash:
+            reasons.add("card_generation_model_run_mismatch")
+        if card_generation_receipt.get("cards_sha256") != cards_hash:
+            reasons.add("card_set_mismatch")
+
+    eligible_sources: set[str] = set()
+    for source, eligibility in source_eligibility_receipts.items():
+        if (
+            eligibility.get("schema_version") == "source-eligibility-receipt/v1"
+            and eligibility.get("source") == source
+            and eligibility.get("status") == "ELIGIBLE"
+            and eligibility.get("secondary_review_count") == 5
+            and _is_sha256(eligibility.get("report_sha256"))
+            and _is_sha256(eligibility.get("policy_sha256"))
+        ):
+            eligible_sources.add(source)
+    if not required_sources or eligible_sources != required_sources:
+        reasons.add("source_not_officially_eligible")
+
+    reviews_by_card: dict[object, Mapping[str, object]] = {}
+    for review in reviews:
+        card_id = review.get("card_id")
+        if card_id in reviews_by_card:
+            reasons.add("duplicate_card_review")
+        reviews_by_card[card_id] = review
+    reviewed = [reviews_by_card.get(card_id) for card_id in card_ids]
+    if any(review is None for review in reviewed) or len(set(card_ids)) != len(card_ids):
+        reasons.add("insufficient_reviewed_cards")
+
+    durations: list[int] = []
+    for review in reviewed:
+        if review is None:
+            continue
+        duration = review.get("duration_seconds")
+        if isinstance(duration, bool) or not isinstance(duration, int) or duration <= 0:
+            reasons.add("invalid_review_duration")
+        else:
+            durations.append(duration)
+            if duration > 300:
+                reasons.add("review_time_exceeded")
+        if review.get("evidence_trace_complete") is not True:
+            reasons.add("evidence_trace_incomplete")
+        if review.get("decision") not in {"REVIEW", "HOLD", "REJECT"}:
+            reasons.add("invalid_human_decision")
+        reviewer_id = review.get("reviewer_id")
+        if not isinstance(reviewer_id, str) or not reviewer_id.strip():
+            reasons.add("reviewer_identity_missing")
+
+    failure_reasons = sorted(reasons)
+    receipt = {
+        "schema_version": "opportunity-promotion-receipt/v1",
+        "status": "BLOCKED" if failure_reasons else "PASS",
+        "product_promotion_allowed": not failure_reasons,
+        "card_count": len(cards),
+        "reviewed_card_count": sum(review is not None for review in reviewed),
+        "max_review_duration_seconds": max(durations, default=0),
+        "source_eligibility_required": True,
+        "required_sources": sorted(required_sources),
+        "model_run_receipt_sha256": model_run_hash,
+        "card_generation_receipt_sha256": generation_hash,
+        "cards_sha256": cards_hash,
+        "reviews_sha256": reviews_hash,
+        "source_eligibility_receipt_sha256": eligibility_hashes,
+        "failure_reasons": failure_reasons,
+    }
+    validate_contract(receipt, _PROMOTION_SCHEMA)
+    return receipt
 
 
 def render_card_markdown(card: Mapping[str, object]) -> str:

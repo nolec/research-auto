@@ -550,6 +550,13 @@ Current code checkpoint:
 - [x] Build and review a deterministic, fixture-only Opportunity Card vertical slice: conservative
       evidence grouping, Evidence/Actionability decisions, eligibility-gated ranking, schema-valid
       JSON, and evidence-linked Markdown with fixture provenance
+- [x] Separate development-only calibration from official source eligibility in the provider receipt;
+      calibration may proceed without eligibility, but product promotion remains prohibited
+- [x] Add semantic preflight hard-stop: schema-valid abstention or unusable evidence cannot PASS
+- [x] Add a fail-closed promotion-candidate receipt scaffold that records model, card, source,
+      and review hashes but cannot authorize product promotion
+- [ ] Implement authoritative model-backed card-generation and official source-eligibility receipt
+      producers before any promotion receipt can PASS
 - [ ] Execute the bounded provider-contract preflight without consuming the canonical 40-record metric-run claim
 - [ ] Run actual structured extraction on the 40 development-calibration records
 - [ ] Compare the first model-backed extractor against `rule_v1` using the physically separate
@@ -579,9 +586,17 @@ authorized 40-record model calibration run, while the fixture slice can expose p
 defects without consuming either claim. The full suite passes **626 tests** with one intentional
 local-custody integration skip. This regression count does not make the product output available;
 product capability remains `PRODUCT_OUTPUT_NOT_AVAILABLE` until model-backed clustering, decision
-policy, ranking, and Opportunity Card generation form an evidence-backed end-to-end path.
+policy, ranking, and Opportunity Card generation form an evidence-backed end-to-end path with a
+PASS promotion receipt. Independent secondary reviews remain mandatory for that promotion even
+though development-only calibration does not require official source eligibility. The current
+promotion-candidate evaluator remains hard-blocked because those authoritative producers do not
+exist yet; caller-supplied self-attestation cannot enable product promotion.
 
 ### Task 4 — Problem clustering and evidence independence
+
+Fixture behavior may be reused only after model provenance is explicit; fixture provenance cannot
+be promoted. Official source eligibility is a hard gate for product promotion, not for development
+calibration.
 
 - [ ] Normalize problem statements and generate candidate clusters
 - [ ] Implement conservative author, thread, time-window, text, and event grouping
@@ -596,6 +611,10 @@ policy, ranking, and Opportunity Card generation form an evidence-backed end-to-
 - [ ] Add policy-versioned decision fixtures and boundary tests
 
 ### Task 6 — Ranking and Opportunity Card output
+
+Before TOP 20 output is considered available, at least three model-backed cards must receive a
+complete reviewer-identified evidence-trace review in five minutes or less each and produce a PASS
+promotion receipt from authoritative upstream artifacts.
 
 - [ ] Implement Review Value and penalties after eligibility gates
 - [ ] Generate evidence-linked JSON and Markdown Opportunity Cards

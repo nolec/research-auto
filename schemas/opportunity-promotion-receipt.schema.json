@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "product_promotion_allowed", "card_count",
+    "reviewed_card_count", "max_review_duration_seconds",
+    "source_eligibility_required", "required_sources", "model_run_receipt_sha256",
+    "card_generation_receipt_sha256", "cards_sha256", "reviews_sha256",
+    "source_eligibility_receipt_sha256", "failure_reasons"
+  ],
+  "properties": {
+    "schema_version": {"const": "opportunity-promotion-receipt/v1"},
+    "status": {"enum": ["PASS", "BLOCKED"]},
+    "product_promotion_allowed": {"type": "boolean"},
+    "card_count": {"type": "integer", "minimum": 0},
+    "reviewed_card_count": {"type": "integer", "minimum": 0},
+    "max_review_duration_seconds": {"type": "integer", "minimum": 0},
+    "source_eligibility_required": {"const": true},
+    "required_sources": {
+      "type": "array", "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "model_run_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "card_generation_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "cards_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reviews_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_eligibility_receipt_sha256": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "failure_reasons": {
+      "type": "array", "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    }
+  }
+}

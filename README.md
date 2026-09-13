@@ -30,7 +30,7 @@ Task 3는 deterministic calibration baseline, evaluator, provenance-bound metric
 |---|---|---|
 | Infrastructure | `READY` | 로컬 계약·baseline·gate·provider 실행 경로와 전체 회귀 테스트가 준비됨 |
 | Operational validation | `UNVERIFIED` | 실제 OpenAI provider preflight와 40건 모델 추출을 실행하지 않음 |
-| Product capability | `PRODUCT_OUTPUT_NOT_AVAILABLE` | clustering, Opportunity Card, TOP 20이 구현되지 않음 |
+| Product capability | `PRODUCT_OUTPUT_NOT_AVAILABLE` | fixture-only Opportunity Card 계약 경로는 구현됐지만 model-backed 카드, human-value 승격 receipt, TOP 20은 아직 없음 |
 | Evaluation evidence | `NOT_STARTED` | frozen four-week evaluation과 human audit을 실행하지 않음 |
 
 전체 **617 tests**가 통과하며 local integration 1건은 기본 실행에서 의도적으로 skip된다. 이 수치는 구현된 계약의 회귀 신호이며 제품 완성도 백분율이 아니다.
