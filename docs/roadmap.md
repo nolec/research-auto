@@ -1,6 +1,6 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-09-03
+> Updated: 2026-09-13
 > Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 bounded provider-preflight implementation complete; live preflight pending; promotion candidate hard-blocked pending authoritative producers
 
 | Readiness axis | Current state |
@@ -583,9 +583,9 @@ or user value. The actual `rule_v1` aggregate baseline bundle and calibration ga
 bounded provider-preflight executor is now implemented but has not made a live API call. The
 immediate operational bottleneck is its single authorized live execution followed by the single
 authorized 40-record model calibration run, while the fixture slice can expose product-contract
-defects without consuming either claim. The current collection contains **635 tests** with one intentional
-local-custody integration skip; the full suite was not rerun for this documentation update. This
-test inventory count does not make the product output available;
+defects without consuming either claim. The current collect-only inventory contains **635 tests**;
+the full suite and local-custody integration skip outcome were not rerun for this documentation
+update. This test inventory count does not make the product output available;
 product capability remains `PRODUCT_OUTPUT_NOT_AVAILABLE` until model-backed clustering, decision
 policy, ranking, and Opportunity Card generation form an evidence-backed end-to-end path with a
 PASS promotion receipt. Independent secondary reviews remain mandatory for that promotion even
