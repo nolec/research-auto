@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "reason", "preflight_receipt_sha256",
+    "model_outputs_persisted", "raw_responses_persisted"
+  ],
+  "properties": {
+    "schema_version": {"const": "model-backed-card-generation-failure-receipt/v1"},
+    "status": {"const": "BLOCKED"},
+    "reason": {"type": "string", "minLength": 1},
+    "preflight_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "model_run_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "model_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "model_outputs_persisted": {"const": false},
+    "raw_responses_persisted": {"const": false}
+  }
+}

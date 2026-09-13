@@ -235,9 +235,10 @@ def _promotion_inputs(
     }
     generation = {
         "schema_version": "model-backed-card-generation-receipt/v1",
-        "status": "success",
+        "status": "CANDIDATE_ONLY",
         "model_run_receipt_sha256": _digest(model_run),
         "cards_sha256": _digest(cards),
+        "promotion_allowed": False,
     }
     eligibility = {
         "github": {

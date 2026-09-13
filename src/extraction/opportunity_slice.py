@@ -347,9 +347,10 @@ def evaluate_product_promotion(
     generation_valid = (
         card_generation_receipt.get("schema_version")
         == "model-backed-card-generation-receipt/v1"
-        and card_generation_receipt.get("status") == "success"
+        and card_generation_receipt.get("status") == "CANDIDATE_ONLY"
         and _is_sha256(card_generation_receipt.get("model_run_receipt_sha256"))
         and _is_sha256(card_generation_receipt.get("cards_sha256"))
+        and card_generation_receipt.get("promotion_allowed") is False
     )
     if not generation_valid:
         reasons.add("card_generation_receipt_invalid")

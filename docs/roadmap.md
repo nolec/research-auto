@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-09-13
-> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 bounded provider-preflight implementation complete; live preflight pending; promotion candidate hard-blocked pending authoritative producers
+> Updated: 2026-09-14
+> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 bounded provider-preflight and same-process card handoff implemented; live model execution pending; promotion hard-blocked pending live artifacts, source eligibility, and independent review
 
 | Readiness axis | Current state |
 |---|---|
@@ -555,8 +555,9 @@ Current code checkpoint:
 - [x] Add semantic preflight hard-stop: schema-valid abstention or unusable evidence cannot PASS
 - [x] Add a fail-closed promotion-candidate receipt scaffold that records model, card, source,
       and review hashes but cannot authorize product promotion
-- [ ] Implement authoritative model-backed card-generation and official source-eligibility receipt
-      producers before any promotion receipt can PASS
+- [x] Implement a custody-bound same-process model-backed card-generation producer that persists
+      only schema-valid cards, Markdown, and a hash-bound aggregate receipt
+- [ ] Implement official source-eligibility receipt producers before any promotion receipt can PASS
 - [ ] Execute the bounded provider-contract preflight without consuming the canonical 40-record metric-run claim
 - [ ] Run actual structured extraction on the 40 development-calibration records
 - [ ] Compare the first model-backed extractor against `rule_v1` using the physically separate
@@ -583,15 +584,18 @@ or user value. The actual `rule_v1` aggregate baseline bundle and calibration ga
 bounded provider-preflight executor is now implemented but has not made a live API call. The
 immediate operational bottleneck is its single authorized live execution followed by the single
 authorized 40-record model calibration run, while the fixture slice can expose product-contract
-defects without consuming either claim. The current collect-only inventory contains **635 tests**;
-the full suite and local-custody integration skip outcome were not rerun for this documentation
-update. This test inventory count does not make the product output available;
+defects without consuming either claim. A same-process handoff now consumes one-shot sanitized model
+outputs in memory and can persist only schema-valid cards, Markdown, and an aggregate receipt; it
+has not executed a live run. The current collect-only inventory contains **653 tests**; the full
+suite and local-custody integration skip outcome were not rerun for this implementation. This test
+inventory count does not make the product output available;
 product capability remains `PRODUCT_OUTPUT_NOT_AVAILABLE` until model-backed clustering, decision
 policy, ranking, and Opportunity Card generation form an evidence-backed end-to-end path with a
 PASS promotion receipt. Independent secondary reviews remain mandatory for that promotion even
 though development-only calibration does not require official source eligibility. The current
-promotion-candidate evaluator remains hard-blocked because those authoritative producers do not
-exist yet; caller-supplied self-attestation cannot enable product promotion.
+promotion path remains hard-blocked in practice: no live model-backed card receipt exists, the
+authoritative source-eligibility producer does not exist, and independent reviews are incomplete;
+caller-supplied self-attestation cannot enable product promotion.
 
 ### Task 4 — Problem clustering and evidence independence
 
