@@ -26,9 +26,12 @@ from src.extraction.openai_responses import (
 
 _ROOT = Path(__file__).resolve().parents[2]
 _LOCAL_ROOT = _ROOT / "artifacts" / "extraction" / "calibration" / "audit-local"
-_CLAIM_PATH = _LOCAL_ROOT / "provider-preflight.claim.json"
-_RECEIPT_PATH = _LOCAL_ROOT / "provider-preflight.receipt.json"
-_PUBLICATION_FAILURE_PATH = _LOCAL_ROOT / "provider-preflight.publication-failure.json"
+_PREFLIGHT_VERSION = "v2-observable"
+_CLAIM_PATH = _LOCAL_ROOT / "provider-preflight-v2-observable.claim.json"
+_RECEIPT_PATH = _LOCAL_ROOT / "provider-preflight-v2-observable.receipt.json"
+_PUBLICATION_FAILURE_PATH = (
+    _LOCAL_ROOT / "provider-preflight-v2-observable.publication-failure.json"
+)
 _PROFILE_PATH = _ROOT / "configs" / "extraction" / "inference-profile-gpt-5.6-v1.json"
 _SCHEMA = json.loads(
     (_ROOT / "schemas" / "model-provider-preflight-receipt.schema.json").read_text()
@@ -99,9 +102,12 @@ def _base_receipt(
     claim_hash: str,
 ) -> dict[str, object]:
     return {
-        "schema_version": "model-provider-preflight-receipt/v1",
+        "schema_version": "model-provider-preflight-receipt/v2",
+        "preflight_version": _PREFLIGHT_VERSION,
         "status": "PREREQUISITE_FAIL",
         "termination_reason": "not_started",
+        "failure_stage": None,
+        "exception_class": None,
         "profile_sha256": profile.profile_sha256,
         "prompt_sha256": profile.prompt_sha256,
         "output_schema_sha256": profile.output_schema_sha256,
@@ -192,6 +198,21 @@ def _is_sha256(value: object) -> bool:
         and len(value) == 64
         and all(character in "0123456789abcdef" for character in value)
     )
+
+
+def _safe_exception_class(error: BaseException) -> str:
+    for exception_type in (
+        RuntimeError,
+        ConnectionError,
+        TimeoutError,
+        OSError,
+        ValueError,
+        TypeError,
+        KeyboardInterrupt,
+    ):
+        if isinstance(error, exception_type):
+            return exception_type.__name__
+    return "UnclassifiedException"
 
 
 def _existing_claim_result(
@@ -291,6 +312,7 @@ def execute_provider_preflight(
     policy_hash = _digest_bytes(_canonical_bytes(policy))
     claim = {
         "schema_version": "model-provider-preflight-claim/v1",
+        "preflight_version": _PREFLIGHT_VERSION,
         "owner_pid": os.getpid(),
         "profile_sha256": profile.profile_sha256,
         "prompt_sha256": profile.prompt_sha256,
@@ -361,12 +383,14 @@ def execute_provider_preflight(
             receipt["status"] = "CONTRACT_FAIL"
             receipt["termination_reason"] = "structured_output_error"
             break
-        except (Exception, KeyboardInterrupt):
+        except (Exception, KeyboardInterrupt) as error:
             receipt["unknown_usage_request_count"] = int(
                 receipt["unknown_usage_request_count"]
             ) + 1
             receipt["status"] = "INTERNAL_FAIL"
             receipt["termination_reason"] = "unexpected_internal_error"
+            receipt["failure_stage"] = "transport"
+            receipt["exception_class"] = _safe_exception_class(error)
             break
         try:
             if result.resolved_model != profile.model and not result.resolved_model.startswith(

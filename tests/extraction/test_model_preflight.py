@@ -5,6 +5,7 @@ from dataclasses import replace
 from pathlib import Path
 
 import pytest
+from jsonschema import Draft202012Validator, ValidationError
 
 from src.extraction import model_preflight, model_runner
 from src.extraction.inference_profile import load_inference_profile
@@ -19,6 +20,8 @@ from src.extraction.openai_responses import build_response_request_body
 
 
 ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_CLAIM_PATH = model_preflight._CLAIM_PATH
+DEFAULT_RECEIPT_PATH = model_preflight._RECEIPT_PATH
 PROFILE = load_inference_profile(
     ROOT / "configs/extraction/inference-profile-gpt-5.6-v1.json"
 )
@@ -445,10 +448,43 @@ def test_preflight_publishes_internal_failure_after_unexpected_transport_error(
 
     assert receipt["status"] == "INTERNAL_FAIL"
     assert receipt["termination_reason"] == "unexpected_internal_error"
+    assert receipt["failure_stage"] == "transport"
+    assert receipt["exception_class"] == "RuntimeError"
+    assert receipt["preflight_version"] == "v2-observable"
+    assert receipt["schema_version"] == "model-provider-preflight-receipt/v2"
     assert receipt["request_count"] == 1
     assert receipt["unknown_usage_request_count"] == 1
     assert calls == 1
     assert (tmp_path / "provider-preflight.receipt.json").exists()
+
+
+def test_v2_schema_requires_observability_fields_and_preserves_v1() -> None:
+    schema = model_preflight._SCHEMA
+    v2 = model_preflight._base_receipt(
+        PROFILE,
+        0.01,
+        {"exists": False, "sha256": None, "mode": None, "size": None, "mtime_ns": None},
+        synthetic_hash="1" * 64,
+        policy_hash="2" * 64,
+        claim_hash="3" * 64,
+    )
+    Draft202012Validator(schema).validate(v2)
+
+    missing = dict(v2)
+    missing.pop("exception_class")
+    with pytest.raises(ValidationError):
+        Draft202012Validator(schema).validate(missing)
+
+    legacy = dict(v2)
+    legacy["schema_version"] = "model-provider-preflight-receipt/v1"
+    for field in ("preflight_version", "failure_stage", "exception_class"):
+        legacy.pop(field)
+    Draft202012Validator(schema).validate(legacy)
+
+
+def test_default_custody_uses_a_new_observable_preflight_version() -> None:
+    assert DEFAULT_CLAIM_PATH.name == "provider-preflight-v2-observable.claim.json"
+    assert DEFAULT_RECEIPT_PATH.name == "provider-preflight-v2-observable.receipt.json"
 
 
 def test_preflight_rejects_invalid_usage_attached_to_model_output_error() -> None:

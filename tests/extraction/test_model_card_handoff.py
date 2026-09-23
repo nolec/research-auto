@@ -156,6 +156,28 @@ def test_same_process_handoff_persists_only_cards_markdown_and_bound_receipt(
     assert "Decision: HOLD" in persisted
 
 
+def test_handoff_accepts_a_v2_pass_preflight_receipt(tmp_path: Path) -> None:
+    preflight = _preflight()
+    preflight.update(
+        {
+            "schema_version": "model-provider-preflight-receipt/v2",
+            "preflight_version": "v2-observable",
+            "failure_stage": None,
+            "exception_class": None,
+        }
+    )
+
+    result = execute_same_process_card_handoff(
+        preflight_receipt=preflight,
+        run_calibration=_run,
+        build_cards=lambda *_args: [_card(index) for index in range(3)],
+        artifact_root=tmp_path / "candidate",
+    )
+
+    assert result["status"] == "CANDIDATE_ONLY"
+    assert (tmp_path / "candidate" / "receipt.json").is_file()
+
+
 def test_handoff_stops_before_calibration_when_preflight_is_not_pass(tmp_path: Path) -> None:
     called = False
     preflight = _preflight()

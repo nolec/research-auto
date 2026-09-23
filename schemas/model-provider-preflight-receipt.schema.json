@@ -16,9 +16,12 @@
     "request_id_persisted", "secret_persisted"
   ],
   "properties": {
-    "schema_version": {"const": "model-provider-preflight-receipt/v1"},
+    "schema_version": {"enum": ["model-provider-preflight-receipt/v1", "model-provider-preflight-receipt/v2"]},
+    "preflight_version": {"const": "v2-observable"},
     "status": {"enum": ["PASS", "CONTRACT_FAIL", "PREREQUISITE_FAIL", "OPERATIONAL_EXHAUSTED", "PUBLICATION_FAIL", "ALREADY_CONSUMED", "METRIC_CLAIM_DRIFT", "INTERNAL_FAIL", "ORPHANED_CLAIM", "IN_PROGRESS"]},
     "termination_reason": {"type": "string", "minLength": 1},
+    "failure_stage": {"type": ["string", "null"], "enum": ["transport", null]},
+    "exception_class": {"type": ["string", "null"], "enum": ["RuntimeError", "ConnectionError", "TimeoutError", "OSError", "ValueError", "TypeError", "KeyboardInterrupt", "UnclassifiedException", null]},
     "profile_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "output_schema_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
@@ -47,6 +50,32 @@
     "request_id_persisted": {"const": false},
     "secret_persisted": {"const": false}
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"schema_version": {"const": "model-provider-preflight-receipt/v2"}},
+        "required": ["schema_version"]
+      },
+      "then": {
+        "required": ["preflight_version", "failure_stage", "exception_class"]
+      }
+    },
+    {
+      "if": {
+        "properties": {"schema_version": {"const": "model-provider-preflight-receipt/v1"}},
+        "required": ["schema_version"]
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            {"required": ["preflight_version"]},
+            {"required": ["failure_stage"]},
+            {"required": ["exception_class"]}
+          ]
+        }
+      }
+    }
+  ],
   "$defs": {
     "fileSnapshot": {
       "type": "object",
