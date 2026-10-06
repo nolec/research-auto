@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 from hashlib import sha256
 from pathlib import Path
 from types import SimpleNamespace
@@ -175,6 +176,95 @@ def test_unexpected_preflight_exception_writes_terminal_receipt(tmp_path: Path, 
     assert receipt["reason"] == "CLI_INTERNAL_ERROR"
     assert "private source text" not in json.dumps(receipt)
     assert json.loads((tmp_path / "custody/preflight.receipt.json").read_text()) == receipt
+
+
+@pytest.mark.parametrize("stderr,expected", [
+    ("error: unexpected argument '--bad'", "ARGUMENT_ERROR"),
+    ("Error: authentication failed", "AUTHENTICATION_ERROR"),
+    ("Error: model is not supported", "MODEL_UNAVAILABLE"),
+    ("Error: connection refused", "NETWORK_ERROR"),
+    ("Error: permission denied", "PERMISSION_ERROR"),
+    ("WARNING: Operation not permitted\nerror: unexpected argument", "ARGUMENT_ERROR"),
+    ("WARNING: Operation not permitted\nPRIVATE SOURCE AND TOKEN", "UNKNOWN"),
+])
+def test_nonzero_error_has_sanitized_diagnostics(
+    monkeypatch: pytest.MonkeyPatch, stderr: str, expected: str,
+) -> None:
+    monkeypatch.setattr(diagnostic.subprocess, "run", lambda *_args, **_kwargs: SimpleNamespace(
+        returncode=2, stdout=_events(), stderr=stderr,
+    ))
+    with pytest.raises(CliContractError) as caught:
+        run_document(DOCUMENT, schema_path=SCHEMA_PATH, prompt_text="extract", timeout=10)
+    assert caught.value.diagnostics == {
+        "returncode": 2, "failure_stage": "subprocess_exit", "error_class": expected,
+    }
+    assert stderr not in json.dumps(caught.value.diagnostics)
+
+
+@pytest.mark.parametrize("error,stage,classification", [
+    (subprocess.TimeoutExpired("codex", 10), "subprocess_timeout", "TIMEOUT"),
+    (FileNotFoundError("PRIVATE executable path"), "subprocess_launch", "EXECUTABLE_NOT_FOUND"),
+    (PermissionError("PRIVATE permission path"), "subprocess_launch", "PERMISSION_ERROR"),
+])
+def test_launch_and_timeout_errors_have_safe_diagnostics(
+    monkeypatch: pytest.MonkeyPatch, error: Exception, stage: str, classification: str,
+) -> None:
+    def fail(*_args: object, **_kwargs: object) -> None:
+        raise error
+    monkeypatch.setattr(diagnostic.subprocess, "run", fail)
+    with pytest.raises(CliContractError) as caught:
+        run_document(DOCUMENT, schema_path=SCHEMA_PATH, prompt_text="extract", timeout=10)
+    assert caught.value.diagnostics == {
+        "returncode": None, "failure_stage": stage, "error_class": classification,
+    }
+
+
+def test_preflight_failure_diagnostics_and_consumed_claim_are_preserved(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _stub_diagnostic_inputs(tmp_path, monkeypatch)
+    calls: list[object] = []
+    def fail(*args: object, **_kwargs: object) -> None:
+        calls.append(args)
+        raise CliContractError("CLI_NONZERO_EXIT", returncode=2,
+                               failure_stage="subprocess_exit", error_class="ARGUMENT_ERROR")
+    monkeypatch.setattr(diagnostic, "run_document", fail)
+    receipt = diagnostic.run_diagnostic()
+    assert receipt["process_diagnostics"]["returncode"] == 2
+    receipt_path = tmp_path / "custody/preflight.receipt.json"
+    frozen = receipt_path.read_bytes()
+    with pytest.raises(CliContractError, match="ALREADY_CONSUMED"):
+        diagnostic.run_diagnostic()
+    assert len(calls) == 1
+    assert receipt_path.read_bytes() == frozen
+
+
+def test_metric_failure_diagnostics_reach_receipt(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _stub_diagnostic_inputs(tmp_path, monkeypatch)
+    def run(document: dict[str, object], **_kwargs: object) -> dict[str, object]:
+        if str(document["document_id"]).startswith("preflight:"):
+            return {"problem_signal": True, "usable_evidence": True}
+        raise CliContractError("CLI_NONZERO_EXIT", returncode=7,
+                               failure_stage="subprocess_exit", error_class="UNKNOWN")
+    monkeypatch.setattr(diagnostic, "run_document", run)
+    assert diagnostic.run_diagnostic()["process_diagnostics"] == {
+        "returncode": 7, "failure_stage": "subprocess_exit", "error_class": "UNKNOWN",
+    }
+
+
+def test_cli_summary_exposes_only_safe_failure_diagnostics(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str],
+) -> None:
+    details = {"returncode": 2, "failure_stage": "subprocess_exit", "error_class": "ARGUMENT_ERROR"}
+    monkeypatch.setattr(diagnostic, "run_diagnostic", lambda: {
+        "status": "PREFLIGHT_BLOCKED", "reason": "CLI_NONZERO_EXIT",
+        "process_diagnostics": details, "private_raw_output": "SECRET",
+    })
+    assert diagnostic.main() == 1
+    assert json.loads(capsys.readouterr().out) == {
+        "status": "PREFLIGHT_BLOCKED", "reason": "CLI_NONZERO_EXIT",
+        "terminal_output_count": 0, "process_diagnostics": details,
+    }
 
 
 def test_nonzero_cli_exit_preserves_observed_usage(monkeypatch: pytest.MonkeyPatch) -> None:

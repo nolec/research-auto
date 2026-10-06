@@ -35,6 +35,49 @@ MAX_RUN_SECONDS = 1800
 class CliContractError(RuntimeError):
     """A stable, non-sensitive classification for a failed CLI contract."""
 
+    def __init__(
+        self, reason: str, *, returncode: int | None = None,
+        failure_stage: str = "contract_validation", error_class: str = "UNKNOWN",
+    ) -> None:
+        super().__init__(reason)
+        stages = {
+            "contract_validation", "subprocess_launch", "subprocess_timeout",
+            "subprocess_exit", "isolation_check", "preflight", "evaluation",
+        }
+        classes = {
+            "UNKNOWN", "TIMEOUT", "EXECUTABLE_NOT_FOUND", "PERMISSION_ERROR",
+            "OPERATIONAL_ERROR", "ARGUMENT_ERROR", "AUTHENTICATION_ERROR",
+            "MODEL_UNAVAILABLE", "NETWORK_ERROR", "INTERNAL_ERROR",
+        }
+        self.diagnostics = {
+            "returncode": returncode if type(returncode) is int else None,
+            "failure_stage": failure_stage if failure_stage in stages else "contract_validation",
+            "error_class": error_class if error_class in classes else "UNKNOWN",
+        }
+
+
+def _classify_cli_stderr(stderr: str) -> str:
+    """Classify explicit error lines; warnings alone do not establish a failure cause."""
+    lines = [line.strip().lower() for line in stderr.splitlines()]
+    errors = "\n".join(line for line in lines if line.startswith(("error:", "error ", "fatal:")))
+    patterns = (
+        ("ARGUMENT_ERROR", ("unexpected argument", "unrecognized option", "invalid value")),
+        ("AUTHENTICATION_ERROR", ("authentication failed", "unauthorized", "not logged in")),
+        ("MODEL_UNAVAILABLE", ("model is not supported", "model not found", "unsupported model")),
+        ("NETWORK_ERROR", ("connection refused", "error sending request", "failed to send request")),
+        ("PERMISSION_ERROR", ("permission denied", "operation not permitted")),
+    )
+    for classification, markers in patterns:
+        if any(marker in errors for marker in markers):
+            return classification
+    return "UNKNOWN"
+
+
+def _failure_diagnostics(error: Exception, stage: str) -> dict[str, object]:
+    if isinstance(error, CliContractError):
+        return dict(error.diagnostics)
+    return {"returncode": None, "failure_stage": stage, "error_class": "INTERNAL_ERROR"}
+
 
 def _digest(value: object) -> str:
     payload = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
@@ -191,14 +234,26 @@ def run_document(
             )
         except subprocess.TimeoutExpired as error:
             _capture_usage(error.stdout, usage_out)
-            raise CliContractError("CLI_TIMEOUT") from error
+            raise CliContractError(
+                "CLI_TIMEOUT", failure_stage="subprocess_timeout", error_class="TIMEOUT",
+            ) from error
         except OSError as error:
-            raise CliContractError("CLI_OPERATIONAL_ERROR") from error
+            classification = (
+                "EXECUTABLE_NOT_FOUND" if isinstance(error, FileNotFoundError)
+                else "PERMISSION_ERROR" if isinstance(error, PermissionError)
+                else "OPERATIONAL_ERROR"
+            )
+            raise CliContractError(
+                "CLI_OPERATIONAL_ERROR", failure_stage="subprocess_launch", error_class=classification,
+            ) from error
         _capture_usage(completed.stdout, usage_out)
         if any(work_dir.iterdir()):
-            raise CliContractError("CLI_ISOLATION_VIOLATION")
+            raise CliContractError("CLI_ISOLATION_VIOLATION", failure_stage="isolation_check")
         if completed.returncode != 0:
-            raise CliContractError("CLI_NONZERO_EXIT")
+            raise CliContractError(
+                "CLI_NONZERO_EXIT", returncode=completed.returncode,
+                failure_stage="subprocess_exit", error_class=_classify_cli_stderr(completed.stderr),
+            )
         return parse_cli_events(completed.stdout, document, schema=schema, usage_out=usage_out)
 
 
@@ -279,6 +334,7 @@ def run_diagnostic() -> dict[str, object]:
         receipt = {
             **preflight_claim, "status": "PREFLIGHT_BLOCKED",
             "reason": str(error) if isinstance(error, CliContractError) else "CLI_INTERNAL_ERROR",
+            "process_diagnostics": _failure_diagnostics(error, "preflight"),
             "claim_sha256": _digest(preflight_claim), "process_count": 1,
             "usage_status": "OBSERVED" if preflight_usage else "UNAVAILABLE",
             "token_usage": preflight_usage,
@@ -355,6 +411,7 @@ def run_diagnostic() -> dict[str, object]:
             **metric_claim,
             "status": "TERMINAL_FAILURE",
             "reason": str(error) if isinstance(error, CliContractError) else "EVALUATION_INTERNAL_ERROR",
+            "process_diagnostics": _failure_diagnostics(error, "evaluation"),
             "claim_sha256": _digest(metric_claim),
             "input_count": 40,
             "terminal_output_count": len(outputs),
@@ -368,10 +425,24 @@ def run_diagnostic() -> dict[str, object]:
     return receipt
 
 
-if __name__ == "__main__":
-    result = run_diagnostic()
-    print(json.dumps({
+def main() -> int:
+    try:
+        result = run_diagnostic()
+    except Exception as error:
+        result = {
+            "status": "DIAGNOSTIC_BLOCKED",
+            "reason": str(error) if isinstance(error, CliContractError) else "CLI_INTERNAL_ERROR",
+            "process_diagnostics": _failure_diagnostics(error, "preflight"),
+        }
+    summary = {
         "status": result["status"], "reason": result["reason"],
         "terminal_output_count": result.get("terminal_output_count", 0),
-    }, sort_keys=True))
-    raise SystemExit(0 if result["status"] == "MEASURED" else 1)
+    }
+    if "process_diagnostics" in result:
+        summary["process_diagnostics"] = result["process_diagnostics"]
+    print(json.dumps(summary, sort_keys=True))
+    return 0 if result["status"] == "MEASURED" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

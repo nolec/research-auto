@@ -1,12 +1,12 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-09-14
-> Status: Task 1 complete, Task 2 frozen at 400/500, Task 3 bounded provider-preflight and same-process card handoff implemented; live model execution pending; promotion hard-blocked pending live artifacts, source eligibility, and independent review
+> Updated: 2026-10-06
+> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 API execution and card handoff implemented, extraction-only Codex CLI diagnostic implemented and attempted; CLI preflight blocked with cause unresolved, 40-record model extraction not started; promotion hard-blocked pending live artifacts, source eligibility, and independent review
 
 | Readiness axis | Current state |
 |---|---|
 | Calibration infrastructure | `READY` |
-| Operational validation | `UNVERIFIED` |
+| Operational validation | `BLOCKED_AT_CLI_PREFLIGHT` |
 | Product capability | `PRODUCT_OUTPUT_NOT_AVAILABLE` |
 | Evaluation evidence | `NOT_STARTED` |
 
@@ -17,6 +17,9 @@ This roadmap tracks implementation progress. Product goals and decision policy r
 ## Four-week objective
 
 Freeze the model, prompts, policy, and thresholds before the final evaluation. V1 succeeds when the frozen run's TOP 20 contains at least five unique opportunities that remain both `EVIDENCE_BACKED` and `ACTIONABLE` after a human audit, with at least 80% automatic positive precision and a median audit time of five minutes or less.
+
+This is the final evaluation objective, not an active four-week schedule. Its start and end
+dates remain unset while model extraction and product output are unavailable.
 
 ## Current milestone
 
@@ -557,8 +560,21 @@ Current code checkpoint:
       and review hashes but cannot authorize product promotion
 - [x] Implement a custody-bound same-process model-backed card-generation producer that persists
       only schema-valid cards, Markdown, and a hash-bound aggregate receipt
+- [x] Implement and commit the separate extraction-only Codex CLI `gpt-6-sol` diagnostic
+      at `9a019c0`, with frozen prompt/schema bytes, isolated execution, and separate
+      preflight/metric claims; it neither produces cards nor consumes the OpenAI API ledger
+- [x] Execute one CLI synthetic preflight on 2026-10-06 and preserve its aggregate receipt:
+      `PREFLIGHT_BLOCKED` / `CLI_NONZERO_EXIT`, process count 1, no usable extraction output,
+      usage/cost and resolved-model identity unavailable; the 40-record loop did not start
+- [x] Implement and review-approve sanitized CLI exit diagnostics for future executions:
+      return code, failure stage, fixed error classification, preflight/metric receipt
+      propagation, and CLI summary; focused suite **26 passed**, staged TDD gate passed
+- [ ] Establish the CLI preflight failure cause; the original stderr and return code were
+      not retained, and a startup permission warning alone does not establish causation
+- [ ] Before another execution, freeze a separately authorized versioned preflight contract
+      and custody location; preserve the consumed v1 claim and receipt without reset or overwrite
 - [ ] Implement official source-eligibility receipt producers before any promotion receipt can PASS
-- [ ] Execute the bounded provider-contract preflight without consuming the canonical 40-record metric-run claim
+- [ ] Obtain a PASS provider-contract preflight before consuming the corresponding metric-run claim
 - [ ] Run actual structured extraction on the 40 development-calibration records
 - [ ] Compare the first model-backed extractor against `rule_v1` using the physically separate
       development gold sidecar; report P/M/E coverage and error classes without opening a new holdout
@@ -576,18 +592,23 @@ documents. The gate now binds candidate run and evaluator receipts to recomputed
 complete diagnostics for GitHub, Stack Exchange, Steam, and TED, and blocks expansion until every
 evidence-positive extraction has a valid blind semantic audit. The frozen OpenAI GPT-5.6 profile,
 strict Responses transport, and one-shot calibration runner are implemented with canonical local
-run custody and fail-closed usage/cost receipts. The code does not yet complete a real provider
-call or produce semantically reliable structured problem extraction from real source data. The
+run custody and fail-closed usage/cost receipts. No successful live model extraction is verified,
+and semantically reliable structured problem extraction from real source data is unestablished. The
 code now has a deterministic fixture-only vertical slice for clustering, policy, ranking, and
 Opportunity Card rendering; it proves contract composition only, not model quality, source quality,
 or user value. The actual `rule_v1` aggregate baseline bundle and calibration gate are frozen. The
-bounded provider-preflight executor is now implemented but has not made a live API call. The
-immediate operational bottleneck is its single authorized live execution followed by the single
-authorized 40-record model calibration run, while the fixture slice can expose product-contract
-defects without consuming either claim. A same-process handoff now consumes one-shot sanitized model
+bounded OpenAI API provider-preflight executor has not made a verified live API call. The separate
+Codex CLI path attempted one synthetic preflight and stopped at `CLI_NONZERO_EXIT`; this is
+execution-path evidence, not a measurement of model extraction quality. Its consumed v1 claim
+and receipt remain preserved. The newly reviewed observability changes have not been exercised
+in another live execution and cannot reconstruct the original failure. The immediate bottleneck
+is a separately authorized, versioned preflight that can establish the execution result and
+diagnostics, followed by a single 40-record calibration run only after preflight PASS.
+The CLI extraction-only diagnostic has no model-backed card handoff; that remains a separate
+product execution path. A same-process handoff now consumes one-shot sanitized model
 outputs in memory and can persist only schema-valid cards, Markdown, and an aggregate receipt; it
-has not executed a live run. The current collect-only inventory contains **653 tests**; the full
-suite and local-custody integration skip outcome were not rerun for this implementation. This test
+has not executed a live run. The historical collect-only inventory contained **653 tests**; the full
+suite and local-custody integration outcome were not rerun for the latest CLI changes. This test
 inventory count does not make the product output available;
 product capability remains `PRODUCT_OUTPUT_NOT_AVAILABLE` until model-backed clustering, decision
 policy, ranking, and Opportunity Card generation form an evidence-backed end-to-end path with a
@@ -598,6 +619,9 @@ authoritative source-eligibility producer does not exist, and independent review
 caller-supplied self-attestation cannot enable product promotion.
 
 ### Task 4 — Problem clustering and evidence independence
+
+The Task 3 fixture slice already exercises grouping; the unchecked items below track
+model-backed integration and human-audited validation.
 
 Fixture behavior may be reused only after model provenance is explicit; fixture provenance cannot
 be promoted. Official source eligibility is a hard gate for product promotion, not for development
@@ -610,12 +634,17 @@ calibration.
 
 ### Task 5 — Evidence and actionability decisions
 
+Fixture decisions exist in the Task 3 slice. These items track completion of the
+model-backed product path, rather than absence of all policy code.
+
 - [ ] Implement the provisional EVIDENCE-BACKED gate
 - [ ] Implement ACTIONABLE, NOT_ACTIONABLE, and UNKNOWN decisions
 - [ ] Preserve counter-evidence, blockers, and uncertainty
 - [ ] Add policy-versioned decision fixtures and boundary tests
 
 ### Task 6 — Ranking and Opportunity Card output
+
+Fixture ranking and card rendering exist; live evidence-backed product output remains unavailable.
 
 Before TOP 20 output is considered available, at least three model-backed cards must receive a
 complete reviewer-identified evidence-trace review in five minutes or less each and produce a PASS
