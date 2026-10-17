@@ -270,52 +270,61 @@ def build_development_gold_sidecar(
     return DevelopmentGoldSidecar(projection.gold, receipt)
 
 
+class ExtractionValidationError(ValueError):
+    """Preserve validation messages while exposing stable, non-content rule metadata."""
+
+    def __init__(self, message: str, *, rule: str, field: str | None = None) -> None:
+        super().__init__(message)
+        self.rule = rule
+        self.field = field
+
+
 def validate_extraction(
     document: Mapping[str, object], output: Mapping[str, object]
 ) -> None:
     if set(document) != set(_INFERENCE_FIELDS):
-        raise ValueError("inference document fields do not match the gold-free contract")
+        raise ExtractionValidationError("inference document fields do not match the gold-free contract", rule="INFERENCE_FIELDS")
     if set(output) != _EXTRACTION_FIELDS:
-        raise ValueError("extraction fields do not match the minimal contract")
+        raise ExtractionValidationError("extraction fields do not match the minimal contract", rule="OUTPUT_FIELDS")
     if output["document_id"] != document.get("document_id"):
-        raise ValueError("extraction document_id does not match input document_id")
+        raise ExtractionValidationError("extraction document_id does not match input document_id", rule="DOCUMENT_ID", field="document_id")
 
     abstention_reason = output["abstention_reason"]
     inferred_fields = _EXTRACTION_FIELDS - {"document_id", "abstention_reason"}
     if abstention_reason is not None:
         if not isinstance(abstention_reason, str) or not abstention_reason.strip():
-            raise ValueError("abstention reason must be a non-empty string")
+            raise ExtractionValidationError("abstention reason must be a non-empty string", rule="ABSTENTION_REASON", field="abstention_reason")
         if any(output[field] is not None for field in inferred_fields):
-            raise ValueError("abstention must not contain inferred values")
+            raise ExtractionValidationError("abstention must not contain inferred values", rule="ABSTENTION_VALUES")
         return
 
     if output["observation_type"] not in _OBSERVATION_TYPES:
-        raise ValueError("invalid observation_type")
+        raise ExtractionValidationError("invalid observation_type", rule="OBSERVATION_TYPE", field="observation_type")
     for field in ("actor", "problem", "context", "consequence", "evidence_quote"):
         if not isinstance(output[field], str) or not str(output[field]).strip():
-            raise ValueError(f"{field} must be a non-empty string")
+            raise ExtractionValidationError(f"{field} must be a non-empty string", rule="NON_EMPTY_STRING", field=field)
     for field in ("problem_signal", "money_signal", "usable_evidence"):
         if not isinstance(output[field], bool):
-            raise ValueError(f"{field} must be boolean")
+            raise ExtractionValidationError(f"{field} must be boolean", rule="BOOLEAN", field=field)
 
     money_type = output["money_signal_type"]
     if output["money_signal"] is False and money_type is not None:
-        raise ValueError("money signal type must be null when money signal is false")
+        raise ExtractionValidationError("money signal type must be null when money signal is false", rule="MONEY_TYPE_NULL", field="money_signal_type")
     if output["money_signal"] is True and money_type not in _MONEY_TYPES:
-        raise ValueError("money signal type is required when money signal is true")
+        raise ExtractionValidationError("money signal type is required when money signal is true", rule="MONEY_TYPE_REQUIRED", field="money_signal_type")
 
     confidence = output["confidence"]
     if isinstance(confidence, bool) or not isinstance(confidence, (int, float)):
-        raise ValueError("confidence must be numeric")
+        raise ExtractionValidationError("confidence must be numeric", rule="NUMERIC", field="confidence")
     if not 0 <= confidence <= 1:
-        raise ValueError("confidence must be between zero and one")
+        raise ExtractionValidationError("confidence must be between zero and one", rule="CONFIDENCE_RANGE", field="confidence")
 
     start = output["evidence_start"]
     end = output["evidence_end"]
     if isinstance(start, bool) or isinstance(end, bool) or not isinstance(start, int) or not isinstance(end, int):
-        raise ValueError("evidence span must use integer offsets")
+        raise ExtractionValidationError("evidence span must use integer offsets", rule="INTEGER_OFFSETS")
     text = document.get("text")
     if not isinstance(text, str) or start < 0 or end <= start or end > len(text):
-        raise ValueError("evidence span is outside the input text")
+        raise ExtractionValidationError("evidence span is outside the input text", rule="SPAN_BOUNDS")
     if text[start:end] != output["evidence_quote"]:
-        raise ValueError("evidence span does not match evidence_quote")
+        raise ExtractionValidationError("evidence span does not match evidence_quote", rule="SPAN_MISMATCH", field="evidence_quote")

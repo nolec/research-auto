@@ -427,3 +427,128 @@ def test_cli_rejects_unknown_mode_without_model_invocation(tmp_path: Path, monke
         diagnostic.main()
     assert caught.value.code == 2
     assert calls == []
+
+
+PRIVATE_VALUE = "PRIVATE-source-value-and-unregistered-key@example.test"
+
+
+def _validation_events(case: str, document: dict[str, object]) -> str:
+    output = _output()
+    output["document_id"] = document["document_id"]
+    output["actor"] = PRIVATE_VALUE
+    if case == "schema_type":
+        output["confidence"] = PRIVATE_VALUE
+    elif case == "schema_extra":
+        output[PRIVATE_VALUE] = PRIVATE_VALUE
+    elif case == "schema_required":
+        del output["context"]
+    elif case == "semantic_null":
+        output["context"] = None
+    elif case == "semantic_span":
+        output["evidence_end"] = 1
+    message = PRIVATE_VALUE if case == "json_decode" else json.dumps(
+        [PRIVATE_VALUE] if case == "object_shape" else output,
+    )
+    return "\n".join(json.dumps(event) for event in (
+        {"type": "item.completed", "item": {"type": "agent_message", "text": message}},
+        {"type": "turn.completed", "usage": {"input_tokens": 10, "output_tokens": 20}},
+    ))
+
+
+@pytest.mark.parametrize("case,stage,field,rule", [
+    ("json_decode", "json_decode", None, "JSON_DECODE"),
+    ("object_shape", "object_shape", None, "OBJECT_REQUIRED"),
+    ("schema_type", "json_schema", "confidence", "TYPE"),
+    ("schema_extra", "json_schema", None, "ADDITIONAL_PROPERTIES"),
+    ("schema_required", "json_schema", None, "REQUIRED"),
+    ("semantic_null", "semantic", "context", "NON_EMPTY_STRING"),
+    ("semantic_span", "semantic", "evidence_quote", "SPAN_MISMATCH"),
+])
+def test_validation_failures_have_allowlisted_metadata(
+    case: str, stage: str, field: str | None, rule: str,
+) -> None:
+    with pytest.raises(CliContractError, match="CLI_OUTPUT_SCHEMA_INVALID") as caught:
+        parse_cli_events(_validation_events(case, DOCUMENT), DOCUMENT,
+                         schema=json.loads(SCHEMA_PATH.read_text()))
+    assert caught.value.diagnostics["validation"] == {"stage": stage, "field": field, "rule": rule}
+    assert PRIVATE_VALUE not in json.dumps(caught.value.diagnostics)
+
+
+def test_validation_metadata_drops_unregistered_values() -> None:
+    error = CliContractError("CLI_OUTPUT_SCHEMA_INVALID", validation={
+        "stage": PRIVATE_VALUE, "field": PRIVATE_VALUE, "rule": PRIVATE_VALUE,
+        "message": PRIVATE_VALUE, "instance": {"private": PRIVATE_VALUE},
+    })
+    assert error.diagnostics["validation"] == {"stage": "unknown", "field": None, "rule": "UNKNOWN"}
+    assert PRIVATE_VALUE not in json.dumps(error.diagnostics)
+
+
+@pytest.mark.parametrize("metric", [False, True])
+@pytest.mark.parametrize("case,rule", [
+    ("json_decode", "JSON_DECODE"), ("schema_extra", "ADDITIONAL_PROPERTIES"),
+    ("semantic_null", "NON_EMPTY_STRING"),
+])
+def test_validation_details_reach_receipt_and_cli_without_raw_values(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str],
+    metric: bool, case: str, rule: str,
+) -> None:
+    _stub_diagnostic_inputs(tmp_path, monkeypatch)
+    def controlled_output(document: dict[str, object], **kwargs: object) -> dict[str, object]:
+        if metric and str(document["document_id"]).startswith("preflight:"):
+            return {"problem_signal": True, "usable_evidence": True}
+        return parse_cli_events(_validation_events(case, document), document,
+                                schema=json.loads(SCHEMA_PATH.read_text()), usage_out=kwargs["usage_out"])
+    monkeypatch.setattr(diagnostic, "run_document", controlled_output)
+    assert diagnostic.main([]) == 1
+    stdout = capsys.readouterr().out
+    summary = json.loads(stdout)
+    name = "metric" if metric else "preflight"
+    receipt_text = (tmp_path / f"custody/{name}.receipt.json").read_text()
+    receipt = json.loads(receipt_text)
+    assert summary["process_diagnostics"] == receipt["process_diagnostics"]
+    assert receipt["process_diagnostics"]["validation"]["rule"] == rule
+    assert receipt["token_usage"] == {"input_tokens": 10, "output_tokens": 20}
+    assert PRIVATE_VALUE not in receipt_text + stdout
+
+
+@pytest.mark.parametrize("changes,rule,field,message", [
+    ({"document_id": "other"}, "DOCUMENT_ID", "document_id", "extraction document_id does not match input document_id"),
+    ({"abstention_reason": ""}, "ABSTENTION_REASON", "abstention_reason", "abstention reason must be a non-empty string"),
+    ({"abstention_reason": "unsupported"}, "ABSTENTION_VALUES", None, "abstention must not contain inferred values"),
+    ({"observation_type": None}, "OBSERVATION_TYPE", "observation_type", "invalid observation_type"),
+    ({"context": None}, "NON_EMPTY_STRING", "context", "context must be a non-empty string"),
+    ({"problem_signal": None}, "BOOLEAN", "problem_signal", "problem_signal must be boolean"),
+    ({"money_signal_type": "loss"}, "MONEY_TYPE_NULL", "money_signal_type", "money signal type must be null when money signal is false"),
+    ({"money_signal": True}, "MONEY_TYPE_REQUIRED", "money_signal_type", "money signal type is required when money signal is true"),
+    ({"confidence": True}, "NUMERIC", "confidence", "confidence must be numeric"),
+    ({"confidence": 1.1}, "CONFIDENCE_RANGE", "confidence", "confidence must be between zero and one"),
+    ({"evidence_start": True}, "INTEGER_OFFSETS", None, "evidence span must use integer offsets"),
+    ({"evidence_end": 999}, "SPAN_BOUNDS", None, "evidence span is outside the input text"),
+    ({"evidence_end": 1}, "SPAN_MISMATCH", "evidence_quote", "evidence span does not match evidence_quote"),
+])
+def test_semantic_validation_preserves_valueerror_and_messages(
+    changes: dict[str, object], rule: str, field: str | None, message: str,
+) -> None:
+    with pytest.raises(ValueError) as caught:
+        diagnostic.validate_extraction(DOCUMENT, {**_output(), **changes})
+    assert str(caught.value) == message
+    assert isinstance(caught.value, diagnostic.ExtractionValidationError)
+    assert caught.value.rule == rule
+    assert caught.value.field == field
+
+
+@pytest.mark.parametrize("bad_document", [False, True])
+def test_semantic_field_set_errors_preserve_messages(bad_document: bool) -> None:
+    document, output = dict(DOCUMENT), _output()
+    if bad_document:
+        del document["source_url"]
+    else:
+        del output["context"]
+    with pytest.raises(ValueError) as caught:
+        diagnostic.validate_extraction(document, output)
+    assert str(caught.value) == (
+        "inference document fields do not match the gold-free contract" if bad_document
+        else "extraction fields do not match the minimal contract"
+    )
+    assert caught.value.rule == ("INFERENCE_FIELDS" if bad_document else "OUTPUT_FIELDS")
+    assert caught.value.field is None

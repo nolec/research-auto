@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-10-18
-> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 v1 CLI preflight failed with cause unresolved; isolated v2 preflight-only implementation review-approved but not executed; 40-record model extraction not started; promotion hard-blocked pending live artifacts, source eligibility, and independent review
+> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 v1 preflight failed and v2 preflight reached output validation but was blocked; detailed validation diagnostics review-approved, not live-validated; 40-record model extraction not started; promotion hard-blocked pending live artifacts, source eligibility, and independent review
 
 | Readiness axis | Current state |
 |---|---|
@@ -580,9 +580,22 @@ Current code checkpoint:
       preserve v1 claims and receipts; focused suite **33 passed**, staged TDD gate passed
 - [x] Verify the CLI surface stops after v2 preflight PASS or FAIL without creating metric
       claims, rejects repeat execution, and reports PASS as exit 0 without claiming `MEASURED`
-- [ ] Execute one separately authorized v2 synthetic preflight with the reviewed code and
-      preserve its result; model subprocess maximum 1, timeout 120 seconds, wrapper retries 0;
-      provider retries/request count, resolved model and hard monetary cap remain unverified
+- [x] Execute one authorized v2 synthetic preflight on 2026-10-18 using `25c2e4b` and
+      `codex-cli 0.162.0-alpha.17.2`; preserve `PREFLIGHT_BLOCKED` /
+      `CLI_OUTPUT_SCHEMA_INVALID`, process count 1, observed input/output tokens 17048/283;
+      actual model identity and cost remain unavailable, and no metric claim was created
+- [x] Verify v2 claim/receipt, code and input hash binding and unchanged v1 custody;
+      v2 receipt SHA-256: `5fe5ba259428866fbf783abd8f73051fec8a925f0fc7d00b45bcac322503fb41`
+- [x] Reproduce offline that JSON decoding, schema and semantic failures collapse to the
+      same legacy code; schema-valid null context or incorrect evidence offsets may still
+      fail semantic validation, but neither is established as the actual v2 violation
+- [x] Implement and review-approve allowlisted validation stage/field/rule diagnostics
+      through receipt and CLI JSON, preserving validation policy, messages and ValueError
+      compatibility; extraction regression **239 passed, 1 skipped**, staged TDD gate passed
+- [ ] Establish the actual output-contract violation; no raw v2 response was retained and
+      the new detailed diagnostics have not been exercised by another live model execution
+- [ ] Define a separately authorized follow-up diagnostic if needed; preserve both consumed
+      v1 and v2 claims/receipts, do not reset or reuse either version, and do not start 40-record extraction
 - [ ] Implement official source-eligibility receipt producers before any promotion receipt can PASS
 - [ ] Obtain a PASS provider-contract preflight before consuming the corresponding metric-run claim
 - [ ] Run actual structured extraction on the 40 development-calibration records
@@ -610,13 +623,17 @@ or user value. The actual `rule_v1` aggregate baseline bundle and calibration ga
 bounded OpenAI API provider-preflight executor has not made a verified live API call. The separate
 Codex CLI path attempted one synthetic preflight and stopped at `CLI_NONZERO_EXIT`; this is
 execution-path evidence, not a measurement of model extraction quality. Its consumed v1 claim
-and receipt remain preserved. The observability changes and the new v2 `--preflight-only`
-path are review-approved but have not been exercised in another live execution and cannot
-reconstruct the original failure. The next operational step is one separately authorized v2
-preflight to obtain the current execution result and diagnostics. Even on PASS, v2 stops
-without starting a metric run: any 40-record calibration execution requires its own later
-contract and execution path. Model binding records an explicit CLI argument, not verified
-server acceptance; unknown model identity, provider requests/retries and cost remain unknown.
+and receipt remain preserved. On 2026-10-18, the isolated v2 preflight completed its CLI process
+and passed event-envelope checks, but its final response failed output-contract validation
+with `CLI_OUTPUT_SCHEMA_INVALID`. The receipt records 17048 input and 283 output tokens;
+its claim binding and unchanged v1 custody were verified. This does not establish which
+field or rule failed, and the original response cannot be reconstructed. The new detailed
+validation diagnostics are review-approved after controlled tests, not live-validated.
+Any follow-up diagnostic needs a distinct authorized execution contract; neither consumed
+version may be silently reset or reused. No 40-record metric run has started. Even on PASS,
+v2 stops without a metric run: a later calibration execution requires its own contract and
+execution path. Model binding records an explicit CLI argument, not verified server acceptance;
+actual model identity, provider request/retry counts and cost remain unknown.
 The CLI extraction-only diagnostic has no model-backed card handoff; that remains a separate
 product execution path. A same-process handoff now consumes one-shot sanitized model
 outputs in memory and can persist only schema-valid cards, Markdown, and an aggregate receipt; it

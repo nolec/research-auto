@@ -17,6 +17,7 @@ from jsonschema import Draft202012Validator, ValidationError
 from src.extraction.baseline_manifest import load_baseline_manifest
 from src.extraction.calibration_evaluator import evaluate_calibration
 from src.extraction.development_slice import (
+    ExtractionValidationError,
     build_development_gold_sidecar,
     build_development_inference,
     validate_extraction,
@@ -33,6 +34,32 @@ MODEL = "gpt-6-sol"
 MAX_DOCUMENT_SECONDS = 120
 MAX_RUN_SECONDS = 1800
 
+_VALIDATION_STAGES = frozenset({"json_decode", "object_shape", "json_schema", "semantic"})
+_VALIDATION_FIELDS = frozenset({
+    "document_id", "observation_type", "actor", "problem", "context", "consequence",
+    "evidence_quote", "evidence_start", "evidence_end", "problem_signal", "money_signal",
+    "money_signal_type", "usable_evidence", "confidence", "abstention_reason",
+})
+_SCHEMA_RULES = {
+    "type": "TYPE", "enum": "ENUM", "required": "REQUIRED",
+    "additionalProperties": "ADDITIONAL_PROPERTIES", "minimum": "MINIMUM", "maximum": "MAXIMUM",
+}
+_VALIDATION_RULES = frozenset(_SCHEMA_RULES.values()) | {
+    "JSON_DECODE", "OBJECT_REQUIRED", "INFERENCE_FIELDS", "OUTPUT_FIELDS", "DOCUMENT_ID",
+    "ABSTENTION_REASON", "ABSTENTION_VALUES", "OBSERVATION_TYPE", "NON_EMPTY_STRING",
+    "BOOLEAN", "MONEY_TYPE_NULL", "MONEY_TYPE_REQUIRED", "NUMERIC", "CONFIDENCE_RANGE",
+    "INTEGER_OFFSETS", "SPAN_BOUNDS", "SPAN_MISMATCH",
+}
+
+
+def _safe_validation_metadata(value: Mapping[str, object]) -> dict[str, object]:
+    stage, field, rule = value.get("stage"), value.get("field"), value.get("rule")
+    return {
+        "stage": stage if isinstance(stage, str) and stage in _VALIDATION_STAGES else "unknown",
+        "field": field if isinstance(field, str) and field in _VALIDATION_FIELDS else None,
+        "rule": rule if isinstance(rule, str) and rule in _VALIDATION_RULES else "UNKNOWN",
+    }
+
 
 class CliContractError(RuntimeError):
     """A stable, non-sensitive classification for a failed CLI contract."""
@@ -40,6 +67,7 @@ class CliContractError(RuntimeError):
     def __init__(
         self, reason: str, *, returncode: int | None = None,
         failure_stage: str = "contract_validation", error_class: str = "UNKNOWN",
+        validation: Mapping[str, object] | None = None,
     ) -> None:
         super().__init__(reason)
         stages = {
@@ -51,11 +79,13 @@ class CliContractError(RuntimeError):
             "OPERATIONAL_ERROR", "ARGUMENT_ERROR", "AUTHENTICATION_ERROR",
             "MODEL_UNAVAILABLE", "NETWORK_ERROR", "INTERNAL_ERROR",
         }
-        self.diagnostics = {
+        self.diagnostics: dict[str, object] = {
             "returncode": returncode if type(returncode) is int else None,
             "failure_stage": failure_stage if failure_stage in stages else "contract_validation",
             "error_class": error_class if error_class in classes else "UNKNOWN",
         }
+        if validation is not None:
+            self.diagnostics["validation"] = _safe_validation_metadata(validation)
 
 
 def _classify_cli_stderr(stderr: str) -> str:
@@ -183,20 +213,35 @@ def parse_cli_events(
     try:
         output = json.loads(messages[0])
     except (TypeError, ValueError) as error:
-        raise CliContractError("CLI_OUTPUT_SCHEMA_INVALID") from error
+        raise CliContractError("CLI_OUTPUT_SCHEMA_INVALID", validation={
+            "stage": "json_decode", "rule": "JSON_DECODE",
+        }) from error
     if not isinstance(output, dict):
-        raise CliContractError("CLI_OUTPUT_SCHEMA_INVALID")
+        raise CliContractError("CLI_OUTPUT_SCHEMA_INVALID", validation={
+            "stage": "object_shape", "rule": "OBJECT_REQUIRED",
+        })
     if schema is not None:
         try:
             Draft202012Validator(schema).validate(output)
         except ValidationError as error:
-            raise CliContractError("CLI_OUTPUT_SCHEMA_INVALID") from error
+            error_path = list(error.absolute_path)
+            raise CliContractError("CLI_OUTPUT_SCHEMA_INVALID", validation={
+                "stage": "json_schema",
+                "field": error_path[0] if len(error_path) == 1 else None,
+                "rule": _SCHEMA_RULES.get(error.validator, "UNKNOWN"),
+            }) from error
     if output.get("document_id") != document.get("document_id"):
-        raise CliContractError("CLI_DOCUMENT_ID_MISMATCH")
+        raise CliContractError("CLI_DOCUMENT_ID_MISMATCH", validation={
+            "stage": "semantic", "field": "document_id", "rule": "DOCUMENT_ID",
+        })
     try:
         validate_extraction(document, output)
+    except ExtractionValidationError as error:
+        raise CliContractError("CLI_OUTPUT_SCHEMA_INVALID", validation={
+            "stage": "semantic", "field": error.field, "rule": error.rule,
+        }) from error
     except (TypeError, ValueError, ValidationError) as error:
-        raise CliContractError("CLI_OUTPUT_SCHEMA_INVALID") from error
+        raise CliContractError("CLI_OUTPUT_SCHEMA_INVALID", validation={"stage": "semantic"}) from error
     return output
 
 
