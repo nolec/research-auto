@@ -1,0 +1,151 @@
+{
+  "title": "Demand Intelligence",
+  "roadmap_updated": "2026-10-18",
+  "prepared_at": "2026-10-18",
+  "source_label": "docs/roadmap.md",
+  "basis": "Roadmap snapshot; live artifacts were not revalidated.",
+  "readiness": {
+    "infrastructure": "READY",
+    "operations": "BLOCKED_AT_CLI_PREFLIGHT",
+    "product": "PRODUCT_OUTPUT_NOT_AVAILABLE",
+    "evaluation": "NOT_STARTED"
+  },
+  "objective": {
+    "opportunities": 5,
+    "top_n": 20,
+    "positive_precision_percent": 80,
+    "median_audit_minutes": 5,
+    "schedule": "UNSET"
+  },
+  "observations_target": 500,
+  "sources": [
+    {
+      "name": "GitHub",
+      "observations": 100,
+      "primary": 20,
+      "primary_target": 20,
+      "secondary": 0,
+      "secondary_target": 5,
+      "eligibility": "deferred"
+    },
+    {
+      "name": "Stack Exchange",
+      "observations": 100,
+      "primary": 20,
+      "primary_target": 20,
+      "secondary": 0,
+      "secondary_target": 5,
+      "eligibility": "deferred"
+    },
+    {
+      "name": "Steam",
+      "observations": 100,
+      "primary": 20,
+      "primary_target": 20,
+      "secondary": 0,
+      "secondary_target": 5,
+      "eligibility": "deferred"
+    },
+    {
+      "name": "TED",
+      "observations": 100,
+      "primary": 20,
+      "primary_target": 20,
+      "secondary": 0,
+      "secondary_target": 5,
+      "eligibility": "deferred"
+    }
+  ],
+  "milestones": [
+    {
+      "id": 1,
+      "name": "Opportunity Card 계약",
+      "state": "complete",
+      "label": "완료",
+      "detail": "스키마·증거 독립성·판정 정책·사람의 감사 기준 확정"
+    },
+    {
+      "id": 2,
+      "name": "소스 수집과 품질 판단",
+      "state": "frozen",
+      "label": "동결",
+      "detail": "4개 소스 400건 확보. 독립 2차 검토와 공식 적격성 판단 미완료"
+    },
+    {
+      "id": 3,
+      "name": "문제·증거 추출",
+      "state": "blocked",
+      "label": "현재 병목",
+      "detail": "v1 preflight 실패. v2 단독 실행 경로는 구현·리뷰 승인, 실제 실행과 40건 추출은 대기"
+    },
+    {
+      "id": 4,
+      "name": "문제 군집과 증거 독립성",
+      "state": "fixture",
+      "label": "Fixture 구현",
+      "detail": "합성 입력 경로 존재. 모델 출력 연결과 사람의 병합 오류 감사 필요"
+    },
+    {
+      "id": 5,
+      "name": "증거·실행 가능성 판정",
+      "state": "fixture",
+      "label": "Fixture 구현",
+      "detail": "판정 코드의 실제 모델 출력 검증과 반대 증거·불확실성 확인 필요"
+    },
+    {
+      "id": 6,
+      "name": "순위와 Opportunity Card",
+      "state": "fixture",
+      "label": "Fixture 구현",
+      "detail": "카드 렌더링 경로 존재. 실제 카드·증거 추적 검토·promotion PASS 미확보"
+    },
+    {
+      "id": 7,
+      "name": "동결 평가",
+      "state": "pending",
+      "label": "대기",
+      "detail": "모델·정책 동결 후 미노출 표본으로 평가. 시작·종료일 미정"
+    }
+  ],
+  "diagnostic": {
+    "date": "2026-10-06",
+    "requested_model": "gpt-6-sol",
+    "status": "PREFLIGHT_BLOCKED",
+    "reason": "CLI_NONZERO_EXIT",
+    "process_count": 1,
+    "metric_run": "NOT_STARTED",
+    "corpus_size": 40,
+    "root_cause": "UNCONFIRMED",
+    "observability": "V2_PREFLIGHT_REVIEW_APPROVED_NOT_RUN"
+  },
+  "next_steps": [
+    {
+      "lane": "다음 실제 실행",
+      "title": "v2 preflight 단독 1회 실행",
+      "detail": "고정된 v2 custody와 리뷰된 코드로 실행 결과를 관측한다. 기존 v1 기록을 보존한다."
+    },
+    {
+      "lane": "별도 후속 계약",
+      "title": "PASS 후 결과 검토·40건 실행 설계",
+      "detail": "v2는 PASS여도 멈춘다. 40건 추출·집계·비교는 별도 계약과 후속 실행으로 진행한다."
+    },
+    {
+      "lane": "병행 검토",
+      "title": "독립 2차 검토와 소스 적격성",
+      "detail": "소스별 5건의 독립 검토와 공식 적격성 receipt가 제품 승격에 필요하다."
+    }
+  ],
+  "promotion_blockers": [
+    "실제 모델 기반 카드 receipt 미확보",
+    "공식 소스 적격성 producer 미구현",
+    "독립 2차 검토 미완료"
+  ],
+  "deferred": "다섯 번째 소스 탐색·외부 SaaS·심층 리서치·자동 MVP·시장 규모 추정·자동 투자 판단",
+  "evidence_notes": [
+    "구현과 테스트 수는 제품 완성도 지표가 아니다.",
+    "CLI 비정상 종료는 모델 추출 품질의 측정 결과가 아니다.",
+    "fixture 카드는 실제 Opportunity Card 성과로 계산하지 않는다.",
+    "독립 2차 검토는 calibration 실행의 선행 조건은 아니지만 제품 승격에는 필수다.",
+    "v2 구현·리뷰 승인은 실제 실행 PASS를 뜻하지 않는다."
+  ]
+}

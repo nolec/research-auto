@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 from hashlib import sha256
 from pathlib import Path
 from types import SimpleNamespace
@@ -260,7 +261,7 @@ def test_cli_summary_exposes_only_safe_failure_diagnostics(
         "status": "PREFLIGHT_BLOCKED", "reason": "CLI_NONZERO_EXIT",
         "process_diagnostics": details, "private_raw_output": "SECRET",
     })
-    assert diagnostic.main() == 1
+    assert diagnostic.main([]) == 1
     assert json.loads(capsys.readouterr().out) == {
         "status": "PREFLIGHT_BLOCKED", "reason": "CLI_NONZERO_EXIT",
         "terminal_output_count": 0, "process_diagnostics": details,
@@ -318,3 +319,111 @@ def test_preflight_failure_receipt_preserves_observed_usage(
     assert receipt["token_usage"] == {"input_tokens": 10, "output_tokens": 20}
     assert receipt["cost_status"] == "UNAVAILABLE"
     assert json.loads((tmp_path / "custody/preflight.receipt.json").read_text()) == receipt
+
+
+def _v2_cli_environment(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mode: str = "pass") -> list[list[str]]:
+    _stub_diagnostic_inputs(tmp_path, monkeypatch)
+    monkeypatch.setattr(diagnostic, "V2_CUSTODY_ROOT", tmp_path / "v2", raising=False)
+    monkeypatch.setattr(sys, "argv", ["codex_cli_diagnostic", "--preflight-only"])
+    legacy = tmp_path / "custody"
+    legacy.mkdir()
+    for name in ("preflight.claim.json", "preflight.receipt.json", "metric.claim.json", "metric.receipt.json"):
+        (legacy / name).write_bytes(b"existing v1 custody")
+    calls: list[list[str]] = []
+
+    def fake_process(command: list[str], **kwargs: object) -> SimpleNamespace:
+        if command == ["codex", "--version"]:
+            return SimpleNamespace(stdout="codex 1.0")
+        calls.append(command)
+        assert kwargs["timeout"] == 120
+        document = json.loads(str(kwargs["input"]).split("Source document JSON:\n", 1)[1])
+        output = _output()
+        output["document_id"] = document["document_id"]
+        if mode == "wrong_id":
+            output["document_id"] = "other-document"
+        if mode == "invalid_span":
+            output["evidence_end"] = 1
+        return SimpleNamespace(
+            returncode=2 if mode == "nonzero" else 0,
+            stdout=_events(output), stderr="error: unexpected argument" if mode == "nonzero" else "",
+        )
+
+    def unexpected_metric(*_args: object, **_kwargs: object) -> None:
+        pytest.fail("preflight-only must not evaluate a metric run")
+
+    monkeypatch.setattr(diagnostic.subprocess, "run", fake_process)
+    monkeypatch.setattr(diagnostic, "evaluate_calibration", unexpected_metric)
+    return calls
+
+
+@pytest.mark.parametrize("mode,status,reason,exit_code", [
+    ("pass", "PREFLIGHT_PASS", "contract_valid", 0),
+    ("nonzero", "PREFLIGHT_BLOCKED", "CLI_NONZERO_EXIT", 1),
+    ("wrong_id", "PREFLIGHT_BLOCKED", "CLI_DOCUMENT_ID_MISMATCH", 1),
+    ("invalid_span", "PREFLIGHT_BLOCKED", "CLI_OUTPUT_SCHEMA_INVALID", 1),
+])
+def test_v2_preflight_cli_isolated(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str],
+    mode: str, status: str, reason: str, exit_code: int,
+) -> None:
+    calls = _v2_cli_environment(tmp_path, monkeypatch, mode)
+    assert diagnostic.main() == exit_code
+    summary = json.loads(capsys.readouterr().out)
+    assert summary["status"] == status
+    assert summary["reason"] == reason
+    assert summary["execution_mode"] == "preflight_only"
+    assert len(calls) == 1
+    assert not list((tmp_path / "v2").glob("metric.*"))
+    assert all(p.read_bytes() == b"existing v1 custody" for p in (tmp_path / "custody").iterdir())
+    receipt_path = tmp_path / "v2/preflight.receipt.json"
+    frozen = receipt_path.read_bytes()
+    assert diagnostic.main() == 1
+    assert json.loads(capsys.readouterr().out)["reason"] == "ALREADY_CONSUMED"
+    assert len(calls) == 1
+    assert receipt_path.read_bytes() == frozen
+
+
+def test_v2_claim_binds_actual_inputs_code_and_process_contract(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _v2_cli_environment(tmp_path, monkeypatch)
+    assert diagnostic.main() == 0
+    claim = json.loads((tmp_path / "v2/preflight.claim.json").read_text())
+    receipt = json.loads((tmp_path / "v2/preflight.receipt.json").read_text())
+    assert claim["schema_version"] == "codex-cli-extraction-claim/v2"
+    assert claim["diagnostic_version"] == "codex-cli-gpt-6-sol-preflight-v2"
+    assert claim["implementation_sha256"] == sha256(Path(diagnostic.__file__).read_bytes()).hexdigest()
+    assert claim["prompt_sha256"] == sha256(b"original prompt").hexdigest()
+    assert claim["output_schema_sha256"] == sha256((tmp_path / "schema.json").read_bytes()).hexdigest()
+    assert claim["cli_version"] == "codex 1.0"
+    assert claim["requested_model"] == "gpt-6-sol"
+    assert claim["model_binding"] == "explicit_cli_argument"
+    assert receipt["resolved_model"] == "UNAVAILABLE"
+    assert receipt["server_acceptance"] == "UNVERIFIED"
+    assert receipt["provider_request_count"] == "UNAVAILABLE"
+    assert claim["execution_contract"] == {
+        "execution_mode": "preflight_only", "max_model_processes": 1,
+        "wrapper_retries": 0, "timeout_seconds": 120,
+        "provider_retry_control": "UNAVAILABLE", "cost_limit_status": "UNENFORCED",
+    }
+    assert claim["command_contract_sha256"] == diagnostic._digest(claim["execution_contract"])
+    assert receipt["claim_sha256"] == diagnostic._digest(claim)
+    assert receipt["token_usage"] == {"input_tokens": 10, "output_tokens": 20}
+
+
+def test_v2_preflight_semantic_abstention_cannot_pass(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _v2_cli_environment(tmp_path, monkeypatch)
+    monkeypatch.setattr(diagnostic, "run_document", lambda *_args, **_kwargs: {
+        "problem_signal": False, "usable_evidence": False,
+    })
+    assert diagnostic.main() == 1
+    receipt = json.loads((tmp_path / "v2/preflight.receipt.json").read_text())
+    assert receipt["reason"] == "CLI_SEMANTIC_SANITY_FAIL"
+    assert not list((tmp_path / "v2").glob("metric.*"))
+
+
+def test_cli_rejects_unknown_mode_without_model_invocation(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _v2_cli_environment(tmp_path, monkeypatch)
+    monkeypatch.setattr(sys, "argv", ["codex_cli_diagnostic", "--unknown-mode"])
+    with pytest.raises(SystemExit) as caught:
+        diagnostic.main()
+    assert caught.value.code == 2
+    assert calls == []

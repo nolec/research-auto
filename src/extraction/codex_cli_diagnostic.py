@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import subprocess
@@ -27,6 +28,7 @@ SCHEMA_PATH = ROOT / "schemas/model-extraction-output.schema.json"
 PROMPT_PATH = ROOT / "configs/extraction/prompts/problem-evidence-v1.txt"
 BASELINE_PATH = ROOT / "configs/extraction/development-baseline-v1.json"
 CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-v1"
+V2_CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-preflight-v2"
 MODEL = "gpt-6-sol"
 MAX_DOCUMENT_SECONDS = 120
 MAX_RUN_SECONDS = 1800
@@ -284,8 +286,8 @@ def _claim_base(
     }
 
 
-def run_diagnostic() -> dict[str, object]:
-    """Run one synthetic preflight, then one 40-document metric run."""
+def run_diagnostic(*, preflight_only: bool = False) -> dict[str, object]:
+    """Run isolated v2 preflight, or preserve the legacy v1 combined workflow."""
     manifest = load_baseline_manifest(BASELINE_PATH, repo_root=ROOT)
     inference = build_development_inference(manifest.sources)
     gold = build_development_gold_sidecar(manifest.sources)
@@ -304,23 +306,46 @@ def run_diagnostic() -> dict[str, object]:
     manifest_hash = str(manifest.receipt["manifest_sha256"])
     corpus_hash = str(inference.receipt["inference_corpus_sha256"])
     gold_hash = str(gold.receipt["gold_sidecar_sha256"])
+    custody_root = V2_CUSTODY_ROOT if preflight_only else CUSTODY_ROOT
     preflight = CliCustody(
-        CUSTODY_ROOT / "preflight.claim.json", CUSTODY_ROOT / "preflight.receipt.json"
+        custody_root / "preflight.claim.json", custody_root / "preflight.receipt.json"
     )
     preflight_claim = _claim_base(
         kind="preflight", cli_version=version, manifest_hash=manifest_hash,
         corpus_hash=corpus_hash, gold_hash=gold_hash,
         prompt_bytes=prompt_bytes, schema_bytes=schema_bytes,
     )
-    preflight.claim(preflight_claim)
     synthetic = {
-        "document_id": "preflight:codex-cli-gpt-6-sol-v1",
+        "document_id": "preflight:codex-cli-gpt-6-sol-preflight-v2" if preflight_only else "preflight:codex-cli-gpt-6-sol-v1",
         "source": "github",
         "title": "Synthetic export failure",
         "text": "The scheduled export fails before producing a file.",
         "published_at": "2026-01-01T00:00:00Z",
         "source_url": "https://research-auto.local/preflight",
     }
+    if preflight_only:
+        execution_contract = {
+            "execution_mode": "preflight_only",
+            "max_model_processes": 1,
+            "wrapper_retries": 0,
+            "timeout_seconds": MAX_DOCUMENT_SECONDS,
+            "provider_retry_control": "UNAVAILABLE",
+            "cost_limit_status": "UNENFORCED",
+        }
+        preflight_claim = {
+            **preflight_claim,
+            "schema_version": "codex-cli-extraction-claim/v2",
+            "diagnostic_version": "codex-cli-gpt-6-sol-preflight-v2",
+            "execution_mode": "preflight_only",
+            "model_binding": "explicit_cli_argument",
+            "server_acceptance": "UNVERIFIED",
+            "provider_request_count": "UNAVAILABLE",
+            "implementation_sha256": sha256(Path(__file__).read_bytes()).hexdigest(),
+            "synthetic_document_sha256": _digest(synthetic),
+            "execution_contract": execution_contract,
+            "command_contract_sha256": _digest(execution_contract),
+        }
+    preflight.claim(preflight_claim)
     preflight_usage: dict[str, int] = {}
     try:
         check = run_document(
@@ -350,6 +375,8 @@ def run_diagnostic() -> dict[str, object]:
         "cost_status": "UNAVAILABLE",
     }
     preflight.publish(preflight_receipt)
+    if preflight_only:
+        return preflight_receipt
     metric = CliCustody(CUSTODY_ROOT / "metric.claim.json", CUSTODY_ROOT / "metric.receipt.json")
     metric_claim = _claim_base(
         kind="metric", cli_version=version, manifest_hash=manifest_hash,
@@ -425,9 +452,15 @@ def run_diagnostic() -> dict[str, object]:
     return receipt
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--preflight-only", action="store_true",
+        help="Run one v2 synthetic preflight without starting a metric run; v1 custody is preserved.",
+    )
+    args = parser.parse_args(argv)
     try:
-        result = run_diagnostic()
+        result = run_diagnostic(preflight_only=True) if args.preflight_only else run_diagnostic()
     except Exception as error:
         result = {
             "status": "DIAGNOSTIC_BLOCKED",
@@ -440,8 +473,13 @@ def main() -> int:
     }
     if "process_diagnostics" in result:
         summary["process_diagnostics"] = result["process_diagnostics"]
+    if args.preflight_only:
+        summary["execution_mode"] = "preflight_only"
     print(json.dumps(summary, sort_keys=True))
-    return 0 if result["status"] == "MEASURED" else 1
+    success = result["status"] == "MEASURED" or (
+        args.preflight_only and result["status"] == "PREFLIGHT_PASS"
+    )
+    return 0 if success else 1
 
 
 if __name__ == "__main__":

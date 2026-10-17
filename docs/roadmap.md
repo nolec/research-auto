@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-10-06
-> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 API execution and card handoff implemented, extraction-only Codex CLI diagnostic implemented and attempted; CLI preflight blocked with cause unresolved, 40-record model extraction not started; promotion hard-blocked pending live artifacts, source eligibility, and independent review
+> Updated: 2026-10-18
+> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 v1 CLI preflight failed with cause unresolved; isolated v2 preflight-only implementation review-approved but not executed; 40-record model extraction not started; promotion hard-blocked pending live artifacts, source eligibility, and independent review
 
 | Readiness axis | Current state |
 |---|---|
@@ -13,6 +13,10 @@
 Test counts below are historical regression checkpoints, not a product-completeness metric.
 
 This roadmap tracks implementation progress. Product goals and decision policy remain authoritative in [`prd.md`](prd.md); machine-readable contracts remain authoritative in `schemas/`.
+
+The local [roadmap dashboard](dashboard/index.html) is a dated inspection snapshot of this
+document. Its [build instructions](dashboard/README.md) describe reproducible generation and
+validation; it does not poll live artifacts or count as a product milestone.
 
 ## Four-week objective
 
@@ -571,8 +575,14 @@ Current code checkpoint:
       propagation, and CLI summary; focused suite **26 passed**, staged TDD gate passed
 - [ ] Establish the CLI preflight failure cause; the original stderr and return code were
       not retained, and a startup permission warning alone does not establish causation
-- [ ] Before another execution, freeze a separately authorized versioned preflight contract
-      and custody location; preserve the consumed v1 claim and receipt without reset or overwrite
+- [x] Implement and review-approve `--preflight-only` with fixed v2 custody, implementation,
+      prompt/schema and synthetic-document hashes, and explicit CLI model-argument binding;
+      preserve v1 claims and receipts; focused suite **33 passed**, staged TDD gate passed
+- [x] Verify the CLI surface stops after v2 preflight PASS or FAIL without creating metric
+      claims, rejects repeat execution, and reports PASS as exit 0 without claiming `MEASURED`
+- [ ] Execute one separately authorized v2 synthetic preflight with the reviewed code and
+      preserve its result; model subprocess maximum 1, timeout 120 seconds, wrapper retries 0;
+      provider retries/request count, resolved model and hard monetary cap remain unverified
 - [ ] Implement official source-eligibility receipt producers before any promotion receipt can PASS
 - [ ] Obtain a PASS provider-contract preflight before consuming the corresponding metric-run claim
 - [ ] Run actual structured extraction on the 40 development-calibration records
@@ -600,10 +610,13 @@ or user value. The actual `rule_v1` aggregate baseline bundle and calibration ga
 bounded OpenAI API provider-preflight executor has not made a verified live API call. The separate
 Codex CLI path attempted one synthetic preflight and stopped at `CLI_NONZERO_EXIT`; this is
 execution-path evidence, not a measurement of model extraction quality. Its consumed v1 claim
-and receipt remain preserved. The newly reviewed observability changes have not been exercised
-in another live execution and cannot reconstruct the original failure. The immediate bottleneck
-is a separately authorized, versioned preflight that can establish the execution result and
-diagnostics, followed by a single 40-record calibration run only after preflight PASS.
+and receipt remain preserved. The observability changes and the new v2 `--preflight-only`
+path are review-approved but have not been exercised in another live execution and cannot
+reconstruct the original failure. The next operational step is one separately authorized v2
+preflight to obtain the current execution result and diagnostics. Even on PASS, v2 stops
+without starting a metric run: any 40-record calibration execution requires its own later
+contract and execution path. Model binding records an explicit CLI argument, not verified
+server acceptance; unknown model identity, provider requests/retries and cost remain unknown.
 The CLI extraction-only diagnostic has no model-backed card handoff; that remains a separate
 product execution path. A same-process handoff now consumes one-shot sanitized model
 outputs in memory and can persist only schema-valid cards, Markdown, and an aggregate receipt; it
@@ -665,4 +678,4 @@ promotion receipt from authoritative upstream artifacts.
 
 ## Explicitly deferred
 
-Dashboard work, external SaaS features, interview-dependent validation, deep research, automatic MVP design, country-gap analysis, unsupported market sizing, and automatic investment decisions remain outside V1.
+Customer-facing dashboard work, external SaaS features, interview-dependent validation, deep research, automatic MVP design, country-gap analysis, unsupported market sizing, and automatic investment decisions remain outside V1. The internal local roadmap dashboard is documentation support only.
