@@ -30,6 +30,7 @@ PROMPT_PATH = ROOT / "configs/extraction/prompts/problem-evidence-v1.txt"
 BASELINE_PATH = ROOT / "configs/extraction/development-baseline-v1.json"
 CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-v1"
 V2_CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-preflight-v2"
+V3_CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-preflight-v3"
 MODEL = "gpt-6-sol"
 MAX_DOCUMENT_SECONDS = 120
 MAX_RUN_SECONDS = 1800
@@ -331,8 +332,11 @@ def _claim_base(
     }
 
 
-def run_diagnostic(*, preflight_only: bool = False) -> dict[str, object]:
-    """Run isolated v2 preflight, or preserve the legacy v1 combined workflow."""
+def run_diagnostic(*, preflight_only: bool = False, preflight_version: str | None = None) -> dict[str, object]:
+    """Run explicitly selected isolated preflight, or the legacy v1 workflow."""
+    if preflight_version is not None and (not preflight_only or preflight_version not in ("v2", "v3")):
+        raise CliContractError("CLI_PREFLIGHT_VERSION_INVALID")
+    selected_version = preflight_version or "v2"
     manifest = load_baseline_manifest(BASELINE_PATH, repo_root=ROOT)
     inference = build_development_inference(manifest.sources)
     gold = build_development_gold_sidecar(manifest.sources)
@@ -351,7 +355,10 @@ def run_diagnostic(*, preflight_only: bool = False) -> dict[str, object]:
     manifest_hash = str(manifest.receipt["manifest_sha256"])
     corpus_hash = str(inference.receipt["inference_corpus_sha256"])
     gold_hash = str(gold.receipt["gold_sidecar_sha256"])
-    custody_root = V2_CUSTODY_ROOT if preflight_only else CUSTODY_ROOT
+    custody_root = (
+        (V3_CUSTODY_ROOT if selected_version == "v3" else V2_CUSTODY_ROOT)
+        if preflight_only else CUSTODY_ROOT
+    )
     preflight = CliCustody(
         custody_root / "preflight.claim.json", custody_root / "preflight.receipt.json"
     )
@@ -377,10 +384,12 @@ def run_diagnostic(*, preflight_only: bool = False) -> dict[str, object]:
             "provider_retry_control": "UNAVAILABLE",
             "cost_limit_status": "UNENFORCED",
         }
+        if selected_version == "v3":
+            execution_contract["preflight_version"] = "v3"
         preflight_claim = {
             **preflight_claim,
             "schema_version": "codex-cli-extraction-claim/v2",
-            "diagnostic_version": "codex-cli-gpt-6-sol-preflight-v2",
+            "diagnostic_version": f"codex-cli-gpt-6-sol-preflight-{selected_version}",
             "execution_mode": "preflight_only",
             "model_binding": "explicit_cli_argument",
             "server_acceptance": "UNVERIFIED",
@@ -501,11 +510,19 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--preflight-only", action="store_true",
-        help="Run one v2 synthetic preflight without starting a metric run; v1 custody is preserved.",
+        help="Run one isolated synthetic preflight without a metric run (default: v2).",
+    )
+    parser.add_argument(
+        "--preflight-version", choices=("v2", "v3"),
+        help="Requires --preflight-only; v3 must be selected explicitly and preserves v1/v2 custody.",
     )
     args = parser.parse_args(argv)
+    if args.preflight_version is not None and not args.preflight_only:
+        parser.error("--preflight-version requires --preflight-only")
     try:
-        result = run_diagnostic(preflight_only=True) if args.preflight_only else run_diagnostic()
+        result = run_diagnostic(
+            preflight_only=True, preflight_version=args.preflight_version,
+        ) if args.preflight_only else run_diagnostic()
     except Exception as error:
         result = {
             "status": "DIAGNOSTIC_BLOCKED",
@@ -520,6 +537,7 @@ def main(argv: list[str] | None = None) -> int:
         summary["process_diagnostics"] = result["process_diagnostics"]
     if args.preflight_only:
         summary["execution_mode"] = "preflight_only"
+        summary["preflight_version"] = args.preflight_version or "v2"
     print(json.dumps(summary, sort_keys=True))
     success = result["status"] == "MEASURED" or (
         args.preflight_only and result["status"] == "PREFLIGHT_PASS"

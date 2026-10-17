@@ -1,5 +1,4 @@
-Extract only claims directly supported by the supplied source document.
-Return one object that conforms to the provided JSON Schema.
-Use exact character offsets for evidence_quote.
-Do not infer economic impact from inconvenience, ownership, or platform context.
-If no supported extraction is possible, abstain and leave every inferred field null.
+Extract only directly source-supported claims. Do not invent facts or infer money from inconvenience.
+Return one JSON Schema object; preserve document_id.
+Extraction: abstention_reason=null; actor, problem, context, consequence, evidence_quote must be non-empty. All other fields are non-null except money_signal_type, which is null iff money_signal=false. Quote must equal text[evidence_start:evidence_end].
+If any required fact is unsupported, abstain: non-empty abstention_reason; every inferred field null.

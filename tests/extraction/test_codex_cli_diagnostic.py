@@ -29,6 +29,61 @@ DOCUMENT = {
 }
 
 
+def test_prompt_and_schema_explain_both_semantic_branches() -> None:
+    prompt = diagnostic.PROMPT_PATH.read_text()
+    schema = json.loads(SCHEMA_PATH.read_text())
+    assert "abstention_reason" in prompt
+    assert "non-empty" in prompt
+    assert "actor, problem, context, consequence, evidence_quote" in prompt
+    assert "Do not invent" in prompt
+    assert "every inferred field null" in prompt
+    assert "Semantic validation" in schema.get("description", "")
+
+
+def test_extraction_contract_stays_within_unchanged_preflight_budget() -> None:
+    from src.extraction import model_preflight
+    from src.extraction.inference_profile import load_inference_profile
+
+    profile = load_inference_profile(
+        diagnostic.ROOT / "configs/extraction/inference-profile-gpt-5.6-v1.json"
+    )
+    assert model_preflight._MAX_COST_USD == 0.10
+    assert model_preflight._MAX_ATTEMPTS == 3
+    assert profile.max_output_tokens == 1200
+    assert model_preflight._upper_bound(profile) <= model_preflight._MAX_COST_USD
+
+
+def test_inference_profile_binds_updated_extraction_contract() -> None:
+    from src.extraction.inference_profile import load_inference_profile
+
+    profile = load_inference_profile(
+        diagnostic.ROOT / "configs/extraction/inference-profile-gpt-5.6-v1.json"
+    )
+    assert profile.prompt_sha256 == sha256(diagnostic.PROMPT_PATH.read_bytes()).hexdigest()
+    assert profile.output_schema == json.loads(SCHEMA_PATH.read_text())
+    assert "Do not invent" in profile.prompt_text
+
+
+@pytest.mark.parametrize("actor", [None, "", "   "])
+def test_non_abstention_actor_is_rejected_without_weakening_semantics(actor: object) -> None:
+    output = {**_output(), "actor": actor}
+    with pytest.raises(CliContractError) as caught:
+        parse_cli_events(_events(output), DOCUMENT, schema=json.loads(SCHEMA_PATH.read_text()))
+    assert caught.value.diagnostics["validation"] == {
+        "stage": "semantic", "field": "actor", "rule": "NON_EMPTY_STRING",
+    }
+
+
+def test_unsupported_actor_can_abstain_without_inventing_a_user() -> None:
+    output = {field: None for field in _output()}
+    output.update(document_id=DOCUMENT["document_id"], abstention_reason="Actor is not supported by the source.")
+    assert parse_cli_events(_events(output), DOCUMENT, schema=json.loads(SCHEMA_PATH.read_text())) == output
+    output["actor"] = "invented user"
+    with pytest.raises(CliContractError) as caught:
+        parse_cli_events(_events(output), DOCUMENT, schema=json.loads(SCHEMA_PATH.read_text()))
+    assert caught.value.diagnostics["validation"]["rule"] == "ABSTENTION_VALUES"
+
+
 def _output() -> dict[str, object]:
     return {
         "document_id": DOCUMENT["document_id"],
@@ -343,6 +398,10 @@ def _v2_cli_environment(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mode: s
             output["document_id"] = "other-document"
         if mode == "invalid_span":
             output["evidence_end"] = 1
+        if mode == "semantic_null":
+            output["context"] = None
+        if mode == "private_extra":
+            output[PRIVATE_VALUE] = PRIVATE_VALUE
         return SimpleNamespace(
             returncode=2 if mode == "nonzero" else 0,
             stdout=_events(output), stderr="error: unexpected argument" if mode == "nonzero" else "",
@@ -552,3 +611,104 @@ def test_semantic_field_set_errors_preserve_messages(bad_document: bool) -> None
     )
     assert caught.value.rule == ("INFERENCE_FIELDS" if bad_document else "OUTPUT_FIELDS")
     assert caught.value.field is None
+
+
+def _v3_cli_environment(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mode: str = "pass") -> list[list[str]]:
+    calls = _v2_cli_environment(tmp_path, monkeypatch, mode)
+    monkeypatch.setattr(diagnostic, "V3_CUSTODY_ROOT", tmp_path / "v3", raising=False)
+    monkeypatch.setattr(sys, "argv", ["codex_cli_diagnostic", "--preflight-only", "--preflight-version", "v3"])
+    (tmp_path / "v2").mkdir()
+    for name in ("preflight.claim.json", "preflight.receipt.json", "metric.claim.json", "metric.receipt.json"):
+        (tmp_path / "v2" / name).write_bytes(b"existing v2 custody")
+    return calls
+
+
+@pytest.mark.parametrize("mode,status,rule", [
+    ("pass", "PREFLIGHT_PASS", None),
+    ("nonzero", "PREFLIGHT_BLOCKED", None),
+    ("semantic_null", "PREFLIGHT_BLOCKED", "NON_EMPTY_STRING"),
+    ("private_extra", "PREFLIGHT_BLOCKED", "ADDITIONAL_PROPERTIES"),
+    ("invalid_span", "PREFLIGHT_BLOCKED", "SPAN_MISMATCH"),
+])
+def test_explicit_v3_cli_preserves_old_custody_and_safe_diagnostics(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str],
+    mode: str, status: str, rule: str | None,
+) -> None:
+    calls = _v3_cli_environment(tmp_path, monkeypatch, mode)
+    assert diagnostic.main() == (0 if status == "PREFLIGHT_PASS" else 1)
+    stdout = capsys.readouterr().out
+    summary = json.loads(stdout)
+    assert summary["status"] == status
+    assert summary["execution_mode"] == "preflight_only"
+    assert summary["preflight_version"] == "v3"
+    receipt_path = tmp_path / "v3/preflight.receipt.json"
+    receipt_text = receipt_path.read_text()
+    receipt = json.loads(receipt_text)
+    assert receipt["diagnostic_version"] == "codex-cli-gpt-6-sol-preflight-v3"
+    if rule:
+        assert receipt["process_diagnostics"]["validation"]["rule"] == rule
+        assert summary["process_diagnostics"] == receipt["process_diagnostics"]
+    assert PRIVATE_VALUE not in stdout + receipt_text
+    assert len(calls) == 1
+    assert not list((tmp_path / "v3").glob("metric.*"))
+    for folder, sentinel in (("custody", b"existing v1 custody"), ("v2", b"existing v2 custody")):
+        assert all(file.read_bytes() == sentinel for file in (tmp_path / folder).iterdir())
+    frozen = receipt_path.read_bytes()
+    assert diagnostic.main() == 1
+    assert json.loads(capsys.readouterr().out)["reason"] == "ALREADY_CONSUMED"
+    assert len(calls) == 1
+    assert receipt_path.read_bytes() == frozen
+
+
+def test_v3_claim_binds_version_without_changing_probe_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _v3_cli_environment(tmp_path, monkeypatch)
+    assert diagnostic.main() == 0
+    claim = json.loads((tmp_path / "v3/preflight.claim.json").read_text())
+    assert claim["diagnostic_version"] == "codex-cli-gpt-6-sol-preflight-v3"
+    assert claim["implementation_sha256"] == sha256(Path(diagnostic.__file__).read_bytes()).hexdigest()
+    assert claim["model_binding"] == "explicit_cli_argument"
+    assert claim["resolved_model"] == "UNAVAILABLE"
+    assert claim["execution_contract"]["preflight_version"] == "v3"
+    assert claim["execution_contract"]["max_model_processes"] == 1
+    assert claim["execution_contract"]["wrapper_retries"] == 0
+    assert claim["command_contract_sha256"] == diagnostic._digest(claim["execution_contract"])
+    assert claim["synthetic_document_sha256"] == diagnostic._digest({
+        "document_id": "preflight:codex-cli-gpt-6-sol-preflight-v2",
+        "source": "github", "title": "Synthetic export failure", "text": DOCUMENT["text"],
+        "published_at": DOCUMENT["published_at"], "source_url": "https://research-auto.local/preflight",
+    })
+
+
+def test_default_preflight_stays_v2_and_does_not_create_v3(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _v2_cli_environment(tmp_path, monkeypatch)
+    monkeypatch.setattr(diagnostic, "V3_CUSTODY_ROOT", tmp_path / "v3", raising=False)
+    assert diagnostic.main() == 0
+    claim = json.loads((tmp_path / "v2/preflight.claim.json").read_text())
+    assert claim["diagnostic_version"] == "codex-cli-gpt-6-sol-preflight-v2"
+    assert not (tmp_path / "v3").exists()
+
+
+@pytest.mark.parametrize("args", [
+    ["--preflight-version", "v3"], ["--preflight-version", "v2"],
+    ["--preflight-only", "--preflight-version", "v4"],
+])
+def test_invalid_version_cli_args_never_launch_model(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, args: list[str],
+) -> None:
+    calls = _v3_cli_environment(tmp_path, monkeypatch)
+    with pytest.raises(SystemExit) as caught:
+        diagnostic.main(args)
+    assert caught.value.code == 2
+    assert calls == []
+    assert not (tmp_path / "v3").exists()
+
+
+@pytest.mark.parametrize("preflight_only,version", [(False, "v3"), (False, "v2"), (True, "v4")])
+def test_invalid_version_api_rejected_before_preparation(
+    monkeypatch: pytest.MonkeyPatch, preflight_only: bool, version: str,
+) -> None:
+    def unexpected(*_args: object, **_kwargs: object) -> None:
+        pytest.fail("invalid mode must be rejected before reading data or calling the CLI")
+    monkeypatch.setattr(diagnostic, "load_baseline_manifest", unexpected)
+    with pytest.raises(CliContractError, match="CLI_PREFLIGHT_VERSION_INVALID"):
+        diagnostic.run_diagnostic(preflight_only=preflight_only, preflight_version=version)

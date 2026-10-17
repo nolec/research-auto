@@ -10,12 +10,12 @@
   "prompt": {
     "version": "problem-evidence-v1",
     "path": "configs/extraction/prompts/problem-evidence-v1.txt",
-    "sha256": "442519c34a9ee768bfa9e392e61c0cba0b7b37ab045aacbf5b52c94cd76771c9"
+    "sha256": "26ffcdf47c93542b0632c0f773d398a1978834528a57c3eaa706c86e1fd60254"
   },
   "extraction_schema": {
     "version": "extraction-v0.1",
     "path": "schemas/model-extraction-output.schema.json",
-    "sha256": "43316f59d84ea622e0b4715185005dc86d3fd2bb224c2a447571794e9be53979"
+    "sha256": "fb9706146ba90359fc3026a52b7f633cf2b62e651b913d1897fe2db67315d270"
   },
   "source_policy": {
     "source_role": "calibration_source",

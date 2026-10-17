@@ -1,9 +1,12 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-18. Actual v2 preflight was blocked by output-contract
-validation; observed input/output tokens were 17048/283. Detailed validation diagnostics
-are review-approved but not live-validated. The 40-record extraction has not started.
+The source snapshot is dated 2026-10-18. Actual v3 preflight was blocked by semantic
+`actor` / `NON_EMPTY_STRING`; observed input/output tokens were 17046/333. Historical
+v1/v2/v3 records remain preserved. v3 used the previous prompt/schema: the subsequent compact
+contract clarification is review-approved and offline-verified (259 passed, 1 skipped), not
+live-validated. Its API preflight cost upper bound is $0.099756 under the unchanged $0.10
+ceiling, not an observed CLI cost. The 40-record extraction has not started.
 Fixture output is not counted as product output.
 
 ## Build and preview

@@ -3,7 +3,7 @@
   "roadmap_updated": "2026-10-18",
   "prepared_at": "2026-10-18",
   "source_label": "docs/roadmap.md",
-  "basis": "Roadmap plus hash-verified v2 aggregate receipt; no new model execution or source inventory revalidation.",
+  "basis": "Roadmap plus hash-verified v3 aggregate receipt and reviewed compact contract; no model call during dashboard update or source inventory revalidation. Revised contract is not live-validated.",
   "readiness": {
     "infrastructure": "READY",
     "operations": "BLOCKED_AT_CLI_PREFLIGHT",
@@ -76,7 +76,7 @@
       "name": "문제·증거 추출",
       "state": "blocked",
       "label": "현재 병목",
-      "detail": "v2 실제 응답이 출력 계약 검증에서 차단됨. 상세 검증 진단은 구현·리뷰 승인, 실제 40건 추출은 미시작"
+      "detail": "v3 의미 검증에서 actor/NON_EMPTY_STRING 확인. 후속 계약 명확화는 리뷰·오프라인 검증 통과, 수정 계약의 실제 모델 검증과 40건 추출은 미시작"
     },
     {
       "id": 4,
@@ -115,21 +115,29 @@
     "process_count": 1,
     "metric_run": "NOT_STARTED",
     "corpus_size": 40,
-    "root_cause": "UNCONFIRMED",
-    "observability": "DETAILED_VALIDATION_DIAGNOSTICS_APPROVED_NOT_LIVE_VALIDATED",
-    "cli_version": "codex-cli 0.162.0-alpha.17.2",
-    "input_tokens": 17048,
-    "output_tokens": 283,
+    "version": "v3",
+    "root_cause": "INCOMPLETE_NON_ABSTENTION_AND_CONTRACT_GUIDANCE_GAP",
+    "observability": "LIVE_VALIDATION_STAGE_FIELD_RULE_OBSERVED",
+    "validation_stage": "semantic",
+    "validation_field": "actor",
+    "validation_rule": "NON_EMPTY_STRING",
+    "revised_contract": "REVIEW_APPROVED_OFFLINE_VERIFIED_NOT_LIVE_VALIDATED",
+    "extraction_tests": "259 passed, 1 skipped",
+    "api_preflight_upper_bound_usd": 0.099756,
+    "api_preflight_ceiling_usd": 0.10,
+    "cli_version": "codex-cli 0.163.0-alpha.10.2",
+    "input_tokens": 17046,
+    "output_tokens": 333,
     "cost_status": "UNAVAILABLE",
     "resolved_model": "UNAVAILABLE",
-    "receipt_sha256": "5fe5ba259428866fbf783abd8f73051fec8a925f0fc7d00b45bcac322503fb41",
-    "boundary_note": "v2는 출력 계약 검증에서 차단됐습니다. 상세 진단 코드는 구현·리뷰 승인됐지만 실제 위반 필드는 아직 미확정입니다. v1·v2 기록을 보존합니다."
+    "receipt_sha256": "ae0dbc35de16337fdd4a17e9e9c50ba9e44d01147b5f216086934ca83389d247",
+    "boundary_note": "v3는 이전 계약으로 실행돼 actor 의미 검증에서 차단됐습니다. 이후 계약 명확화는 259 passed, 1 skipped와 리뷰를 통과했지만 실제 모델 미검증입니다. API 비용 상계 $0.099756/$0.10은 CLI 실측 비용이 아닙니다. v1·v2·v3 기록을 보존하며, v2 원인과 v3 actor 실제 값은 복원하지 않습니다."
   },
   "next_steps": [
     {
       "lane": "다음 증거",
-      "title": "상세 진단의 후속 실행 범위 결정",
-      "detail": "v2 원문은 보존되지 않아 실제 위반 필드를 복원할 수 없다. 별도 계약 없이 v1·v2를 재실행하지 않는다."
+      "title": "수정 계약의 새 버전 실행 범위 결정",
+      "detail": "v3는 기존 계약의 actor 위반만 확인했다. 수정된 프롬프트·스키마는 별도 승인한 새 버전에서 검증하며 v1·v2·v3를 재사용하지 않는다."
     },
     {
       "lane": "별도 후속 계약",
@@ -152,8 +160,8 @@
     "구현과 테스트 수는 제품 완성도 지표가 아니다.",
     "fixture 카드는 실제 Opportunity Card 성과로 계산하지 않는다.",
     "독립 2차 검토는 calibration 실행의 선행 조건은 아니지만 제품 승격에는 필수다.",
-    "v2 출력 계약 검증 실패는 확인했지만 실제 위반 필드·규칙은 미확정이다.",
-    "상세 검증 진단 코드 승인과 실제 모델 검증은 구분한다."
+    "v3에서 semantic / actor / NON_EMPTY_STRING을 확인했다. 실제 값과 과거 v2 원인은 미확정이다.",
+    "수정 계약의 리뷰·오프라인 검증과 실제 모델 검증은 구분한다."
   ],
-  "snapshot_revision": "2026-10-18-validation-diagnostics"
+  "snapshot_revision": "2026-10-18-v3-contract-alignment"
 }

@@ -1,5 +1,6 @@
 {
   "type": "object",
+  "description": "Extraction requires complete source-supported fields; otherwise abstain. Semantic validation enforces both modes.",
   "additionalProperties": false,
   "required": [
     "document_id", "observation_type", "actor", "problem", "context",

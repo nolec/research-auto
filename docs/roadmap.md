@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-10-18
-> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 v1 preflight failed and v2 preflight reached output validation but was blocked; detailed validation diagnostics review-approved, not live-validated; 40-record model extraction not started; promotion hard-blocked pending live artifacts, source eligibility, and independent review
+> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 v3 preflight blocked at semantic actor/NON_EMPTY_STRING; compact extraction contract reviewed and offline-verified, not live-validated; v1/v2/v3 records preserved; 40-record model extraction not started; promotion hard-blocked pending live artifacts, source eligibility, and independent review
 
 | Readiness axis | Current state |
 |---|---|
@@ -592,10 +592,25 @@ Current code checkpoint:
 - [x] Implement and review-approve allowlisted validation stage/field/rule diagnostics
       through receipt and CLI JSON, preserving validation policy, messages and ValueError
       compatibility; extraction regression **239 passed, 1 skipped**, staged TDD gate passed
-- [ ] Establish the actual output-contract violation; no raw v2 response was retained and
-      the new detailed diagnostics have not been exercised by another live model execution
-- [ ] Define a separately authorized follow-up diagnostic if needed; preserve both consumed
-      v1 and v2 claims/receipts, do not reset or reuse either version, and do not start 40-record extraction
+- [x] Add explicitly selected `--preflight-only --preflight-version v3` with separate custody,
+      default v2 behavior, invalid-mode rejection and no metric execution
+- [x] Execute one authorized v3 preflight on 2026-10-18 using the previous prompt/schema and
+      `codex-cli 0.163.0-alpha.10.2`: `PREFLIGHT_BLOCKED` / `CLI_OUTPUT_SCHEMA_INVALID`,
+      semantic `actor` / `NON_EMPTY_STRING`, process count 1, input/output tokens 17046/333;
+      preserve v1/v2 byte-for-byte, with no metric claim or raw output persisted
+- [x] Bind the v3 receipt SHA-256:
+      `ae0dbc35de16337fdd4a17e9e9c50ba9e44d01147b5f216086934ca83389d247`
+- [x] Confirm offline that non-abstaining null/empty/whitespace actor passes JSON Schema but
+      fails semantic validation, while complete abstention passes extraction validation;
+      the actual v3 actor value is not retained and the historical v2 violation remains unknown
+- [x] Review-approve compact non-abstention/abstention instructions and synchronized profile
+      hashes without weakening semantic checks or increasing limits; extraction regression
+      **259 passed, 1 skipped**, staged TDD gate passed; API preflight conservative upper bound
+      **$0.099756 <= $0.10**, unchanged three attempts and 1200 output tokens
+- [ ] Live-validate the revised extraction contract only under a distinct authorized version;
+      v3 used the old contract, so its receipt is not evidence for the revised prompt/schema
+- [ ] Preserve consumed v1/v2/v3 records; do not reset/reuse versions or start 40-record extraction
+      without the corresponding separate execution contract
 - [ ] Implement official source-eligibility receipt producers before any promotion receipt can PASS
 - [ ] Obtain a PASS provider-contract preflight before consuming the corresponding metric-run claim
 - [ ] Run actual structured extraction on the 40 development-calibration records
@@ -627,11 +642,15 @@ and receipt remain preserved. On 2026-10-18, the isolated v2 preflight completed
 and passed event-envelope checks, but its final response failed output-contract validation
 with `CLI_OUTPUT_SCHEMA_INVALID`. The receipt records 17048 input and 283 output tokens;
 its claim binding and unchanged v1 custody were verified. This does not establish which
-field or rule failed, and the original response cannot be reconstructed. The new detailed
-validation diagnostics are review-approved after controlled tests, not live-validated.
-Any follow-up diagnostic needs a distinct authorized execution contract; neither consumed
-version may be silently reset or reused. No 40-record metric run has started. Even on PASS,
-v2 stops without a metric run: a later calibration execution requires its own contract and
+field or rule failed, and the original response cannot be reconstructed. A separate authorized
+v3 run exercised the detailed diagnostics and identified semantic `actor` / `NON_EMPTY_STRING`,
+with 17046 input and 333 output tokens. It does not establish the historical v2 cause or the
+exact v3 actor value. All three versions remain preserved. The subsequent compact contract
+clarification is review-approved and offline-verified (259 passed, 1 skipped), not live-validated.
+Its API preflight upper bound is $0.099756 with the unchanged $0.10 ceiling; this is not an
+observed CLI cost. Any follow-up needs a distinct authorized execution contract; no consumed
+version may be reset or reused. No 40-record metric run has started. Even on PASS,
+preflight-only stops without a metric run: a later calibration execution requires its own contract and
 execution path. Model binding records an explicit CLI argument, not verified server acceptance;
 actual model identity, provider request/retry counts and cost remain unknown.
 The CLI extraction-only diagnostic has no model-backed card handoff; that remains a separate
