@@ -64,6 +64,23 @@ def _safe_validation_metadata(value: Mapping[str, object]) -> dict[str, object]:
     }
 
 
+_TERMINAL_REASONS = frozenset({
+    "NO_COMPLETED_AGENT_MESSAGE", "MULTIPLE_COMPLETED_AGENT_MESSAGES",
+    "NON_STRING_AGENT_MESSAGE",
+})
+
+
+def _safe_terminal_metadata(value: Mapping[str, object]) -> dict[str, object]:
+    reason = value.get("reason_detail")
+    count = value.get("completed_agent_message_count")
+    detected = value.get("non_string_message_detected")
+    return {
+        "reason_detail": reason if isinstance(reason, str) and reason in _TERMINAL_REASONS else "UNKNOWN",
+        "completed_agent_message_count": count if type(count) is int and count >= 0 else None,
+        "non_string_message_detected": detected if type(detected) is bool else None,
+    }
+
+
 class CliContractError(RuntimeError):
     """A stable, non-sensitive classification for a failed CLI contract."""
 
@@ -71,6 +88,7 @@ class CliContractError(RuntimeError):
         self, reason: str, *, returncode: int | None = None,
         failure_stage: str = "contract_validation", error_class: str = "UNKNOWN",
         validation: Mapping[str, object] | None = None,
+        terminal_diagnostics: Mapping[str, object] | None = None,
     ) -> None:
         super().__init__(reason)
         stages = {
@@ -89,6 +107,8 @@ class CliContractError(RuntimeError):
         }
         if validation is not None:
             self.diagnostics["validation"] = _safe_validation_metadata(validation)
+        if terminal_diagnostics is not None:
+            self.diagnostics["terminal_diagnostics"] = _safe_terminal_metadata(terminal_diagnostics)
 
 
 def _classify_cli_stderr(stderr: str) -> str:
@@ -203,7 +223,12 @@ def parse_cli_events(
             if kind == "item.completed" and item_type == "agent_message":
                 message = item.get("text")
                 if not isinstance(message, str):
-                    raise CliContractError("CLI_OUTPUT_MISSING")
+                    raise CliContractError("CLI_OUTPUT_MISSING", terminal_diagnostics={
+                        "reason_detail": "NON_STRING_AGENT_MESSAGE",
+                        # This branch aborts before the remaining events are inspected.
+                        "completed_agent_message_count": None,
+                        "non_string_message_detected": True,
+                    })
                 messages.append(message)
         elif kind not in {"thread.started", "turn.started", "turn.completed", "error", "turn.failed"}:
             raise CliContractError("CLI_TERMINAL_EVENT_INVALID")
@@ -212,7 +237,11 @@ def parse_cli_events(
     if terminal_count != 1:
         raise CliContractError("CLI_TERMINAL_EVENT_INVALID")
     if len(messages) != 1:
-        raise CliContractError("CLI_OUTPUT_MISSING")
+        raise CliContractError("CLI_OUTPUT_MISSING", terminal_diagnostics={
+            "reason_detail": "NO_COMPLETED_AGENT_MESSAGE" if not messages else "MULTIPLE_COMPLETED_AGENT_MESSAGES",
+            "completed_agent_message_count": len(messages),
+            "non_string_message_detected": False,
+        })
     try:
         output = json.loads(messages[0])
     except (TypeError, ValueError) as error:

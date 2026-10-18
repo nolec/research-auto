@@ -1,14 +1,14 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-10-19
-> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 v5 synthetic positive preflight PASS (true/false/true); v1-v5 records preserved; 40-record model extraction awaits a separate execution path and contract; extraction quality and product value remain unmeasured; promotion hard-blocked pending live artifacts, source eligibility, and independent review
+> Status: Task 1 complete, Task 2 frozen at 400/500; v5 synthetic positive preflight PASS preserved; metric-v1 stopped on first document (CLI_OUTPUT_MISSING), 1 operational failure and 39 not attempted; terminal diagnostics improved offline; actual failure subtype UNKNOWN; extraction quality and product value remain unmeasured; promotion hard-blocked
 
 | Readiness axis | Current state |
 |---|---|
 | Calibration infrastructure | `READY` |
-| Operational validation | `BLOCKED_AT_CLI_PREFLIGHT` |
+| Operational validation | `BLOCKED_AT_METRIC_TERMINAL_OUTPUT` |
 | Product capability | `PRODUCT_OUTPUT_NOT_AVAILABLE` |
-| Evaluation evidence | `NOT_STARTED` |
+| Evaluation evidence | `INCOMPLETE` (1 operational failure, 39 not attempted) |
 
 Test counts below are historical regression checkpoints, not a product-completeness metric.
 
@@ -626,15 +626,34 @@ Current code checkpoint:
       implementation/prompt/schema hashes match, v1-v4 unchanged, no metric artifacts
 - [x] Bind the v5 receipt SHA-256:
       `6bc8874ddc936149b280dfda54f4ff33999ee011a391f09707c354169bb6afd1`
-- [ ] Define and review a separately authorized 40-record CLI execution path and contract,
+- [x] Define and review a separately authorized 40-record CLI execution path and contract,
       with fresh metric custody and explicit preflight binding; do not reuse the consumed v1
       workflow or infer metric authorization from synthetic v5 PASS
-- [ ] Preserve consumed v1-v5 records; synthetic PASS does not establish real extraction
+- [x] Preserve consumed v1-v5 records; synthetic PASS does not establish real extraction
       quality, absence of hallucination, product output, or causal improvement over v4
+- [x] Execute the separately approved metric-v1 once on 2026-10-19: maximum 40 calls,
+      120 seconds/document, 1800 seconds total, no wrapper retry and CLI cost ceiling unenforced;
+      stop at document 1 with `CLI_OUTPUT_MISSING`, elapsed 17.948 seconds, tokens 36334/839
+- [x] Preserve metric-v1 as `INCOMPLETE` / `OPERATIONAL_FAILURE`: valid extraction 0,
+      valid abstention 0, invalid 0, operational failure 1, not attempted 39, unknown 0;
+      evaluation remains null / `RUN_INCOMPLETE`, not a 40-record quality result
+- [x] Bind metric-v1 claim / progress / receipt SHA-256 respectively:
+      `f5a682c607bfcae806e3ac93d36cffa9e3d9b58cf34b91be8758e0fe8e422356`,
+      `a5ea0ab5d4095a228bc1a48de100bd60f1d838a99f2977a1053e779834f7133d`,
+      `eafda67d79cb3e8a66962eab202d5bae4bf3f3fba73a766d991add875dcaba79`
+- [x] Investigate without model rerun or historical edits: the original terminal-message
+      subtype is `UNKNOWN`; absent, multiple and non-string messages shared the error code
+- [x] Implement and review-approve allowlisted terminal diagnostics through error, CLI,
+      preflight receipt, metric progress and receipt; preserve failure order, null for early
+      unobserved counts and absence for old metadata; offline regression **338 passed, 1 skipped**,
+      staged TDD gate PASS; no live verification of the new diagnostics
+- [ ] Decide whether to authorize a separately versioned, bounded diagnostic of the improved
+      terminal metadata; do not retry/reset metric-v1 or infer permission from this roadmap
 - [ ] Implement official source-eligibility receipt producers before any promotion receipt can PASS
 - [ ] Obtain a PASS provider-contract preflight before consuming the corresponding metric-run claim
       (CLI v5 synthetic PASS is observed; the separate OpenAI API path remains unverified)
-- [ ] Run actual structured extraction on the 40 development-calibration records
+- [ ] Complete actual structured extraction on the 40 development-calibration records
+      (metric-v1 attempted one record and stopped; 39 were not attempted)
 - [ ] Compare the first model-backed extractor against `rule_v1` using the physically separate
       development gold sidecar; report P/M/E coverage and error classes without opening a new holdout
 - [ ] Report coverage and P/E diagnostics separately from a gold-hidden structured-field audit
@@ -677,11 +696,19 @@ and observed `PREFLIGHT_PASS`: contract valid=true, abstained=false, positive sa
 tokens 17132/1155, no wrapper retry and no metric artifacts. v1-v4 hashes were unchanged.
 The v5 implementation regression is 289 passed, 1 skipped. This verifies a synthetic positive
 path only, not real extraction quality or field grounding. It is not a performance comparison
-with v4 because the input changed. A 40-record run still needs a separate reviewed execution
-path and human-approved contract with fresh metric custody and preflight binding.
+with v4 because the input changed. A separate reviewed execution path and human-approved
+contract subsequently authorized one metric-v1 run; its first document failed operationally.
 The API preflight upper bound is $0.099756 with the unchanged $0.10 ceiling; this is not an
 observed CLI cost. Any follow-up needs a distinct authorized execution contract; no consumed
-version may be reset or reused. No 40-record metric run has started. Even on PASS,
+version may be reset or reused. The metric-v1 attempt started on 2026-10-19 and stopped
+on the first document with CLI_OUTPUT_MISSING: operational failure 1, not attempted 39,
+valid extraction/abstention/invalid 0, tokens 36334/839 and elapsed 17.948 seconds.
+Evaluation is INCOMPLETE with null metrics, not a measured failure rate for all 40 records.
+The original raw events were not retained, so the terminal-message subtype remains UNKNOWN.
+Offline diagnostic improvements now distinguish missing, multiple and non-string completed
+agent messages, preserve null for early unobserved counts, and propagate only safe metadata.
+They passed 338 extraction tests with one skipped and code review; they have not been
+exercised by a new model call. Historical records remain unchanged. Even on PASS,
 preflight-only stops without a metric run: a later calibration execution requires its own contract and
 execution path. Model binding records an explicit CLI argument, not verified server acceptance;
 actual model identity, provider request/retry counts and cost remain unknown.

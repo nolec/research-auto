@@ -968,3 +968,68 @@ def test_v5_requires_preflight_only_before_preparation(monkeypatch: pytest.Monke
     assert caught.value.code == 2
     with pytest.raises(CliContractError, match="CLI_PREFLIGHT_VERSION_INVALID"):
         diagnostic.run_diagnostic(preflight_version="v5")
+
+
+@pytest.mark.parametrize("texts,detail,count,detected", [
+    ([], "NO_COMPLETED_AGENT_MESSAGE", 0, False),
+    (["private", "private"], "MULTIPLE_COMPLETED_AGENT_MESSAGES", 2, False),
+    ([None, "private"], "NON_STRING_AGENT_MESSAGE", None, True),
+])
+def test_terminal_diagnostics_distinguish_missing_cases(texts, detail, count, detected):
+    events = [{"type": "item.completed", "item": {"type": "agent_message", "text": text}} for text in texts]
+    events.append({"type": "turn.completed"})
+    with pytest.raises(CliContractError, match="^CLI_OUTPUT_MISSING$") as caught:
+        parse_cli_events("\n".join(json.dumps(e) for e in events), DOCUMENT)
+    assert caught.value.diagnostics["terminal_diagnostics"] == {
+        "reason_detail": detail, "completed_agent_message_count": count,
+        "non_string_message_detected": detected,
+    }
+    assert "private" not in json.dumps(caught.value.diagnostics)
+    assert "validation" not in caught.value.diagnostics
+
+
+@pytest.mark.parametrize("count,detected,expected_count,expected_detected", [
+    (True, 1, None, None), (-1, "private", None, None),
+    (2.0, None, None, None), (2, False, 2, False), (None, True, None, True),
+])
+def test_terminal_diagnostics_are_sanitized(count, detected, expected_count, expected_detected):
+    error = CliContractError("CLI_OUTPUT_MISSING", terminal_diagnostics={
+        "reason_detail": "private", "completed_agent_message_count": count,
+        "non_string_message_detected": detected, "private": "private",
+    })
+    assert error.diagnostics["terminal_diagnostics"] == {
+        "reason_detail": "UNKNOWN", "completed_agent_message_count": expected_count,
+        "non_string_message_detected": expected_detected,
+    }
+
+
+def test_terminal_diagnostics_keep_first_failure_order():
+    for tail in ({"type": "turn.completed"}, {"type": "item.started", "item": {"type": "tool_call"}}):
+        events = [{"type": "item.completed", "item": {"type": "agent_message", "text": None}}, tail]
+        with pytest.raises(CliContractError, match="^CLI_OUTPUT_MISSING$") as caught:
+            parse_cli_events("\n".join(json.dumps(e) for e in events), DOCUMENT)
+        assert caught.value.diagnostics["terminal_diagnostics"]["completed_agent_message_count"] is None
+    with pytest.raises(CliContractError, match="^CLI_ERROR_EVENT$"):
+        parse_cli_events('{"type":"error"}\n{"type":"turn.completed"}', DOCUMENT)
+    with pytest.raises(CliContractError, match="^CLI_TERMINAL_EVENT_INVALID$"):
+        parse_cli_events('{"type":"turn.started"}', DOCUMENT)
+
+
+def test_terminal_diagnostics_preflight_cli_and_custody(tmp_path, monkeypatch, capsys):
+    _stub_diagnostic_inputs(tmp_path, monkeypatch)
+    root = tmp_path / "v5"
+    monkeypatch.setattr(diagnostic, "V5_CUSTODY_ROOT", root)
+    # Both version probe and model transport are offline stubs.
+    monkeypatch.setattr(diagnostic.subprocess, "run", lambda *a, **k: SimpleNamespace(
+        stdout='{"type":"turn.completed"}', stderr="private", returncode=0,
+    ))
+    assert diagnostic.main(["--preflight-only", "--preflight-version", "v5"]) == 1
+    summary = json.loads(capsys.readouterr().out)
+    receipt = json.loads((root / "preflight.receipt.json").read_text())
+    expected = {"reason_detail": "NO_COMPLETED_AGENT_MESSAGE",
+                "completed_agent_message_count": 0, "non_string_message_detected": False}
+    assert summary["process_diagnostics"]["terminal_diagnostics"] == expected
+    assert receipt["process_diagnostics"] == summary["process_diagnostics"]
+    assert summary["reason"] == "CLI_OUTPUT_MISSING"
+    assert summary["output_contract_valid"] is None
+    assert "private" not in json.dumps(receipt)

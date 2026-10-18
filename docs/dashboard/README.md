@@ -1,16 +1,22 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-19. Actual v5 positive synthetic preflight observed
-output-contract validity=true, abstained=false and positive sanity=true, with tokens 17132/1155.
-It returned `PREFLIGHT_PASS` / `contract_valid` in one model process without wrapper retries.
-Historical v1-v5 records remain preserved; v1-v4 hashes were unchanged. v4's contract-valid
-abstention remains a separate observation on a different input, not a performance baseline.
-Offline extraction regression is 289 passed, 1 skipped. The existing API preflight cost upper bound
-is $0.099756 under the unchanged $0.10 ceiling, not an observed CLI cost.
-Only the synthetic positive path has passed. Real extraction quality is unmeasured and the
-40-record CLI path requires a separate reviewed execution contract and fresh metric custody.
-Fixture output is not counted as product output.
+The source snapshot is dated 2026-10-19 (revision metric-v1-interrupted).
+The approved 40-record metric-v1 execution stopped after its first document with
+CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
+39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
+No quality metrics were produced; this is not a 40-record failure rate or abstention result.
+The raw events were not retained, so its terminal-message subtype remains UNKNOWN.
+The new terminal diagnostics distinguish absent, multiple and non-string messages,
+retain null for early unobserved counts and do not backfill historical evidence.
+Their offline regression passed 338 tests with one skipped and code review approved;
+no new live model execution has exercised these diagnostics.
+Historical v1-v5 and metric-v1 custody remain preserved. V5 synthetic positive PASS
+(true/false/true, tokens 17132/1155) remains a separate observation, not product evidence.
+No model calls, retries or historical writes are part of this dashboard refresh.
+Any future execution needs an explicitly approved new version and bounded contract.
+Actual CLI cost and resolved model are unavailable. The API $0.099756/$0.10 upper bound
+is not a measured CLI cost. Fixture output is not counted as product output.
 
 ## Build and preview
 
