@@ -690,7 +690,7 @@ def test_default_preflight_stays_v2_and_does_not_create_v3(tmp_path: Path, monke
 
 @pytest.mark.parametrize("args", [
     ["--preflight-version", "v3"], ["--preflight-version", "v2"],
-    ["--preflight-only", "--preflight-version", "v5"],
+    ["--preflight-only", "--preflight-version", "v6"],
 ])
 def test_invalid_version_cli_args_never_launch_model(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, args: list[str],
@@ -703,7 +703,7 @@ def test_invalid_version_cli_args_never_launch_model(
     assert not (tmp_path / "v3").exists()
 
 
-@pytest.mark.parametrize("preflight_only,version", [(False, "v3"), (False, "v2"), (True, "v5")])
+@pytest.mark.parametrize("preflight_only,version", [(False, "v3"), (False, "v2"), (True, "v6")])
 def test_invalid_version_api_rejected_before_preparation(
     monkeypatch: pytest.MonkeyPatch, preflight_only: bool, version: str,
 ) -> None:
@@ -842,3 +842,129 @@ def test_v4_requires_preflight_only_before_data_access(monkeypatch: pytest.Monke
     assert caught.value.code == 2
     with pytest.raises(CliContractError, match="CLI_PREFLIGHT_VERSION_INVALID"):
         diagnostic.run_diagnostic(preflight_version="v4")
+
+
+_V5_DOCUMENT = {
+    "document_id": "preflight:codex-cli-gpt-6-sol-preflight-v5",
+    "source": "github",
+    "title": "Synthetic positive payroll export failure",
+    "text": "I am a payroll administrator. During our monthly payroll preparation, the scheduled payroll export fails before producing a file. I cannot submit payroll until the export file is available.",
+    "published_at": "2026-01-01T00:00:00Z",
+    "source_url": "https://research-auto.local/preflight",
+}
+
+
+def _v5_cli_environment(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mode: str) -> list[list[str]]:
+    calls = _v4_cli_environment(tmp_path, monkeypatch, mode)
+    monkeypatch.setattr(diagnostic, "V5_CUSTODY_ROOT", tmp_path / "v5", raising=False)
+    monkeypatch.setattr(sys, "argv", ["codex_cli_diagnostic", "--preflight-only", "--preflight-version", "v5"])
+    (tmp_path / "v4").mkdir()
+    for name in ("preflight.claim.json", "preflight.receipt.json", "metric.claim.json", "metric.receipt.json"):
+        (tmp_path / "v4" / name).write_bytes(b"existing v4 custody")
+    previous_run = diagnostic.subprocess.run
+
+    def process(command: list[str], **kwargs: object) -> SimpleNamespace:
+        if command != ["codex", "--version"]:
+            request = str(kwargs["input"])
+            source = json.loads(request.split("Source document JSON:\n", 1)[1])
+            assert source == {k: v for k, v in _V5_DOCUMENT.items() if k != "source_url"}
+            assert "expected_output" not in request and "ground_truth" not in request
+        completed = previous_run(command, **kwargs)
+        if command == ["codex", "--version"] or mode in ("abstain", "event", "json", "object"):
+            return completed
+        events = [json.loads(line) for line in completed.stdout.splitlines()]
+        output = json.loads(events[2]["item"]["text"])
+        if output["actor"] == "user":
+            output["actor"] = "payroll administrator"
+        output.update(
+            problem="the scheduled payroll export fails before producing a file",
+            context="monthly payroll preparation",
+            consequence="I cannot submit payroll until the export file is available.",
+            evidence_quote=_V5_DOCUMENT["text"], evidence_start=0, evidence_end=len(_V5_DOCUMENT["text"]),
+        )
+        events[2]["item"]["text"] = json.dumps(output)
+        completed.stdout = "\n".join(json.dumps(event) for event in events)
+        return completed
+
+    monkeypatch.setattr(diagnostic.subprocess, "run", process)
+    return calls
+
+
+@pytest.mark.parametrize("mode,reason,observed", [
+    ("pass", "contract_valid", (True, False, True)),
+    ("abstain", "CLI_SEMANTIC_SANITY_FAIL", (True, True, False)),
+    ("negative", "CLI_SEMANTIC_SANITY_FAIL", (True, False, False)),
+    ("json", "CLI_OUTPUT_SCHEMA_INVALID", (False, None, None)),
+    ("object", "CLI_OUTPUT_SCHEMA_INVALID", (False, None, None)),
+    ("schema", "CLI_OUTPUT_SCHEMA_INVALID", (False, None, None)),
+    ("semantic", "CLI_OUTPUT_SCHEMA_INVALID", (False, None, None)),
+    ("membership", "CLI_DOCUMENT_ID_MISMATCH", (False, None, None)),
+    ("event", "CLI_TERMINAL_EVENT_INVALID", (None, None, None)),
+    ("nonzero", "CLI_NONZERO_EXIT", (None, None, None)),
+    ("timeout", "CLI_TIMEOUT", (None, None, None)),
+    ("internal", "CLI_INTERNAL_ERROR", (None, None, None)),
+])
+def test_v5_positive_probe_cli_surface_and_frozen_prior_versions(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str],
+    mode: str, reason: str, observed: tuple[bool | None, ...],
+) -> None:
+    calls = _v5_cli_environment(tmp_path, monkeypatch, mode)
+    historical = {str(p): p.read_bytes() for folder in ("custody", "v2", "v3", "v4") for p in (tmp_path / folder).iterdir()}
+    assert diagnostic.main() == (0 if mode == "pass" else 1)
+    stdout = capsys.readouterr().out
+    summary = json.loads(stdout)
+    path = tmp_path / "v5/preflight.receipt.json"
+    receipt_text = path.read_text()
+    receipt = json.loads(receipt_text)
+    claim = json.loads((tmp_path / "v5/preflight.claim.json").read_text())
+    assert summary["preflight_version"] == "v5"
+    assert summary["reason"] == receipt["reason"] == reason
+    assert summary["status"] == receipt["status"] == ("PREFLIGHT_PASS" if mode == "pass" else "PREFLIGHT_BLOCKED")
+    for key, expected in zip(("output_contract_valid", "abstained", "positive_sanity_valid"), observed):
+        assert summary[key] is expected
+        assert receipt[key] is expected
+    assert claim["diagnostic_version"] == receipt["diagnostic_version"] == "codex-cli-gpt-6-sol-preflight-v5"
+    assert claim["synthetic_document_sha256"] == diagnostic._digest(_V5_DOCUMENT)
+    assert claim["execution_contract"]["preflight_version"] == "v5"
+    assert claim["execution_contract"]["max_model_processes"] == 1
+    assert claim["execution_contract"]["wrapper_retries"] == 0
+    assert claim["execution_contract"]["timeout_seconds"] == 120
+    assert claim["implementation_sha256"] == sha256(Path(diagnostic.__file__).read_bytes()).hexdigest()
+    assert PRIVATE_VALUE not in stdout + receipt_text
+    assert not list((tmp_path / "v5").glob("metric.*"))
+    assert len(calls) == receipt["process_count"] == 1
+    assert {p: Path(p).read_bytes() for p in historical} == historical
+    frozen = path.read_bytes()
+    assert diagnostic.main() == 1
+    assert json.loads(capsys.readouterr().out)["reason"] == "ALREADY_CONSUMED"
+    assert len(calls) == 1
+    assert path.read_bytes() == frozen
+
+
+def test_v5_directly_supported_expected_output_passes_unchanged_validator() -> None:
+    from src.extraction.development_slice import validate_extraction
+    from jsonschema import Draft202012Validator
+
+    text = _V5_DOCUMENT["text"]
+    output = {
+        **_output(), "document_id": _V5_DOCUMENT["document_id"],
+        "actor": "payroll administrator", "problem": "the scheduled payroll export fails before producing a file",
+        "context": "monthly payroll preparation", "consequence": "I cannot submit payroll until the export file is available.",
+        "evidence_quote": text, "evidence_start": 0, "evidence_end": len(text),
+    }
+    for field in ("actor", "problem", "context", "consequence"):
+        assert output[field] in text
+    assert output["money_signal"] is False and output["money_signal_type"] is None
+    Draft202012Validator(json.loads(SCHEMA_PATH.read_text())).validate(output)
+    validate_extraction(_V5_DOCUMENT, output)
+
+
+def test_v5_requires_preflight_only_before_preparation(monkeypatch: pytest.MonkeyPatch) -> None:
+    def unexpected(*_args: object, **_kwargs: object) -> None:
+        pytest.fail("invalid mode must not prepare data")
+    monkeypatch.setattr(diagnostic, "load_baseline_manifest", unexpected)
+    with pytest.raises(SystemExit) as caught:
+        diagnostic.main(["--preflight-version", "v5"])
+    assert caught.value.code == 2
+    with pytest.raises(CliContractError, match="CLI_PREFLIGHT_VERSION_INVALID"):
+        diagnostic.run_diagnostic(preflight_version="v5")

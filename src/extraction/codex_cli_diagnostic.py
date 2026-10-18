@@ -32,6 +32,7 @@ CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gp
 V2_CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-preflight-v2"
 V3_CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-preflight-v3"
 V4_CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-preflight-v4"
+V5_CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-preflight-v5"
 MODEL = "gpt-6-sol"
 MAX_DOCUMENT_SECONDS = 120
 MAX_RUN_SECONDS = 1800
@@ -335,7 +336,7 @@ def _claim_base(
 
 def run_diagnostic(*, preflight_only: bool = False, preflight_version: str | None = None) -> dict[str, object]:
     """Run explicitly selected isolated preflight, or the legacy v1 workflow."""
-    if preflight_version is not None and (not preflight_only or preflight_version not in ("v2", "v3", "v4")):
+    if preflight_version is not None and (not preflight_only or preflight_version not in ("v2", "v3", "v4", "v5")):
         raise CliContractError("CLI_PREFLIGHT_VERSION_INVALID")
     selected_version = preflight_version or "v2"
     manifest = load_baseline_manifest(BASELINE_PATH, repo_root=ROOT)
@@ -357,7 +358,7 @@ def run_diagnostic(*, preflight_only: bool = False, preflight_version: str | Non
     corpus_hash = str(inference.receipt["inference_corpus_sha256"])
     gold_hash = str(gold.receipt["gold_sidecar_sha256"])
     custody_root = (
-        {"v2": V2_CUSTODY_ROOT, "v3": V3_CUSTODY_ROOT, "v4": V4_CUSTODY_ROOT}[selected_version]
+        {"v2": V2_CUSTODY_ROOT, "v3": V3_CUSTODY_ROOT, "v4": V4_CUSTODY_ROOT, "v5": V5_CUSTODY_ROOT}[selected_version]
         if preflight_only else CUSTODY_ROOT
     )
     preflight = CliCustody(
@@ -376,6 +377,16 @@ def run_diagnostic(*, preflight_only: bool = False, preflight_version: str | Non
         "published_at": "2026-01-01T00:00:00Z",
         "source_url": "https://research-auto.local/preflight",
     }
+    if preflight_only and selected_version == "v5":
+        synthetic.update(
+            document_id="preflight:codex-cli-gpt-6-sol-preflight-v5",
+            title="Synthetic positive payroll export failure",
+            text=(
+                "I am a payroll administrator. During our monthly payroll preparation, "
+                "the scheduled payroll export fails before producing a file. "
+                "I cannot submit payroll until the export file is available."
+            ),
+        )
     if preflight_only:
         execution_contract = {
             "execution_mode": "preflight_only",
@@ -385,7 +396,7 @@ def run_diagnostic(*, preflight_only: bool = False, preflight_version: str | Non
             "provider_retry_control": "UNAVAILABLE",
             "cost_limit_status": "UNENFORCED",
         }
-        if selected_version in ("v3", "v4"):
+        if selected_version in ("v3", "v4", "v5"):
             execution_contract["preflight_version"] = selected_version
         preflight_claim = {
             **preflight_claim,
@@ -404,7 +415,7 @@ def run_diagnostic(*, preflight_only: bool = False, preflight_version: str | Non
     preflight_usage: dict[str, int] = {}
     observations: dict[str, bool | None] = (
         {"output_contract_valid": None, "abstained": None, "positive_sanity_valid": None}
-        if preflight_only and selected_version == "v4" else {}
+        if preflight_only and selected_version in ("v4", "v5") else {}
     )
     try:
         check = run_document(
@@ -533,8 +544,8 @@ def main(argv: list[str] | None = None) -> int:
         help="Run one isolated synthetic preflight without a metric run (default: v2).",
     )
     parser.add_argument(
-        "--preflight-version", choices=("v2", "v3", "v4"),
-        help="Requires --preflight-only; v3/v4 must be selected explicitly and preserve prior custody.",
+        "--preflight-version", choices=("v2", "v3", "v4", "v5"),
+        help="Requires --preflight-only; v3/v4/v5 must be explicit; v5 uses a positive synthetic input.",
     )
     args = parser.parse_args(argv)
     if args.preflight_version is not None and not args.preflight_only:
@@ -558,7 +569,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.preflight_only:
         summary["execution_mode"] = "preflight_only"
         summary["preflight_version"] = args.preflight_version or "v2"
-        if args.preflight_version == "v4":
+        if args.preflight_version in ("v4", "v5"):
             for field in ("output_contract_valid", "abstained", "positive_sanity_valid"):
                 summary[field] = result.get(field)
     print(json.dumps(summary, sort_keys=True))

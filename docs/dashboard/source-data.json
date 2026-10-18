@@ -1,12 +1,12 @@
 {
   "title": "Demand Intelligence",
-  "roadmap_updated": "2026-10-18",
-  "prepared_at": "2026-10-18",
+  "roadmap_updated": "2026-10-19",
+  "prepared_at": "2026-10-19",
   "source_label": "docs/roadmap.md",
-  "basis": "Roadmap plus hash-verified v4 aggregate receipt: contract-valid abstention, not positive preflight PASS. No model call during dashboard update or source inventory revalidation.",
+  "basis": "Roadmap plus hash-verified v5 aggregate receipt: synthetic positive preflight PASS only, not extraction quality. No model call during dashboard update or source inventory revalidation.",
   "readiness": {
     "infrastructure": "READY",
-    "operations": "BLOCKED_AT_CLI_PREFLIGHT",
+    "operations": "PREFLIGHT_PASS_AWAITING_METRIC_CONTRACT",
     "product": "PRODUCT_OUTPUT_NOT_AVAILABLE",
     "evaluation": "NOT_STARTED"
   },
@@ -75,8 +75,8 @@
       "id": 3,
       "name": "문제·증거 추출",
       "state": "blocked",
-      "label": "현재 병목",
-      "detail": "v4 실제 실행에서 계약 유효=true·기권=true·양성 sanity=false 확인. 정상 기권으로 진단 종료했지만 양성 preflight와 40건 추출은 계속 대기"
+      "label": "본 평가 대기",
+      "detail": "v5 양성 합성 preflight PASS: 계약 유효=true·기권=false·양성 sanity=true. 실제 품질은 미측정이며 40건 실행 경로·별도 계약이 다음 병목"
     },
     {
       "id": 4,
@@ -108,41 +108,41 @@
     }
   ],
   "diagnostic": {
-    "date": "2026-10-18",
+    "date": "2026-10-19",
     "requested_model": "gpt-6-sol",
-    "status": "PREFLIGHT_BLOCKED",
-    "reason": "CLI_SEMANTIC_SANITY_FAIL",
+    "status": "PREFLIGHT_PASS",
+    "reason": "contract_valid",
     "process_count": 1,
     "metric_run": "NOT_STARTED",
     "corpus_size": 40,
-    "version": "v4",
-    "root_cause": "CONTRACT_VALID_ABSTENTION_NOT_POSITIVE",
+    "version": "v5",
+    "root_cause": "NOT_APPLICABLE_SYNTHETIC_POSITIVE_PASS",
     "observability": "LIVE_TRISTATE_OBSERVATIONS_RECORDED",
     "output_contract_valid": true,
-    "abstained": true,
-    "positive_sanity_valid": false,
-    "revised_contract": "LIVE_VALIDATED_ABSTENTION_ONLY",
-    "extraction_tests": "275 passed, 1 skipped",
+    "abstained": false,
+    "positive_sanity_valid": true,
+    "revised_contract": "LIVE_VALIDATED_SYNTHETIC_POSITIVE_ONLY",
+    "extraction_tests": "289 passed, 1 skipped",
     "api_preflight_upper_bound_usd": 0.099756,
     "api_preflight_ceiling_usd": 0.10,
     "cli_version": "codex-cli 0.163.0-alpha.10.2",
-    "input_tokens": 17106,
-    "output_tokens": 191,
+    "input_tokens": 17132,
+    "output_tokens": 1155,
     "cost_status": "UNAVAILABLE",
     "resolved_model": "UNAVAILABLE",
-    "receipt_sha256": "14828d56db2a2043bb9c92d93a863cd258ab2f35f620f3073e87c9c80b6029f1",
-    "boundary_note": "v4는 수정 계약을 지킨 기권으로 진단을 마쳤습니다. 양성 preflight PASS나 추출 품질의 증명은 아닙니다. 기권 사유 원문은 저장하지 않아 이유를 단정하지 않습니다. v1·v2·v3 해시는 그대로이며 v4도 보존합니다. API 비용 상계 $0.099756/$0.10은 CLI 실측 비용이 아닙니다."
+    "receipt_sha256": "6bc8874ddc936149b280dfda54f4ff33999ee011a391f09707c354169bb6afd1",
+    "boundary_note": "v5는 양성 합성 입력의 실행 경로만 확인했습니다. 실제 추출 품질·환각 해소·제품 성과나 40건 평가 실행 승인이 아닙니다. v4와 입력이 달라 성능 비교가 아니며 v1~v4 기록 해시는 동일합니다. 기존 API 비용 상계 $0.099756/$0.10은 v5 CLI 실측 비용이 아닙니다."
   },
   "next_steps": [
     {
       "lane": "다음 증거",
-      "title": "근거가 충분한 양성 경로의 별도 계약 결정",
-      "detail": "v4는 계약에 맞게 기권했다. 양성 경로는 충분한 근거를 가진 별도 입력·새 실행 계약을 사람이 결정하며 v1·v2·v3·v4를 재사용하지 않는다."
+      "title": "40건 실행 경로와 별도 계약 확정",
+      "detail": "v5 합성 PASS 후에도 본 평가는 자동 시작하지 않는다. 별도 CLI 실행 경로·새 metric 기록·preflight 결속을 리뷰하고 사람이 실행을 승인한다."
     },
     {
       "lane": "별도 후속 계약",
-      "title": "40건 추출은 계속 대기",
-      "detail": "preflight PASS와 별도 실행 계약 전까지 metric claim을 소비하지 않는다. 상세 진단 구현은 추출 품질의 증명이 아니다."
+      "title": "동결 40건 입력·평가 경계 유지",
+      "detail": "금 표준은 모델 입력에서 분리한다. 실행 계약 전에는 metric claim을 소비하지 않고 v1~v5 기록을 재사용하지 않는다."
     },
     {
       "lane": "병행 검토",
@@ -160,8 +160,8 @@
     "구현과 테스트 수는 제품 완성도 지표가 아니다.",
     "fixture 카드는 실제 Opportunity Card 성과로 계산하지 않는다.",
     "독립 2차 검토는 calibration 실행의 선행 조건은 아니지만 제품 승격에는 필수다.",
-    "v4 실제 관측은 계약 유효=true·기권=true·양성 sanity=false다. 기권 이유 원문은 보존하지 않았다.",
-    "계약에 맞는 기권은 양성 preflight PASS·추출 품질·환각 해소의 증명이 아니다."
+    "v5 실제 관측은 계약 유효=true·기권=false·양성 sanity=true다. 40건 본 평가는 시작하지 않았다.",
+    "합성 양성 PASS는 실제 추출 품질·환각 해소·제품 성과의 증명이 아니다."
   ],
-  "snapshot_revision": "2026-10-18-v4-valid-abstention"
+  "snapshot_revision": "2026-10-19-v5-synthetic-pass"
 }

@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-10-18
-> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 v4 observed contract-valid abstention (true/true/false), positive preflight remains blocked; v1/v2/v3/v4 records preserved; 40-record model extraction not started; promotion hard-blocked pending live artifacts, source eligibility, and independent review
+> Updated: 2026-10-19
+> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 v5 synthetic positive preflight PASS (true/false/true); v1-v5 records preserved; 40-record model extraction awaits a separate execution path and contract; extraction quality and product value remain unmeasured; promotion hard-blocked pending live artifacts, source eligibility, and independent review
 
 | Readiness axis | Current state |
 |---|---|
@@ -617,13 +617,23 @@ Current code checkpoint:
       v1/v2/v3 unchanged, no metric artifacts, no raw response or abstention reason retained
 - [x] Bind the v4 receipt SHA-256:
       `14828d56db2a2043bb9c92d93a863cd258ab2f35f620f3073e87c9c80b6029f1`
-- [ ] Decide a separately authorized positive-path diagnostic with sufficiently supported input;
-      valid abstention completes this diagnostic but is not preflight PASS, extraction quality,
-      absence of hallucination, or an established reason for abstention
-- [ ] Preserve consumed v1/v2/v3/v4 records; do not reset/reuse versions or start 40-record
-      extraction without the corresponding separate execution contract
+- [x] Implement and review-approve explicitly selected v5 with an isolated positive synthetic
+      payroll document, directly supported actor/problem/context/consequence and no answer
+      mapping in the model request; **289 passed, 1 skipped**, staged TDD gate passed
+- [x] Execute one authorized v5 preflight on 2026-10-19:
+      `PREFLIGHT_PASS` / `contract_valid`, output-contract valid=true, abstained=false,
+      positive sanity valid=true, process count 1, wrapper retries 0, tokens 17132/1155;
+      implementation/prompt/schema hashes match, v1-v4 unchanged, no metric artifacts
+- [x] Bind the v5 receipt SHA-256:
+      `6bc8874ddc936149b280dfda54f4ff33999ee011a391f09707c354169bb6afd1`
+- [ ] Define and review a separately authorized 40-record CLI execution path and contract,
+      with fresh metric custody and explicit preflight binding; do not reuse the consumed v1
+      workflow or infer metric authorization from synthetic v5 PASS
+- [ ] Preserve consumed v1-v5 records; synthetic PASS does not establish real extraction
+      quality, absence of hallucination, product output, or causal improvement over v4
 - [ ] Implement official source-eligibility receipt producers before any promotion receipt can PASS
 - [ ] Obtain a PASS provider-contract preflight before consuming the corresponding metric-run claim
+      (CLI v5 synthetic PASS is observed; the separate OpenAI API path remains unverified)
 - [ ] Run actual structured extraction on the 40 development-calibration records
 - [ ] Compare the first model-backed extractor against `rule_v1` using the physically separate
       development gold sidecar; report P/M/E coverage and error classes without opening a new holdout
@@ -656,12 +666,19 @@ its claim binding and unchanged v1 custody were verified. This does not establis
 field or rule failed, and the original response cannot be reconstructed. A separate authorized
 v3 run exercised the detailed diagnostics and identified semantic `actor` / `NON_EMPTY_STRING`,
 with 17046 input and 333 output tokens. It does not establish the historical v2 cause or the
-exact v3 actor value. All four versions remain preserved. The compact contract clarification
+exact v3 actor value. All five versions remain preserved. The compact contract clarification
 was subsequently exercised by one v4 run: output contract valid=true, abstained=true,
 positive sanity valid=false. This is contract-valid abstention, not positive preflight PASS;
 the receipt retains `PREFLIGHT_BLOCKED` / `CLI_SEMANTIC_SANITY_FAIL` and input/output tokens
 17106/191. The abstention reason was not retained and must not be inferred. Offline extraction
-regression is now 275 passed, 1 skipped. The positive extraction path remains unverified.
+regression for v4 was 275 passed, 1 skipped. A separately authorized v5 diagnostic on
+2026-10-19 changed only the versioned synthetic input to explicitly supported payroll facts
+and observed `PREFLIGHT_PASS`: contract valid=true, abstained=false, positive sanity=true,
+tokens 17132/1155, no wrapper retry and no metric artifacts. v1-v4 hashes were unchanged.
+The v5 implementation regression is 289 passed, 1 skipped. This verifies a synthetic positive
+path only, not real extraction quality or field grounding. It is not a performance comparison
+with v4 because the input changed. A 40-record run still needs a separate reviewed execution
+path and human-approved contract with fresh metric custody and preflight binding.
 The API preflight upper bound is $0.099756 with the unchanged $0.10 ceiling; this is not an
 observed CLI cost. Any follow-up needs a distinct authorized execution contract; no consumed
 version may be reset or reused. No 40-record metric run has started. Even on PASS,

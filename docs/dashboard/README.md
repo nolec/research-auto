@@ -1,14 +1,15 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-18. Actual v4 preflight observed output-contract
-validity=true, abstained=true and positive sanity=false, with input/output tokens 17106/191.
-It remains `PREFLIGHT_BLOCKED` / `CLI_SEMANTIC_SANITY_FAIL`: contract-valid abstention is
-not positive preflight PASS or extraction-quality evidence. The abstention reason was not
-retained. Historical v1/v2/v3/v4 records remain preserved; v1/v2/v3 hashes were unchanged.
-Offline extraction regression is 275 passed, 1 skipped. The API preflight cost upper bound
+The source snapshot is dated 2026-10-19. Actual v5 positive synthetic preflight observed
+output-contract validity=true, abstained=false and positive sanity=true, with tokens 17132/1155.
+It returned `PREFLIGHT_PASS` / `contract_valid` in one model process without wrapper retries.
+Historical v1-v5 records remain preserved; v1-v4 hashes were unchanged. v4's contract-valid
+abstention remains a separate observation on a different input, not a performance baseline.
+Offline extraction regression is 289 passed, 1 skipped. The existing API preflight cost upper bound
 is $0.099756 under the unchanged $0.10 ceiling, not an observed CLI cost.
-The positive extraction path and 40-record model evaluation remain unstarted.
+Only the synthetic positive path has passed. Real extraction quality is unmeasured and the
+40-record CLI path requires a separate reviewed execution contract and fresh metric custody.
 Fixture output is not counted as product output.
 
 ## Build and preview
