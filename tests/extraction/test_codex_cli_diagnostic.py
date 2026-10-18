@@ -690,7 +690,7 @@ def test_default_preflight_stays_v2_and_does_not_create_v3(tmp_path: Path, monke
 
 @pytest.mark.parametrize("args", [
     ["--preflight-version", "v3"], ["--preflight-version", "v2"],
-    ["--preflight-only", "--preflight-version", "v4"],
+    ["--preflight-only", "--preflight-version", "v5"],
 ])
 def test_invalid_version_cli_args_never_launch_model(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, args: list[str],
@@ -703,7 +703,7 @@ def test_invalid_version_cli_args_never_launch_model(
     assert not (tmp_path / "v3").exists()
 
 
-@pytest.mark.parametrize("preflight_only,version", [(False, "v3"), (False, "v2"), (True, "v4")])
+@pytest.mark.parametrize("preflight_only,version", [(False, "v3"), (False, "v2"), (True, "v5")])
 def test_invalid_version_api_rejected_before_preparation(
     monkeypatch: pytest.MonkeyPatch, preflight_only: bool, version: str,
 ) -> None:
@@ -712,3 +712,133 @@ def test_invalid_version_api_rejected_before_preparation(
     monkeypatch.setattr(diagnostic, "load_baseline_manifest", unexpected)
     with pytest.raises(CliContractError, match="CLI_PREFLIGHT_VERSION_INVALID"):
         diagnostic.run_diagnostic(preflight_only=preflight_only, preflight_version=version)
+
+
+def _v4_cli_environment(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mode: str) -> list[list[str]]:
+    calls = _v3_cli_environment(tmp_path, monkeypatch, "nonzero" if mode == "nonzero" else "pass")
+    monkeypatch.setattr(diagnostic, "V4_CUSTODY_ROOT", tmp_path / "v4", raising=False)
+    monkeypatch.setattr(sys, "argv", ["codex_cli_diagnostic", "--preflight-only", "--preflight-version", "v4"])
+    (tmp_path / "v3").mkdir()
+    for name in ("preflight.claim.json", "preflight.receipt.json", "metric.claim.json", "metric.receipt.json"):
+        (tmp_path / "v3" / name).write_bytes(b"existing v3 custody")
+    fake_run = diagnostic.subprocess.run
+
+    def process(command: list[str], **kwargs: object) -> SimpleNamespace:
+        if command == ["codex", "--version"]:
+            if mode == "prerequisite":
+                raise FileNotFoundError("private executable path")
+            return fake_run(command, **kwargs)
+        completed = fake_run(command, **kwargs)
+        if mode == "timeout":
+            raise subprocess.TimeoutExpired(command, 120)
+        if mode == "internal":
+            raise RuntimeError(PRIVATE_VALUE)
+        events = [json.loads(line) for line in completed.stdout.splitlines()]
+        output = json.loads(events[2]["item"]["text"])
+        if mode == "abstain":
+            output = {field: None for field in output}
+            output.update(document_id=json.loads(events[2]["item"]["text"])["document_id"], abstention_reason=PRIVATE_VALUE)
+        elif mode == "negative":
+            output["problem_signal"] = False
+        elif mode == "schema":
+            output["actor"] = 42
+        elif mode == "semantic":
+            output["actor"] = None
+        elif mode == "membership":
+            output["document_id"] = "wrong-document"
+        if mode == "event":
+            completed.stdout = "{}"
+        else:
+            events[2]["item"]["text"] = "{" if mode == "json" else json.dumps([] if mode == "object" else output)
+            completed.stdout = "\n".join(json.dumps(event) for event in events)
+        return completed
+
+    monkeypatch.setattr(diagnostic.subprocess, "run", process)
+    return calls
+
+
+@pytest.mark.parametrize("mode,status,reason,observed", [
+    ("pass", "PREFLIGHT_PASS", "contract_valid", (True, False, True)),
+    ("abstain", "PREFLIGHT_BLOCKED", "CLI_SEMANTIC_SANITY_FAIL", (True, True, False)),
+    ("negative", "PREFLIGHT_BLOCKED", "CLI_SEMANTIC_SANITY_FAIL", (True, False, False)),
+    ("json", "PREFLIGHT_BLOCKED", "CLI_OUTPUT_SCHEMA_INVALID", (False, None, None)),
+    ("object", "PREFLIGHT_BLOCKED", "CLI_OUTPUT_SCHEMA_INVALID", (False, None, None)),
+    ("schema", "PREFLIGHT_BLOCKED", "CLI_OUTPUT_SCHEMA_INVALID", (False, None, None)),
+    ("semantic", "PREFLIGHT_BLOCKED", "CLI_OUTPUT_SCHEMA_INVALID", (False, None, None)),
+    ("membership", "PREFLIGHT_BLOCKED", "CLI_DOCUMENT_ID_MISMATCH", (False, None, None)),
+    ("event", "PREFLIGHT_BLOCKED", "CLI_TERMINAL_EVENT_INVALID", (None, None, None)),
+    ("nonzero", "PREFLIGHT_BLOCKED", "CLI_NONZERO_EXIT", (None, None, None)),
+    ("timeout", "PREFLIGHT_BLOCKED", "CLI_TIMEOUT", (None, None, None)),
+    ("internal", "PREFLIGHT_BLOCKED", "CLI_INTERNAL_ERROR", (None, None, None)),
+])
+def test_v4_cli_observations_match_receipt_and_preserve_custody(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str],
+    mode: str, status: str, reason: str, observed: tuple[bool | None, ...],
+) -> None:
+    calls = _v4_cli_environment(tmp_path, monkeypatch, mode)
+    historical = {str(p): p.read_bytes() for folder in ("custody", "v2", "v3") for p in (tmp_path / folder).iterdir()}
+    assert diagnostic.main() == (0 if status == "PREFLIGHT_PASS" else 1)
+    stdout = capsys.readouterr().out
+    summary = json.loads(stdout)
+    receipt_path = tmp_path / "v4/preflight.receipt.json"
+    receipt_text = receipt_path.read_text()
+    receipt = json.loads(receipt_text)
+    assert summary["status"] == receipt["status"] == status
+    assert summary["reason"] == receipt["reason"] == reason
+    assert summary["preflight_version"] == "v4"
+    for key, expected in zip(("output_contract_valid", "abstained", "positive_sanity_valid"), observed):
+        assert summary[key] is expected
+        assert receipt[key] is expected
+    claim = json.loads((tmp_path / "v4/preflight.claim.json").read_text())
+    assert claim["diagnostic_version"] == receipt["diagnostic_version"] == "codex-cli-gpt-6-sol-preflight-v4"
+    assert claim["execution_contract"]["preflight_version"] == "v4"
+    assert claim["execution_contract"]["max_model_processes"] == 1
+    assert claim["execution_contract"]["wrapper_retries"] == 0
+    assert claim["implementation_sha256"] == sha256(Path(diagnostic.__file__).read_bytes()).hexdigest()
+    assert receipt["process_count"] == len(calls) == 1
+    assert PRIVATE_VALUE not in stdout + receipt_text
+    assert not list((tmp_path / "v4").glob("metric.*"))
+    assert {path: Path(path).read_bytes() for path in historical} == historical
+    frozen = receipt_path.read_bytes()
+    assert diagnostic.main() == 1
+    repeated = json.loads(capsys.readouterr().out)
+    assert repeated["reason"] == "ALREADY_CONSUMED"
+    assert all(repeated[k] is None for k in ("output_contract_valid", "abstained", "positive_sanity_valid"))
+    assert receipt_path.read_bytes() == frozen
+    assert len(calls) == 1
+
+
+def test_v4_prerequisite_failure_is_unobserved_and_does_not_claim(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str],
+) -> None:
+    calls = _v4_cli_environment(tmp_path, monkeypatch, "prerequisite")
+    assert diagnostic.main() == 1
+    summary = json.loads(capsys.readouterr().out)
+    assert summary["reason"] == "CLI_PREREQUISITE_FAIL"
+    assert all(summary[k] is None for k in ("output_contract_valid", "abstained", "positive_sanity_valid"))
+    assert calls == []
+    assert not (tmp_path / "v4").exists()
+
+
+@pytest.mark.parametrize("version", ["v2", "v3"])
+def test_legacy_preflight_does_not_gain_v4_observation_fields(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], version: str,
+) -> None:
+    (_v2_cli_environment if version == "v2" else _v3_cli_environment)(tmp_path, monkeypatch)
+    assert diagnostic.main() == 0
+    summary = json.loads(capsys.readouterr().out)
+    receipt = json.loads((tmp_path / version / "preflight.receipt.json").read_text())
+    for key in ("output_contract_valid", "abstained", "positive_sanity_valid"):
+        assert key not in summary
+        assert key not in receipt
+
+
+def test_v4_requires_preflight_only_before_data_access(monkeypatch: pytest.MonkeyPatch) -> None:
+    def unexpected(*_args: object, **_kwargs: object) -> None:
+        pytest.fail("invalid mode must not prepare data")
+    monkeypatch.setattr(diagnostic, "load_baseline_manifest", unexpected)
+    with pytest.raises(SystemExit) as caught:
+        diagnostic.main(["--preflight-version", "v4"])
+    assert caught.value.code == 2
+    with pytest.raises(CliContractError, match="CLI_PREFLIGHT_VERSION_INVALID"):
+        diagnostic.run_diagnostic(preflight_version="v4")

@@ -1,12 +1,14 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-18. Actual v3 preflight was blocked by semantic
-`actor` / `NON_EMPTY_STRING`; observed input/output tokens were 17046/333. Historical
-v1/v2/v3 records remain preserved. v3 used the previous prompt/schema: the subsequent compact
-contract clarification is review-approved and offline-verified (259 passed, 1 skipped), not
-live-validated. Its API preflight cost upper bound is $0.099756 under the unchanged $0.10
-ceiling, not an observed CLI cost. The 40-record extraction has not started.
+The source snapshot is dated 2026-10-18. Actual v4 preflight observed output-contract
+validity=true, abstained=true and positive sanity=false, with input/output tokens 17106/191.
+It remains `PREFLIGHT_BLOCKED` / `CLI_SEMANTIC_SANITY_FAIL`: contract-valid abstention is
+not positive preflight PASS or extraction-quality evidence. The abstention reason was not
+retained. Historical v1/v2/v3/v4 records remain preserved; v1/v2/v3 hashes were unchanged.
+Offline extraction regression is 275 passed, 1 skipped. The API preflight cost upper bound
+is $0.099756 under the unchanged $0.10 ceiling, not an observed CLI cost.
+The positive extraction path and 40-record model evaluation remain unstarted.
 Fixture output is not counted as product output.
 
 ## Build and preview

@@ -1,7 +1,7 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-10-18
-> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 v3 preflight blocked at semantic actor/NON_EMPTY_STRING; compact extraction contract reviewed and offline-verified, not live-validated; v1/v2/v3 records preserved; 40-record model extraction not started; promotion hard-blocked pending live artifacts, source eligibility, and independent review
+> Status: Task 1 complete, Task 2 frozen at 400/500; Task 3 v4 observed contract-valid abstention (true/true/false), positive preflight remains blocked; v1/v2/v3/v4 records preserved; 40-record model extraction not started; promotion hard-blocked pending live artifacts, source eligibility, and independent review
 
 | Readiness axis | Current state |
 |---|---|
@@ -607,10 +607,21 @@ Current code checkpoint:
       hashes without weakening semantic checks or increasing limits; extraction regression
       **259 passed, 1 skipped**, staged TDD gate passed; API preflight conservative upper bound
       **$0.099756 <= $0.10**, unchanged three attempts and 1200 output tokens
-- [ ] Live-validate the revised extraction contract only under a distinct authorized version;
-      v3 used the old contract, so its receipt is not evidence for the revised prompt/schema
-- [ ] Preserve consumed v1/v2/v3 records; do not reset/reuse versions or start 40-record extraction
-      without the corresponding separate execution contract
+- [x] Implement and review-approve explicit v4 custody and tri-state contract validity,
+      abstention and positive sanity observations in both CLI JSON and receipt, preserving
+      legacy surfaces and invalid/unreached distinctions; **275 passed, 1 skipped**, TDD gate passed
+- [x] Execute one authorized v4 preflight on 2026-10-18 with the revised contract:
+      `output_contract_valid=true`, `abstained=true`, `positive_sanity_valid=false`;
+      `PREFLIGHT_BLOCKED` / `CLI_SEMANTIC_SANITY_FAIL`, process count 1, wrapper retries 0,
+      input/output tokens 17106/191, matching implementation/prompt/schema hashes;
+      v1/v2/v3 unchanged, no metric artifacts, no raw response or abstention reason retained
+- [x] Bind the v4 receipt SHA-256:
+      `14828d56db2a2043bb9c92d93a863cd258ab2f35f620f3073e87c9c80b6029f1`
+- [ ] Decide a separately authorized positive-path diagnostic with sufficiently supported input;
+      valid abstention completes this diagnostic but is not preflight PASS, extraction quality,
+      absence of hallucination, or an established reason for abstention
+- [ ] Preserve consumed v1/v2/v3/v4 records; do not reset/reuse versions or start 40-record
+      extraction without the corresponding separate execution contract
 - [ ] Implement official source-eligibility receipt producers before any promotion receipt can PASS
 - [ ] Obtain a PASS provider-contract preflight before consuming the corresponding metric-run claim
 - [ ] Run actual structured extraction on the 40 development-calibration records
@@ -645,9 +656,13 @@ its claim binding and unchanged v1 custody were verified. This does not establis
 field or rule failed, and the original response cannot be reconstructed. A separate authorized
 v3 run exercised the detailed diagnostics and identified semantic `actor` / `NON_EMPTY_STRING`,
 with 17046 input and 333 output tokens. It does not establish the historical v2 cause or the
-exact v3 actor value. All three versions remain preserved. The subsequent compact contract
-clarification is review-approved and offline-verified (259 passed, 1 skipped), not live-validated.
-Its API preflight upper bound is $0.099756 with the unchanged $0.10 ceiling; this is not an
+exact v3 actor value. All four versions remain preserved. The compact contract clarification
+was subsequently exercised by one v4 run: output contract valid=true, abstained=true,
+positive sanity valid=false. This is contract-valid abstention, not positive preflight PASS;
+the receipt retains `PREFLIGHT_BLOCKED` / `CLI_SEMANTIC_SANITY_FAIL` and input/output tokens
+17106/191. The abstention reason was not retained and must not be inferred. Offline extraction
+regression is now 275 passed, 1 skipped. The positive extraction path remains unverified.
+The API preflight upper bound is $0.099756 with the unchanged $0.10 ceiling; this is not an
 observed CLI cost. Any follow-up needs a distinct authorized execution contract; no consumed
 version may be reset or reused. No 40-record metric run has started. Even on PASS,
 preflight-only stops without a metric run: a later calibration execution requires its own contract and

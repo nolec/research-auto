@@ -31,6 +31,7 @@ BASELINE_PATH = ROOT / "configs/extraction/development-baseline-v1.json"
 CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-v1"
 V2_CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-preflight-v2"
 V3_CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-preflight-v3"
+V4_CUSTODY_ROOT = ROOT / "artifacts/extraction/calibration/audit-local/codex-cli-gpt-6-sol-preflight-v4"
 MODEL = "gpt-6-sol"
 MAX_DOCUMENT_SECONDS = 120
 MAX_RUN_SECONDS = 1800
@@ -334,7 +335,7 @@ def _claim_base(
 
 def run_diagnostic(*, preflight_only: bool = False, preflight_version: str | None = None) -> dict[str, object]:
     """Run explicitly selected isolated preflight, or the legacy v1 workflow."""
-    if preflight_version is not None and (not preflight_only or preflight_version not in ("v2", "v3")):
+    if preflight_version is not None and (not preflight_only or preflight_version not in ("v2", "v3", "v4")):
         raise CliContractError("CLI_PREFLIGHT_VERSION_INVALID")
     selected_version = preflight_version or "v2"
     manifest = load_baseline_manifest(BASELINE_PATH, repo_root=ROOT)
@@ -356,7 +357,7 @@ def run_diagnostic(*, preflight_only: bool = False, preflight_version: str | Non
     corpus_hash = str(inference.receipt["inference_corpus_sha256"])
     gold_hash = str(gold.receipt["gold_sidecar_sha256"])
     custody_root = (
-        (V3_CUSTODY_ROOT if selected_version == "v3" else V2_CUSTODY_ROOT)
+        {"v2": V2_CUSTODY_ROOT, "v3": V3_CUSTODY_ROOT, "v4": V4_CUSTODY_ROOT}[selected_version]
         if preflight_only else CUSTODY_ROOT
     )
     preflight = CliCustody(
@@ -384,8 +385,8 @@ def run_diagnostic(*, preflight_only: bool = False, preflight_version: str | Non
             "provider_retry_control": "UNAVAILABLE",
             "cost_limit_status": "UNENFORCED",
         }
-        if selected_version == "v3":
-            execution_contract["preflight_version"] = "v3"
+        if selected_version in ("v3", "v4"):
+            execution_contract["preflight_version"] = selected_version
         preflight_claim = {
             **preflight_claim,
             "schema_version": "codex-cli-extraction-claim/v2",
@@ -401,17 +402,35 @@ def run_diagnostic(*, preflight_only: bool = False, preflight_version: str | Non
         }
     preflight.claim(preflight_claim)
     preflight_usage: dict[str, int] = {}
+    observations: dict[str, bool | None] = (
+        {"output_contract_valid": None, "abstained": None, "positive_sanity_valid": None}
+        if preflight_only and selected_version == "v4" else {}
+    )
     try:
         check = run_document(
             synthetic, schema_path=SCHEMA_PATH, prompt_text=prompt_text,
             timeout=MAX_DOCUMENT_SECONDS, schema_bytes=schema_bytes,
             usage_out=preflight_usage,
         )
-        if check.get("problem_signal") is not True or check.get("usable_evidence") is not True:
+        positive_sanity = check.get("problem_signal") is True and check.get("usable_evidence") is True
+        if observations:
+            observations.update(
+                output_contract_valid=True,
+                abstained=check.get("abstention_reason") is not None,
+                positive_sanity_valid=positive_sanity,
+            )
+        if not positive_sanity:
             raise CliContractError("CLI_SEMANTIC_SANITY_FAIL")
     except Exception as error:
+        if observations and observations["output_contract_valid"] is None and isinstance(error, CliContractError):
+            validation = error.diagnostics.get("validation")
+            if isinstance(validation, dict) and validation.get("stage") in (
+                "json_decode", "object_shape", "json_schema", "semantic",
+            ):
+                observations["output_contract_valid"] = False
         receipt = {
             **preflight_claim, "status": "PREFLIGHT_BLOCKED",
+            **observations,
             "reason": str(error) if isinstance(error, CliContractError) else "CLI_INTERNAL_ERROR",
             "process_diagnostics": _failure_diagnostics(error, "preflight"),
             "claim_sha256": _digest(preflight_claim), "process_count": 1,
@@ -423,6 +442,7 @@ def run_diagnostic(*, preflight_only: bool = False, preflight_version: str | Non
         return receipt
     preflight_receipt = {
         **preflight_claim, "status": "PREFLIGHT_PASS", "reason": "contract_valid",
+        **observations,
         "claim_sha256": _digest(preflight_claim), "process_count": 1,
         "usage_status": "OBSERVED" if preflight_usage else "UNAVAILABLE",
         "token_usage": preflight_usage,
@@ -513,8 +533,8 @@ def main(argv: list[str] | None = None) -> int:
         help="Run one isolated synthetic preflight without a metric run (default: v2).",
     )
     parser.add_argument(
-        "--preflight-version", choices=("v2", "v3"),
-        help="Requires --preflight-only; v3 must be selected explicitly and preserves v1/v2 custody.",
+        "--preflight-version", choices=("v2", "v3", "v4"),
+        help="Requires --preflight-only; v3/v4 must be selected explicitly and preserve prior custody.",
     )
     args = parser.parse_args(argv)
     if args.preflight_version is not None and not args.preflight_only:
@@ -538,6 +558,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.preflight_only:
         summary["execution_mode"] = "preflight_only"
         summary["preflight_version"] = args.preflight_version or "v2"
+        if args.preflight_version == "v4":
+            for field in ("output_contract_valid", "abstained", "positive_sanity_valid"):
+                summary[field] = result.get(field)
     print(json.dumps(summary, sort_keys=True))
     success = result["status"] == "MEASURED" or (
         args.preflight_only and result["status"] == "PREFLIGHT_PASS"
