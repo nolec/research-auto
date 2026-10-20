@@ -1,12 +1,12 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-10-20
-> Status: Task 1 complete, Task 2 frozen at 400/500; v5 synthetic positive preflight PASS preserved; metric-v1 stopped on first document (CLI_OUTPUT_MISSING), 1 operational failure and 39 not attempted; terminal-probe-v1 local candidate implemented and review-approved with 367 tests passed/1 skipped, awaiting separate execution approval; actual failure subtype UNKNOWN; extraction quality and product value remain unmeasured; promotion hard-blocked; ship BLOCKED because project quality gates remain unconfigured
+> Status: Task 1 complete, Task 2 frozen at 400/500; v1-v5 preserved; metric-v1 INCOMPLETE / CLI_OUTPUT_MISSING, operational failure 1 and not attempted 39; terminal-probe-v1 consumed once: OTHER_FAILURE / CLI_NONZERO_EXIT, attempts 1 / processes 1, history integrity VERIFIED; actual CLI cause UNKNOWN; process-diagnostics preservation fix review-approved with 33 synthetic tests passed, no model rerun; product quality unmeasured; ship BLOCKED
 
 | Readiness axis | Current state |
 |---|---|
 | Calibration infrastructure | `READY` |
-| Operational validation | `TERMINAL_PROBE_READY_AWAITING_APPROVAL` (not executed) |
+| Operational validation | `OTHER_FAILURE / CLI_NONZERO_EXIT` (terminal-probe-v1 consumed once; cause UNKNOWN; metadata fix synthetic-tested only) |
 | Product capability | `PRODUCT_OUTPUT_NOT_AVAILABLE` |
 | Evaluation evidence | `INCOMPLETE` (1 operational failure, 39 not attempted) |
 | Delivery readiness | `BLOCKED` — project quality gates `unconfigured`; code approval is not ship readiness |
@@ -655,9 +655,16 @@ Current code checkpoint:
       returned/postlaunch observation 1, unknown null; orphan claims infer neither count
 - [x] Restore complete custody/privacy/repeat-run assertions and pass offline extraction
       regression **367 passed, 1 skipped**, staged TDD gate and candidate-bound code review
-- [ ] Execute terminal-probe-v1 only after separate explicit approval; not executed yet;
-      maximum one first-document process, subprocess timeout 120 seconds, no total workflow
-      bound, CLI cost ceiling unenforced, no retry and no 40-record evaluation
+- [x] Execute terminal-probe-v1 once after explicit approval: OTHER_FAILURE / CLI_NONZERO_EXIT;
+      local attempts 1, observed processes 1, historical integrity VERIFIED. Custody consumed;
+      no retry, no new version execution and no 40-record evaluation. Usage/cost unavailable.
+- [x] Investigate evidence loss without rerun: CLI wrapper produced safe process metadata,
+      but probe receipt omitted it; actual CLI exit cause remains UNKNOWN.
+- [x] Preserve sanitized returncode/failure_stage/error_class in future receipts; retain legacy
+      receipt compatibility. Two-file code review APPROVE; synthetic regression 33 passed.
+      No historical backfill or model execution after fix; completion gate remains incomplete
+      because implementation changes are unstaged.
+
 - [ ] Decide whether to authorize a separately versioned, bounded diagnostic of the improved
       terminal metadata; do not retry/reset metric-v1 or infer permission from this roadmap
 - [ ] Implement official source-eligibility receipt producers before any promotion receipt can PASS
@@ -718,26 +725,12 @@ Evaluation is INCOMPLETE with null metrics, not a measured failure rate for all 
 The original raw events were not retained, so the terminal-message subtype remains UNKNOWN.
 Offline diagnostic improvements now distinguish missing, multiple and non-string completed
 agent messages, preserve null for early unobserved counts, and propagate only safe metadata.
-The dedicated terminal-probe-v1 local candidate was implemented and review-approved
-on 2026-10-20, including 0/1/null observed process counts separate from call attempts.
-Its offline regression passed 367 tests with one skipped and the staged TDD gate passed.
-It has not been exercised by a new model call; actual execution requires separate approval. Historical records remain unchanged. Even on PASS,
-preflight-only stops without a metric run: a later calibration execution requires its own contract and
-execution path. Model binding records an explicit CLI argument, not verified server acceptance;
-actual model identity, provider request/retry counts and cost remain unknown.
-The CLI extraction-only diagnostic has no model-backed card handoff; that remains a separate
-product execution path. A same-process handoff now consumes one-shot sanitized model
-outputs in memory and can persist only schema-valid cards, Markdown, and an aggregate receipt; it
-has not executed a live run. The historical collect-only inventory contained **653 tests**; the full
-suite and local-custody integration outcome were not rerun for the latest CLI changes. This test
-inventory count does not make the product output available;
-product capability remains `PRODUCT_OUTPUT_NOT_AVAILABLE` until model-backed clustering, decision
-policy, ranking, and Opportunity Card generation form an evidence-backed end-to-end path with a
-PASS promotion receipt. Independent secondary reviews remain mandatory for that promotion even
-though development-only calibration does not require official source eligibility. The current
-promotion path remains hard-blocked in practice: no live model-backed card receipt exists, the
-authoritative source-eligibility producer does not exist, and independent reviews are incomplete;
-caller-supplied self-attestation cannot enable product promotion.
+The dedicated terminal-probe-v1 was executed once with explicit approval on 2026-10-20.
+It ended OTHER_FAILURE / CLI_NONZERO_EXIT: one local attempt and one observed process;
+historical integrity VERIFIED. Its custody is consumed and must not be retried.
+The actual exit cause remains UNKNOWN because process diagnostics were not persisted.
+The subsequent preservation fix has code review APPROVE and 33 synthetic tests passed;
+no model execution after the fix. The prior 367 passed / 1 skipped remain historical evidence.
 
 ### Task 4 — Problem clustering and evidence independence
 

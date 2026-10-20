@@ -182,6 +182,49 @@ def test_real_cli_wrapper_process_observations_reach_cli_and_receipt(environment
     assert json.loads(capsys.readouterr().out) == value
 
 
+@pytest.mark.parametrize('mode', ['nonzero', 'timeout', 'launch', 'unsafe'])
+def test_safe_process_diagnostics_survive_receipt_and_inspection(environment, monkeypatch, capsys, mode):
+    m, _, _, calls, transport = environment
+    before = m.inventory()
+    expected = {
+        'nonzero': dict(returncode=2, failure_stage='subprocess_exit', error_class='AUTHENTICATION_ERROR'),
+        'timeout': dict(returncode=None, failure_stage='subprocess_timeout', error_class='TIMEOUT'),
+        'launch': dict(returncode=None, failure_stage='subprocess_launch', error_class='PERMISSION_ERROR'),
+        'unsafe': dict(returncode=None, failure_stage='contract_validation', error_class='UNKNOWN'),
+    }[mode]
+
+    def process(doc, **kwargs):
+        transport(doc, **kwargs)
+        error = cli.CliContractError('CLI_NONZERO_EXIT', **expected)
+        error.diagnostics.update(stdout=PRIVATE, stderr=PRIVATE)
+        if mode == 'unsafe':
+            error.diagnostics.update(returncode=True, failure_stage=PRIVATE, error_class=PRIVATE)
+        raise error
+
+    monkeypatch.setattr(cli, 'run_document', process)
+    assert m.main(['--execute']) == 2
+    value = json.loads(capsys.readouterr().out)
+    assert value['process_diagnostics'] == expected
+    receipt_path = m.PROBE_ROOT / 'probe.receipt.json'
+    assert json.loads(receipt_path.read_text()) == value
+    assert PRIVATE not in receipt_path.read_text()
+    assert m.main(['--inspect']) == 2
+    assert json.loads(capsys.readouterr().out) == value
+    assert m.inventory() == before
+    assert len(calls) == 1
+
+    # A legacy receipt without the optional metadata remains readable.
+    legacy = {k: v for k, v in value.items() if k != 'process_diagnostics'}
+    receipt_path.write_text(json.dumps(legacy))
+    assert m.inspect_probe() == legacy
+    for invalid in (None, {**expected, 'stderr': PRIVATE},
+                    {**expected, 'returncode': True},
+                    {**expected, 'failure_stage': [PRIVATE]},
+                    {**expected, 'error_class': PRIVATE}):
+        receipt_path.write_text(json.dumps({**value, 'process_diagnostics': invalid}))
+        assert m.inspect_probe()['reason'] == 'TERMINAL_RECEIPT_INVALID'
+
+
 def test_unobserved_call_attempts_are_not_inferred_from_claim(environment, monkeypatch, capsys):
     m, _, _, _, _ = environment
     monkeypatch.setattr(cli, 'run_document', lambda *a, **k: (_ for _ in ()).throw(SystemExit('stop')))

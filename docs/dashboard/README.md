@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-20 (revision ship-gates-blocked).
+The source snapshot is dated 2026-10-20 (revision terminal-probe-v1-nonzero).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -9,13 +9,15 @@ No quality metrics were produced; this is not a 40-record failure rate or absten
 The raw events were not retained, so its terminal-message subtype remains UNKNOWN.
 The new terminal diagnostics distinguish absent, multiple and non-string messages,
 retain null for early unobserved counts and do not backfill historical evidence.
-The dedicated terminal-probe-v1 local candidate is implemented and review-approved.
-Offline regression passed 367 tests with one skipped and the staged TDD gate passed.
-Call attempts and actual processes are separate: known prelaunch failure=0, observed
-execution=1, unknown=null. Orphan claim inspection infers neither value.
-No live model execution has exercised this probe. A future run needs separate approval
-for at most one first-document call, no retry, subprocess timeout 120 seconds, no total
-workflow time bound and an unenforced CLI cost ceiling; no 40-record evaluation.
+The dedicated terminal-probe-v1 was executed once after explicit approval.
+Result: OTHER_FAILURE / CLI_NONZERO_EXIT; local attempts 1, observed processes 1,
+historical integrity VERIFIED. Usage and cost unavailable. This custody is consumed.
+The actual exit cause is UNKNOWN: the receipt did not retain process diagnostics.
+The subsequent safe process-metadata preservation fix is code-review approved, with
+33 synthetic regression tests passed and legacy receipt compatibility maintained.
+No model execution followed the fix. Its staged completion gate remains incomplete;
+prior 367 passed / 1 skipped and prior staged gate PASS are historical evidence.
+No retry or 40-record evaluation is authorized.
 Historical v1-v5 and metric-v1 custody remain preserved. V5 synthetic positive PASS
 (true/false/true, tokens 17132/1155) remains a separate observation, not product evidence.
 No model calls, retries or historical writes are part of this dashboard refresh.

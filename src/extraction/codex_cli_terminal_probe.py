@@ -170,6 +170,17 @@ def _observed_process_count(error: cli.CliContractError) -> int | None:
     return None
 
 
+def _safe_process_diagnostics(value: dict) -> dict:
+    """Reuse the CLI allowlists without retaining messages or raw process output."""
+    stage = value.get("failure_stage")
+    classification = value.get("error_class")
+    return cli.CliContractError(
+        "CLI_OPERATIONAL_ERROR", returncode=value.get("returncode"),
+        failure_stage=stage if type(stage) is str else "contract_validation",
+        error_class=classification if type(classification) is str else "UNKNOWN",
+    ).diagnostics
+
+
 def inspect_probe() -> dict:
     """No writes, launch inference, historical verification, or inferred launch count."""
     path = PROBE_ROOT / "probe.receipt.json"
@@ -177,7 +188,7 @@ def inspect_probe() -> dict:
         try:
             value = json.loads(path.read_bytes())
             base_keys = set(_result("INCOMPLETE", "NO_TERMINAL_RECEIPT"))
-            if (not isinstance(value, dict) or set(value) - {"terminal_diagnostics"} != base_keys
+            if (not isinstance(value, dict) or set(value) - {"terminal_diagnostics", "process_diagnostics"} != base_keys
                 or value["schema_version"] != "codex-cli-terminal-probe-receipt/v1"
                 or value["run_id"] != RUN_ID or value["status"] not in OUTCOMES
                 or value["status"] == "BLOCKED" or value["reason"] not in REASONS
@@ -190,6 +201,12 @@ def inspect_probe() -> dict:
             terminal = value.get("terminal_diagnostics")
             if terminal is not None and (not isinstance(terminal, dict) or terminal != cli._safe_terminal_metadata(terminal)):
                 raise ValueError("unsafe diagnostics")
+            if "process_diagnostics" in value:
+                process = value["process_diagnostics"]
+                if (not isinstance(process, dict)
+                    or (process.get("returncode") is not None and type(process.get("returncode")) is not int)
+                    or process != _safe_process_diagnostics(process)):
+                    raise ValueError("unsafe process diagnostics")
             return value
         except (OSError, ValueError, TypeError, KeyError):
             return _result("INCOMPLETE", "TERMINAL_RECEIPT_INVALID")
@@ -234,6 +251,7 @@ def run_probe() -> dict:
         validate_extraction(frozen.document, result)
         value.update(status="NOT_REPRODUCED", reason="CONTRACT_VALID")
     except cli.CliContractError as error:
+        value["process_diagnostics"] = _safe_process_diagnostics(error.diagnostics)
         value["local_model_process_count"] = _observed_process_count(error)
         reason = str(error) if str(error) in REASONS else "CLI_INTERNAL_ERROR"
         value.update(status="REPRODUCED" if reason == "CLI_OUTPUT_MISSING" else "OTHER_FAILURE", reason=reason)
