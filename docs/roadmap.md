@@ -1,14 +1,15 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-10-19
-> Status: Task 1 complete, Task 2 frozen at 400/500; v5 synthetic positive preflight PASS preserved; metric-v1 stopped on first document (CLI_OUTPUT_MISSING), 1 operational failure and 39 not attempted; terminal diagnostics improved offline; actual failure subtype UNKNOWN; extraction quality and product value remain unmeasured; promotion hard-blocked
+> Updated: 2026-10-20
+> Status: Task 1 complete, Task 2 frozen at 400/500; v5 synthetic positive preflight PASS preserved; metric-v1 stopped on first document (CLI_OUTPUT_MISSING), 1 operational failure and 39 not attempted; terminal-probe-v1 local candidate implemented and review-approved with 367 tests passed/1 skipped, awaiting separate execution approval; actual failure subtype UNKNOWN; extraction quality and product value remain unmeasured; promotion hard-blocked; ship BLOCKED because project quality gates remain unconfigured
 
 | Readiness axis | Current state |
 |---|---|
 | Calibration infrastructure | `READY` |
-| Operational validation | `BLOCKED_AT_METRIC_TERMINAL_OUTPUT` |
+| Operational validation | `TERMINAL_PROBE_READY_AWAITING_APPROVAL` (not executed) |
 | Product capability | `PRODUCT_OUTPUT_NOT_AVAILABLE` |
 | Evaluation evidence | `INCOMPLETE` (1 operational failure, 39 not attempted) |
+| Delivery readiness | `BLOCKED` — project quality gates `unconfigured`; code approval is not ship readiness |
 
 Test counts below are historical regression checkpoints, not a product-completeness metric.
 
@@ -647,6 +648,16 @@ Current code checkpoint:
       preflight receipt, metric progress and receipt; preserve failure order, null for early
       unobserved counts and absence for old metadata; offline regression **338 passed, 1 skipped**,
       staged TDD gate PASS; no live verification of the new diagnostics
+- [x] Implement and review-approve the independent first-document terminal-probe-v1 local
+      candidate on 2026-10-20: source metric/corpus/order/input/prompt/schema bindings,
+      one-shot custody, atomic no-overwrite receipt, historical subtype UNKNOWN and no retry
+- [x] Separate local call attempts from observed process count: known prelaunch failure 0,
+      returned/postlaunch observation 1, unknown null; orphan claims infer neither count
+- [x] Restore complete custody/privacy/repeat-run assertions and pass offline extraction
+      regression **367 passed, 1 skipped**, staged TDD gate and candidate-bound code review
+- [ ] Execute terminal-probe-v1 only after separate explicit approval; not executed yet;
+      maximum one first-document process, subprocess timeout 120 seconds, no total workflow
+      bound, CLI cost ceiling unenforced, no retry and no 40-record evaluation
 - [ ] Decide whether to authorize a separately versioned, bounded diagnostic of the improved
       terminal metadata; do not retry/reset metric-v1 or infer permission from this roadmap
 - [ ] Implement official source-eligibility receipt producers before any promotion receipt can PASS
@@ -707,8 +718,10 @@ Evaluation is INCOMPLETE with null metrics, not a measured failure rate for all 
 The original raw events were not retained, so the terminal-message subtype remains UNKNOWN.
 Offline diagnostic improvements now distinguish missing, multiple and non-string completed
 agent messages, preserve null for early unobserved counts, and propagate only safe metadata.
-They passed 338 extraction tests with one skipped and code review; they have not been
-exercised by a new model call. Historical records remain unchanged. Even on PASS,
+The dedicated terminal-probe-v1 local candidate was implemented and review-approved
+on 2026-10-20, including 0/1/null observed process counts separate from call attempts.
+Its offline regression passed 367 tests with one skipped and the staged TDD gate passed.
+It has not been exercised by a new model call; actual execution requires separate approval. Historical records remain unchanged. Even on PASS,
 preflight-only stops without a metric run: a later calibration execution requires its own contract and
 execution path. Model binding records an explicit CLI argument, not verified server acceptance;
 actual model identity, provider request/retry counts and cost remain unknown.
@@ -770,6 +783,20 @@ promotion receipt from authoritative upstream artifacts.
 - [ ] Audit each card in five minutes or less
 - [ ] Report yield, positive precision, boundary error, merge error, and audit time
 - [ ] Decide whether to proceed, recalibrate the system, or revise source selection
+
+## Delivery readiness — separate from product/model execution
+
+The terminal-probe code has candidate-bound review approval and the historical focused
+regression is 367 passed, 1 skipped. This does not establish project-wide test, type,
+lint or secret-gate completion. `.omc/quality-gates.json` is unconfigured; no quality
+commands were executed during the ship check. Type/lint project commands and a secret
+scan contract remain unresolved. Tool availability alone is not an approved command.
+Bounded read-only quality discovery remains pending after a work-class scope conflict;
+preserve the existing benchmark-maintenance candidate rather than treating it as a
+clean documentation-only worktree. No policy exception, install, model run, push or
+deploy is implied. Proposal scope, configuration application and verification execution
+need separate approvals. Rebuild outputs before freezing the final candidate; any
+subsequent tracked documentation change requires renewed integrated review.
 
 ## Explicitly deferred
 
