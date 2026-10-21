@@ -101,3 +101,21 @@ to an existing package directory when using a shared runtime. Render verificatio
 1440px and 390px screenshots, horizontal-overflow checks, expected source/milestone counts,
 and displayed aggregate values. The local `evidence/<snapshot_revision>/handoff.json` keeps the results;
 source claims still require independent live verification.
+
+## 2026-10-22: accepted limited local search, HOLD unchanged
+
+- Case: github:4995518374 / pandas #66499. Search limited to the existing fixed
+  GitHub run ff2ac41d-73bb-4593-9e3e-9aa3a93369dd and its four manifest-listed files.
+- Case-insensitive literal terms: 66499, 4995518374, DataFrame.eq, Pylance, ListLike.
+  Five distinct source-record identifiers matched: target 1, other issues 4.
+- The target in raw-source-items.jsonl and collection-result.json is the same report,
+  not an independent event. No additional event or quantitative impact evidence was
+  found in this limited search. Frequency, time loss, cost and affected-user scale
+  remain unestablished; stored comment count 3 is not an affected-user count.
+- Coverage limitation: search-unmatched record bodies were not read. Some other
+  candidates were excluded from titles and opening text; initial output was truncated.
+  This is not an exhaustive source audit, independent reproduction, or proof of absence.
+- User accepted this bounded conclusion; existing HOLD remains unchanged. Prior card,
+  audit, OMC closure and historical records are preserved; no retrospective repair.
+  Bundle MATCH and imports/corpus NOT_RUN unchanged; no model/network/elevation.
+  No product-validation completion or card-production credit.

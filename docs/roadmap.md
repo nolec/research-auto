@@ -3,6 +3,24 @@
 > Updated: 2026-10-22
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-22: accepted limited local search, HOLD unchanged
+
+- Case: github:4995518374 / pandas #66499. Search limited to the existing fixed
+  GitHub run ff2ac41d-73bb-4593-9e3e-9aa3a93369dd and its four manifest-listed files.
+- Case-insensitive literal terms: 66499, 4995518374, DataFrame.eq, Pylance, ListLike.
+  Five distinct source-record identifiers matched: target 1, other issues 4.
+- The target in raw-source-items.jsonl and collection-result.json is the same report,
+  not an independent event. No additional event or quantitative impact evidence was
+  found in this limited search. Frequency, time loss, cost and affected-user scale
+  remain unestablished; stored comment count 3 is not an affected-user count.
+- Coverage limitation: search-unmatched record bodies were not read. Some other
+  candidates were excluded from titles and opening text; initial output was truncated.
+  This is not an exhaustive source audit, independent reproduction, or proof of absence.
+- User accepted this bounded conclusion; existing HOLD remains unchanged. Prior card,
+  audit, OMC closure and historical records are preserved; no retrospective repair.
+  Bundle MATCH and imports/corpus NOT_RUN unchanged; no model/network/elevation.
+  No product-validation completion or card-production credit.
+
 ## 2026-10-22: OMC completion investigation closed by user acceptance
 
 - Preserve commit `69cfaddb3fb7f4cb9ec1270c58dfa0f850a3a784` and all existing records.
