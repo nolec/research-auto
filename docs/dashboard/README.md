@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-21 (revision local-readiness-investigation-closed).
+The source snapshot is dated 2026-10-22 (revision manual-card-hold).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -36,6 +36,17 @@ Terminal-probe-v2 previously ended CLI_NONZERO_EXIT, returncode 1, subprocess_ex
 PERMISSION_ERROR; the actual denied operation remains UNKNOWN. No retries.
 Import restriction investigation is CLOSED by user acceptance; imports and corpus
 reconstruction remain NOT_RUN. Neither authentication nor model readiness is established.
+
+## Single manual card review
+
+Independent case github:4995518374 (pandas #66499): initial card-only judgment HOLD;
+source audit found the quotation accurate and summary substantially faithful, with
+interpretation and omitted technical context separated; final user judgment HOLD unchanged.
+Recurrence and impact evidence remain insufficient. Three stored comments are not three
+affected users; comment contents were not inspected. Initial card and judgment remain distinct.
+This chat-only manual review is concluded, not product validation completion or card-production
+credit. It does not establish model quality, representativeness or time savings. No next case
+is authorized. Prior bundle MATCH and import/corpus NOT_RUN are unchanged.
 
 ## Delivery readiness
 

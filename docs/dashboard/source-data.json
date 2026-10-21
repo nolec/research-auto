@@ -1,9 +1,9 @@
 {
   "title": "Demand Intelligence",
-  "roadmap_updated": "2026-10-21",
-  "prepared_at": "2026-10-21",
+  "roadmap_updated": "2026-10-22",
+  "prepared_at": "2026-10-22",
   "source_label": "docs/roadmap.md",
-  "basis": "User-provided ordinary-terminal outputs: local permission checks successful and cleanup confirmed; historical preservation UNCHANGED; implementation bundle MATCH. No independent rerun during documentation update. Import restriction not established: imports/corpus NOT_RUN; user accepted investigation closure. Historical metric and terminal-probe records preserved; v2 cause remains UNKNOWN.",
+  "basis": "User-provided ordinary-terminal outputs: local permission checks successful and cleanup confirmed; historical preservation UNCHANGED; implementation bundle MATCH. No independent rerun during documentation update. Import restriction not established: imports/corpus NOT_RUN; user accepted investigation closure. Historical metric and terminal-probe records preserved; v2 cause remains UNKNOWN. Independent manual GitHub case reviewed in chat: initial HOLD, source audit, final HOLD confirmed by user; missing recurrence and impact evidence. Not automated output, product validation, or card production.",
   "readiness": {
     "infrastructure": "READY",
     "operations": "TERMINAL_PROBE_READY_AWAITING_APPROVAL",
@@ -77,7 +77,7 @@
       "name": "문제·증거 추출",
       "state": "blocked",
       "label": "단일 진단 승인 대기",
-      "detail": "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님."
+      "detail": "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님. 수동 카드 1건: github:4995518374(pandas #66499), 동결 목록과 독립된 기존 원문 첫 레코드. 첫 판단 보류 → 원문 감사 → 보류 유지. 인용 정확·요약 대체로 충실; 개발 혼선은 해석, 타입 선언 원인·수정안은 초안 누락. 반복 빈도·영향 규모 부족으로 기회 판단 근거 미충족. 수동 검토 종료이며 제품 검증 완료·카드 생산 실적 아님."
     },
     {
       "id": 4,
@@ -145,7 +145,7 @@
       "attempted_unknown": 0
     },
     "elapsed_seconds": 17.948,
-    "improvement": "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님.",
+    "improvement": "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님. 수동 카드 1건: github:4995518374(pandas #66499), 동결 목록과 독립된 기존 원문 첫 레코드. 첫 판단 보류 → 원문 감사 → 보류 유지. 인용 정확·요약 대체로 충실; 개발 혼선은 해석, 타입 선언 원인·수정안은 초안 누락. 반복 빈도·영향 규모 부족으로 기회 판단 근거 미충족. 수동 검토 종료이며 제품 검증 완료·카드 생산 실적 아님.",
     "probe": {
       "version": "codex-cli-gpt-6-sol-terminal-probe-v2",
       "implementation_status": "REVIEW_APPROVED_LOCAL_CANDIDATE",
@@ -212,7 +212,7 @@
     "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님.",
     "코드 리뷰 APPROVE는 SHIP READY가 아니다. 품질 게이트 미설정과 미실행 항목을 분리하며 이번 문서 갱신은 기존 전체 후보 리뷰의 재결속이 필요하다."
   ],
-  "snapshot_revision": "2026-10-21-local-readiness-investigation-closed",
+  "snapshot_revision": "2026-10-22-manual-card-hold",
   "delivery": {
     "status": "BLOCKED",
     "code_review": "PROBE_APPROVED",
@@ -252,6 +252,46 @@
     "historical_v2_root_cause": "UNKNOWN"
   },
   "notes": [
-    "일반 터미널 점검과 구현 번들 MATCH는 사용자 제공 출력의 관측이며 이번 갱신에서 재실행하지 않았다. import·corpus 재구성은 NOT_RUN으로 유지하고 조사를 종료했다. 안전한 방법이 존재하지 않는다는 판정은 아니다."
-  ]
+    "일반 터미널 점검과 구현 번들 MATCH는 사용자 제공 출력의 관측이며 이번 갱신에서 재실행하지 않았다. import·corpus 재구성은 NOT_RUN으로 유지하고 조사를 종료했다. 안전한 방법이 존재하지 않는다는 판정은 아니다.",
+    "수동 카드 1건: github:4995518374(pandas #66499), 동결 목록과 독립된 기존 원문 첫 레코드. 첫 판단 보류 → 원문 감사 → 보류 유지. 인용 정확·요약 대체로 충실; 개발 혼선은 해석, 타입 선언 원인·수정안은 초안 누락. 반복 빈도·영향 규모 부족으로 기회 판단 근거 미충족. 수동 검토 종료이며 제품 검증 완료·카드 생산 실적 아님.",
+    "첫 초안·첫 판단은 감사 결과 및 최종 판단과 구분해 보존한다. 기존 구현 번들 MATCH·import/corpus NOT_RUN은 유지하며 별도 모델 실행·외부 통신은 하지 않았다."
+  ],
+  "manual_card_review": {
+    "status": "COMPLETED_SINGLE_CASE_ONLY",
+    "review_date": "2026-10-22",
+    "document_id": "github:4995518374",
+    "source": "github",
+    "community": "pandas-dev/pandas",
+    "issue_number": 66499,
+    "selection": "FIRST_STORED_RECORD_OF_FIXED_RAW_FILE_INDEPENDENT_OF_FROZEN_EVALUATION",
+    "source_path": "artifacts/source-spike/github-analysis/runs/ff2ac41d-73bb-4593-9e3e-9aa3a93369dd/raw-source-items.jsonl",
+    "source_line": 1,
+    "source_file_sha256": "6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b",
+    "initial_judgment": {
+      "decision": "HOLD",
+      "basis": "Concrete problem but recurrence and impact evidence insufficient"
+    },
+    "source_audit": {
+      "quotation": "ACCURATE",
+      "summary": "SUBSTANTIALLY_FAITHFUL",
+      "interpretation": "Developer confusion is an inference, not measured harm",
+      "omission": "Type annotation explanation and proposed fix omitted from initial card",
+      "comment_count": 3,
+      "comment_content_verified": false,
+      "recurrence_evidence": "NOT_ESTABLISHED",
+      "impact_evidence": "NOT_ESTABLISHED"
+    },
+    "final_judgment": {
+      "decision": "HOLD",
+      "changed": false,
+      "basis": "User maintained hold after source audit; recurrence and impact evidence still insufficient"
+    },
+    "evidence_source": "CHAT_MANUAL_INTERPRETATION_AND_EXPLICIT_USER_JUDGMENTS",
+    "independent_reproduction": false,
+    "product_validation": "NOT_ESTABLISHED",
+    "counts_toward_card_production": false,
+    "automatic_extraction_result": false,
+    "representativeness": "NOT_ESTABLISHED",
+    "next_case_authorized": false
+  }
 }

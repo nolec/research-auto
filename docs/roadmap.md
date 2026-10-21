@@ -1,7 +1,28 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-10-21
-> Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED
+> Updated: 2026-10-22
+> Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit
+
+## 2026-10-22: independent manual card review, HOLD maintained
+
+- Case: `github:4995518374`, pandas issue #66499, first stored record of the fixed GitHub
+  raw file; independent of the frozen evaluation list, overlap not determined.
+- Evidence: chat interpretation of the existing local source and explicit user judgments.
+  Source file SHA-256: `6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b`.
+- Initial card-only judgment: HOLD. Concrete problem, insufficient recurrence and impact evidence.
+- Source audit: quotation accurate, summary substantially faithful. Developer confusion was
+  an inference, not measured harm. Initial card omitted the type-annotation explanation
+  and proposed fix. Stored comment count 3 is not evidence of three affected users;
+  comment contents were not inspected. Initial card and judgment remain separate from this audit.
+- Final user judgment: HOLD maintained after audit, for the same missing recurrence and impact evidence.
+  No judgment change and no independent reproduction or external verification.
+- This single manual review is concluded. It is not product validation completion, an
+  automated extraction result, or credit toward five trustworthy Opportunity Cards.
+  No claim of representativeness, time savings, precision or throughput.
+- Existing bundle MATCH observation and import/corpus NOT_RUN remain unchanged.
+  Historical evidence preserved; no separate model execution or external traffic.
+  No next case or external investigation is automatically authorized.
+
 
 ## 2026-10-21: accepted local readiness observations and investigation closure
 
