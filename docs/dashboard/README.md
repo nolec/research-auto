@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-22 (revision manual-card-hold).
+The source snapshot is dated 2026-10-22 (revision omc-investigation-closed).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -47,6 +47,16 @@ affected users; comment contents were not inspected. Initial card and judgment r
 This chat-only manual review is concluded, not product validation completion or card-production
 credit. It does not establish model quality, representativeness or time savings. No next case
 is authorized. Prior bundle MATCH and import/corpus NOT_RUN are unchanged.
+
+## OMC completion investigation closure
+
+Commit 69cfadd succeeded; its OMC completion receipt was not generated. The accepted
+read-only investigation confirmed that new completion tracking had not been started.
+The exact invalid pending condition at commit time remains UNKNOWN because the
+contemporaneous pending original was unavailable. Current absence does not establish
+historical absence. Investigation CLOSED; prior commit and records preserved, with
+no retroactive recovery or receipt backfill. This does not change manual HOLD, bundle
+MATCH, imports/corpus NOT_RUN or product-validation status.
 
 ## Delivery readiness
 

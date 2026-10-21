@@ -1,7 +1,23 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-10-22
-> Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit
+> Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
+
+## 2026-10-22: OMC completion investigation closed by user acceptance
+
+- Preserve commit `69cfaddb3fb7f4cb9ec1270c58dfa0f850a3a784` and all existing records.
+- Git commit succeeded; OMC completion receipt was not generated. These are separate states.
+- Confirmed procedural issue: the new manual-card documentation work used
+  `preserve-if-present` with `work_id: null` instead of starting new completion tracking.
+- Exact invalid pending condition at commit time remains UNKNOWN. The original pending
+  file from that moment was unavailable; current absence does not prove historical absence.
+- Investigation is CLOSED after explicit user acceptance. No retroactive receipt creation,
+  repair, record overwrite or commit rewrite. This is not a new product validation result.
+- Future new work should start its own tracking with the correct work class; this new
+  documentation update uses document_only/start, not retroactive repair of the prior work.
+- Prior manual-card HOLD, bundle MATCH and import/corpus NOT_RUN remain unchanged.
+  No separate model execution, external communication or privilege escalation.
+
 
 ## 2026-10-22: independent manual card review, HOLD maintained
 

@@ -3,7 +3,7 @@
   "roadmap_updated": "2026-10-22",
   "prepared_at": "2026-10-22",
   "source_label": "docs/roadmap.md",
-  "basis": "User-provided ordinary-terminal outputs: local permission checks successful and cleanup confirmed; historical preservation UNCHANGED; implementation bundle MATCH. No independent rerun during documentation update. Import restriction not established: imports/corpus NOT_RUN; user accepted investigation closure. Historical metric and terminal-probe records preserved; v2 cause remains UNKNOWN. Independent manual GitHub case reviewed in chat: initial HOLD, source audit, final HOLD confirmed by user; missing recurrence and impact evidence. Not automated output, product validation, or card production.",
+  "basis": "User-provided ordinary-terminal outputs: local permission checks successful and cleanup confirmed; historical preservation UNCHANGED; implementation bundle MATCH. No independent rerun during documentation update. Import restriction not established: imports/corpus NOT_RUN; user accepted investigation closure. Historical metric and terminal-probe records preserved; v2 cause remains UNKNOWN. Independent manual GitHub case reviewed in chat: initial HOLD, source audit, final HOLD confirmed by user; missing recurrence and impact evidence. Not automated output, product validation, or card production. Accepted OMC investigation closure: 69cfadd commit successful; completion receipt not generated; new work did not start completion tracking, exact historical invalid condition UNKNOWN. No historical receipt backfill.",
   "readiness": {
     "infrastructure": "READY",
     "operations": "TERMINAL_PROBE_READY_AWAITING_APPROVAL",
@@ -145,7 +145,7 @@
       "attempted_unknown": 0
     },
     "elapsed_seconds": 17.948,
-    "improvement": "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님. 수동 카드 1건: github:4995518374(pandas #66499), 동결 목록과 독립된 기존 원문 첫 레코드. 첫 판단 보류 → 원문 감사 → 보류 유지. 인용 정확·요약 대체로 충실; 개발 혼선은 해석, 타입 선언 원인·수정안은 초안 누락. 반복 빈도·영향 규모 부족으로 기회 판단 근거 미충족. 수동 검토 종료이며 제품 검증 완료·카드 생산 실적 아님.",
+    "improvement": "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님. 수동 카드 1건: github:4995518374(pandas #66499), 동결 목록과 독립된 기존 원문 첫 레코드. 첫 판단 보류 → 원문 감사 → 보류 유지. 인용 정확·요약 대체로 충실; 개발 혼선은 해석, 타입 선언 원인·수정안은 초안 누락. 반복 빈도·영향 규모 부족으로 기회 판단 근거 미충족. 수동 검토 종료이며 제품 검증 완료·카드 생산 실적 아님. OMC 조사 종료 수용: 69cfadd Git 커밋 성공과 완료 기록 미생성은 별개. 새 완료 추적을 시작하지 않은 절차 문제는 확인됐지만 당시 직접적인 pending 무효 조건은 미확정. 커밋·기존 기록 보존, 소급 복구 없음.",
     "probe": {
       "version": "codex-cli-gpt-6-sol-terminal-probe-v2",
       "implementation_status": "REVIEW_APPROVED_LOCAL_CANDIDATE",
@@ -212,7 +212,7 @@
     "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님.",
     "코드 리뷰 APPROVE는 SHIP READY가 아니다. 품질 게이트 미설정과 미실행 항목을 분리하며 이번 문서 갱신은 기존 전체 후보 리뷰의 재결속이 필요하다."
   ],
-  "snapshot_revision": "2026-10-22-manual-card-hold",
+  "snapshot_revision": "2026-10-22-omc-investigation-closed",
   "delivery": {
     "status": "BLOCKED",
     "code_review": "PROBE_APPROVED",
@@ -254,7 +254,8 @@
   "notes": [
     "일반 터미널 점검과 구현 번들 MATCH는 사용자 제공 출력의 관측이며 이번 갱신에서 재실행하지 않았다. import·corpus 재구성은 NOT_RUN으로 유지하고 조사를 종료했다. 안전한 방법이 존재하지 않는다는 판정은 아니다.",
     "수동 카드 1건: github:4995518374(pandas #66499), 동결 목록과 독립된 기존 원문 첫 레코드. 첫 판단 보류 → 원문 감사 → 보류 유지. 인용 정확·요약 대체로 충실; 개발 혼선은 해석, 타입 선언 원인·수정안은 초안 누락. 반복 빈도·영향 규모 부족으로 기회 판단 근거 미충족. 수동 검토 종료이며 제품 검증 완료·카드 생산 실적 아님.",
-    "첫 초안·첫 판단은 감사 결과 및 최종 판단과 구분해 보존한다. 기존 구현 번들 MATCH·import/corpus NOT_RUN은 유지하며 별도 모델 실행·외부 통신은 하지 않았다."
+    "첫 초안·첫 판단은 감사 결과 및 최종 판단과 구분해 보존한다. 기존 구현 번들 MATCH·import/corpus NOT_RUN은 유지하며 별도 모델 실행·외부 통신은 하지 않았다.",
+    "OMC 조사 종료 수용: 69cfadd Git 커밋 성공과 완료 기록 미생성은 별개. 새 완료 추적을 시작하지 않은 절차 문제는 확인됐지만 당시 직접적인 pending 무효 조건은 미확정. 커밋·기존 기록 보존, 소급 복구 없음."
   ],
   "manual_card_review": {
     "status": "COMPLETED_SINGLE_CASE_ONLY",
@@ -293,5 +294,23 @@
     "automatic_extraction_result": false,
     "representativeness": "NOT_ESTABLISHED",
     "next_case_authorized": false
+  },
+  "omc_investigation": {
+    "status": "CLOSED_ACCEPTED_BY_USER",
+    "preserved_commit": "69cfaddb3fb7f4cb9ec1270c58dfa0f850a3a784",
+    "git_commit": "SUCCEEDED",
+    "historical_completion_receipt": "NOT_GENERATED",
+    "observed_message": "pending completion is invalid",
+    "confirmed_procedural_issue": "NEW_COMPLETION_TRACKING_NOT_STARTED",
+    "session_evidence": {
+      "session_id": "20261022T010047-7044365e",
+      "completion_action": "preserve-if-present",
+      "work_id": null
+    },
+    "historical_direct_invalid_condition": "UNKNOWN",
+    "historical_pending_original": "NOT_AVAILABLE",
+    "retroactive_recovery": "NOT_PERFORMED",
+    "historical_records": "PRESERVED",
+    "scope": "ACCEPTED_READ_ONLY_INVESTIGATION_NOT_PRODUCT_VALIDATION"
   }
 }
