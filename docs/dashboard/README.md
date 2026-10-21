@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-20 (revision terminal-probe-v1-nonzero).
+The source snapshot is dated 2026-10-21 (revision local-readiness-investigation-closed).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -15,7 +15,7 @@ historical integrity VERIFIED. Usage and cost unavailable. This custody is consu
 The actual exit cause is UNKNOWN: the receipt did not retain process diagnostics.
 The subsequent safe process-metadata preservation fix is code-review approved, with
 33 synthetic regression tests passed and legacy receipt compatibility maintained.
-No model execution followed the fix. Its staged completion gate remains incomplete;
+No model execution followed the fix. Its pre-commit completion report was incomplete; the fix and v2 preparation were subsequently committed;
 prior 367 passed / 1 skipped and prior staged gate PASS are historical evidence.
 No retry or 40-record evaluation is authorized.
 Historical v1-v5 and metric-v1 custody remain preserved. V5 synthetic positive PASS
@@ -24,6 +24,18 @@ No model calls, retries or historical writes are part of this dashboard refresh.
 Any future execution needs an explicitly approved new version and bounded contract.
 Actual CLI cost and resolved model are unavailable. The API $0.099756/$0.10 upper bound
 is not a measured CLI cost. Fixture output is not counted as product output.
+
+## Accepted ordinary-terminal observations
+
+User-provided output (not rerun during this update): local sandbox, temporary file and
+loopback checks SUCCESS, historical preservation UNCHANGED, process groups CONFIRMED,
+temporary resources CLEAN, elapsed 0.212 seconds; Python 3.12.8. Separate standard-library
+implementation bundle MATCH: 6a342edab1a35c8c9cd072df59436efceda3fcfe1114fb0305fa5260a27dd997.
+The bundle comparison created no resources and did not perform its own preservation audit.
+Terminal-probe-v2 previously ended CLI_NONZERO_EXIT, returncode 1, subprocess_exit,
+PERMISSION_ERROR; the actual denied operation remains UNKNOWN. No retries.
+Import restriction investigation is CLOSED by user acceptance; imports and corpus
+reconstruction remain NOT_RUN. Neither authentication nor model readiness is established.
 
 ## Delivery readiness
 

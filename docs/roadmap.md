@@ -1,12 +1,33 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-10-20
-> Status: Task 1 complete, Task 2 frozen at 400/500; v1-v5 preserved; metric-v1 INCOMPLETE / CLI_OUTPUT_MISSING, operational failure 1 and not attempted 39; terminal-probe-v1 consumed once: OTHER_FAILURE / CLI_NONZERO_EXIT, attempts 1 / processes 1, history integrity VERIFIED; actual CLI cause UNKNOWN; process-diagnostics preservation fix review-approved with 33 synthetic tests passed, no model rerun; product quality unmeasured; ship BLOCKED
+> Updated: 2026-10-21
+> Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED
+
+## 2026-10-21: accepted local readiness observations and investigation closure
+
+- Evidence source: user-provided ordinary-terminal output, not independently rerun here.
+- Python 3.12.8; nested sandbox, temporary file and loopback checks SUCCESS.
+- Historical file inventory/content/mode checks matched v2 claim; before/after snapshot
+  `7c5a62b29ef2ee46d060e9c6d4053a4093200ac3c70eaffb2cb749e42bf8f500`;
+  preservation UNCHANGED, groups CONFIRMED, temporary resources CLEAN, elapsed 0.212s.
+- Separate standard-library bundle comparison MATCH:
+  `6a342edab1a35c8c9cd072df59436efceda3fcfe1114fb0305fa5260a27dd997`;
+  metric files 9 plus probe, elapsed 0.006s, no resources created. This command did not
+  perform a separate preservation hash audit; historical algorithm identity was not independently verified.
+- Terminal-probe-v2 consumed one first-document attempt: OTHER_FAILURE / CLI_NONZERO_EXIT,
+  returncode 1, subprocess_exit, PERMISSION_ERROR classification, processes 1, integrity VERIFIED.
+  The denied operation and historical root cause remain UNKNOWN; no retry or backfill.
+- Safe diagnostic metadata/v2 preparation are committed; synthetic v2 regression 36 passed.
+- Import restriction API investigation CLOSED after explicit user acceptance. Imports and corpus
+  reconstruction remain NOT_RUN; this is not proof that safe isolation is impossible.
+- No model/CLI inference, external traffic, privilege escalation or historical writes during this update.
+  Authentication, model availability and product value remain unverified. No automatic follow-up run.
+
 
 | Readiness axis | Current state |
 |---|---|
 | Calibration infrastructure | `READY` |
-| Operational validation | `OTHER_FAILURE / CLI_NONZERO_EXIT` (terminal-probe-v1 consumed once; cause UNKNOWN; metadata fix synthetic-tested only) |
+| Operational validation | User-provided local checks PASS; bundle MATCH; import/corpus NOT_RUN; investigation CLOSED; v2 root cause UNKNOWN |
 | Product capability | `PRODUCT_OUTPUT_NOT_AVAILABLE` |
 | Evaluation evidence | `INCOMPLETE` (1 operational failure, 39 not attempted) |
 | Delivery readiness | `BLOCKED` — project quality gates `unconfigured`; code approval is not ship readiness |
@@ -662,10 +683,9 @@ Current code checkpoint:
       but probe receipt omitted it; actual CLI exit cause remains UNKNOWN.
 - [x] Preserve sanitized returncode/failure_stage/error_class in future receipts; retain legacy
       receipt compatibility. Two-file code review APPROVE; synthetic regression 33 passed.
-      No historical backfill or model execution after fix; completion gate remains incomplete
-      because implementation changes are unstaged.
+      No historical backfill or model execution after fix; the pre-commit completion report was incomplete because changes were unstaged; those changes were subsequently committed.
 
-- [ ] Decide whether to authorize a separately versioned, bounded diagnostic of the improved
+- [ ] Deferred, not authorized: any future separately versioned, bounded diagnostic of the improved
       terminal metadata; do not retry/reset metric-v1 or infer permission from this roadmap
 - [ ] Implement official source-eligibility receipt producers before any promotion receipt can PASS
 - [ ] Obtain a PASS provider-contract preflight before consuming the corresponding metric-run claim

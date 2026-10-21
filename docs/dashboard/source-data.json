@@ -1,9 +1,9 @@
 {
   "title": "Demand Intelligence",
-  "roadmap_updated": "2026-10-20",
-  "prepared_at": "2026-10-20",
+  "roadmap_updated": "2026-10-21",
+  "prepared_at": "2026-10-21",
   "source_label": "docs/roadmap.md",
-  "basis": "Historical v1-v5 and metric-v1 preserved. Approved terminal-probe-v1 executed once: OTHER_FAILURE / CLI_NONZERO_EXIT; attempts 1, observed processes 1, integrity VERIFIED. Exit subtype UNKNOWN. Subsequent safe process-diagnostics preservation fix review-approved; 33 synthetic tests passed, no further model execution.",
+  "basis": "User-provided ordinary-terminal outputs: local permission checks successful and cleanup confirmed; historical preservation UNCHANGED; implementation bundle MATCH. No independent rerun during documentation update. Import restriction not established: imports/corpus NOT_RUN; user accepted investigation closure. Historical metric and terminal-probe records preserved; v2 cause remains UNKNOWN.",
   "readiness": {
     "infrastructure": "READY",
     "operations": "TERMINAL_PROBE_READY_AWAITING_APPROVAL",
@@ -77,7 +77,7 @@
       "name": "문제·증거 추출",
       "state": "blocked",
       "label": "단일 진단 승인 대기",
-      "detail": "terminal-probe-v1은 승인된 첫 문서 1회 실행 후 OTHER_FAILURE / CLI_NONZERO_EXIT로 종료. 시도 1·실행 1·기존 기록 무결성 VERIFIED. 종료 코드·오류 분류는 기록되지 않아 원인 UNKNOWN. 후속 진단 정보 보존 수정은 리뷰 APPROVE·합성 33 passed; 수정 후 모델 실행 없음. 기존 367 passed, 1 skipped는 이전 오프라인 근거이며 staged 완료 게이트는 미충족."
+      "detail": "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님."
     },
     {
       "id": 4,
@@ -145,9 +145,9 @@
       "attempted_unknown": 0
     },
     "elapsed_seconds": 17.948,
-    "improvement": "terminal-probe-v1은 승인된 첫 문서 1회 실행 후 OTHER_FAILURE / CLI_NONZERO_EXIT로 종료. 시도 1·실행 1·기존 기록 무결성 VERIFIED. 종료 코드·오류 분류는 기록되지 않아 원인 UNKNOWN. 후속 진단 정보 보존 수정은 리뷰 APPROVE·합성 33 passed; 수정 후 모델 실행 없음. 기존 367 passed, 1 skipped는 이전 오프라인 근거이며 staged 완료 게이트는 미충족.",
+    "improvement": "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님.",
     "probe": {
-      "version": "codex-cli-gpt-6-sol-terminal-probe-v1",
+      "version": "codex-cli-gpt-6-sol-terminal-probe-v2",
       "implementation_status": "REVIEW_APPROVED_LOCAL_CANDIDATE",
       "execution_status": "OTHER_FAILURE",
       "execution_authorized": false,
@@ -162,12 +162,17 @@
       "local_model_call_attempt_count": 1,
       "local_model_process_count": 1,
       "integrity": "VERIFIED",
-      "error_class": "UNKNOWN",
+      "error_class": "PERMISSION_ERROR",
       "token_usage": {},
       "cost_status": "UNAVAILABLE",
       "process_diagnostics_fix": "REVIEW_APPROVED_SYNTHETIC_ONLY",
-      "process_diagnostics_tests": "33 passed",
-      "detail": "terminal-probe-v1은 승인된 첫 문서 1회 실행 후 OTHER_FAILURE / CLI_NONZERO_EXIT로 종료. 시도 1·실행 1·기존 기록 무결성 VERIFIED. 종료 코드·오류 분류는 기록되지 않아 원인 UNKNOWN. 후속 진단 정보 보존 수정은 리뷰 APPROVE·합성 33 passed; 수정 후 모델 실행 없음. 기존 367 passed, 1 skipped는 이전 오프라인 근거이며 staged 완료 게이트는 미충족."
+      "process_diagnostics_tests": "36 passed",
+      "detail": "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님.",
+      "process_diagnostics": {
+        "returncode": 1,
+        "failure_stage": "subprocess_exit",
+        "error_class": "PERMISSION_ERROR"
+      }
     }
   },
   "next_steps": [
@@ -179,7 +184,7 @@
     {
       "lane": "다음 결정",
       "title": "첫 문서 단일 진단 실행 승인 여부 결정",
-      "detail": "terminal-probe-v1은 승인된 첫 문서 1회 실행 후 OTHER_FAILURE / CLI_NONZERO_EXIT로 종료. 시도 1·실행 1·기존 기록 무결성 VERIFIED. 종료 코드·오류 분류는 기록되지 않아 원인 UNKNOWN. 후속 진단 정보 보존 수정은 리뷰 APPROVE·합성 33 passed; 수정 후 모델 실행 없음. 기존 367 passed, 1 skipped는 이전 오프라인 근거이며 staged 완료 게이트는 미충족."
+      "detail": "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님."
     },
     {
       "lane": "기록 보존",
@@ -204,10 +209,10 @@
     "독립 2차 검토는 calibration 실행의 선행 조건은 아니지만 제품 승격에는 필수다.",
     "본 평가 metric-v1: 첫 문서 CLI_OUTPUT_MISSING, 운영 실패 1·미시도 39. 평가 INCOMPLETE, 실제 세부 원인 UNKNOWN.",
     "합성 양성 PASS는 실제 추출 품질·환각 해소·제품 성과의 증명이 아니다.",
-    "terminal-probe-v1은 승인된 첫 문서 1회 실행 후 OTHER_FAILURE / CLI_NONZERO_EXIT로 종료. 시도 1·실행 1·기존 기록 무결성 VERIFIED. 종료 코드·오류 분류는 기록되지 않아 원인 UNKNOWN. 후속 진단 정보 보존 수정은 리뷰 APPROVE·합성 33 passed; 수정 후 모델 실행 없음. 기존 367 passed, 1 skipped는 이전 오프라인 근거이며 staged 완료 게이트는 미충족.",
+    "terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님.",
     "코드 리뷰 APPROVE는 SHIP READY가 아니다. 품질 게이트 미설정과 미실행 항목을 분리하며 이번 문서 갱신은 기존 전체 후보 리뷰의 재결속이 필요하다."
   ],
-  "snapshot_revision": "2026-10-20-terminal-probe-v1-nonzero",
+  "snapshot_revision": "2026-10-21-local-readiness-investigation-closed",
   "delivery": {
     "status": "BLOCKED",
     "code_review": "PROBE_APPROVED",
@@ -218,5 +223,35 @@
     "secret_check": "NOT_RUN",
     "approval": "NOT_GRANTED",
     "boundary": "진단 코드 리뷰 승인과 배포 준비는 별개입니다. 품질 게이트 미설정으로 배포 차단 중이며, 전체 테스트·타입·린트·비밀값 검사는 이번 ship에서 실행하지 않았습니다. mypy 실행 파일 존재만으로 프로젝트 타입 검사 계약이 확정되지는 않습니다. 문서 갱신 후 전체 후보 리뷰도 새로 결속해야 합니다."
-  }
+  },
+  "local_readiness": {
+    "evidence_source": "USER_PROVIDED_TERMINAL_OUTPUT_NOT_INDEPENDENTLY_RERUN",
+    "observed_date": "2026-10-21",
+    "python": "3.12.8",
+    "nested_sandbox": "SUCCESS",
+    "temporary_file": "SUCCESS",
+    "loopback": "SUCCESS",
+    "historical_preservation": "UNCHANGED",
+    "snapshot_sha256": "7c5a62b29ef2ee46d060e9c6d4053a4093200ac3c70eaffb2cb749e42bf8f500",
+    "process_group_cleanup": "CONFIRMED",
+    "temporary_resources_cleanup": "CLEAN",
+    "elapsed_seconds": 0.212,
+    "implementation_bundle": "MATCH",
+    "implementation_bundle_sha256": "6a342edab1a35c8c9cd072df59436efceda3fcfe1114fb0305fa5260a27dd997",
+    "bundle_elapsed_seconds": 0.006,
+    "historical_algorithm_identity": "NOT_INDEPENDENTLY_VERIFIED",
+    "bundle_preservation_hash_audit": "NOT_RUN",
+    "imports": "NOT_RUN",
+    "corpus_reconstruction": "NOT_RUN",
+    "investigation": "CLOSED_ACCEPTED_BY_USER",
+    "reason": "IMPORT_RESTRICTION_NOT_ESTABLISHED",
+    "model_readiness": "NOT_ESTABLISHED",
+    "model_execution": "NOT_RUN",
+    "external_network": "NOT_RUN",
+    "privilege_escalation": "NOT_RUN",
+    "historical_v2_root_cause": "UNKNOWN"
+  },
+  "notes": [
+    "일반 터미널 점검과 구현 번들 MATCH는 사용자 제공 출력의 관측이며 이번 갱신에서 재실행하지 않았다. import·corpus 재구성은 NOT_RUN으로 유지하고 조사를 종료했다. 안전한 방법이 존재하지 않는다는 판정은 아니다."
+  ]
 }
