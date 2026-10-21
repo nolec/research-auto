@@ -15,11 +15,12 @@ from src.extraction import codex_cli_diagnostic as cli
 from src.extraction import codex_cli_metric as metric
 from src.extraction.development_slice import validate_extraction
 
-RUN_ID = "codex-cli-gpt-6-sol-terminal-probe-v1"
+RUN_ID = "codex-cli-gpt-6-sol-terminal-probe-v2"
 PROBE_ROOT = metric.RUN_ROOT.parent / RUN_ID
+V1_PROBE_ROOT = metric.RUN_ROOT.parent / "codex-cli-gpt-6-sol-terminal-probe-v1"
 METRIC_ROOT = metric.RUN_ROOT
 HISTORY_ROOTS = (cli.CUSTODY_ROOT, cli.V2_CUSTODY_ROOT, cli.V3_CUSTODY_ROOT,
-                 cli.V4_CUSTODY_ROOT, cli.V5_CUSTODY_ROOT, METRIC_ROOT)
+                 cli.V4_CUSTODY_ROOT, cli.V5_CUSTODY_ROOT, V1_PROBE_ROOT, METRIC_ROOT)
 SOURCE_HASHES = {
     "metric.claim.json": "f5a682c607bfcae806e3ac93d36cffa9e3d9b58cf34b91be8758e0fe8e422356",
     "metric.receipt.json": "eafda67d79cb3e8a66962eab202d5bae4bf3f3fba73a766d991add875dcaba79",
@@ -106,6 +107,14 @@ def prepare() -> Prepared:
                 "input_serialization": "UTF-8 canonical JSON; sorted keys; compact separators; ensure_ascii=false",
                 "selected_ordinal": 1, "requested_model": cli.MODEL,
                 "cli_version": "codex-cli 0.163.0-alpha.10.2",
+                # metric.prepare checks the CLI version; host permissions are not probed.
+                "execution_environment": {
+                    "cli_version": "codex-cli 0.163.0-alpha.10.2",
+                    "requested_sandbox": "read-only",
+                    "host_sandbox": "UNKNOWN", "effective_permissions": "UNKNOWN",
+                    "v1_environment_comparison": "UNKNOWN",
+                    "error_class_semantics": "PATTERN_CLASSIFICATION_NOT_ROOT_CAUSE",
+                },
                 "implementation_bundle_sha256": cli._digest({
                     "metric_bundle_sha256": frozen.bindings["implementation_bundle_sha256"],
                     "probe_sha256": sha256(Path(__file__).read_bytes()).hexdigest(),

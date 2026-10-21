@@ -38,7 +38,9 @@ def output(doc, abstain=False):
 @pytest.fixture
 def environment(tmp_path, monkeypatch):
     m = module()
-    roots = [tmp_path / f'old-v{i}' for i in range(1, 6)] + [tmp_path / 'metric-v1']
+    roots = [tmp_path / f'old-v{i}' for i in range(1, 6)] + [
+        tmp_path / 'terminal-probe-v1', tmp_path / 'metric-v1',
+    ]
     for root in roots:
         root.mkdir()
         (root / 'preserved.json').write_text('{}')
@@ -62,7 +64,7 @@ def environment(tmp_path, monkeypatch):
     monkeypatch.setattr(m, 'HISTORY_ROOTS', tuple(roots))
     monkeypatch.setattr(m, 'METRIC_ROOT', roots[-1])
     monkeypatch.setattr(m, 'SOURCE_HASHES', pins)
-    monkeypatch.setattr(m, 'PROBE_ROOT', tmp_path / 'terminal-probe-v1')
+    monkeypatch.setattr(m, 'PROBE_ROOT', tmp_path / 'terminal-probe-v2')
     monkeypatch.setattr(m.metric, 'prepare', lambda: prepared)
     calls = []
 
@@ -223,6 +225,53 @@ def test_safe_process_diagnostics_survive_receipt_and_inspection(environment, mo
                     {**expected, 'error_class': PRIVATE}):
         receipt_path.write_text(json.dumps({**value, 'process_diagnostics': invalid}))
         assert m.inspect_probe()['reason'] == 'TERMINAL_RECEIPT_INVALID'
+
+
+def test_v2_default_identity_preserves_v1_in_history():
+    m = module()
+    assert m.RUN_ID == 'codex-cli-gpt-6-sol-terminal-probe-v2'
+    assert m.PROBE_ROOT.name == m.RUN_ID
+    assert m.V1_PROBE_ROOT.name == 'codex-cli-gpt-6-sol-terminal-probe-v1'
+    assert m.V1_PROBE_ROOT in m.HISTORY_ROOTS
+    assert m.PROBE_ROOT not in m.HISTORY_ROOTS
+
+
+def test_v2_environment_and_v1_custody_reach_cli_receipt_and_inspection(environment, capsys):
+    m, roots, _, calls, _ = environment
+    before = m.inventory()
+    assert m.main(['--execute']) == 0
+    value = json.loads(capsys.readouterr().out)
+    assert value['run_id'] == 'codex-cli-gpt-6-sol-terminal-probe-v2'
+    expected = dict(cli_version='codex-cli 0.163.0-alpha.10.2', requested_sandbox='read-only',
+                    host_sandbox='UNKNOWN', effective_permissions='UNKNOWN',
+                    v1_environment_comparison='UNKNOWN',
+                    error_class_semantics='PATTERN_CLASSIFICATION_NOT_ROOT_CAUSE')
+    assert value['bindings']['execution_environment'] == expected
+    assert json.loads((m.PROBE_ROOT / 'probe.receipt.json').read_text()) == value
+    claim = json.loads((m.PROBE_ROOT / 'probe.claim.json').read_text())
+    assert claim['run_id'] == value['run_id']
+    assert claim['history'] == before
+    assert any(key.startswith(roots[-2].name + '/') for key in claim['history'])
+    assert m.main(['--inspect']) == 0
+    assert json.loads(capsys.readouterr().out) == value
+    assert m.inventory() == before
+    assert len(calls) == 1
+    assert m.main(['--execute']) == 4
+    assert json.loads(capsys.readouterr().out)['reason'] == 'ALREADY_CONSUMED'
+    assert len(calls) == 1
+
+
+def test_v2_existing_directory_blocks_without_call(environment, capsys):
+    m, _, _, calls, _ = environment
+    m.PROBE_ROOT.mkdir()
+    assert m.main(['--execute']) == 4
+    assert json.loads(capsys.readouterr().out)['local_model_call_attempt_count'] == 0
+    assert calls == []
+    assert m.main(['--inspect']) == 5
+    value = json.loads(capsys.readouterr().out)
+    assert value['status'] == 'INCOMPLETE'
+    assert value['local_model_call_attempt_count'] is None
+    assert value['local_model_process_count'] is None
 
 
 def test_unobserved_call_attempts_are_not_inferred_from_claim(environment, monkeypatch, capsys):
