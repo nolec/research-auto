@@ -3,6 +3,32 @@
 > Updated: 2026-10-22
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-22: fifth manual card review, final HOLD maintained
+
+- Case: github:5006282465 / pandas #66527, physical line 5 of the fixed raw file.
+  Same bytes used for expected SHA-256, baseline records 1-4 and candidate selection.
+  Identity fields distinct from all prior cases; one following row inspected, no
+  exclusions, selection about 0.006 seconds. Different author hash is not demand proof.
+- Source SHA-256: 6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+- Initial user judgment: HOLD with selection information and source quotes visible,
+  not a blind or card-only evaluation.
+- Source audit: error, single-column boolean selection/self-assignment and environment
+  faithful to author report. Reproduction uses .loc, but traceback user call uses .iloc;
+  discrepancy unresolved, not explained away by internal iloc assignment delegation.
+- Two-column workaround has a code example; explicit column-label workaround has
+  prose only. Expected behavior is exception-free self-assignment. Workaround cost unknown.
+- Reported pandas 3.0.5 / Python 3.14.0 / Darwin arm64; upgrading to 3.0.x preceded
+  the report but no previous-version comparison establishes a regression. Sixty string
+  rows in the example are not proven necessary conditions or a general dtype result.
+- Final user judgment after audit: HOLD maintained. loc/iloc discrepancy, regression,
+  recurrence frequency and quantitative impact remain unestablished. Stored open state
+  and comment count 4 do not establish current status, incident frequency or user scale.
+- Preserve both judgments separately, four prior HOLDs and all records. Five manual
+  reviews do not meet the goal of five trustworthy Opportunity Cards and are not
+  product validation completion, automated extraction quality or card production credit.
+  Imports/corpus/independent reproduction NOT_RUN; no model/network/elevation.
+  No automatic next case or investigation is authorized.
+
 ## 2026-10-22: fourth manual card review, final HOLD maintained
 
 - Case: github:5003192389 / pandas #66514, physical line 4 of the fixed raw file.
