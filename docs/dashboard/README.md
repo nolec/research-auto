@@ -239,3 +239,29 @@ source claims still require independent live verification.
   quality, card production credit or achievement of the five-trustworthy-card goal.
   Imports/corpus/independent reproduction NOT_RUN; no model/network/elevation.
   No automatic next case or investigation is authorized.
+
+## 2026-10-22: seventh manual card review, final HOLD maintained
+
+- Case: github:5021233814 / pandas #66545, physical line 7 of the fixed raw file.
+  Same bytes used for expected SHA-256, baseline records 1-6 and candidate selection.
+  Identity fields distinct from all prior cases; one following row inspected, no
+  exclusions, selection about 0.004 seconds. Different author hash is not demand proof.
+- Source SHA-256: 6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+- Initial user judgment: HOLD with selection information and source quotes visible,
+  not a blind or card-only evaluation.
+- Source audit: ECG task, coordinate/time-gap interpolation limit request and workaround
+  summary faithful to author report. Helper targets interior missing positions between
+  valid anchors, excluding leading/trailing missing values. Equivalence with the
+  rr_interval-based workaround is unverified. Five seconds is an example threshold,
+  not a general ECG processing or clinical standard.
+- CPU/cache performance explanation, local implementation/tests and PR readiness are
+  author claims; no benchmark, test output, PR identifier, merge or release evidence.
+  Related issue 64588 not inspected; package version/environment not established.
+- Final user judgment after audit: HOLD maintained. Recurrence frequency, quantitative
+  impact and implementation adoption remain unestablished. Stored open state, comment
+  count 0 and readiness to submit a PR do not establish current adoption or demand.
+- Preserve both judgments separately, six prior HOLDs and all existing evidence.
+  Seven manual reviews are not product validation completion, automated extraction
+  quality, card production credit or achievement of the five-trustworthy-card goal.
+  Imports/corpus/independent reproduction NOT_RUN; no model/network/elevation.
+  No automatic next case or investigation is authorized.
