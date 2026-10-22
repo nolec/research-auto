@@ -3,6 +3,30 @@
 > Updated: 2026-10-22
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-22: third manual card review, final HOLD maintained
+
+- Case: github:5002866511 / pandas #66509, physical line 3 of the fixed raw file.
+  Same bytes used for expected SHA-256 and baseline records 1/2 verification.
+  First following record with all three identity fields distinct from both prior cases;
+  one following row inspected, no exclusions, selection about 0.004 seconds.
+- Source SHA-256: 6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Different author hash is not proof of independent demand or representativeness.
+- Initial user judgment: HOLD with selection information and source quotations visible;
+  not a blind or card-only evaluation.
+- Source audit: crash, test conditions, environments and avoidance-path summary faithful
+  to the author's report. Cause explanation and code evidence not independently verified.
+  Draft omitted pandas 2.3.3 TypeError versus 3.0 passthrough boundary, experimental
+  self_destruct post-conversion reuse restriction, and rejection as an acceptable alternative.
+- Author reports pandas 3.0.5 / pyarrow 25.0.0 and macOS/arm64 plus Linux/x86-64.
+  Test-condition counts and stored comment count 4 are not operating incident frequency.
+- Final user judgment after audit: HOLD maintained. Recurrence frequency, quantitative
+  impact and closed reason remain unknown. Stored closed status does not establish
+  resolution, fixed version or current status. Comment bodies were not inspected.
+- Preserve initial and final judgments separately, both prior HOLDs and all existing
+  evidence. Three manual reviews, not product validation completion or card production.
+  Imports/corpus/independent reproduction NOT_RUN; no model/network/elevation.
+  No automatic next case or investigation is authorized.
+
 ## 2026-10-22: second manual card review, final HOLD maintained
 
 - Case: github:4996577382 / pandas #66501, physical line 2 of the fixed raw file.
