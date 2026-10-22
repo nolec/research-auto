@@ -214,3 +214,28 @@ source claims still require independent live verification.
   product validation completion, automated extraction quality or card production credit.
   Imports/corpus/independent reproduction NOT_RUN; no model/network/elevation.
   No automatic next case or investigation is authorized.
+
+## 2026-10-22: sixth manual card review, final HOLD maintained
+
+- Case: github:5016862188 / pandas #66542, physical line 6 of the fixed raw file.
+  Same bytes used for expected SHA-256, baseline records 1-5 and candidate selection.
+  Identity fields distinct from all prior cases; one following row inspected, no
+  exclusions, selection about 0.005 seconds. Different author hash is not demand proof.
+- Source SHA-256: 6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+- Initial user judgment: HOLD with selection information and source quotes visible,
+  not a blind or card-only evaluation.
+- Source audit: quotation, invalid errors option validation/error-message scope and
+  environment faithful to author report. Not a valid-input datetime conversion failure.
+  to_timedelta has a comparison example; to_time validation is described in prose only.
+- Internal assertion paths, removed errors=ignore upgrade impact and two-line fix
+  estimate are author claims, not independent verification or completed implementation.
+  No prior-version comparison or equivalent-behavior workaround is established.
+- Reported pandas 3.0.5 / Python 3.14.4 / Darwin arm64. Final user judgment after
+  source audit: HOLD maintained; recurrence frequency, quantitative impact and closed
+  reason remain unknown. Stored closed state, comment count 1 and intent to fix do not
+  establish frequency, affected-user scale, resolution, fixed version or current status.
+- Preserve both judgments separately, five prior HOLDs and all existing records.
+  Six manual reviews are not product validation completion, automated extraction
+  quality, card production credit or achievement of the five-trustworthy-card goal.
+  Imports/corpus/independent reproduction NOT_RUN; no model/network/elevation.
+  No automatic next case or investigation is authorized.
