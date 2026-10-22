@@ -3,6 +3,29 @@
 > Updated: 2026-10-22
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-22: fourth manual card review, final HOLD maintained
+
+- Case: github:5003192389 / pandas #66514, physical line 4 of the fixed raw file.
+  Same bytes used for expected SHA-256, baseline records 1-3 and candidate selection.
+  All three identity fields distinct from all prior cases; one following row inspected,
+  no exclusions, selection about 0.003 seconds. Different author hash is not demand proof.
+- Source SHA-256: 6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+- Initial user judgment: HOLD with selection information and source quotes visible;
+  not a blind or card-only evaluation.
+- Source audit: TypeError quotation, iterator-inside-set input and environment faithful
+  to the author report. Traceback locates len(value), not independently proven root cause.
+  Nightly regression is the author's tentative claim, not verified comparative evidence.
+- Reported environment: pandas 3.1.0.dev0+1420.g7986b42596, Python 3.14.6, Darwin/arm64.
+  Previous-version result, expected return value, supported-input contract and workaround
+  are not established. Do not generalize to all pandas versions or all isin inputs.
+- Final user judgment after audit: HOLD maintained. Regression, recurrence frequency
+  and quantitative impact remain unestablished. Stored open status and comment count 4
+  do not prove current status, incident frequency or affected-user scale.
+- Preserve initial and final judgments separately, prior three HOLDs and all evidence.
+  Four manual reviews, not product validation completion or card production.
+  Imports/corpus/independent reproduction NOT_RUN; no model/network/elevation.
+  No automatic next case or investigation is authorized.
+
 ## 2026-10-22: third manual card review, final HOLD maintained
 
 - Case: github:5002866511 / pandas #66509, physical line 3 of the fixed raw file.
