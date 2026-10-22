@@ -3,6 +3,28 @@
 > Updated: 2026-10-22
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-22: second manual card review, final HOLD maintained
+
+- Case: github:4996577382 / pandas #66501, physical line 2 of the fixed raw file.
+  First following record with distinct document_id, source_url and text_fingerprint;
+  no exclusions, one following row inspected, selection about 0.003 seconds.
+- Source SHA-256: 6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Published 2026-07-28, collected 2026-08-12. Identifier distinction is not proof of
+  an independent event or user; author hash matches the first card.
+- Initial user judgment: HOLD after selection information and source quotations were
+  exposed. Not a blind or card-only evaluation.
+- Source audit: quotation, triggering conditions and reported workarounds faithful.
+  Numeric name interpreted as level number is the author's hypothesis, not verified.
+  Draft omitted ordinary one-dimensional Index condition, pandas 3.0.0 / Python
+  3.14.5 environment, and request for earlier rejection or documentation if unsupported.
+- Final user judgment after audit: HOLD maintained. Actual recurrence frequency,
+  time loss, cost and affected-user scale remain unestablished. Reproduction example
+  and stored comment count 1 are not evidence of frequency or quantitative impact.
+- Preserve both judgments separately and retain the first card's HOLD and all prior
+  records. Two manual reviews, not product validation completion or card production.
+  Independent reproduction/imports/corpus NOT_RUN; no model, network or elevation.
+  No automatic third case or follow-up investigation is authorized.
+
 ## 2026-10-22: accepted limited local search, HOLD unchanged
 
 - Case: github:4995518374 / pandas #66499. Search limited to the existing fixed
