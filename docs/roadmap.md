@@ -3,6 +3,39 @@
 > Updated: 2026-10-23
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-23: eighth-case access report and separate exposure/assignment limits
+
+- Case: github:5031774885 / pandas #66564. Preserve original initial/final HOLD.
+  Separately record candidate eligibility UNKNOWN after user acceptance.
+- The author reports 404 responses from version-selector links. Actual workplace
+  interruption, rework, loss or a performed workaround is unestablished. Homepage
+  URLs describe the problem location, not successful alternative access. Alternative
+  route use, access success and required-version information preservation are unknown.
+- Explicit target URLs name 1.4 and 1.0; intermediate versions are elided. Do not
+  generalize the title to all earlier versions. Regression is a tentative author claim.
+  No URL request or independent HTTP verification was performed.
+- Same bytes verified raw SHA-256 and eighth-row document id / issue URL:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Scope: four manifest-listed files in ff2ac41d-73bb-4593-9e3e-9aa3a93369dd;
+  target first, same-document/thread records in file-name and stored order, then
+  clear target-body references only, one level without recursion.
+- Two candidates: raw-source-items.jsonl line 8 and collection-result.json $.items[92],
+  same document and text fingerprint, not independent experiences. Identity metadata
+  inspected: 220 records. Allowed scope exhausted in about 0.015 seconds, below
+  10 minutes / 10 candidates. Clear and ambiguous references extracted: zero.
+- Evaluation states: source exposure OBSERVED; holdout assignment UNKNOWN because
+  no target assignment record was found in the allowed files. This does not establish
+  nonassignment. This document cannot support an untouched independent evaluation
+  claim, but all-purpose evaluation ineligibility is not inferred. No whole-holdout
+  invalidation, assignment change or first-exposure-time inference. Preserve the
+  previously recorded #66542 document-specific exposure limitation unchanged.
+- No complete comment-body audit or current upstream-state verification; stored
+  closed is not resolution evidence. Missing evidence is not absent burden or rejection.
+- Preserve all prior judgments and records, including ECG candidate/persistence.
+  No additional review count, product-validation completion or card-production credit.
+  Imports/corpus NOT_RUN; no separate model, external network or elevation.
+  No automatic follow-up execution is authorized.
+
 ## 2026-10-23: sixth-case work evidence unknown and document-specific holdout exposure
 
 - Case: github:5016862188 / pandas #66542. Preserve original initial/final HOLD.
