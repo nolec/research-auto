@@ -315,3 +315,32 @@ source claims still require independent live verification.
   quality, card production credit or achievement of the five-trustworthy-card goal.
   Imports/corpus/independent reproduction NOT_RUN; no link access/model/network/elevation.
   No automatic next case or investigation is authorized.
+
+## 2026-10-23: tenth manual card review, final HOLD maintained
+
+- Case: github:5037425861 / pandas #66579, physical line 10 of the fixed raw file.
+  Same bytes used for expected SHA-256, baseline records 1-9 and candidate selection.
+  Identity fields distinct from all prior cases; one following row inspected, no
+  exclusions, pre-acceptance about 0.00343 seconds, selection about 0.00348 seconds.
+  Different author hash is not proof of independent demand.
+- Source SHA-256: 6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+- Initial user judgment: HOLD with selection information and source quotes visible,
+  not a blind or card-only evaluation.
+- Source audit: value-loss quotation, odf/calamine comparison and environment faithful
+  to author report. Loss is in the read DataFrame (42 becomes NaN), not source-file corruption.
+  Minimal example constructs a covered cell with explicit value, not a complete matrix
+  formula generation/calculation path. odfpy/LibreOffice checks, reader cause and external
+  specification interpretation are author evidence, not independently verified results.
+- Calamine example success does not prove all-file compatibility, equivalent behavior
+  or switching cost. show_versions reporting installed dependencies as None is a separate
+  ancillary claim, not proof of reader failure or resolution of environment discrepancies.
+- Reported pandas 3.0.5 and 3.0.3, odfpy 1.4.1, python-calamine 0.8.2, Python 3.13.5,
+  Linux/x86_64. Main confirmation unchecked; two-version reports do not establish regression.
+- Final user judgment after audit: HOLD maintained. Recurrence frequency, quantitative
+  impact and resolution remain unknown. Stored open state and comment count 2 do not
+  establish current unresolved status, frequency or affected-user scale.
+- Preserve both judgments separately, nine prior HOLDs and all existing records.
+  Ten manual reviews are not product validation completion, automated extraction
+  quality, card production credit or achievement of the five-trustworthy-card goal.
+  Imports/corpus/independent reproduction NOT_RUN; no link access/model/network/elevation.
+  No automatic next case or investigation is authorized.
