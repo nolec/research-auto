@@ -3,6 +3,31 @@
 > Updated: 2026-10-22
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-22: eighth manual card review, final HOLD maintained
+
+- Case: github:5031774885 / pandas #66564, physical line 8 of the fixed raw file.
+  Same bytes used for expected SHA-256, baseline records 1-7 and candidate selection.
+  Identity fields distinct from all prior cases; one following row inspected, no
+  exclusions, pre-acceptance about 0.0037 seconds, selection about 0.0038 seconds.
+  Different author hash is not proof of independent demand.
+- Source SHA-256: 6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+- Initial user judgment: HOLD with selection information and source quotes visible,
+  not a blind or card-only evaluation.
+- Source audit: 404 quotation, version-selector path and stated 1.4-1.0 range faithful
+  to author report. Explicit target URLs cover 1.4 and 1.0, with intermediate versions
+  elided. Title wording does not establish failure for every earlier version.
+- Latest development-doc confirmation and regression are author claims, not independently
+  verified HTTP responses or evidence of prior working state. Cause is unknown.
+  Suggested fix n/a and no stated workaround do not prove a workaround is impossible.
+- Final user judgment after audit: HOLD maintained. Regression, recurrence frequency,
+  quantitative impact and closed reason remain unknown. Stored closed state and comment
+  count 1 do not establish resolution, fixed date, current status or affected-user scale.
+- Preserve both judgments separately, seven prior HOLDs and all existing records.
+  Eight manual reviews are not product validation completion, automated extraction
+  quality, card production credit or achievement of the five-trustworthy-card goal.
+  Imports/corpus/independent reproduction NOT_RUN; no link access/model/network/elevation.
+  No automatic next case or investigation is authorized.
+
 ## 2026-10-22: seventh manual card review, final HOLD maintained
 
 - Case: github:5021233814 / pandas #66545, physical line 7 of the fixed raw file.
