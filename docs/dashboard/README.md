@@ -290,3 +290,28 @@ source claims still require independent live verification.
   quality, card production credit or achievement of the five-trustworthy-card goal.
   Imports/corpus/independent reproduction NOT_RUN; no link access/model/network/elevation.
   No automatic next case or investigation is authorized.
+
+## 2026-10-23: ninth manual card review, final HOLD maintained
+
+- Case: github:5034214812 / pandas #66574, physical line 9 of the fixed raw file.
+  Same bytes used for expected SHA-256, baseline records 1-8 and candidate selection.
+  Identity fields distinct from all prior cases; one following row inspected, no
+  exclusions, pre-acceptance about 0.0043 seconds, selection about 0.0044 seconds.
+  Different author hash is not proof of independent demand.
+- Source SHA-256: 6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+- Initial user judgment: HOLD with selection information and source quotes visible,
+  not a blind or card-only evaluation.
+- Source audit: quotation, documentation-example scope and proposed matching string
+  keys faithful to author report. Existing Group a/b/c categories do not match numeric
+  keys 1/2/3; this is a failed demonstration, not an established library malfunction.
+- Latest development-doc confirmation, local x/y/z output and one-line fix are author
+  claims, not independent reproduction, integration completion or regression safety.
+  Package version and execution environment not provided; current docs/PR/release unread.
+- Final user judgment after audit: HOLD maintained. Recurrence frequency, quantitative
+  impact, adoption and closed reason remain unknown. Stored closed state and comment
+  count 0 do not prove implementation adoption or absence of demand.
+- Preserve both judgments separately, eight prior HOLDs and all existing records.
+  Nine manual reviews are not product validation completion, automated extraction
+  quality, card production credit or achievement of the five-trustworthy-card goal.
+  Imports/corpus/independent reproduction NOT_RUN; no link access/model/network/elevation.
+  No automatic next case or investigation is authorized.
