@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-23 (revision first-case-source-evidence-unknown).
+The source snapshot is dated 2026-10-23 (revision second-case-source-evidence-unknown).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -457,3 +457,32 @@ source claims still require independent live verification.
 - No additional card, product-validation completion or production credit. Historical
   records and imports/corpus NOT_RUN preserved; no separate model, external network
   or privilege escalation. No automatic follow-up execution is authorized.
+
+## 2026-10-23: second-case workaround report and workplace-use uncertainty
+
+- Case: github:4996577382 / pandas #66501. Existing initial/final HOLD preserved.
+  Separately record candidate eligibility UNKNOWN after user acceptance.
+- Author reports that removing the column Index name makes the issue disappear,
+  with df.columns.name = None and headers = headers.rename(None) code examples.
+  This is a reported workaround method/effect, stronger than a mere proposal,
+  but not independently reproduced or established as an actual workplace action.
+- Reproduction/isolation and real work use remain distinct. Actual workplace use,
+  work loss, additional burden and causal connection to such burden are unestablished.
+  Do not infer absent burden or candidate rejection.
+- Same bytes verified raw SHA-256 and second-row document id / issue URL:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Scope: four manifest-listed files in ff2ac41d-73bb-4593-9e3e-9aa3a93369dd;
+  target first, then same-document/thread records in file-name and stored order;
+  only clear target-body references allowed, one level without recursion.
+- Three candidates: raw-source-items.jsonl line 2 (original), collection-result.json
+  $.items[98] (duplicate), labeling-assignments.json $[18] (assignment metadata).
+  Not three independent experiences or three source reports. Same author as case 1
+  does not establish independent users or recurring demand.
+- Identity metadata inspected: 220 records. Allowed scope exhausted in about
+  0.023 seconds, below 10 minutes / 10 candidates. Clear and ambiguous references
+  extracted: zero. Installed-environment #58 was not followed. No complete comment
+  audit, independent reproduction or current upstream-state verification.
+- Preserve prior HOLDs, #66499 chat/source candidate uncertainty, ECG candidate
+  ELIGIBLE and persistence UNKNOWN. No additional review count, product-validation
+  completion or card-production credit. Historical records and imports/corpus NOT_RUN
+  unchanged; no separate model, external network or elevation. No automatic follow-up.
