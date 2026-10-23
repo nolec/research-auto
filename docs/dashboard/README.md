@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-23 (revision ecg-persistence-unknown).
+The source snapshot is dated 2026-10-23 (revision first-case-candidate-unknown).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -401,3 +401,30 @@ source claims still require independent live verification.
   completion; no card-production credit. Preserve all previous judgments and records.
   Imports/corpus reconstruction NOT_RUN; no separate model, external network or
   privilege escalation. No automatic follow-up execution is authorized.
+
+## 2026-10-23: first-case candidate eligibility unknown, chat-only assessment
+
+- Case: github:4995518374 / pandas #66499. New candidate criterion applied separately;
+  preserve both original HOLD judgments. Candidate eligibility remains UNKNOWN,
+  not rejection or a finding that burden is absent.
+- Fixed selection: previous manual cases 1-12, excluding already assessed cases 7
+  and 12; ascending manual-review number selects case 1. No replacement because
+  evidence is insufficient. This is not a new source selection or additional review count.
+- Evidence is limited to the prior chat assessment and audit summaries. No original
+  quotation was reconstructed; no source reinspection or independent verification.
+  Partial work context: reported string-scalar DataFrame.eq type-checking issue;
+  actual work purpose and progression are insufficiently described in chat evidence.
+- Concrete burden, causal link to actual burden, and work loss or an actually performed
+  workaround remain unestablished. Developer confusion is interpretation, not a
+  reported interruption or rework. Type-declaration correction is a proposed solution,
+  not proof that the author performed a workaround.
+- Question: what actual work stopped or required rework because of this type-checking
+  issue, and what additional processing did the author actually perform to avoid it?
+  Confirmed actual loss/workaround and causal connection allow reassessment of all
+  conditions; a possible solution alone or no answer leaves eligibility UNKNOWN.
+- User accepted this evidence-bounded conclusion. It does not establish that supporting
+  evidence is absent from the original source. ECG candidate ELIGIBLE and workaround
+  persistence UNKNOWN remain unchanged, separately from its original HOLD.
+- Preserve prior judgments and records; imports/corpus NOT_RUN. No separate model,
+  external network or privilege escalation. No product-validation completion, card
+  production credit, retrospective reclassification or automatic follow-up execution.

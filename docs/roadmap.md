@@ -3,6 +3,33 @@
 > Updated: 2026-10-23
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-23: first-case candidate eligibility unknown, chat-only assessment
+
+- Case: github:4995518374 / pandas #66499. New candidate criterion applied separately;
+  preserve both original HOLD judgments. Candidate eligibility remains UNKNOWN,
+  not rejection or a finding that burden is absent.
+- Fixed selection: previous manual cases 1-12, excluding already assessed cases 7
+  and 12; ascending manual-review number selects case 1. No replacement because
+  evidence is insufficient. This is not a new source selection or additional review count.
+- Evidence is limited to the prior chat assessment and audit summaries. No original
+  quotation was reconstructed; no source reinspection or independent verification.
+  Partial work context: reported string-scalar DataFrame.eq type-checking issue;
+  actual work purpose and progression are insufficiently described in chat evidence.
+- Concrete burden, causal link to actual burden, and work loss or an actually performed
+  workaround remain unestablished. Developer confusion is interpretation, not a
+  reported interruption or rework. Type-declaration correction is a proposed solution,
+  not proof that the author performed a workaround.
+- Question: what actual work stopped or required rework because of this type-checking
+  issue, and what additional processing did the author actually perform to avoid it?
+  Confirmed actual loss/workaround and causal connection allow reassessment of all
+  conditions; a possible solution alone or no answer leaves eligibility UNKNOWN.
+- User accepted this evidence-bounded conclusion. It does not establish that supporting
+  evidence is absent from the original source. ECG candidate ELIGIBLE and workaround
+  persistence UNKNOWN remain unchanged, separately from its original HOLD.
+- Preserve prior judgments and records; imports/corpus NOT_RUN. No separate model,
+  external network or privilege escalation. No product-validation completion, card
+  production credit, retrospective reclassification or automatic follow-up execution.
+
 ## 2026-10-23: ECG workaround persistence investigation accepted
 
 - Case: github:5021233814 / pandas #66545. Preserve the existing initial and final
