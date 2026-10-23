@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-23 (revision first-case-candidate-unknown).
+The source snapshot is dated 2026-10-23 (revision first-case-source-evidence-unknown).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -428,3 +428,32 @@ source claims still require independent live verification.
 - Preserve prior judgments and records; imports/corpus NOT_RUN. No separate model,
   external network or privilege escalation. No product-validation completion, card
   production credit, retrospective reclassification or automatic follow-up execution.
+
+## 2026-10-23: first-case bounded source evidence unknown, investigation accepted
+
+- Case: github:4995518374 / pandas #66499. Preserve original HOLD judgments and
+  the prior chat-only candidate UNKNOWN assessment. Separately record source-based
+  candidate eligibility UNKNOWN after user acceptance, not rejection or absent burden.
+- The original reports a type-checker false positive despite valid runtime behavior.
+  The code is a reproduction example; the scalar type-annotation correction is a
+  proposal. Neither establishes actual workplace interruption, rework or a performed
+  workaround. Actual work loss and its causal link remain unestablished.
+- Same bytes verified raw SHA-256 and first-row document id / issue URL:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Scope: four manifest-listed files in ff2ac41d-73bb-4593-9e3e-9aa3a93369dd.
+  Target first, then same-document/thread records in file-name and stored order,
+  followed only by target-body direct references; no recursive follow-up.
+- Two candidates: raw-source-items.jsonl line 1 and collection-result.json $.items[99].
+  Same document and fingerprint, not two independent experiences; duplicates counted
+  toward the 10-candidate cap. Identity metadata inspected: 220 records.
+  Allowed scope exhausted in about 0.019 seconds, below 10 minutes / 10 candidates.
+- Limitation: automatic extraction misread OS version #58 as an issue reference.
+  Its lookup was unmatched and added zero candidates. Do not count it as an actual
+  explicit reference or infer absence of related material. No extractor modification
+  or rerun occurred; this was not a complete comment-body audit.
+- Missing direct evidence within the permitted local scope does not establish absent
+  work burden. Distinguish not found from unsearched or unavailable material.
+  Preserve ECG candidate ELIGIBLE and workaround persistence UNKNOWN separately.
+- No additional card, product-validation completion or production credit. Historical
+  records and imports/corpus NOT_RUN preserved; no separate model, external network
+  or privilege escalation. No automatic follow-up execution is authorized.

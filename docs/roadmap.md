@@ -3,6 +3,35 @@
 > Updated: 2026-10-23
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-23: first-case bounded source evidence unknown, investigation accepted
+
+- Case: github:4995518374 / pandas #66499. Preserve original HOLD judgments and
+  the prior chat-only candidate UNKNOWN assessment. Separately record source-based
+  candidate eligibility UNKNOWN after user acceptance, not rejection or absent burden.
+- The original reports a type-checker false positive despite valid runtime behavior.
+  The code is a reproduction example; the scalar type-annotation correction is a
+  proposal. Neither establishes actual workplace interruption, rework or a performed
+  workaround. Actual work loss and its causal link remain unestablished.
+- Same bytes verified raw SHA-256 and first-row document id / issue URL:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Scope: four manifest-listed files in ff2ac41d-73bb-4593-9e3e-9aa3a93369dd.
+  Target first, then same-document/thread records in file-name and stored order,
+  followed only by target-body direct references; no recursive follow-up.
+- Two candidates: raw-source-items.jsonl line 1 and collection-result.json $.items[99].
+  Same document and fingerprint, not two independent experiences; duplicates counted
+  toward the 10-candidate cap. Identity metadata inspected: 220 records.
+  Allowed scope exhausted in about 0.019 seconds, below 10 minutes / 10 candidates.
+- Limitation: automatic extraction misread OS version #58 as an issue reference.
+  Its lookup was unmatched and added zero candidates. Do not count it as an actual
+  explicit reference or infer absence of related material. No extractor modification
+  or rerun occurred; this was not a complete comment-body audit.
+- Missing direct evidence within the permitted local scope does not establish absent
+  work burden. Distinguish not found from unsearched or unavailable material.
+  Preserve ECG candidate ELIGIBLE and workaround persistence UNKNOWN separately.
+- No additional card, product-validation completion or production credit. Historical
+  records and imports/corpus NOT_RUN preserved; no separate model, external network
+  or privilege escalation. No automatic follow-up execution is authorized.
+
 ## 2026-10-23: first-case candidate eligibility unknown, chat-only assessment
 
 - Case: github:4995518374 / pandas #66499. New candidate criterion applied separately;
