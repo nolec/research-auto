@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-23 (revision fourth-case-source-evidence-unknown).
+The source snapshot is dated 2026-10-23 (revision fifth-case-source-evidence-unknown).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -546,3 +546,33 @@ source claims still require independent live verification.
   count, product-validation completion or card-production credit. Historical records
   and imports/corpus NOT_RUN unchanged; no separate model, external network or
   elevation. No automatic follow-up execution is authorized.
+
+## 2026-10-23: fifth-case reported effects and workplace-use/path uncertainty
+
+- Case: github:5006282465 / pandas #66527. Preserve original initial/final HOLD.
+  Separately record candidate eligibility UNKNOWN after user acceptance.
+- Author reports encountering an error after upgrading and successful assignment
+  with an additional column or an explicit column label. Preserve these as reported
+  experience/effects, stronger than a mere proposal, but not established actual
+  workplace use, work loss or a causal connection to workplace burden.
+- Two-column normal comparison has code; explicit column-label use is prose only.
+  Keep .loc reproduction, .iloc traceback user call and workaround prose separate.
+  Same failure-path/effect mapping and workplace equivalence remain unestablished.
+  Do not silently reconcile the discrepancy or dismiss all author experience.
+- Same bytes verified raw SHA-256 and fifth-row document id / issue URL:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Scope: four manifest-listed files in ff2ac41d-73bb-4593-9e3e-9aa3a93369dd;
+  target first, then same-document/thread records in file-name and stored order;
+  clear target-body references only, one level without recursion.
+- Two candidates: raw-source-items.jsonl line 5 and collection-result.json $.items[95].
+  Same document and text fingerprint, not independent experiences; both count
+  toward the candidate cap. Identity metadata inspected: 220 records.
+  Allowed scope exhausted in about 0.016 seconds, below 10 minutes / 10 candidates.
+  Clear and ambiguous references extracted: zero.
+- No independent reproduction, complete comment-body audit or current upstream
+  verification. Local evidence not found does not prove absent burden or rejection.
+- Preserve prior HOLDs and candidate judgments, including earlier UNKNOWN findings
+  and ECG candidate ELIGIBLE / persistence UNKNOWN. No additional review count,
+  product-validation completion or card-production credit. Historical records and
+  imports/corpus NOT_RUN unchanged; no separate model, external network or elevation.
+  No automatic follow-up execution is authorized.

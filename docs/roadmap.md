@@ -3,6 +3,36 @@
 > Updated: 2026-10-23
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-23: fifth-case reported effects and workplace-use/path uncertainty
+
+- Case: github:5006282465 / pandas #66527. Preserve original initial/final HOLD.
+  Separately record candidate eligibility UNKNOWN after user acceptance.
+- Author reports encountering an error after upgrading and successful assignment
+  with an additional column or an explicit column label. Preserve these as reported
+  experience/effects, stronger than a mere proposal, but not established actual
+  workplace use, work loss or a causal connection to workplace burden.
+- Two-column normal comparison has code; explicit column-label use is prose only.
+  Keep .loc reproduction, .iloc traceback user call and workaround prose separate.
+  Same failure-path/effect mapping and workplace equivalence remain unestablished.
+  Do not silently reconcile the discrepancy or dismiss all author experience.
+- Same bytes verified raw SHA-256 and fifth-row document id / issue URL:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Scope: four manifest-listed files in ff2ac41d-73bb-4593-9e3e-9aa3a93369dd;
+  target first, then same-document/thread records in file-name and stored order;
+  clear target-body references only, one level without recursion.
+- Two candidates: raw-source-items.jsonl line 5 and collection-result.json $.items[95].
+  Same document and text fingerprint, not independent experiences; both count
+  toward the candidate cap. Identity metadata inspected: 220 records.
+  Allowed scope exhausted in about 0.016 seconds, below 10 minutes / 10 candidates.
+  Clear and ambiguous references extracted: zero.
+- No independent reproduction, complete comment-body audit or current upstream
+  verification. Local evidence not found does not prove absent burden or rejection.
+- Preserve prior HOLDs and candidate judgments, including earlier UNKNOWN findings
+  and ECG candidate ELIGIBLE / persistence UNKNOWN. No additional review count,
+  product-validation completion or card-production credit. Historical records and
+  imports/corpus NOT_RUN unchanged; no separate model, external network or elevation.
+  No automatic follow-up execution is authorized.
+
 ## 2026-10-23: fourth-case error reproduction and workplace-impact uncertainty
 
 - Case: github:5003192389 / pandas #66514. Preserve original initial/final HOLD.
