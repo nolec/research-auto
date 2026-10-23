@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-22 (revision omc-investigation-closed).
+The source snapshot is dated 2026-10-23 (revision ecg-persistence-unknown).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -372,3 +372,32 @@ source claims still require independent live verification.
   quality, card production credit or achievement of the five-trustworthy-card goal.
   Imports/corpus/independent reproduction NOT_RUN; no link access/model/network/elevation.
   No automatic next case or investigation is authorized.
+
+## 2026-10-23: ECG workaround persistence investigation accepted
+
+- Case: github:5021233814 / pandas #66545. Preserve the existing initial and final
+  HOLD; separately retain eligibility under the new additional-investigation candidate
+  criterion. Workaround persistence remains UNKNOWN, not an opportunity verdict.
+- Candidate minimum: actual work context, concrete burden and traceable causal link,
+  plus author-reported work loss or workaround burden. A second independent case
+  and quantitative frequency/impact are not required for this investigation gate.
+- Author reports needing to write code for ECG work. Additional processing after
+  interpolation (NumPy interval calculation and masking) is described with code.
+  Repeated modification, repeated execution, per-run human intervention, repeated
+  result checks and unchanged reuse periods/conditions remain unestablished.
+  Code reuse does not imply no burden; code presence does not imply manual checks.
+- Scope: only the four manifest-listed files in local run
+  ff2ac41d-73bb-4593-9e3e-9aa3a93369dd. Case-insensitive literal terms:
+  5021233814, 66545, limit_distance, _interp_limit_distance. Raw SHA-256 MATCH:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+- Two matched copies: raw-source-items.jsonl line 7 and collection-result.json
+  $.items[93], same document id and text fingerprint, not two independent experiences.
+  Listed-file search exhausted in about 0.02 seconds, below 15 minutes / 30 candidates.
+- Related issue #64588 separate body and external follow-up history were not inspected.
+  Fixed-keyword search is not an exhaustive source audit. Missing persistence evidence
+  does not establish one-time reuse, absence of burden or candidate rejection.
+  Any future reuse claim must state the reported period and conditions.
+- User accepted the bounded conclusion. No additional card review or product-validation
+  completion; no card-production credit. Preserve all previous judgments and records.
+  Imports/corpus reconstruction NOT_RUN; no separate model, external network or
+  privilege escalation. No automatic follow-up execution is authorized.
