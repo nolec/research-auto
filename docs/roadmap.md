@@ -3,6 +3,36 @@
 > Updated: 2026-10-23
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-23: third-case crash experiments and workplace-impact uncertainty
+
+- Case: github:5002866511 / pandas #66509. Preserve original initial/final HOLD.
+  Separately record candidate eligibility UNKNOWN after user acceptance.
+- The author explicitly reports running each case in its own subprocess. This
+  establishes reported diagnostic experiment execution, not workplace recovery.
+  Actual work loss, a performed workplace workaround and causal connection to
+  workplace burden remain unestablished; do not infer absent burden or rejection.
+- Preserve self_destruct=True and post-conversion Table reuse conditions. Normal
+  no-option comparisons do not establish equivalent workplace output or switching
+  burden. The two-step example still crashes on later Table access, not a safe
+  workaround. Do not generalize to all parquet reads or actual data loss.
+- Same bytes verified raw SHA-256 and third-row document id / issue URL:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Scope: four manifest-listed files in ff2ac41d-73bb-4593-9e3e-9aa3a93369dd;
+  target first, then same-document/thread records in file-name and stored order;
+  clear target-body references only, one level without recursion.
+- Two candidates: raw-source-items.jsonl line 3 and collection-result.json $.items[97].
+  Same document and text fingerprint, not independent experiences; both count
+  toward the candidate cap. Identity metadata inspected: 220 records.
+  Allowed scope exhausted in about 0.016 seconds, below 10 minutes / 10 candidates.
+  Clear and ambiguous references extracted: zero.
+- No independent reproduction, complete comment-body audit or current upstream
+  verification. Stored closed state does not establish resolution or a fixed version.
+- Preserve all prior HOLDs and candidate judgments, including #66499/#66501 UNKNOWN
+  and ECG candidate ELIGIBLE / persistence UNKNOWN. No additional review count,
+  product-validation completion or card-production credit. Historical records and
+  imports/corpus NOT_RUN unchanged; no separate model, external network or elevation.
+  No automatic follow-up execution is authorized.
+
 ## 2026-10-23: second-case workaround report and workplace-use uncertainty
 
 - Case: github:4996577382 / pandas #66501. Existing initial/final HOLD preserved.
