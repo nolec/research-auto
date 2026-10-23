@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-23 (revision fifth-case-source-evidence-unknown).
+The source snapshot is dated 2026-10-23 (revision sixth-case-source-exposure-unknown).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -575,4 +575,36 @@ source claims still require independent live verification.
   and ECG candidate ELIGIBLE / persistence UNKNOWN. No additional review count,
   product-validation completion or card-production credit. Historical records and
   imports/corpus NOT_RUN unchanged; no separate model, external network or elevation.
+  No automatic follow-up execution is authorized.
+
+## 2026-10-23: sixth-case work evidence unknown and document-specific holdout exposure
+
+- Case: github:5016862188 / pandas #66542. Preserve original initial/final HOLD.
+  Separately record candidate eligibility UNKNOWN after user acceptance.
+- Invalid errors value AssertionError and general upgrade effects are author reports,
+  not a specific workplace interruption/rework account. Actual work loss, performed
+  workaround and causal connection to workplace burden remain unestablished.
+- Option change performed, error avoidance and preservation of required work results
+  are separate unknowns. to_timedelta has comparison code; to_time has prose only.
+  Two-line fix and intent to work on it are proposals, not workplace workaround use.
+- Same bytes verified raw SHA-256 and sixth-row document id / issue URL:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Scope: four manifest-listed files in ff2ac41d-73bb-4593-9e3e-9aa3a93369dd;
+  target first, same-document/thread records in file-name and stored order, then
+  clear target-body references only, one level without recursion.
+- Three candidates: raw-source-items.jsonl line 6, duplicate collection-result.json
+  $.items[94], and labeling-assignments.json $[9] assignment metadata. Not three
+  independent experiences. Identity metadata inspected: 220 records.
+  Allowed scope exhausted in about 0.019 seconds, below 10 minutes / 10 candidates.
+  Clear and ambiguous references extracted: zero.
+- Document-specific evaluation limitation: assignment metadata marks this document
+  holdout, but its source text has been exposed. Do not use this document as untouched
+  independent evaluation evidence. Gold labels were not inspected in this investigation.
+  Do not infer first exposure time or invalidate the whole holdout. Assignment and
+  historical records remain unchanged; this update does not repair evaluation custody.
+- Independent reproduction and complete comment-body audit NOT_RUN. Stored closed
+  is not resolution evidence. Missing local evidence is not absent burden or rejection.
+- Preserve all prior HOLDs/candidate judgments and ECG candidate ELIGIBLE / persistence
+  UNKNOWN. No additional review count, product-validation completion or production
+  credit. Imports/corpus NOT_RUN; no separate model, external network or elevation.
   No automatic follow-up execution is authorized.
