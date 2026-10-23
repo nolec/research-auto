@@ -344,3 +344,31 @@ source claims still require independent live verification.
   quality, card production credit or achievement of the five-trustworthy-card goal.
   Imports/corpus/independent reproduction NOT_RUN; no link access/model/network/elevation.
   No automatic next case or investigation is authorized.
+
+## 2026-10-23: eleventh manual card review, final HOLD maintained
+
+- Case: github:5038193296 / pandas #66588, physical line 11 of the fixed raw file.
+  Same bytes used for expected SHA-256, baseline records 1-10 and candidate selection.
+  Identity fields distinct from all prior cases; one following row inspected, no
+  exclusions, pre-acceptance about 0.00405 seconds, selection about 0.00414 seconds.
+  Different author hash is not proof of independent demand.
+- Source SHA-256: 6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+- Initial user judgment: HOLD with selection information and source quotes visible,
+  not a blind or card-only evaluation.
+- Source audit: duplicate level argument conditions, internal errors and alternatives
+  faithful to author report. Draft quotation describes expected behavior, not actual error output.
+  Literal/name duplicates and [1,-2] report AssertionError; [2,-1] reports IndexError.
+  Legacy comparison contains input values 0-7 versus displayed output 1-8; unresolved.
+- Rejecting duplicates, deduplicating and legacy sequential stacking have different
+  semantics; none is established as an equivalent restoration for all inputs. Cause
+  code, sibling API behavior, issue 25413 precedent and PR readiness are author evidence,
+  not independent reproduction or proof of PR integration.
+- Reported main source build 1b1e271f30b3ac77a051dc8293294d7b526db87e, Python 3.13.1,
+  NumPy 2.5.1, Windows 11 x86_64/MSVC. Final user judgment after audit: HOLD maintained.
+  Recurrence frequency, quantitative impact, PR adoption and closed reason remain unknown.
+  Stored closed state and comment count 0 do not prove merge, fixed version or current status.
+- Preserve both judgments separately, ten prior HOLDs and all existing records.
+  Eleven manual reviews are not product validation completion, automated extraction
+  quality, card production credit or achievement of the five-trustworthy-card goal.
+  Imports/corpus/independent reproduction NOT_RUN; no link access/model/network/elevation.
+  No automatic next case or investigation is authorized.
