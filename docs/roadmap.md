@@ -1,7 +1,39 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-10-23
+> Updated: 2026-10-24
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
+
+## 2026-10-24: ninth-case local edit report and task-burden/exposure uncertainty
+
+- Case: github:5034214812 / pandas #66574. Preserve original initial/final HOLD.
+  Separately record candidate eligibility UNKNOWN after user acceptance.
+- The author reports local example modification and verification of x/y/z output.
+  Preserve actual reported execution, not mere intent. Example normalization is
+  described, but whether extra correction was needed for a learning/application
+  task and what burden it caused remain unestablished. Do not automatically exclude
+  documentation work or promote diagnostic comparison to a task-driven workaround.
+- Numeric dict keys mismatch existing string categories in the example. This does
+  not establish library malfunction or upstream fix adoption; stored closed is not
+  resolution evidence. Actual work loss/burden and causal connection remain unknown.
+- Same bytes verified raw SHA-256 and ninth-row document id / issue URL:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Scope: four manifest-listed files in ff2ac41d-73bb-4593-9e3e-9aa3a93369dd;
+  target first, same-document/thread records in file-name and stored order, then
+  clear target-body references only, one level without recursion.
+- Two candidates: raw-source-items.jsonl line 9 and collection-result.json $.items[91].
+  Same document and fingerprint, not independent experiences. Identity metadata
+  inspected: 220 records. Allowed scope exhausted in about 0.021 seconds, below
+  10 minutes / 10 candidates. Clear and ambiguous references extracted: zero.
+- Evaluation states: source exposure OBSERVED; holdout assignment UNKNOWN because
+  no target assignment record was found in allowed files, not proof of nonassignment.
+  This document cannot support an untouched independent evaluation claim; do not
+  infer all-purpose ineligibility, whole-holdout invalidation or first exposure time.
+  Preserve prior document-specific exposure limits and assignments unchanged.
+- No external document access, independent reproduction, complete comment-body audit
+  or current upstream-state verification. Missing evidence is not absent burden or rejection.
+- Preserve all prior judgments and records. No additional review count, product-
+  validation completion or card-production credit. Imports/corpus NOT_RUN; no
+  separate model, external network or elevation. No automatic follow-up execution.
 
 ## 2026-10-23: eighth-case access report and separate exposure/assignment limits
 
