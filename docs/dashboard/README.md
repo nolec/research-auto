@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-24 (revision tenth-case-source-exposure-unknown).
+The source snapshot is dated 2026-10-24 (revision eleventh-case-source-timer-unverified).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -708,3 +708,34 @@ source claims still require independent live verification.
 - No additional review count, product-validation completion or production credit.
   Imports/corpus NOT_RUN; no separate model, external network or elevation.
   No automatic follow-up execution is authorized.
+
+## 2026-10-24: eleventh-case unknown task burden and unverified whole timer
+
+- Case: github:5038193296 / pandas #66588. Original initial/final HOLD remains
+  unchanged; separate candidate eligibility UNKNOWN, accepted by the user.
+- Retain author-reported error, legacy and sequential-call comparisons. Informative
+  errors/deduplication are alternatives; a PR-ready claim is not demonstrated
+  workplace workaround use, merge or resolution. Actual work loss, task-driven
+  action, burden and causal connection remain unestablished, not disproved.
+- Input 0–7 versus legacy output 1–8 remains inconsistent. Deduplication and
+  sequential stacking have different semantics. Recovery success and workplace
+  equivalence are not additional candidate eligibility requirements.
+- Same-byte raw SHA-256 and row-11 identity MATCH:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Four manifest-listed files; three candidates: raw row 11, collection $.items[89]
+  and assignment $[19]. Two report copies plus development metadata are not three
+  independent experiences. Explicit precedent #25413 has no body in allowed files;
+  no ambiguous-reference or external follow-up. Scope exhausted; no automatic retry.
+- Candidate adoption time checks were observed. Individual executions measured
+  0.003717792s and 0.014301459s; the interval between executions was not measured.
+  No whole continuous timer exists: total 10-minute compliance UNVERIFIED.
+  Do not sum individual durations or present them as total elapsed time.
+  Candidate count 3 is below the fixed maximum of 10.
+- Source exposure OBSERVED; local assignment is development, not independently
+  verified current assignment. This document is not untouched independent evaluation
+  evidence. No whole-holdout invalidation, assignment change or first-exposure claim.
+- No independent reproduction, full comment audit or current PR/resolution check;
+  stored closed state is not proof of resolution. Preserve all prior judgments,
+  ECG candidate/persistence uncertainty, document-specific limits and records.
+- No additional review count, product-validation or card-production credit.
+  Imports/corpus NOT_RUN; no separate model or external network.

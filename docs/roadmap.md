@@ -3,6 +3,37 @@
 > Updated: 2026-10-24
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-24: eleventh-case unknown task burden and unverified whole timer
+
+- Case: github:5038193296 / pandas #66588. Original initial/final HOLD remains
+  unchanged; separate candidate eligibility UNKNOWN, accepted by the user.
+- Retain author-reported error, legacy and sequential-call comparisons. Informative
+  errors/deduplication are alternatives; a PR-ready claim is not demonstrated
+  workplace workaround use, merge or resolution. Actual work loss, task-driven
+  action, burden and causal connection remain unestablished, not disproved.
+- Input 0–7 versus legacy output 1–8 remains inconsistent. Deduplication and
+  sequential stacking have different semantics. Recovery success and workplace
+  equivalence are not additional candidate eligibility requirements.
+- Same-byte raw SHA-256 and row-11 identity MATCH:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Four manifest-listed files; three candidates: raw row 11, collection $.items[89]
+  and assignment $[19]. Two report copies plus development metadata are not three
+  independent experiences. Explicit precedent #25413 has no body in allowed files;
+  no ambiguous-reference or external follow-up. Scope exhausted; no automatic retry.
+- Candidate adoption time checks were observed. Individual executions measured
+  0.003717792s and 0.014301459s; the interval between executions was not measured.
+  No whole continuous timer exists: total 10-minute compliance UNVERIFIED.
+  Do not sum individual durations or present them as total elapsed time.
+  Candidate count 3 is below the fixed maximum of 10.
+- Source exposure OBSERVED; local assignment is development, not independently
+  verified current assignment. This document is not untouched independent evaluation
+  evidence. No whole-holdout invalidation, assignment change or first-exposure claim.
+- No independent reproduction, full comment audit or current PR/resolution check;
+  stored closed state is not proof of resolution. Preserve all prior judgments,
+  ECG candidate/persistence uncertainty, document-specific limits and records.
+- No additional review count, product-validation or card-production credit.
+  Imports/corpus NOT_RUN; no separate model or external network.
+
 ## 2026-10-24: tenth-case comparison reports and separate burden/recovery limits
 
 - Case: github:5037425861 / pandas #66579. Preserve original initial/final HOLD.
