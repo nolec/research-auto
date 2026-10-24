@@ -3,6 +3,35 @@
 > Updated: 2026-10-25
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-25: original positions 21-30 metadata check accepted
+
+- Full ordered 31-key list matched retained prior runtime memory, with both earlier
+  ten-key rounds matched. Exclude slice(0,20); select slice(20,30): length ten,
+  original positions 21–30, intersection with previous twenty keys zero. Retained
+  memory is not a historical immutable artifact or independent attestation.
+- All ten references are in raw-source-items.jsonl, in fixed string order:
+  line:10, line:11, line:12, line:2, line:3, line:4, line:5, line:6, line:7, line:8.
+  File existence is PREVIOUSLY_OBSERVED_NOT_RECHECKED from the preceding round;
+  no target stat or new file existence check was performed. Only reference locations
+  in current starting documents were checked; all ten source records remain UNVERIFIED.
+- Target bodies unread; duplication, new content, direct evidence and independent
+  experiences not established. Existing duplicate judgments are not revoked.
+- Stop CANDIDATE_LIMIT at ten. One direct reference and listing-only names
+  bundle-manifest.json / review remain unchecked. No previous-candidate recheck,
+  directory relisting, link following, automatic continuation or post-cap query.
+- Fresh persistent timer preflight before file access retained process/token and
+  performance.now start 15791317.206042ms; separate-call elapsed 7.548985958s.
+  Finalization checks: before 63.022342125s, after 63.022942500s. Whole continuous
+  600-second and ten-candidate limits verified through finalization, including
+  inter-call wait/interpretation; later chat delivery excluded, not individual-time
+  summation. This does not retroactively validate #66588 timing.
+- Preserve previous judgments, original HOLDs, ECG candidate/persistence, twelfth
+  original final judgment NOT_SUBMITTED, document-specific exposure limits,
+  #66588 missing-timer limitation and both previous metadata rounds. No inference
+  of remaining record existence or absence of direct burden evidence/materials.
+  No new review count, product-validation or card-production credit. Imports/corpus
+  NOT_RUN; no separate model or external network. No automatic follow-up execution.
+
 ## 2026-10-25: next-ten local location metadata check accepted
 
 - Full ordered 31-key reference list matched the retained previous runtime list.

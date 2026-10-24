@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-25 (revision local-material-location-followup).
+The source snapshot is dated 2026-10-25 (revision local-material-location-third-round).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -862,4 +862,33 @@ source claims still require independent live verification.
 - Preserve all previous judgments, source-exposure limits, ECG candidate/persistence,
   twelfth original final judgment NOT_SUBMITTED, #66588 timer limitation and records.
   No new review count, product validation or card-production credit. Imports/corpus
+  NOT_RUN; no separate model or external network. No automatic follow-up execution.
+
+## 2026-10-25: original positions 21-30 metadata check accepted
+
+- Full ordered 31-key list matched retained prior runtime memory, with both earlier
+  ten-key rounds matched. Exclude slice(0,20); select slice(20,30): length ten,
+  original positions 21–30, intersection with previous twenty keys zero. Retained
+  memory is not a historical immutable artifact or independent attestation.
+- All ten references are in raw-source-items.jsonl, in fixed string order:
+  line:10, line:11, line:12, line:2, line:3, line:4, line:5, line:6, line:7, line:8.
+  File existence is PREVIOUSLY_OBSERVED_NOT_RECHECKED from the preceding round;
+  no target stat or new file existence check was performed. Only reference locations
+  in current starting documents were checked; all ten source records remain UNVERIFIED.
+- Target bodies unread; duplication, new content, direct evidence and independent
+  experiences not established. Existing duplicate judgments are not revoked.
+- Stop CANDIDATE_LIMIT at ten. One direct reference and listing-only names
+  bundle-manifest.json / review remain unchecked. No previous-candidate recheck,
+  directory relisting, link following, automatic continuation or post-cap query.
+- Fresh persistent timer preflight before file access retained process/token and
+  performance.now start 15791317.206042ms; separate-call elapsed 7.548985958s.
+  Finalization checks: before 63.022342125s, after 63.022942500s. Whole continuous
+  600-second and ten-candidate limits verified through finalization, including
+  inter-call wait/interpretation; later chat delivery excluded, not individual-time
+  summation. This does not retroactively validate #66588 timing.
+- Preserve previous judgments, original HOLDs, ECG candidate/persistence, twelfth
+  original final judgment NOT_SUBMITTED, document-specific exposure limits,
+  #66588 missing-timer limitation and both previous metadata rounds. No inference
+  of remaining record existence or absence of direct burden evidence/materials.
+  No new review count, product-validation or card-production credit. Imports/corpus
   NOT_RUN; no separate model or external network. No automatic follow-up execution.
