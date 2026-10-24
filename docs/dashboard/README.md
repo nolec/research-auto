@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-24 (revision ninth-case-source-exposure-unknown).
+The source snapshot is dated 2026-10-24 (revision tenth-case-source-exposure-unknown).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -673,3 +673,38 @@ source claims still require independent live verification.
 - Preserve all prior judgments and records. No additional review count, product-
   validation completion or card-production credit. Imports/corpus NOT_RUN; no
   separate model, external network or elevation. No automatic follow-up execution.
+
+## 2026-10-24: tenth-case comparison reports and separate burden/recovery limits
+
+- Case: github:5037425861 / pandas #66579. Preserve original initial/final HOLD.
+  Separately record candidate eligibility UNKNOWN after user acceptance.
+- Retain engine comparison, LibreOffice and odfpy value checks as author-reported
+  execution, not mere proposals. Whether extra processing was needed to continue
+  an actual task, its burden and causal connection remain unestablished.
+- Minimal example reports odf NaN versus calamine 42. This effect is separate from
+  actual-file recovery, general compatibility, workplace equivalence and switching
+  burden, which remain unknown. Recovery success/equivalence are not extra candidate
+  eligibility requirements; lack of task-driven evidence is the current limitation.
+- Read-result omission is not source-file corruption or proven work data loss. The
+  minimal example creates an explicit covered-cell value, not a verified full matrix-
+  formula generation/calculation workflow. show_versions is a separate ancillary issue.
+- Same bytes verified raw SHA-256 and tenth-row document id / issue URL:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Scope: four manifest-listed files in ff2ac41d-73bb-4593-9e3e-9aa3a93369dd;
+  target first, same-document/thread records in file-name and stored order, then
+  clear target-body references only, one level without recursion.
+- Two candidates: raw-source-items.jsonl line 10 and collection-result.json $.items[90].
+  Same document and fingerprint, not independent experiences. Identity metadata
+  inspected: 220 records. Allowed scope exhausted in about 0.023 seconds, below
+  10 minutes / 10 candidates. Clear/ambiguous issue references extracted: zero.
+- Evaluation states: source exposure OBSERVED; holdout assignment UNKNOWN because
+  no target assignment record was found in allowed files, not proof of nonassignment.
+  No untouched independent evaluation claim for this document; do not infer all-
+  purpose ineligibility or invalidate the entire holdout. Assignments and prior
+  document-specific exposure limitations remain unchanged; first exposure unknown.
+- No external URL/specification access, independent reproduction, complete comment
+  audit or current upstream-state verification. Missing evidence is not absent burden
+  or candidate rejection. Preserve all prior judgments and records.
+- No additional review count, product-validation completion or production credit.
+  Imports/corpus NOT_RUN; no separate model, external network or elevation.
+  No automatic follow-up execution is authorized.
