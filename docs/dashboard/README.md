@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-25 (revision local-material-location-limit).
+The source snapshot is dated 2026-10-25 (revision local-material-location-followup).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -833,3 +833,33 @@ source claims still require independent live verification.
   twelfth original final judgment NOT_SUBMITTED, all document exposure limits and
   historical records. No new review count, product validation or production credit.
   Imports/corpus NOT_RUN; no separate model or external network.
+
+## 2026-10-25: next-ten local location metadata check accepted
+
+- Full ordered 31-key reference list matched the retained previous runtime list.
+  Previous first ten keys were excluded; only original positions 11–20 were checked.
+  Retained memory is not a historically immutable list or independent attestation.
+- Scope: existing roadmap and dashboard references only. collection-result.json
+  $.items[97], [98], [99] retain PREVIOUSLY_OBSERVED_NOT_RECHECKED file existence;
+  those record positions remain unverified. No repeat target stat for that file.
+- Current file existence confirmed for labeling-assignments.json, qualification.json
+  and raw-source-items.jsonl. Assignment positions $[18], $[19], $[9] and raw line 1
+  remain record-existence UNVERIFIED. Thus ten candidates include three file-only
+  entries and seven record positions, not ten files or seven verified records.
+- Target bodies unread; duplication/new content/direct evidence/independent experience
+  not established. Existing duplicate findings are not revoked. Each new target path
+  ancestor was checked; no symlink followed or directory relisting.
+- Stop CANDIDATE_LIMIT at ten. Direct references remaining: 11; listing-only names
+  bundle-manifest.json and review remain unchecked. No automatic continuation or
+  inference of whole-local-material absence. Prior first-round result remains intact.
+- Fresh persistent timer preflight confirmed same process/token and performance.now
+  start 12376152.306208ms across calls; second-call elapsed 9.742717667s.
+  Finalization checks: before 103.598590250s, after 103.598744917s. Continuous
+  600-second and ten-candidate limits verified through finalization, including
+  inter-call wait/interpretation and helper-scope error correction. That correction
+  was memory-only: no file reread, re-extraction or candidate replacement. Later chat
+  delivery excluded; no individual-time sum or query after ten candidates.
+- Preserve all previous judgments, source-exposure limits, ECG candidate/persistence,
+  twelfth original final judgment NOT_SUBMITTED, #66588 timer limitation and records.
+  No new review count, product validation or card-production credit. Imports/corpus
+  NOT_RUN; no separate model or external network. No automatic follow-up execution.

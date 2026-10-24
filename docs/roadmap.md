@@ -3,6 +3,36 @@
 > Updated: 2026-10-25
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-25: next-ten local location metadata check accepted
+
+- Full ordered 31-key reference list matched the retained previous runtime list.
+  Previous first ten keys were excluded; only original positions 11–20 were checked.
+  Retained memory is not a historically immutable list or independent attestation.
+- Scope: existing roadmap and dashboard references only. collection-result.json
+  $.items[97], [98], [99] retain PREVIOUSLY_OBSERVED_NOT_RECHECKED file existence;
+  those record positions remain unverified. No repeat target stat for that file.
+- Current file existence confirmed for labeling-assignments.json, qualification.json
+  and raw-source-items.jsonl. Assignment positions $[18], $[19], $[9] and raw line 1
+  remain record-existence UNVERIFIED. Thus ten candidates include three file-only
+  entries and seven record positions, not ten files or seven verified records.
+- Target bodies unread; duplication/new content/direct evidence/independent experience
+  not established. Existing duplicate findings are not revoked. Each new target path
+  ancestor was checked; no symlink followed or directory relisting.
+- Stop CANDIDATE_LIMIT at ten. Direct references remaining: 11; listing-only names
+  bundle-manifest.json and review remain unchecked. No automatic continuation or
+  inference of whole-local-material absence. Prior first-round result remains intact.
+- Fresh persistent timer preflight confirmed same process/token and performance.now
+  start 12376152.306208ms across calls; second-call elapsed 9.742717667s.
+  Finalization checks: before 103.598590250s, after 103.598744917s. Continuous
+  600-second and ten-candidate limits verified through finalization, including
+  inter-call wait/interpretation and helper-scope error correction. That correction
+  was memory-only: no file reread, re-extraction or candidate replacement. Later chat
+  delivery excluded; no individual-time sum or query after ten candidates.
+- Preserve all previous judgments, source-exposure limits, ECG candidate/persistence,
+  twelfth original final judgment NOT_SUBMITTED, #66588 timer limitation and records.
+  No new review count, product validation or card-production credit. Imports/corpus
+  NOT_RUN; no separate model or external network. No automatic follow-up execution.
+
 ## 2026-10-25: bounded local material location check accepted
 
 - Metadata-only result: ten candidates are one known collection-result.json file
