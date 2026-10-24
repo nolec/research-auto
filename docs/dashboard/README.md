@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-24 (revision eleventh-case-source-timer-unverified).
+The source snapshot is dated 2026-10-24 (revision twelfth-case-source-continuous-timer).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -738,4 +738,38 @@ source claims still require independent live verification.
   stored closed state is not proof of resolution. Preserve all prior judgments,
   ECG candidate/persistence uncertainty, document-specific limits and records.
 - No additional review count, product-validation or card-production credit.
+  Imports/corpus NOT_RUN; no separate model or external network.
+
+## 2026-10-24: twelfth-case task context and verified continuous timer
+
+- Case: github:5044014674 / pandas #66605. Retain original initial HOLD and final
+  judgment NOT_SUBMITTED; separate candidate eligibility UNKNOWN accepted by user.
+- Author directly reports encountering this with an int8 target in a parquet-backed
+  training run. Preserve actual task context and reported gains/KS overflow link.
+  Actual work loss, task-driven workaround performance, extra burden and its causal
+  link remain unestablished. NumPy/nullable/groupby outputs are comparisons, not
+  demonstrated switching in that work. Missing evidence is UNKNOWN, not rejection.
+- The 128th positive row is an overflow boundary, not an incident/person count.
+  Narrow-integer widening is distinct from the 64-bit change the author does not
+  request. Quantified loss, independent cases, recovery success and equivalence are
+  not extra candidate requirements. No independent reproduction or current-state check.
+- Same-byte SHA-256 and raw row-12 identity MATCH:
+  6c43663097cddd27a89a02ff76e635b193be2f49eebe58e93ebfcd0c6b18e90b.
+  Four allowed files; two candidates at raw line 12 and collection $.items[88] are
+  identical copies of one report. Identity metadata inspected: 220. Clear/ambiguous
+  issue references: none. Allowed scope exhausted, no automatic follow-up.
+- Before any file access, separate-call preflight confirmed the same persistent
+  process, token and performance.now start value 61.973792ms; elapsed 7.552653666s.
+  Candidate adoption checks: 15.00760625s and 28.443982291s. Finalization checks:
+  before 58.037548708s, after 58.037658125s. Continuous 600-second and 10-candidate
+  limits verified through finalization, including inter-call wait/interpretation.
+  Subsequent chat delivery is excluded; this is not summed individual durations.
+  No timer file was written during research. Preserve #66588 missing-whole-timer
+  limitation; this result does not retroactively verify that investigation.
+- Source exposure OBSERVED; holdout assignment UNKNOWN after no target assignment
+  was found in allowed files, not proof of nonassignment. No untouched independent
+  evaluation claim for this document, all-purpose ineligibility inference, whole-
+  holdout invalidation or assignment change. First exposure remains unestablished.
+- Preserve all prior judgments, ECG candidate/persistence uncertainty and records.
+  No full comment audit, extra review count, product-validation or production credit.
   Imports/corpus NOT_RUN; no separate model or external network.
