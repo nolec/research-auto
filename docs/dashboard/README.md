@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-24 (revision twelfth-case-source-continuous-timer).
+The source snapshot is dated 2026-10-25 (revision twelve-case-record-reconciliation).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -772,4 +772,33 @@ source claims still require independent live verification.
   holdout invalidation or assignment change. First exposure remains unestablished.
 - Preserve all prior judgments, ECG candidate/persistence uncertainty and records.
   No full comment audit, extra review count, product-validation or production credit.
+  Imports/corpus NOT_RUN; no separate model or external network.
+
+## 2026-10-25: fixed twelve-case record reconciliation accepted
+
+- Fixed order: #66499, #66501, #66509, #66514, #66527, #66542, #66545,
+  #66564, #66574, #66579, #66588, #66605. Existing records link document identity,
+  investigation purpose, source location, findings and user acceptance for all 12.
+- Documented direct investigation: 12; uninvestigated: 0; record-link-unconfirmed: 0.
+  This closes the documented direct-investigation pass within the fixed twelve only.
+  It does not establish exhaustive source/comment coverage or independently verify
+  historical investigation execution. Roadmap and dashboard data can share one
+  reporting origin; agreement is record linkage, not independent source evidence.
+- Candidate UNKNOWN 11 and ECG ELIGIBLE 1 are unchanged findings, not investigation
+  coverage. ECG persistence UNKNOWN, original HOLD judgments, twelfth original final
+  judgment NOT_SUBMITTED, document-specific exposure limits and #66588 unverified
+  whole timer remain unchanged. Missing/conflicting linkage would be separately
+  RECORD_LINK_UNCONFIRMED, not automatically uninvestigated.
+- Scope: docs/roadmap.md and docs/dashboard/source-data.json only; no source reread.
+  Rows in the structured reconciliation retain source locations and data keys.
+  roadmap_line_at_audit refers to the prior audited revision
+  2026-10-24-twelfth-case-source-continuous-timer, not current shifted line numbers.
+- Persistent timer preflight before file access retained the same process/token and
+  performance.now start 2008439.421292ms across calls; second-call elapsed 5.147665125s.
+  Finalization checks: before 63.328634583s, after 63.328751708s. Whole continuous
+  600-second and 12-case limits verified through finalization, including inter-call
+  waits/interpretation; later chat delivery excluded, no individual-time summation.
+  This does not retroactively validate #66588 timing. No timer file during audit.
+- No automatic source selection, rerun, resolution of UNKNOWN, new review count,
+  product-validation completion or card-production credit. Preserve all prior records.
   Imports/corpus NOT_RUN; no separate model or external network.
