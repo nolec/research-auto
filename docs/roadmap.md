@@ -3,6 +3,37 @@
 > Updated: 2026-10-25
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
 
+## 2026-10-25: bounded local material location check accepted
+
+- Metadata-only result: ten candidates are one known collection-result.json file
+  plus nine existing record-location references $.items[88] through $.items[96].
+  File existence is confirmed; record existence remains UNVERIFIED. This is not ten
+  files or nine newly verified records. Target content was not opened.
+- New content, direct burden evidence, independent experiences and current content
+  duplication remain unestablished. DUPLICATION_UNCONFIRMED in this check does not
+  revoke earlier duplicate findings. Existing judgments and exposure limits remain.
+- Scope: existing docs/roadmap.md and docs/dashboard/source-data.json references,
+  plus the nonrecursive name list in run ff2ac41d-73bb-4593-9e3e-9aa3a93369dd.
+  Direct references were ordered by normalized path and record position before
+  listing-only entries. Stop reason CANDIDATE_LIMIT at 10; 31 direct references were
+  identified, 21 remain unchecked. bundle-manifest.json and review are names only,
+  not individually inspected or classified. No recursive or automatic continuation.
+- Each ancestor path component was checked with lstat before access. No symlink
+  followed, outside-repository path access or target-file content read. No new body
+  hash or record-existence validation. Starting documents were used for references
+  and existing metadata only, not source-text reanalysis.
+- Before file access, separate-call preflight confirmed the same persistent process,
+  token and performance.now start 9912708.486833ms; elapsed 4.369378875s.
+  Finalization checks: before 111.614106959s, after 111.614265084s. Continuous
+  600-second and 10-candidate limits verified through finalization, including
+  inter-call wait/interpretation; later chat delivery excluded, no time summation.
+  No further query after ten candidates. This does not verify #66588 historical timing.
+- Fixed-scope results do not establish absence of additional local materials or
+  burden. Preserve original HOLDs, candidate judgments, ECG persistence UNKNOWN,
+  twelfth original final judgment NOT_SUBMITTED, all document exposure limits and
+  historical records. No new review count, product validation or production credit.
+  Imports/corpus NOT_RUN; no separate model or external network.
+
 ## 2026-10-25: fixed twelve-case record reconciliation accepted
 
 - Fixed order: #66499, #66501, #66509, #66514, #66527, #66542, #66545,

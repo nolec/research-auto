@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-25 (revision twelve-case-record-reconciliation).
+The source snapshot is dated 2026-10-25 (revision local-material-location-limit).
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -801,4 +801,35 @@ source claims still require independent live verification.
   This does not retroactively validate #66588 timing. No timer file during audit.
 - No automatic source selection, rerun, resolution of UNKNOWN, new review count,
   product-validation completion or card-production credit. Preserve all prior records.
+  Imports/corpus NOT_RUN; no separate model or external network.
+
+## 2026-10-25: bounded local material location check accepted
+
+- Metadata-only result: ten candidates are one known collection-result.json file
+  plus nine existing record-location references $.items[88] through $.items[96].
+  File existence is confirmed; record existence remains UNVERIFIED. This is not ten
+  files or nine newly verified records. Target content was not opened.
+- New content, direct burden evidence, independent experiences and current content
+  duplication remain unestablished. DUPLICATION_UNCONFIRMED in this check does not
+  revoke earlier duplicate findings. Existing judgments and exposure limits remain.
+- Scope: existing docs/roadmap.md and docs/dashboard/source-data.json references,
+  plus the nonrecursive name list in run ff2ac41d-73bb-4593-9e3e-9aa3a93369dd.
+  Direct references were ordered by normalized path and record position before
+  listing-only entries. Stop reason CANDIDATE_LIMIT at 10; 31 direct references were
+  identified, 21 remain unchecked. bundle-manifest.json and review are names only,
+  not individually inspected or classified. No recursive or automatic continuation.
+- Each ancestor path component was checked with lstat before access. No symlink
+  followed, outside-repository path access or target-file content read. No new body
+  hash or record-existence validation. Starting documents were used for references
+  and existing metadata only, not source-text reanalysis.
+- Before file access, separate-call preflight confirmed the same persistent process,
+  token and performance.now start 9912708.486833ms; elapsed 4.369378875s.
+  Finalization checks: before 111.614106959s, after 111.614265084s. Continuous
+  600-second and 10-candidate limits verified through finalization, including
+  inter-call wait/interpretation; later chat delivery excluded, no time summation.
+  No further query after ten candidates. This does not verify #66588 historical timing.
+- Fixed-scope results do not establish absence of additional local materials or
+  burden. Preserve original HOLDs, candidate judgments, ECG persistence UNKNOWN,
+  twelfth original final judgment NOT_SUBMITTED, all document exposure limits and
+  historical records. No new review count, product validation or production credit.
   Imports/corpus NOT_RUN; no separate model or external network.
