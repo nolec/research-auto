@@ -1343,6 +1343,16 @@ The fifth 100-record source is deferred pending evidence that the Task 3 product
 
 From M2-A onward, test count is a safety signal rather than the progress metric. Every implementation update must report smoke records separately from analysis-ready observations by source and the total out of 500.
 
+## 2026-10-25: LB-8e72735c 새 기준 B단계 위치 확인 수용
+
+- 승인 JSON 8,050바이트·전체 SHA-256 `84100341d8791a45db53d3a255397deed9ac7dd28451f24d389d7292b7079578` 일치. 재귀 JS 키 정렬·배열 순서 보존·compact UTF-8·BOM/끝 개행 없음, 중복 키 거부. 기준 ID는 동일 승인 payload에 결속.
+- B단계 시작 문서 해시 일치: roadmap `d1f8bc9fb3b85f752e3995311922a08fe3486965cc578f9f16944a8fae80f837`, source-data `79f979db3053becba526670e7f4c16d1228bc55fed60ea8f3c83210117c32525`. 이는 이번 반영 전 관찰값이며 갱신 후 문서 해시가 아님. 승인 불일치 시 대상 조회 전 중단하는 조건을 통과했고 B단계를 재실행하지 않음.
+- 새 기준 전체 참조 31개·기록상 제외 30개 대조의 차이는 raw-source-items.jsonl `line:9` 1건. 과거 기준 메모리 목록 소실 `BASELINE_LIST_UNAVAILABLE`은 유지; 새 승인 목록이며 과거 목록 복구·독립 재인증 아님. A는 제안·대상 접근 0, B는 별도 사용자 승인 후 실행으로 구분.
+- 고정 3건: raw-source-items.jsonl 9행은 `PREVIOUSLY_OBSERVED_NOT_RECHECKED`로 과거 파일 존재만 사용, 현재 파일 존재 재조회·대상 stat 없음·레코드 실재 `UNVERIFIED`. bundle-manifest.json은 당시 현재 파일 존재, review는 당시 현재 디렉터리 존재만 확인. 두 경로는 중간 경로까지 lstat로 심볼릭 링크를 배제; 본문·디렉터리 내부는 열지 않음. 이번 문서화에서 대상 재조회 없음.
+- 연속 타이머: 동일 시작값 9463878.9125ms·토큰 B-6ee8fa4c-aa69-4b55-9275-bdef3826345e, 별도 호출 사전 확인 4.709248083초. 확정 직전 20.911535125초·직후 20.911563458초로 600초·10건 상한 내 고정 3건 종료. 호출 사이 대기·해석 포함, 승인 대기·이후 채팅 전달 제외; 개별 시간 합산 아님.
+- 대상 stat 후보 2개·본문 열람 0·디렉터리 목록 0·B단계 기록 변경 0. 레코드 실재·신규 내용·중복·독립 경험·업무 손실/우회 근거는 확인하지 않음. 로컬 전체 자료 부재나 기존 중복 판단 취소로 확대하지 않음.
+- 기존 회차의 잔여 미확인은 당시 기록 그대로 보존. 기존 HOLD·새 후보 판단·ECG 지속성 미확인·열두 번째 기존 최종 판단 NOT_SUBMITTED·문서별 평가 노출 한계·#66588 타이머 한계 유지. 리뷰는 채팅 코드·출력 대조이며 독립 재실행·승인 receipt 생성 아님. 제품 검증·카드 생산 실적 없음; import/corpus NOT_RUN, 별도 모델·외부 통신 없음. 자동 후속 실행 없음.
+
 ## Following milestones
 
 ### Task 3 — Problem and evidence extraction · Calibration foundation in progress
