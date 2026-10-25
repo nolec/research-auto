@@ -1353,6 +1353,15 @@ From M2-A onward, test count is a safety signal rather than the progress metric.
 - 대상 stat 후보 2개·본문 열람 0·디렉터리 목록 0·B단계 기록 변경 0. 레코드 실재·신규 내용·중복·독립 경험·업무 손실/우회 근거는 확인하지 않음. 로컬 전체 자료 부재나 기존 중복 판단 취소로 확대하지 않음.
 - 기존 회차의 잔여 미확인은 당시 기록 그대로 보존. 기존 HOLD·새 후보 판단·ECG 지속성 미확인·열두 번째 기존 최종 판단 NOT_SUBMITTED·문서별 평가 노출 한계·#66588 타이머 한계 유지. 리뷰는 채팅 코드·출력 대조이며 독립 재실행·승인 receipt 생성 아님. 제품 검증·카드 생산 실적 없음; import/corpus NOT_RUN, 별도 모델·외부 통신 없음. 자동 후속 실행 없음.
 
+## 2026-10-25: manifest 단독 제한 열람 결과 수용
+
+- 별도 승인한 bundle-manifest.json 단독 열람: 326바이트의 동일 바이트를 해시 계산·JSON 해석에 사용. 최초 보고 SHA-256 `8a94240f3472a97200988bfbb196bf5a6b4e5c3c4c78dc9bed319cc05245a4c9`. 과거 미보고 계산값 복구·사전 승인 해시 일치·진위 인증 아님. 이번 문서화에서는 대상 재열람·해시 재계산 없음.
+- files는 문자열 4항목: raw-source-items.jsonl, collection-result.json, qualification.json, labeling-assignments.json. 검사 4·출력 4·미검사 0·항목 생략 0·필드 생략 0. 생략 0은 승인된 투영 범위 기준. schema_version 미기재, run_id는 고정 run과 같은 기재값. 경로 문자열은 manifest의 주장일 뿐 대상 존재·레코드 실재·신규 내용·독립 경험 확인이 아님.
+- 한도: 파일 64 KiB·문자열 512자·항목 20개·누적 출력 4,000자. 단계별 JSON 2,345자, 추가 집계 안내와 최종 보고를 포함해 한도 내; 정확한 전체 합계는 미보고. 읽기·해시 직후와 배열 총건수 확인 직후 메모리 결과 객체 및 최소 출력에 보존한 뒤 항목 처리. 정상·중단 보고는 결과 객체만 사용, 이번 결과 조립 오류 없음.
+- 새 연속 타이머 시작 19856831.249541ms·토큰 2d022ce4-d235-4a8b-bd88-a656d76dbb97, 별도 호출 사전 확인 4.076988167초. 확정 직전 29.639093459초·직후 29.639094917초로 600초 이내, 고정 1건 종료 후 추가 열람 없음. 호출 사이 대기·해석 포함, 이후 채팅 전달 제외; 개별 시간 합산 아님.
+- 이전 제한 열람의 MANIFEST_ITEM_STRUCTURE와 결과 조립 오류 lrRecord is not defined, 당시 해시·총건수 미보고/미확정은 그대로 보존. 새 실행 성공으로 이전 실패를 소급 변경하지 않음. 과거 기준 목록 소실 BASELINE_LIST_UNAVAILABLE도 복구하지 않음.
+- 이번 수용 리뷰는 채팅 실행 코드·도구 출력 대조이며 독립 재실행·영수증 생성 아님. 기존 HOLD·후보 판단·ECG 지속성 미확인·열두 번째 기존 최종 판단 NOT_SUBMITTED·문서별 노출/평가 한계·#66588 전체 타이머 미확보 한계·기록 보존. 제품 검증·카드 생산 실적 없음, import/corpus NOT_RUN. 열람 중 기록 변경·raw 재열람·참조 추적·별도 모델·외부 통신 없음. 자동 후속 실행 없음.
+
 ## Following milestones
 
 ### Task 3 — Problem and evidence extraction · Calibration foundation in progress
