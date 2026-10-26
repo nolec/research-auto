@@ -240,7 +240,7 @@
     "원래 21~30번째 위치 메타데이터 10건 결과 수용: 전체 31개 키·순서가 이전 실행 환경에 보존된 목록과 일치하고 이전 두 회차 각 10개 키도 일치. 이전 20건 제외 집합 slice(0,20), 이번 slice(20,30)의 길이 10·원래 위치 21~30·교집합 0 확인. 기준은 보존 메모리이며 과거 불변 기록·독립 인증 아님. raw-source-items.jsonl 참조 위치는 문자열 정렬 순서 line:10·11·12·2·3·4·5·6·7·8. 파일 존재는 이전 회차 확인값 PREVIOUSLY_OBSERVED_NOT_RECHECKED로 사용하고 대상 파일 재조회·새 파일 존재 확인은 하지 않음. 현재 시작 문서의 참조 위치만 확인했으며 10개 레코드 실재·본문·중복·신규 내용·독립 경험은 미검증. 이번 중복 미확인은 과거 중복 판단 취소가 아님. CANDIDATE_LIMIT 10건에서 중단, 직접 참조 1건과 목록상 bundle-manifest.json·review 2개는 계속 미확인. 이전 후보 재확인·디렉터리 재목록·상한 이후 추가 조회·링크 추적 없음. 새 지속 타이머 사전 확인 통과: 동일 performance.now 시작값 15791317.206042ms·동일 토큰, 별도 호출 경과 7.548985958초. 확정 직전 63.022342125초·직후 63.022942500초로 전체 연속 600초·10건 상한 준수 확인; 도구 호출 사이 대기·해석 포함, 이후 채팅 전달 시간 제외, 개별 시간 합산 아님. 남은 자료·레코드 실재·직접 근거 부재를 추정하지 않음. 기존 판단·문서별 노출 한계·#66588 타이머 한계·첫 두 회차 결과·기록 보존. 제품 검증·카드 생산 실적 없음, import/corpus NOT_RUN 유지, 자동 후속 실행 없음.",
     "ECG 추가 조사: github:5021233814(pandas #66545). 기존 HOLD 유지 / 새 추가 조사 후보 유지 / 우회 부담 지속성 미확인. 실제 작업 때문에 코드 작성 및 보간 후 간격 계산·마스킹의 추가 처리 절차는 확인. 반복 수정·반복 실행·매번 수동 점검·수정 없는 재사용 기간과 조건은 미확인. 지정 로컬 4개 파일·고정 검색어에서 후보 2건은 동일 문서·본문 지문의 중복 저장본이며 독립 경험 2건 아님. 원문 해시 MATCH; 검색 범위 소진 약 0.02초, 상한 15분 또는 후보 30건. #64588 별도 본문·외부 후속 이력 미추적. 근거 미발견은 부담 부재·일회성·후보 기각 증거 아님. 제품 검증·카드 생산 실적에 집계하지 않음. 기존 기록·import/corpus NOT_RUN 유지."
   ],
-  "snapshot_revision": "2026-10-26-collection-tail-c",
+  "snapshot_revision": "2026-10-26-additional-record-designation",
   "delivery": {
     "status": "BLOCKED",
     "code_review": "PROBE_APPROVED",
@@ -3611,6 +3611,103 @@
       "output": "통합 출력 2,516 UTF-16 코드 단위 / 시작 안내·도구 출력·집계·봉인 최종 문안·기계 판정 포함 / 플랫폼 표시 포장 제외",
       "timer": "동일 연속 타이머 / 확정 직전 20.242033750초·직후 20.242035292초 / 고정 1건 종료",
       "boundary": "앞부분·생략 코드·URL·다른 자료의 근거 부재 단정 없음 / 기존 판단·과거 오류·목록 소실·노출·타이머·A단계 계수 한계 유지 / 제품·생산 실적 아님"
+    }
+  },
+  "additional_local_record_gate": {
+    "status": "AWAITING_EXPLICIT_DESIGNATION",
+    "accepted_principles": true,
+    "summary": "추가 기록 선정·승인 원칙 수용: 사용자가 열람 대상으로 명시한 첫 1건만 고정하고 예시·단순 언급·순서 없는 후보 목록은 지정으로 추정하지 않음. 정확한 로컬 경로·레코드 위치는 아직 미확정이며 자료 부재를 뜻하지 않음. 접근 불가·중복·부적합·근거 미기재여도 자동 교체·주변 탐색 금지. 대상 지정과 구체적 제한 열람 승인은 별개, 지정만으로 열람하지 않음. 직접 경험·타인 인용·제안·해석과 실제 수행을 구분하며 기존 판단·각 한계·import/corpus NOT_RUN 보존. 추가 근거·제품 검증·카드 생산 실적 없음.",
+    "designation": {
+      "rule": "FIRST_USER_EXPLICITLY_DESIGNATED_SINGLE_RECORD",
+      "designated_record": null,
+      "local_path": null,
+      "record_location": null,
+      "location_status": "UNCONFIRMED",
+      "material_absence": "NOT_ESTABLISHED",
+      "examples_or_mentions_count_as_designation": false,
+      "unordered_candidates_auto_selected": false,
+      "ambiguous_location_action": "STOP_WITHOUT_READING"
+    },
+    "replacement": {
+      "automatic_replacement": false,
+      "surrounding_search": false,
+      "no_substitution_for": [
+        "unavailable",
+        "duplicate",
+        "unsuitable",
+        "missing_evidence"
+      ],
+      "preserve_original_designation_on_stop": true
+    },
+    "approval": {
+      "designation_is_read_approval": false,
+      "read_approval_status": "NOT_GRANTED",
+      "required_before_read": [
+        "exact local path and record location",
+        "byte and body limits",
+        "quotation and integrated output limits",
+        "continuous timer and stop conditions",
+        "separate explicit read approval"
+      ],
+      "automatic_task_entry": false,
+      "follow_references": false
+    },
+    "evidence_classification": {
+      "attribution": [
+        "author direct experience",
+        "quoted third-party statement",
+        "proposal",
+        "reviewer interpretation"
+      ],
+      "separate_actual_performance": true,
+      "dimensions": [
+        "who",
+        "actual task",
+        "experienced loss or performed additional action",
+        "link to reported problem"
+      ],
+      "reproduction_or_example_change_is_workplace_workaround": "NOT_INFERRED",
+      "author_report_is_independent_verification": false,
+      "same_report_copy_is_new_independent_evidence": false,
+      "work_loss_and_workaround_assessed_separately": true,
+      "missing_statement": "UNKNOWN",
+      "extra_mandatory_conditions_not_added": [
+        "quantitative time",
+        "recurrence",
+        "independent case",
+        "successful resolution"
+      ]
+    },
+    "preservation": {
+      "original_judgments": "UNCHANGED",
+      "historical_errors": "UNCHANGED",
+      "old_baseline": "BASELINE_LIST_UNAVAILABLE",
+      "document_exposure_limits": "UNCHANGED",
+      "pandas_66588_timer_limit": "UNCHANGED",
+      "A_integrated_output_count": "NOT_AVAILABLE_UNCHANGED",
+      "prior_source_investigations": "UNCHANGED",
+      "historical_repair": false
+    },
+    "execution": {
+      "source_reread": "NOT_RUN",
+      "record_identification_search": "NOT_RUN",
+      "reference_follow": "NOT_RUN",
+      "separate_models": "NOT_RUN",
+      "external_network": "NOT_RUN",
+      "imports": "NOT_RUN",
+      "corpus": "NOT_RUN",
+      "new_evidence_confirmed": false,
+      "product_validation_credit": false,
+      "card_production_credit": false
+    },
+    "review_boundary": "채팅 계획의 원칙 검토 수용이며 대상 지정·열람 승인·자료 부재 검증·승인 receipt 생성 아님",
+    "surface": {
+      "status": "위치 미확정 / 아직 명시 지정된 기록 없음 / 자료 부재로 판단하지 않음",
+      "selection": "사용자가 열람 대상으로 명시한 첫 1건만 / 예시·단순 언급·순서 없는 목록은 지정으로 추정하지 않음",
+      "replacement": "접근 불가·중복·부적합·근거 미기재에도 자동 교체·주변 탐색 금지",
+      "approval": "대상 지정 ≠ 열람 승인 / 정확한 위치·열람 한도·계수·타이머·종료 조건 제시 후 별도 승인 / 승인 전 열람 없음",
+      "attribution": "직접 경험·타인 인용·제안·해석과 실제 수행 구분 / 작성자 보고 ≠ 독립 검증 / 같은 보고 사본 ≠ 새 독립 근거",
+      "boundary": "기존 판단·과거 오류·목록 소실·노출·타이머·A단계 계수 한계 유지 / import·corpus NOT_RUN / 제품·생산 실적 아님"
     }
   }
 }
