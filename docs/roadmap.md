@@ -1715,3 +1715,18 @@ subsequent tracked documentation change requires renewed integrated review.
 ## Explicitly deferred
 
 Customer-facing dashboard work, external SaaS features, interview-dependent validation, deep research, automatic MVP design, country-gap analysis, unsupported market sizing, and automatic investment decisions remain outside V1. The internal local roadmap dashboard is documentation support only.
+
+
+### 2026-10-28 · A조회 진단 보류 수용
+
+- A조회 진단 보류 / 재개는 별도 승인 필요
+- 완전 취득 stderr 32바이트 / 과거 보존 SHA-256과 일치 / 원문 복구·원인 동일성 증거 아님
+- 과거 stderr 원문 미보존 / 해시만 보존
+- 새 stderr 원문은 안전성 판별 불가로 전체 생략 / 생략 안내만 저장
+- 권한 오류 가설 유지 / app-server 초기화 실패와의 인과관계 미확인
+- 기존 A조회 OMC BLOCK 유지 / 조회 검증 실패·RED 미등록 / 문서 정합성 검사와 별개
+- CLI 예산 기록상 SPENT / 품질 미평가 / API 예산 마지막 확인값 UNUSED·재조회 없음
+- 기존 HOLD·후보 판단·ECG 지속성 미확인·문서별 노출·#66588 타이머·A단계 계수 한계와 기록 유지 / import·corpus NOT_RUN
+- 동일 A조회 1회 종료 코드 64, stdout 사건 0건·stderr 1건·32바이트·EOF 완전 취득·잘림 없음.
+- 새 기록에는 생략 안내만 배타적 저장했고 쓰기·파일/디렉터리 동기화·닫기 성공을 기록했다. 메시지 자체 확보·파일 재읽기 검증·강제 종료 경로 검증은 아님.
+- 과거 작업 기록·완료 판정은 소급 변경하지 않는다. 이번 문서 정합성 결과로 기존 BLOCK을 해제하거나 제품 검증·카드 생산 실적으로 계산하지 않는다.

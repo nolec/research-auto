@@ -240,7 +240,7 @@
     "원래 21~30번째 위치 메타데이터 10건 결과 수용: 전체 31개 키·순서가 이전 실행 환경에 보존된 목록과 일치하고 이전 두 회차 각 10개 키도 일치. 이전 20건 제외 집합 slice(0,20), 이번 slice(20,30)의 길이 10·원래 위치 21~30·교집합 0 확인. 기준은 보존 메모리이며 과거 불변 기록·독립 인증 아님. raw-source-items.jsonl 참조 위치는 문자열 정렬 순서 line:10·11·12·2·3·4·5·6·7·8. 파일 존재는 이전 회차 확인값 PREVIOUSLY_OBSERVED_NOT_RECHECKED로 사용하고 대상 파일 재조회·새 파일 존재 확인은 하지 않음. 현재 시작 문서의 참조 위치만 확인했으며 10개 레코드 실재·본문·중복·신규 내용·독립 경험은 미검증. 이번 중복 미확인은 과거 중복 판단 취소가 아님. CANDIDATE_LIMIT 10건에서 중단, 직접 참조 1건과 목록상 bundle-manifest.json·review 2개는 계속 미확인. 이전 후보 재확인·디렉터리 재목록·상한 이후 추가 조회·링크 추적 없음. 새 지속 타이머 사전 확인 통과: 동일 performance.now 시작값 15791317.206042ms·동일 토큰, 별도 호출 경과 7.548985958초. 확정 직전 63.022342125초·직후 63.022942500초로 전체 연속 600초·10건 상한 준수 확인; 도구 호출 사이 대기·해석 포함, 이후 채팅 전달 시간 제외, 개별 시간 합산 아님. 남은 자료·레코드 실재·직접 근거 부재를 추정하지 않음. 기존 판단·문서별 노출 한계·#66588 타이머 한계·첫 두 회차 결과·기록 보존. 제품 검증·카드 생산 실적 없음, import/corpus NOT_RUN 유지, 자동 후속 실행 없음.",
     "ECG 추가 조사: github:5021233814(pandas #66545). 기존 HOLD 유지 / 새 추가 조사 후보 유지 / 우회 부담 지속성 미확인. 실제 작업 때문에 코드 작성 및 보간 후 간격 계산·마스킹의 추가 처리 절차는 확인. 반복 수정·반복 실행·매번 수동 점검·수정 없는 재사용 기간과 조건은 미확인. 지정 로컬 4개 파일·고정 검색어에서 후보 2건은 동일 문서·본문 지문의 중복 저장본이며 독립 경험 2건 아님. 원문 해시 MATCH; 검색 범위 소진 약 0.02초, 상한 15분 또는 후보 30건. #64588 별도 본문·외부 후속 이력 미추적. 근거 미발견은 부담 부재·일회성·후보 기각 증거 아님. 제품 검증·카드 생산 실적에 집계하지 않음. 기존 기록·import/corpus NOT_RUN 유지."
   ],
-  "snapshot_revision": "2026-10-26-review-internal-location",
+  "snapshot_revision": "2026-10-28-a-query-diagnostic-paused",
   "delivery": {
     "status": "BLOCKED",
     "code_review": "PROBE_APPROVED",
@@ -3944,5 +3944,32 @@
       "approval": "파일 위치·종류·크기 ≠ 레코드 실재·새 근거·명시 지정·열람 승인 / 추가 기록 미지정·열람 미승인",
       "boundary": "관찰 순서·시점 한정 / 로컬 전체 자료 부재 단정 없음 / 기존 판단·과거 오류·목록 소실·노출·타이머·A단계 계수 한계·import·corpus NOT_RUN 유지"
     }
+  },
+  "a_query_diagnostic_pause": {
+    "decision": "DEFERRED",
+    "surface": {
+      "status": "A조회 진단 보류 / 재개는 별도 승인 필요",
+      "hash": "완전 취득 stderr 32바이트 / 과거 보존 SHA-256과 일치 / 원문 복구·원인 동일성 증거 아님",
+      "past_original": "과거 stderr 원문 미보존 / 해시만 보존",
+      "new_original": "새 stderr 원문은 안전성 판별 불가로 전체 생략 / 생략 안내만 저장",
+      "causality": "권한 오류 가설 유지 / app-server 초기화 실패와의 인과관계 미확인",
+      "historical_gate": "기존 A조회 OMC BLOCK 유지 / 조회 검증 실패·RED 미등록 / 문서 정합성 검사와 별개",
+      "budgets": "CLI 예산 기록상 SPENT / 품질 미평가 / API 예산 마지막 확인값 UNUSED·재조회 없음",
+      "preservation": "기존 HOLD·후보 판단·ECG 지속성 미확인·문서별 노출·#66588 타이머·A단계 계수 한계와 기록 유지 / import·corpus NOT_RUN"
+    },
+    "evidence_basis": "사용자가 수용한 저장 기록과 대화 근거만 문서화; 시스템·DB·예산 추가 조회 없음",
+    "hash_match": "MATCH_TO_RETAINED_HASH_ONLY",
+    "stderr_bytes": 32,
+    "stderr_sha256": "3d1bfc20628becabc4bda68e57c58ad567d3a8aa0c8aa281f68b58bb28a3d0e5",
+    "historical_original": "NOT_PRESERVED",
+    "new_original": "OMITTED_SAFETY_UNCERTAIN",
+    "causality": "UNCONFIRMED",
+    "historical_omc": "BLOCK",
+    "document_validation": "SEPARATE_FROM_HISTORICAL_DIAGNOSTIC_GATE",
+    "CLI_budget": "RECORDED_SPENT_NOT_REQUERIED",
+    "quality": "NOT_ASSESSED",
+    "API_budget": "LAST_KNOWN_UNUSED_NOT_REQUERIED",
+    "import": "NOT_RUN",
+    "corpus": "NOT_RUN"
   }
 }
