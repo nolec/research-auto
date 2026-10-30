@@ -1,8 +1,22 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-10-30
-> Latest documentation: ECG limited evidence unconfirmed; conditional preparation NOT_ENTERED; R2 unmet/RED unregistered historical BLOCK and output/timer limits retained. persistent-v4 actual output 1 obtained; valid abstention accepted; human card HOLD; work loss/workplace workaround UNKNOWN. Historical A조회 진단 보류; hash match only; past original missing, new original omitted; causality UNKNOWN; CLI SPENT, quality NOT_ASSESSED, API last-known UNUSED; prior desktop/mobile render unverified and historical OMC BLOCK retained.
+> Latest documentation: ECG fixed-three-span author-performed workaround report accepted; independent verification incomplete; A3/RED BLOCK and output/timer limits retained. Historical: ECG limited evidence unconfirmed; conditional preparation NOT_ENTERED; R2 unmet/RED unregistered historical BLOCK and output/timer limits retained. persistent-v4 actual output 1 obtained; valid abstention accepted; human card HOLD; work loss/workplace workaround UNKNOWN. Historical A조회 진단 보류; hash match only; past original missing, new original omitted; causality UNKNOWN; CLI SPENT, quality NOT_ASSESSED, API last-known UNUSED; prior desktop/mobile render unverified and historical OMC BLOCK retained.
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; single-case v4 output obtained; overall model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
+
+## 2026-10-30 · ECG 고정 3구간 추가 확인 수용
+
+- ECG #66545 추가 확인 / 작성자 우회 수행 보고 확인 / 독립 실행 검증 미완료
+- ECG 작업 때문에 별도 코드 작성·보간 후 수동 간격 계산 및 마스킹을 했다는 작성자 보고 / 단순 기능 제안과 구분
+- 정량적 업무 손실·반복 빈도·지속 기간 미확인 / 남은 미확인 구간·전체 자료의 근거 부재 단정 없음
+- 지정 보존 레코드 SHA-256 일치 / 4,827바이트 동일 바이트 배타적 보존 / 이번 문서 작업에서 재열람 없음
+- Python 인덱스·끝 제외 [900:1227]·[3703:4371]·[4534:4539] / 길이 327·668·5 / UTF-16 인용 합계 1,000단위
+- 사전 검사 오류 출력 미계수 / 전체 출력 통합 계수 미확보 / 4,000단위 상한 준수 미확인
+- Guard 전부터 평가 기록까지 약 63.84초 / 최종 정리·보고 포함 전체 연속 타이머 검증 아님
+- 추가 열람 작업 A3 미충족·RED 미등록 OMC BLOCK 유지 / 이전 ECG R2·RED BLOCK·문서 작업 BLOCK과 별개
+- 기존 ECG HOLD·조사 후보 ELIGIBLE·지속성 미확인·이전 제한 확인 중단 이력 유지 / SPENT·원출력·각 한계·화면 검증 미완료·import·corpus NOT_RUN 보존
+- 새 실험 준비·A 초기화·B 실행 없음 / 후속 열람·판단 변경·실행은 자동 진행하지 않음
+- 사용자 수용 결과의 문서 반영이며, 과거 근거 미확인 판단·기록을 소급 수정하거나 새 실험 준비 승인으로 간주하지 않음.
 
 ## 2026-10-30 · ECG 제한 확인 중단 결과 수용
 

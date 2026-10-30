@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The documentation snapshot is dated 2026-10-30 (revision 2026-10-30-ecg-bounded-stop-accepted).
+The documentation snapshot is dated 2026-10-30 (revision 2026-10-30-ecg-addendum-author-report).
 This is a documentation refresh date, not a new source observation or quality measurement.
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
@@ -1015,3 +1015,17 @@ source claims still require independent live verification.
 - 후보 교체·추가 열람·실행 파일 생성·A 초기화·B 실행 없음 / 중단 분기 검사와 모델 회귀 검증은 별개
 - 기존 ECG HOLD·조사 후보 ELIGIBLE·지속성 미확인 유지 / 기존 SPENT·원출력·각 한계·import·corpus NOT_RUN 보존
 - 근거는 사용자가 수용한 제한 확인·리뷰 기록이며 이번 갱신에서 대상·보존 본문을 재열람하지 않음. 기존 화면 검증 미완료 유지. 제품 검증·카드 생산 실적 아님.
+
+## 2026-10-30 · ECG 고정 3구간 추가 확인 수용
+
+- ECG #66545 추가 확인 / 작성자 우회 수행 보고 확인 / 독립 실행 검증 미완료
+- ECG 작업 때문에 별도 코드 작성·보간 후 수동 간격 계산 및 마스킹을 했다는 작성자 보고 / 단순 기능 제안과 구분
+- 정량적 업무 손실·반복 빈도·지속 기간 미확인 / 남은 미확인 구간·전체 자료의 근거 부재 단정 없음
+- 지정 보존 레코드 SHA-256 일치 / 4,827바이트 동일 바이트 배타적 보존 / 이번 문서 작업에서 재열람 없음
+- Python 인덱스·끝 제외 [900:1227]·[3703:4371]·[4534:4539] / 길이 327·668·5 / UTF-16 인용 합계 1,000단위
+- 사전 검사 오류 출력 미계수 / 전체 출력 통합 계수 미확보 / 4,000단위 상한 준수 미확인
+- Guard 전부터 평가 기록까지 약 63.84초 / 최종 정리·보고 포함 전체 연속 타이머 검증 아님
+- 추가 열람 작업 A3 미충족·RED 미등록 OMC BLOCK 유지 / 이전 ECG R2·RED BLOCK·문서 작업 BLOCK과 별개
+- 기존 ECG HOLD·조사 후보 ELIGIBLE·지속성 미확인·이전 제한 확인 중단 이력 유지 / SPENT·원출력·각 한계·화면 검증 미완료·import·corpus NOT_RUN 보존
+- 새 실험 준비·A 초기화·B 실행 없음 / 후속 열람·판단 변경·실행은 자동 진행하지 않음
+- 사용자 수용 결과의 문서 반영이며, 과거 근거 미확인 판단·기록을 소급 수정하거나 새 실험 준비 승인으로 간주하지 않음.
