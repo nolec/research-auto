@@ -2,6 +2,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const root = __dirname;
+// Reject malformed cards before creating evidence or generated output.
+const inputSteps = JSON.parse(fs.readFileSync(path.join(root, 'source-data.json'))).next_steps;
+if (!Array.isArray(inputSteps) || inputSteps.some(step => !step || typeof step !== 'object' || Array.isArray(step) || ['lane','title','detail'].some(key => typeof step[key] !== 'string' || !step[key].trim()))) throw Error('NEXT_STEPS_CONTRACT_REQUIRED');
 const inputRevision = JSON.parse(fs.readFileSync(path.join(root, 'source-data.json'))).snapshot_revision;
 if (typeof inputRevision !== 'string' || !/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$/.test(inputRevision)) throw Error('INPUT_CONTRACT_REQUIRED: snapshot_revision');
 const taskEvidence = process.env.OMC_DASHBOARD_EVIDENCE;
@@ -62,6 +65,7 @@ const html = `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta n
 <section class="panel" data-collection-c="assessment"><div class="section-title"><h2>collection-result C단계 · 뒤 410단위와 수행 보고</h2><small>업무상 우회 미확인 유지</small></div>${['binding','selection','finding','output','timer','boundary'].map(k=>`<p class="boundary" data-collection-c="${k}">${esc(d.collection_result_tail_C.surface[k])}</p>`).join('')}<p class="boundary">${esc(d.collection_result_tail_C.summary)}</p></section>
 <section class="panel" data-additional-record="assessment"><div class="section-title"><h2>추가 로컬 기록 · 지정과 열람 승인</h2><small>위치 미확정</small></div>${['status','selection','replacement','approval','attribution','boundary'].map(k=>`<p class="boundary" data-additional-record="${k}">${esc(d.additional_local_record_gate.surface[k])}</p>`).join('')}<p class="boundary">${esc(d.additional_local_record_gate.summary)}</p></section>
 <section class="panel" data-review-locations="assessment"><div class="section-title"><h2>review 직하 · 디렉터리 위치 확인</h2><small>지정·열람 승인 아님</small></div>${['order','scope','output','timer','approval','boundary'].map(k=>`<p class="boundary" data-review-locations="${k}">${esc(d.review_directory_location_check.surface[k])}</p>`).join('')}<p class="boundary">${esc(d.review_directory_location_check.summary)}</p></section>
+<section class="panel" data-ecg-v2-diagnosis="assessment"><div class="section-title"><h2>ECG v2 · 로컬 진단의 확인 범위</h2><small>문구 일치 · 당시 전달 미확인</small></div>${Object.entries(d.ecg_v2_accepted_local_diagnosis.surface).map(([k,v])=>`<p class="boundary" data-ecg-v2-diagnosis="${esc(k)}">${esc(v)}</p>`).join('')}</section>
 <section class="panel" data-ecg-v2-invalid="assessment"><div class="section-title"><h2>ECG v2 · 도구 실행 감지로 무효</h2><small>SPENT · 품질 미평가 · 사후 감지</small></div>${Object.entries(d.ecg_v2_accepted_invalid_result.surface).map(([k,v])=>`<p class="boundary" data-ecg-v2-invalid="${esc(k)}">${esc(v)}</p>`).join('')}</section>
 <section class="panel" data-ecg-addendum="assessment"><div class="section-title"><h2>ECG · 작성자 우회 수행 보고</h2><small>독립 검증 미완료 · 과거 중단 이력 보존</small></div>${Object.entries(d.ecg_three_span_accepted_addendum.surface).map(([k,v])=>`<p class="boundary" data-ecg-addendum="${esc(k)}">${esc(v)}</p>`).join('')}</section>
 <section class="panel" data-ecg-stop="assessment"><div class="section-title"><h2>ECG · 제한 확인 중단</h2><small>근거 미확인과 근거 부재 구분</small></div>${Object.entries(d.ecg_bounded_read_accepted_stop.surface).map(([k,v])=>`<p class="boundary" data-ecg-stop="${esc(k)}">${esc(v)}</p>`).join('')}</section>

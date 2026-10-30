@@ -1,8 +1,23 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-10-30
-> Latest documentation: ECG v2 actual command_execution detected; experiment_invalid / SPENT / quality NOT_ASSESSED; post-hoc detection is not prior tool prevention; v1 last-reviewed UNUSED retained. Historical: ECG fixed-three-span author-performed workaround report accepted; independent verification incomplete; A3/RED BLOCK and output/timer limits retained. Historical: ECG limited evidence unconfirmed; conditional preparation NOT_ENTERED; R2 unmet/RED unregistered historical BLOCK and output/timer limits retained. persistent-v4 actual output 1 obtained; valid abstention accepted; human card HOLD; work loss/workplace workaround UNKNOWN. Historical A조회 진단 보류; hash match only; past original missing, new original omitted; causality UNKNOWN; CLI SPENT, quality NOT_ASSESSED, API last-known UNUSED; prior desktop/mobile render unverified and historical OMC BLOCK retained.
+> Updated: 2026-10-31
+> Latest documentation: Fixed-ten-file diagnosis accepted: current AGENTS text match only; historical loading/delivery and prior prevention UNCONFIRMED; diagnostic gate NOT_RUN, reported BLOCK. ECG v2 actual command_execution detected; experiment_invalid / SPENT / quality NOT_ASSESSED; post-hoc detection is not prior tool prevention; v1 last-reviewed UNUSED retained. Historical: ECG fixed-three-span author-performed workaround report accepted; independent verification incomplete; A3/RED BLOCK and output/timer limits retained. Historical: ECG limited evidence unconfirmed; conditional preparation NOT_ENTERED; R2 unmet/RED unregistered historical BLOCK and output/timer limits retained. persistent-v4 actual output 1 obtained; valid abstention accepted; human card HOLD; work loss/workplace workaround UNKNOWN. Historical A조회 진단 보류; hash match only; past original missing, new original omitted; causality UNKNOWN; CLI SPENT, quality NOT_ASSESSED, API last-known UNUSED; prior desktop/mobile render unverified and historical OMC BLOCK retained.
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; single-case v4 output obtained; overall model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
+
+## 2026-10-31 · ECG v2 고정 10개 파일 로컬 진단 수용
+
+- ECG v2 고정 10개 파일 진단 수용 / 현재 AGENTS 문구 일치 / 당시 로딩·전달·사전 차단 근거 미확인
+- 현재 AGENTS의 초기화·session_start 명령 문구와 저장 stdout 명령 일치 / 현재 문구 비교이며 당시 AGENTS 로딩·모델 전달의 증명 아님
+- prompt·stdin에서 해당 초기화 명령 문구 미발견 / 다른 지시 유입 경로 배제·원인 확정 아님
+- 명세·manifest 최종 인자 및 기록된 코드 해시 결속 일치 / 실제 CLI 도구 강제 차단 입증 아님 / 사후 감지와 사전 차단 구분
+- 진단 당시 고정 10개 파일·66,571바이트 / stderr·예산·토큰 미조회 / stderr 0바이트·v2 SPENT·v1 UNUSED는 과거 관찰값 유지
+- 인용 300 UTF-16 단위 / 통합 출력 3,482 UTF-16 단위 / 시작 안내·출력된 도구 텍스트·계수 보고·봉인 최종문 포함 / UI·도구 표시 래퍼·도구 입력 제외
+- 첫 파일 읽기부터 보고 봉인까지 연속 66.808초 / 초기 자료 취득·조립 0.007819125초와 구분 / 봉인 이후 전달 시간 제외 / 이번 문서 작업 시간 아님
+- 진단 당시 파일·OMC 기록 변경 금지로 OMC 게이트 미실행 / 보고상 BLOCK / 새 complete-task 공식 판정이 아니며 기존 BLOCK 해제 아님
+- v2 SPENT·v1 마지막 확인값 UNUSED·다른 예산·원출력·기존 판단·각 한계·화면/독립 검증 미완료·import·corpus NOT_RUN 유지
+- 사용자 수용 진단 결과만 문서 반영 / 진단 대상 재조회·재실행·초기화·모델·외부 통신·스테이징·커밋 없음
+
+- 근거는 사용자가 수용한 진단·리뷰 대화이며 새 진단 영수증·재측정으로 간주하지 않음. 제품 검증·카드 생산 실적 아님.
 
 ## 2026-10-30 · ECG v2 실제 도구 실행 감지·무효 결과 수용
 
