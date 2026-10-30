@@ -1,7 +1,31 @@
 # Demand Intelligence V1 Roadmap
 
-> Updated: 2026-10-25
-> Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
+> Updated: 2026-10-30
+> Latest documentation: ECG limited evidence unconfirmed; conditional preparation NOT_ENTERED; R2 unmet/RED unregistered historical BLOCK and output/timer limits retained. persistent-v4 actual output 1 obtained; valid abstention accepted; human card HOLD; work loss/workplace workaround UNKNOWN. Historical A조회 진단 보류; hash match only; past original missing, new original omitted; causality UNKNOWN; CLI SPENT, quality NOT_ASSESSED, API last-known UNUSED; prior desktop/mobile render unverified and historical OMC BLOCK retained.
+> Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; single-case v4 output obtained; overall model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
+
+## 2026-10-30 · ECG 제한 확인 중단 결과 수용
+
+- ECG #66545 / github:5021233814 / 제한 근거 미확인·조건부 실험 준비 미진입
+- 제한 발췌에서 실제 업무 손실·수행한 우회 부담의 인과 연결 미확인 / 미출력 부분·전체 자료의 근거 부재 단정 없음
+- 지정 $.items[93] 식별 일치 / 467,237바이트 동일 바이트 보존 / 이번 취득·보존 결속이며 과거 해시 비교 미수행
+- 기존 ECG 작업 OMC BLOCK 유지 / R2 미충족과 코드 구현 없이 RED 미등록을 구분 / 문서 검사로 해제하지 않음
+- 인용 1,000 UTF-16 단위 / 전체 출력 통합 계수 미확보 / 통합 4,000단위 준수로 보고하지 않음
+- 중단 감사 시점 약 100.54초 / Guard 설정 시간 제외 / 최종 정리·보고 포함 전체 연속 시간 검증 아님
+- 후보 교체·추가 열람·실행 파일 생성·A 초기화·B 실행 없음 / 중단 분기 검사와 모델 회귀 검증은 별개
+- 기존 ECG HOLD·조사 후보 ELIGIBLE·지속성 미확인 유지 / 기존 SPENT·원출력·각 한계·import·corpus NOT_RUN 보존
+- 근거는 사용자가 수용한 제한 확인·리뷰 기록이며 이번 갱신에서 대상·보존 본문을 재열람하지 않음. 기존 화면 검증 미완료 유지. 제품 검증·카드 생산 실적 아님.
+
+## 2026-10-30 · persistent-v4 단건 결과 수용
+
+- #66574 persistent-v4 / 실제 모델 출력 1건 확보 / 정상 보류 valid_abstention
+- 사람의 검토·사용자 수용: 정상 보류 / 카드 HOLD / 저장 결과 content_quality NOT_ASSESSED·human_card NOT_RUN 보존
+- 문서 예제 문제·수정 제안과 작성자의 로컬 수정·출력 확인 보고를 구분 / 실제 업무 손실·업무상 우회 부담 미확인
+- v4 SPENT·소비 표식 일치 / v3 및 기존 SPENT 보존 / API 마지막 확인값 UNUSED·재조회 없음
+- 사용자 보고 경과 16.155630833초 / 저장 응답 1건·완료 이벤트 1건·stderr 0바이트 / 전체 연속 타이머 검증으로 확대 안 함
+- 기존 노출 사례 1건 / 독립 holdout·제품 품질 통과·카드 생산 실적 아님 / 내부 요청·과금·도구 강제 차단 미확인
+- 과거 오류·목록 소실·문서별 노출·#66588 타이머·A단계 계수 한계·기존 OMC BLOCK 유지 / import·corpus NOT_RUN
+- 근거: 사용자가 수용한 저장 결과의 읽기 전용 리뷰. 이번 문서 갱신에서 모델·자료 재조회·예산 초기화·외부 통신 없음. 원출력·기존 예산·판단을 수정하지 않음.
 
 ## 2026-10-25: original positions 21-30 metadata check accepted
 
@@ -1730,3 +1754,11 @@ Customer-facing dashboard work, external SaaS features, interview-dependent vali
 - 동일 A조회 1회 종료 코드 64, stdout 사건 0건·stderr 1건·32바이트·EOF 완전 취득·잘림 없음.
 - 새 기록에는 생략 안내만 배타적 저장했고 쓰기·파일/디렉터리 동기화·닫기 성공을 기록했다. 메시지 자체 확보·파일 재읽기 검증·강제 종료 경로 검증은 아님.
 - 과거 작업 기록·완료 판정은 소급 변경하지 않는다. 이번 문서 정합성 결과로 기존 BLOCK을 해제하거나 제품 검증·카드 생산 실적으로 계산하지 않는다.
+
+
+### 2026-10-29 · 로드맵·대시보드 정합성 최신화
+
+- 문서 갱신일과 대시보드 준비일은 2026-10-29이며, 기존 조사·측정 시점을 변경한 것이 아니다.
+- A조회 보류 반영 커밋 `740afc4`와 당시 사용자 보고 OMC MATCH는 기록 결속 확인이다. 화면 검증 완료·과거 진단 BLOCK 해제·제품 검증으로 확대하지 않는다.
+- 오래된 첫 문서 실행 승인 안내를 A조회 보류 유지로 갱신했다. 추가 조회·모델·예산 재초기화를 자동 추천·실행하지 않는다.
+- 과거 해시 일치·과거 원문 미보존·새 원문 생략·인과관계 미확인, CLI SPENT·품질 미평가·API 마지막 UNUSED·기존 판단과 각 한계·import/corpus NOT_RUN 유지.

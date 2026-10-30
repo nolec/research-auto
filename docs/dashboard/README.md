@@ -1,7 +1,8 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The source snapshot is dated 2026-10-25 (revision local-material-location-third-round).
+The documentation snapshot is dated 2026-10-30 (revision 2026-10-30-ecg-bounded-stop-accepted).
+This is a documentation refresh date, not a new source observation or quality measurement.
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
 39 not attempted, zero valid extraction/abstention/invalid outputs, tokens 36334/839.
@@ -981,3 +982,36 @@ source claims still require independent live verification.
 이번 갱신은 수용된 기존 기록의 문서화다. 추가 시스템/DB/예산 조회나 모델 호출은 없다. 새 오류 메시지는 전체 생략되어 문구 확인 목적은 미충족이다. 기존 조회 실패·RED 미등록 OMC BLOCK과 이번 문서 정합성 결과는 별개이며, 원문 복구·원인 확정·제품 검증·카드 생산 실적이 아니다.
 
 승인된 파일 밖 evidence 생성을 피하려면 `OMC_DASHBOARD_EVIDENCE=.omc/state/sessions/<현재 세션 ID>/dashboard`를 설정해 build와 verify-render를 실행한다. 환경변수는 세션 경로 형식만 허용하며, 기존 evidence는 덮어쓰지 않는다. 이번 산출물은 현재 OMC 관리 기록에만 둔다. 스테이징·커밋은 별도 승인 대상이다.
+
+
+## 2026-10-29 · Documentation consistency refresh
+
+- Roadmap update and dashboard preparation dates agree at 2026-10-29; historical observation dates remain unchanged.
+- The next-step panel preserves the accepted A-query pause instead of recommending an old execution approval.
+- Prior local commit `740afc4` and user-reported OMC MATCH establish commit-record linkage only. Desktop/mobile render verification remains incomplete; historical diagnostic BLOCK and all evidence/budget limits remain unchanged.
+- No new system/DB/budget query, model call, reset, external network, escalation or push is part of this refresh.
+
+## 2026-10-30 · persistent-v4 단건 결과 수용
+
+- #66574 persistent-v4 / 실제 모델 출력 1건 확보 / 정상 보류 valid_abstention
+- 사람의 검토·사용자 수용: 정상 보류 / 카드 HOLD / 저장 결과 content_quality NOT_ASSESSED·human_card NOT_RUN 보존
+- 문서 예제 문제·수정 제안과 작성자의 로컬 수정·출력 확인 보고를 구분 / 실제 업무 손실·업무상 우회 부담 미확인
+- v4 SPENT·소비 표식 일치 / v3 및 기존 SPENT 보존 / API 마지막 확인값 UNUSED·재조회 없음
+- 사용자 보고 경과 16.155630833초 / 저장 응답 1건·완료 이벤트 1건·stderr 0바이트 / 전체 연속 타이머 검증으로 확대 안 함
+- 기존 노출 사례 1건 / 독립 holdout·제품 품질 통과·카드 생산 실적 아님 / 내부 요청·과금·도구 강제 차단 미확인
+- 과거 오류·목록 소실·문서별 노출·#66588 타이머·A단계 계수 한계·기존 OMC BLOCK 유지 / import·corpus NOT_RUN
+- 근거: 사용자가 수용한 저장 결과의 읽기 전용 리뷰. 이번 문서 갱신에서 모델·자료 재조회·예산 초기화·외부 통신 없음. 원출력·기존 예산·판단을 수정하지 않음.
+
+- 기존 화면 검증 미완료 유지. 이번 정합성 검사는 실제 화면·제품 검증이 아님.
+
+## 2026-10-30 · ECG 제한 확인 중단 결과 수용
+
+- ECG #66545 / github:5021233814 / 제한 근거 미확인·조건부 실험 준비 미진입
+- 제한 발췌에서 실제 업무 손실·수행한 우회 부담의 인과 연결 미확인 / 미출력 부분·전체 자료의 근거 부재 단정 없음
+- 지정 $.items[93] 식별 일치 / 467,237바이트 동일 바이트 보존 / 이번 취득·보존 결속이며 과거 해시 비교 미수행
+- 기존 ECG 작업 OMC BLOCK 유지 / R2 미충족과 코드 구현 없이 RED 미등록을 구분 / 문서 검사로 해제하지 않음
+- 인용 1,000 UTF-16 단위 / 전체 출력 통합 계수 미확보 / 통합 4,000단위 준수로 보고하지 않음
+- 중단 감사 시점 약 100.54초 / Guard 설정 시간 제외 / 최종 정리·보고 포함 전체 연속 시간 검증 아님
+- 후보 교체·추가 열람·실행 파일 생성·A 초기화·B 실행 없음 / 중단 분기 검사와 모델 회귀 검증은 별개
+- 기존 ECG HOLD·조사 후보 ELIGIBLE·지속성 미확인 유지 / 기존 SPENT·원출력·각 한계·import·corpus NOT_RUN 보존
+- 근거는 사용자가 수용한 제한 확인·리뷰 기록이며 이번 갱신에서 대상·보존 본문을 재열람하지 않음. 기존 화면 검증 미완료 유지. 제품 검증·카드 생산 실적 아님.
