@@ -6,7 +6,7 @@
   "basis": "User-provided ordinary-terminal outputs: local permission checks successful and cleanup confirmed; historical preservation UNCHANGED; implementation bundle MATCH. No independent rerun during documentation update. Import restriction not established: imports/corpus NOT_RUN; user accepted investigation closure. Historical metric and terminal-probe records preserved; v2 cause remains UNKNOWN. Independent manual GitHub case reviewed in chat: initial HOLD, source audit, final HOLD confirmed by user; missing recurrence and impact evidence. Not automated output, product validation, or card production. Accepted OMC investigation closure: 69cfadd commit successful; completion receipt not generated; new work did not start completion tracking, exact historical invalid condition UNKNOWN. No historical receipt backfill. User accepted limited local keyword search: no additional event or quantitative impact evidence found within scope; not exhaustive source audit; HOLD unchanged. Second manual case github:4996577382: initial exposed-draft HOLD, source audit, user final HOLD; recurrence/impact unestablished; same author as first case, no production credit. Third manual case github:5002866511: initial exposed-draft HOLD, source audit, final user HOLD; recurrence/impact/closed reason unknown; not product validation or production. Fourth manual case github:5003192389: initial exposed-draft HOLD, source audit, final user HOLD; regression/recurrence/impact unknown, not product validation or production. Fifth manual case github:5006282465: initial exposed-draft HOLD, source audit, final HOLD; loc/iloc discrepancy, regression, recurrence and impact unresolved. Five manual reviews are not the five-card production goal. Sixth manual case github:5016862188: initial exposed-draft HOLD, source audit, final HOLD; recurrence/impact/closed reason unknown, author evidence levels separated; no product validation or production credit. Seventh manual case github:5021233814: initial exposed-draft HOLD, source audit, final HOLD; recurrence/impact/adoption unknown, helper/workaround equivalence and author performance/tests/PR claims unverified; no product or production credit. Eighth manual case github:5031774885: initial exposed-draft HOLD, source audit, final HOLD; 404 author report, explicit target URLs only 1.4/1.0, regression/recurrence/impact/closed reason unknown; no product or production credit. Ninth manual case github:5034214812: initial exposed-draft HOLD, source audit, final HOLD; documentation example, author local validation/fix claims, recurrence/impact/adoption/closed reason unknown; no product or production credit. Tenth manual case github:5037425861: initial exposed-draft HOLD, source audit, final HOLD; read-result loss not source corruption, covered-cell example not matrix-formula reproduction, author comparisons/specification claims unverified; recurrence/impact/resolution unknown, no product or production credit. Eleventh manual case github:5038193296: initial exposed-draft HOLD, source audit, final HOLD; error distinctions, legacy numeric mismatch, different alternative semantics; recurrence/impact/PR adoption/closed reason unknown; no product or production credit. Accepted ECG follow-up: existing HOLD unchanged; separate additional-investigation candidate ELIGIBLE; workaround persistence UNKNOWN. Fixed four-file search found two duplicate copies of one report; not product validation or production credit. User accepted pandas #66499 chat-only assessment: separate candidate eligibility UNKNOWN, not rejection or absence of source evidence; actual burden/causal link/performed workaround unestablished. Preserve prior HOLD and ECG candidate/persistence judgments; no production credit. User accepted a separate bounded original-source check for pandas #66499: work loss/performed workaround unestablished; two duplicate copies of one report. OS version #58 reference-extraction false positive disclosed, no extra candidate or absence inference. Preserve prior judgments; no production credit. User accepted pandas #66501 bounded source findings: workaround method/effect author-reported, actual workplace use/loss and candidate eligibility UNKNOWN. Three candidates comprise original, duplicate and assignment metadata, not independent experiences. Preserve all prior judgments; no product credit. User accepted pandas #66509 bounded source findings: author performed crash comparison experiments, not established workplace loss or recovery workaround; candidate UNKNOWN. Two duplicate copies, no independent reproduction or closed-state resolution inference. Preserve all prior judgments; no product credit. User accepted pandas #66514 bounded source findings: error reproduction author-reported, actual work loss/performed workaround and candidate eligibility UNKNOWN; input-change execution/avoidance/equivalence unestablished. Two duplicate copies, no independent reproduction or previous-version regression comparison. Prior judgments preserved; no product credit. User accepted pandas #66527 bounded source findings: author-reported error experience/workaround effects retained, workplace use/loss and loc/iloc path-effect mapping unestablished; candidate UNKNOWN. Two duplicate copies, no independent reproduction. Prior judgments preserved; no product credit. User accepted pandas #66542 bounded source findings: actual work loss/performed workaround and candidate UNKNOWN. Three candidates are original, duplicate and assignment metadata. This document is marked holdout but source-exposed, not untouched independent evaluation evidence; no whole-holdout invalidation, first-exposure inference or assignment change. Prior judgments preserved; no product credit. User accepted pandas #66564 bounded source findings: author-reported 404, actual work loss/performed workaround and candidate UNKNOWN. Source exposed, holdout assignment UNKNOWN after no target assignment found within allowed files; no untouched-independent evaluation claim, nonassignment or all-purpose ineligibility inference. Preserve all prior judgments and document-specific exposure limits; no product credit. User accepted pandas #66574 bounded source findings: local example modification/output verification author-performed, task-driven workaround burden and candidate UNKNOWN. Source exposed, holdout assignment UNKNOWN, no untouched-independent evaluation claim or nonassignment inference. Preserve prior judgments and document-specific limits; no product credit. User accepted pandas #66579 bounded source findings: engine/value checks author-performed, task-driven burden/candidate UNKNOWN; minimal recovery effect distinct from workplace equivalence and not an extra candidate gate. Source exposed, holdout assignment UNKNOWN; no untouched-independent claim, assignment change or nonassignment inference. Preserve prior judgments and limits; no product credit. User accepted pandas #66588 bounded findings: error/legacy comparisons and PR-preparation claim distinct from UNKNOWN actual work loss/task workaround burden/candidate. Three candidates include development metadata. Entire continuous timer missing: total ten-minute compliance UNVERIFIED, individual durations not total. Source exposed; local development assignment only. Preserve prior judgments and limits; no product credit. User accepted pandas #66605 bounded source findings: actual training-task context author-reported but actual work loss/task workaround burden and candidate UNKNOWN. Whole continuous timer verified across calls through post-finalization 58.037658125 seconds, two duplicate report copies; no inference of assignment from missing target metadata. Preserve prior judgments including original twelfth final judgment not submitted and pandas 66588 unverified timer; no product credit. User accepted fixed twelve-case record reconciliation: documented investigation 12, uninvestigated 0, record-link-unconfirmed 0. This is two-document record linkage, not independent source verification. Candidate UNKNOWN 11 and ECG ELIGIBLE 1 unchanged; continuous timer after finalization 63.328751708 seconds. Preserve prior judgments and pandas 66588 timer limitation; no new cases or product credit. User accepted bounded metadata-only local material location check: ten candidates are one existing collection file and nine unverified record positions, content duplication unconfirmed. Stop at candidate cap; 21 direct references plus two listing-only entries remain unexamined. Whole continuous timer after finalization 111.614265084 seconds. No target body reads or new evidence claim; preserve all prior judgments and limitations, no product credit. User accepted next-ten metadata check: full ordered 31-key match to retained prior memory, previous ten excluded, positions 11-20 only. Three current file existence checks, prior collection existence reused, seven record positions unverified. Eleven direct references and two listing-only entries remain; continuous timer after finalization 103.598744917 seconds. No target body read or independent evidence claim; preserve prior judgments and limits, no product credit. User accepted original positions 21-30 metadata check: full ordered 31-key match and previous two rounds bound; slice(20,30) selects ten keys disjoint from prior twenty. Previous raw-file existence reused without target stat; ten record positions unverified. One direct reference and two listing-only names remain. Continuous timer after finalization 63.022942500 seconds; no body read or product credit, all prior judgments and limits preserved.",
   "readiness": {
     "infrastructure": "READY",
-    "operations": "SINGLE_CASE_OUTPUT_OBTAINED_ABSTENTION",
+    "operations": "V4_ABSTENTION_OBTAINED_ECG_V2_TOOL_EVENT_INVALID",
     "product": "SINGLE_CASE_ABSTENTION_CARD_HOLD_NOT_PRODUCT_VALIDATED",
     "evaluation": "INCOMPLETE",
     "ship": "BLOCKED"
@@ -76,8 +76,8 @@
       "id": 3,
       "name": "문제·증거 추출",
       "state": "blocked",
-      "label": "단건 출력 확보·추가 준비 보류",
-      "detail": "현재: #66574 실제 출력 1건·정상 보류·사람 카드 HOLD. ECG는 제한 근거 미확인·조건부 준비 미진입이며 R2 미충족·RED 미등록 BLOCK 및 측정 한계 유지. 아래는 과거 실행·수동 검토 이력이며 전체 제품 검증 아님. terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님. 수동 카드 1건: github:4995518374(pandas #66499), 동결 목록과 독립된 기존 원문 첫 레코드. 첫 판단 보류 → 원문 감사 → 보류 유지. 인용 정확·요약 대체로 충실; 개발 혼선은 해석, 타입 선언 원인·수정안은 초안 누락. 반복 빈도·영향 규모 부족으로 기회 판단 근거 미충족. 수동 검토 종료이며 제품 검증 완료·카드 생산 실적 아님."
+      "label": "출력 1건·ECG v2 실행 무효",
+      "detail": "최신 ECG v2: 실제 도구 실행 감지로 experiment_invalid·SPENT·품질 미평가. 사후 감지는 사전 차단 증거가 아니며 v1 UNUSED·기존 BLOCK·판단·각 한계 보존. 다음은 당시 단계별 이력이다. 현재: #66574 실제 출력 1건·정상 보류·사람 카드 HOLD. ECG는 제한 근거 미확인·조건부 준비 미진입이며 R2 미충족·RED 미등록 BLOCK 및 측정 한계 유지. 아래는 과거 실행·수동 검토 이력이며 전체 제품 검증 아님. terminal-probe-v2는 첫 문서 1회 후 OTHER_FAILURE / CLI_NONZERO_EXIT: PERMISSION_ERROR·subprocess_exit·종료 1, 시도 1·실행 1·기존 기록 무결성 VERIFIED. 구체 원인 UNKNOWN. 사용자 제공 일반 터미널 출력: Python 3.12.8, 중첩 샌드박스·임시 파일·루프백 SUCCESS, 전후 기록 UNCHANGED, 그룹 CONFIRMED·임시 자원 CLEAN, 0.212초. 구현 번들 MATCH. import·corpus 재구성 NOT_RUN 유지, 조사 종료 수용. 오프라인 회귀 36 passed; 이전 33 passed 및 367 passed, 1 skipped는 과거 근거. 모델 준비 완료·품질 증거 아님. 수동 카드 1건: github:4995518374(pandas #66499), 동결 목록과 독립된 기존 원문 첫 레코드. 첫 판단 보류 → 원문 감사 → 보류 유지. 인용 정확·요약 대체로 충실; 개발 혼선은 해석, 타입 선언 원인·수정안은 초안 누락. 반복 빈도·영향 규모 부족으로 기회 판단 근거 미충족. 수동 검토 종료이며 제품 검증 완료·카드 생산 실적 아님."
     },
     {
       "id": 4,
@@ -177,6 +177,11 @@
   },
   "next_steps": [
     {
+      "lane": "ECG v2 실행 무효 수용",
+      "title": "SPENT·품질 미평가 유지 / 자동 재시도 없음",
+      "detail": "실제 도구 실행의 사후 감지로 무효이며 사전 차단 성공으로 보지 않는다. v1 마지막 UNUSED·기존 BLOCK·판단·원출력을 보존한다. 추가 조사·실행은 별도 승인 전 진행하지 않는다."
+    },
+    {
       "lane": "ECG 추가 확인 수용",
       "title": "작성자 우회 수행 보고와 독립 검증 구분",
       "detail": "ECG 작업 때문에 별도 코드 작성·보간 후 수동 간격 계산 및 마스킹을 했다는 작성자 보고 / 단순 기능 제안과 구분 / 정량적 업무 손실·반복 빈도·지속 기간 미확인 / 남은 미확인 구간·전체 자료의 근거 부재 단정 없음 / 기존 BLOCK 유지·후속 실행은 별도 승인."
@@ -256,9 +261,10 @@
     "ECG 추가 조사: github:5021233814(pandas #66545). 기존 HOLD 유지 / 새 추가 조사 후보 유지 / 우회 부담 지속성 미확인. 실제 작업 때문에 코드 작성 및 보간 후 간격 계산·마스킹의 추가 처리 절차는 확인. 반복 수정·반복 실행·매번 수동 점검·수정 없는 재사용 기간과 조건은 미확인. 지정 로컬 4개 파일·고정 검색어에서 후보 2건은 동일 문서·본문 지문의 중복 저장본이며 독립 경험 2건 아님. 원문 해시 MATCH; 검색 범위 소진 약 0.02초, 상한 15분 또는 후보 30건. #64588 별도 본문·외부 후속 이력 미추적. 근거 미발견은 부담 부재·일회성·후보 기각 증거 아님. 제품 검증·카드 생산 실적에 집계하지 않음. 기존 기록·import/corpus NOT_RUN 유지.",
     "persistent-v4: 실제 출력 1건 확보·정상 보류 수용·사람 카드 HOLD. 저장 품질 NOT_ASSESSED·human_card NOT_RUN은 수정하지 않음. 업무 손실·업무상 우회 미확인; 독립 holdout·제품 품질 통과·생산 실적 아님. 기존 SPENT·원출력·각 한계·import/corpus NOT_RUN 유지.",
     "ECG 제한 확인 수용: 제한 근거 미확인·조건부 준비 미진입. 미출력 부분의 근거 부재 단정 없음. R2 미충족·RED 미등록 OMC BLOCK 유지. 인용 1,000단위와 통합 계수 미확보 구분; 약 100.54초는 Guard·최종 정리/보고 제외. 기존 판단·SPENT·원출력·import/corpus NOT_RUN 보존.",
-    "ECG 고정 3구간 추가 확인 수용: 작성자 우회 수행 보고 확인·독립 검증 미완료. 이전 제한 근거 미확인 중단은 당시 이력으로 보존. 추가 작업 A3 미충족·RED 미등록 BLOCK, 통합 출력 계수 미확보·평가 기록까지 타이머 한계 유지. 기존 판단·SPENT·원출력·import/corpus NOT_RUN 유지."
+    "ECG 고정 3구간 추가 확인 수용: 작성자 우회 수행 보고 확인·독립 검증 미완료. 이전 제한 근거 미확인 중단은 당시 이력으로 보존. 추가 작업 A3 미충족·RED 미등록 BLOCK, 통합 출력 계수 미확보·평가 기록까지 타이머 한계 유지. 기존 판단·SPENT·원출력·import/corpus NOT_RUN 유지.",
+    "ECG v2 run-001 수용: 실제 command_execution 이벤트로 experiment_invalid·SPENT, 내용 품질 NOT_ASSESSED·사람 카드 NOT_RUN. OMC 초기화 도구 명령은 scripts/omc.py 부재로 종료 2; 지시 유입 경로 미확인. 사후 감지이며 사전 차단 입증 아님. v1 마지막 UNUSED·기존 BLOCK·판단·각 한계·원출력·import/corpus NOT_RUN 보존. 원출력·예산 재열람 없음."
   ],
-  "snapshot_revision": "2026-10-30-ecg-addendum-author-report",
+  "snapshot_revision": "2026-10-30-ecg-v2-tool-event-invalid",
   "delivery": {
     "status": "BLOCKED",
     "code_review": "PROBE_APPROVED",
@@ -4124,6 +4130,49 @@
       "gate": "추가 열람 작업 A3 미충족·RED 미등록 OMC BLOCK 유지 / 이전 ECG R2·RED BLOCK·문서 작업 BLOCK과 별개",
       "preservation": "기존 ECG HOLD·조사 후보 ELIGIBLE·지속성 미확인·이전 제한 확인 중단 이력 유지 / SPENT·원출력·각 한계·화면 검증 미완료·import·corpus NOT_RUN 보존",
       "execution": "새 실험 준비·A 초기화·B 실행 없음 / 후속 열람·판단 변경·실행은 자동 진행하지 않음"
+    }
+  },
+  "ecg_v2_accepted_invalid_result": {
+    "experiment_id": "E66545-CLI-EXTRACTION-v2",
+    "document_id": "github:5021233814",
+    "status": "experiment_invalid",
+    "reason": "tool_event",
+    "contract": "FAILED",
+    "model_output": null,
+    "content_quality": "NOT_ASSESSED",
+    "human_card": "NOT_RUN",
+    "v2_budget": "SPENT_AT_ACCEPTED_REVIEW",
+    "v1_budget": "LAST_REVIEWED_UNUSED_NOT_REQUERIED_IN_DOCUMENT_TASK",
+    "event_count_recorded": 5,
+    "tool_started_recorded": 1,
+    "turn_completed_recorded": 0,
+    "tool_command_exit_code_recorded": 2,
+    "instruction_origin": "UNCONFIRMED",
+    "tool_prevention": "NOT_ESTABLISHED_POST_HOC_DETECTION_ONLY",
+    "reported_elapsed_seconds": 11.679004375000659,
+    "recorded_bytes": {
+      "result": 182,
+      "stdout": 1189,
+      "stderr": 0
+    },
+    "result_sha256_recorded": "22cf2be642488b06b566fc4cb912c7e7f5d5980cc56422623b3dee5a0374d08b",
+    "stdout_sha256_recorded": "ad93a5ab31eaaf0806a56927a390c57d7529bc5783ee6d1a48ec430e8626cf98",
+    "basis": "User accepted read-only result review; this documentation task performs no experiment/source/budget reread",
+    "old_judgments": "UNCHANGED",
+    "import": "NOT_RUN",
+    "corpus": "NOT_RUN",
+    "product_validation": false,
+    "card_production_credit": false,
+    "surface": {
+      "status": "ECG E66545-CLI-EXTRACTION-v2 run-001 / 실제 command_execution 감지로 experiment_invalid / 계약 FAILED",
+      "cause": "OMC 초기화 명령의 도구 실행 이벤트 확인 / 작업 디렉터리에 scripts/omc.py가 없어 종료 코드 2로 실패 / 명령 선택 지시의 유입 경로 미확인",
+      "boundary": "실제 도구 실행 후 사후 감지·수집 중단 / 도구 실행 사전 차단 입증 아님 / error 항목 오분류와 구분",
+      "quality": "추출 model_output=null / 완료 이벤트 0건 / 내용 품질 NOT_ASSESSED·사람 카드 NOT_RUN / 추출 내용 오류 판정 아님",
+      "budget": "v2 SPENT·소비 표식·승인 결속 일치 / v1 마지막 확인값 UNUSED 보존 / 다른 SPENT·기존 예산 변경 없음",
+      "storage": "검토 당시 결과 182바이트·stdout 1,189바이트·stderr 0바이트 / 도구 오류는 stdout 이벤트 내부 / 중단 이후 미취득 출력까지 보존됐다는 뜻 아님",
+      "timing": "사용자 보고 B 경과 약 11.68초 / 전체 조사·보고 연속 타이머나 통합 출력 상한 준수로 확대하지 않음",
+      "preservation": "기존 BLOCK·화면/독립 검증 미완료·판단·문서별 노출·측정 한계·원출력·import·corpus NOT_RUN 유지",
+      "execution": "결과 수용 후 재열람·재실행·재초기화·모델·외부 통신·스테이징·커밋 없음 / 후속 실행 자동 진행 금지"
     }
   }
 }

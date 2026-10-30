@@ -1,8 +1,21 @@
 # Demand Intelligence V1 Roadmap
 
 > Updated: 2026-10-30
-> Latest documentation: ECG fixed-three-span author-performed workaround report accepted; independent verification incomplete; A3/RED BLOCK and output/timer limits retained. Historical: ECG limited evidence unconfirmed; conditional preparation NOT_ENTERED; R2 unmet/RED unregistered historical BLOCK and output/timer limits retained. persistent-v4 actual output 1 obtained; valid abstention accepted; human card HOLD; work loss/workplace workaround UNKNOWN. Historical A조회 진단 보류; hash match only; past original missing, new original omitted; causality UNKNOWN; CLI SPENT, quality NOT_ASSESSED, API last-known UNUSED; prior desktop/mobile render unverified and historical OMC BLOCK retained.
+> Latest documentation: ECG v2 actual command_execution detected; experiment_invalid / SPENT / quality NOT_ASSESSED; post-hoc detection is not prior tool prevention; v1 last-reviewed UNUSED retained. Historical: ECG fixed-three-span author-performed workaround report accepted; independent verification incomplete; A3/RED BLOCK and output/timer limits retained. Historical: ECG limited evidence unconfirmed; conditional preparation NOT_ENTERED; R2 unmet/RED unregistered historical BLOCK and output/timer limits retained. persistent-v4 actual output 1 obtained; valid abstention accepted; human card HOLD; work loss/workplace workaround UNKNOWN. Historical A조회 진단 보류; hash match only; past original missing, new original omitted; causality UNKNOWN; CLI SPENT, quality NOT_ASSESSED, API last-known UNUSED; prior desktop/mobile render unverified and historical OMC BLOCK retained.
 > Status: Sources frozen at 400/500; metric-v1 and terminal-probe-v1/v2 custody preserved; v2 CLI_NONZERO_EXIT / PERMISSION_ERROR classification, root cause UNKNOWN; user-provided ordinary-terminal local checks PASS and implementation bundle MATCH; import/corpus NOT_RUN, investigation CLOSED by user acceptance; single-case v4 output obtained; overall model readiness and product quality NOT_ESTABLISHED; ship BLOCKED; independent manual card review 1: HOLD before and after source audit; not product validation or production credit; OMC completion investigation CLOSED: procedure issue confirmed, exact historical invalid condition UNKNOWN, no backfill
+
+## 2026-10-30 · ECG v2 실제 도구 실행 감지·무효 결과 수용
+
+- ECG E66545-CLI-EXTRACTION-v2 run-001 / 실제 command_execution 감지로 experiment_invalid / 계약 FAILED
+- OMC 초기화 명령의 도구 실행 이벤트 확인 / 작업 디렉터리에 scripts/omc.py가 없어 종료 코드 2로 실패 / 명령 선택 지시의 유입 경로 미확인
+- 실제 도구 실행 후 사후 감지·수집 중단 / 도구 실행 사전 차단 입증 아님 / error 항목 오분류와 구분
+- 추출 model_output=null / 완료 이벤트 0건 / 내용 품질 NOT_ASSESSED·사람 카드 NOT_RUN / 추출 내용 오류 판정 아님
+- v2 SPENT·소비 표식·승인 결속 일치 / v1 마지막 확인값 UNUSED 보존 / 다른 SPENT·기존 예산 변경 없음
+- 검토 당시 결과 182바이트·stdout 1,189바이트·stderr 0바이트 / 도구 오류는 stdout 이벤트 내부 / 중단 이후 미취득 출력까지 보존됐다는 뜻 아님
+- 사용자 보고 B 경과 약 11.68초 / 전체 조사·보고 연속 타이머나 통합 출력 상한 준수로 확대하지 않음
+- 기존 BLOCK·화면/독립 검증 미완료·판단·문서별 노출·측정 한계·원출력·import·corpus NOT_RUN 유지
+- 결과 수용 후 재열람·재실행·재초기화·모델·외부 통신·스테이징·커밋 없음 / 후속 실행 자동 진행 금지
+- 사용자가 수용한 저장 결과 리뷰를 문서화했으며 이번 갱신에서 실험 원출력·예산을 재열람하지 않음. 제품 검증·카드 생산 실적 아님.
 
 ## 2026-10-30 · ECG 고정 3구간 추가 확인 수용
 

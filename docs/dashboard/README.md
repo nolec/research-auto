@@ -1,7 +1,7 @@
 # Roadmap dashboard
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The documentation snapshot is dated 2026-10-30 (revision 2026-10-30-ecg-addendum-author-report).
+The documentation snapshot is dated 2026-10-30 (revision 2026-10-30-ecg-v2-tool-event-invalid).
 This is a documentation refresh date, not a new source observation or quality measurement.
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
@@ -1029,3 +1029,16 @@ source claims still require independent live verification.
 - 기존 ECG HOLD·조사 후보 ELIGIBLE·지속성 미확인·이전 제한 확인 중단 이력 유지 / SPENT·원출력·각 한계·화면 검증 미완료·import·corpus NOT_RUN 보존
 - 새 실험 준비·A 초기화·B 실행 없음 / 후속 열람·판단 변경·실행은 자동 진행하지 않음
 - 사용자 수용 결과의 문서 반영이며, 과거 근거 미확인 판단·기록을 소급 수정하거나 새 실험 준비 승인으로 간주하지 않음.
+
+## 2026-10-30 · ECG v2 실제 도구 실행 감지·무효 결과 수용
+
+- ECG E66545-CLI-EXTRACTION-v2 run-001 / 실제 command_execution 감지로 experiment_invalid / 계약 FAILED
+- OMC 초기화 명령의 도구 실행 이벤트 확인 / 작업 디렉터리에 scripts/omc.py가 없어 종료 코드 2로 실패 / 명령 선택 지시의 유입 경로 미확인
+- 실제 도구 실행 후 사후 감지·수집 중단 / 도구 실행 사전 차단 입증 아님 / error 항목 오분류와 구분
+- 추출 model_output=null / 완료 이벤트 0건 / 내용 품질 NOT_ASSESSED·사람 카드 NOT_RUN / 추출 내용 오류 판정 아님
+- v2 SPENT·소비 표식·승인 결속 일치 / v1 마지막 확인값 UNUSED 보존 / 다른 SPENT·기존 예산 변경 없음
+- 검토 당시 결과 182바이트·stdout 1,189바이트·stderr 0바이트 / 도구 오류는 stdout 이벤트 내부 / 중단 이후 미취득 출력까지 보존됐다는 뜻 아님
+- 사용자 보고 B 경과 약 11.68초 / 전체 조사·보고 연속 타이머나 통합 출력 상한 준수로 확대하지 않음
+- 기존 BLOCK·화면/독립 검증 미완료·판단·문서별 노출·측정 한계·원출력·import·corpus NOT_RUN 유지
+- 결과 수용 후 재열람·재실행·재초기화·모델·외부 통신·스테이징·커밋 없음 / 후속 실행 자동 진행 금지
+- 사용자가 수용한 저장 결과 리뷰를 문서화했으며 이번 갱신에서 실험 원출력·예산을 재열람하지 않음. 제품 검증·카드 생산 실적 아님.
