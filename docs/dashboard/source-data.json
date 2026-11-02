@@ -1,9 +1,9 @@
 {
   "title": "Demand Intelligence",
-  "roadmap_updated": "2026-10-31",
-  "prepared_at": "2026-10-31",
+  "roadmap_updated": "2026-11-02",
+  "prepared_at": "2026-11-02",
   "source_label": "docs/roadmap.md",
-  "basis": "User-provided ordinary-terminal outputs: local permission checks successful and cleanup confirmed; historical preservation UNCHANGED; implementation bundle MATCH. No independent rerun during documentation update. Import restriction not established: imports/corpus NOT_RUN; user accepted investigation closure. Historical metric and terminal-probe records preserved; v2 cause remains UNKNOWN. Independent manual GitHub case reviewed in chat: initial HOLD, source audit, final HOLD confirmed by user; missing recurrence and impact evidence. Not automated output, product validation, or card production. Accepted OMC investigation closure: 69cfadd commit successful; completion receipt not generated; new work did not start completion tracking, exact historical invalid condition UNKNOWN. No historical receipt backfill. User accepted limited local keyword search: no additional event or quantitative impact evidence found within scope; not exhaustive source audit; HOLD unchanged. Second manual case github:4996577382: initial exposed-draft HOLD, source audit, user final HOLD; recurrence/impact unestablished; same author as first case, no production credit. Third manual case github:5002866511: initial exposed-draft HOLD, source audit, final user HOLD; recurrence/impact/closed reason unknown; not product validation or production. Fourth manual case github:5003192389: initial exposed-draft HOLD, source audit, final user HOLD; regression/recurrence/impact unknown, not product validation or production. Fifth manual case github:5006282465: initial exposed-draft HOLD, source audit, final HOLD; loc/iloc discrepancy, regression, recurrence and impact unresolved. Five manual reviews are not the five-card production goal. Sixth manual case github:5016862188: initial exposed-draft HOLD, source audit, final HOLD; recurrence/impact/closed reason unknown, author evidence levels separated; no product validation or production credit. Seventh manual case github:5021233814: initial exposed-draft HOLD, source audit, final HOLD; recurrence/impact/adoption unknown, helper/workaround equivalence and author performance/tests/PR claims unverified; no product or production credit. Eighth manual case github:5031774885: initial exposed-draft HOLD, source audit, final HOLD; 404 author report, explicit target URLs only 1.4/1.0, regression/recurrence/impact/closed reason unknown; no product or production credit. Ninth manual case github:5034214812: initial exposed-draft HOLD, source audit, final HOLD; documentation example, author local validation/fix claims, recurrence/impact/adoption/closed reason unknown; no product or production credit. Tenth manual case github:5037425861: initial exposed-draft HOLD, source audit, final HOLD; read-result loss not source corruption, covered-cell example not matrix-formula reproduction, author comparisons/specification claims unverified; recurrence/impact/resolution unknown, no product or production credit. Eleventh manual case github:5038193296: initial exposed-draft HOLD, source audit, final HOLD; error distinctions, legacy numeric mismatch, different alternative semantics; recurrence/impact/PR adoption/closed reason unknown; no product or production credit. Accepted ECG follow-up: existing HOLD unchanged; separate additional-investigation candidate ELIGIBLE; workaround persistence UNKNOWN. Fixed four-file search found two duplicate copies of one report; not product validation or production credit. User accepted pandas #66499 chat-only assessment: separate candidate eligibility UNKNOWN, not rejection or absence of source evidence; actual burden/causal link/performed workaround unestablished. Preserve prior HOLD and ECG candidate/persistence judgments; no production credit. User accepted a separate bounded original-source check for pandas #66499: work loss/performed workaround unestablished; two duplicate copies of one report. OS version #58 reference-extraction false positive disclosed, no extra candidate or absence inference. Preserve prior judgments; no production credit. User accepted pandas #66501 bounded source findings: workaround method/effect author-reported, actual workplace use/loss and candidate eligibility UNKNOWN. Three candidates comprise original, duplicate and assignment metadata, not independent experiences. Preserve all prior judgments; no product credit. User accepted pandas #66509 bounded source findings: author performed crash comparison experiments, not established workplace loss or recovery workaround; candidate UNKNOWN. Two duplicate copies, no independent reproduction or closed-state resolution inference. Preserve all prior judgments; no product credit. User accepted pandas #66514 bounded source findings: error reproduction author-reported, actual work loss/performed workaround and candidate eligibility UNKNOWN; input-change execution/avoidance/equivalence unestablished. Two duplicate copies, no independent reproduction or previous-version regression comparison. Prior judgments preserved; no product credit. User accepted pandas #66527 bounded source findings: author-reported error experience/workaround effects retained, workplace use/loss and loc/iloc path-effect mapping unestablished; candidate UNKNOWN. Two duplicate copies, no independent reproduction. Prior judgments preserved; no product credit. User accepted pandas #66542 bounded source findings: actual work loss/performed workaround and candidate UNKNOWN. Three candidates are original, duplicate and assignment metadata. This document is marked holdout but source-exposed, not untouched independent evaluation evidence; no whole-holdout invalidation, first-exposure inference or assignment change. Prior judgments preserved; no product credit. User accepted pandas #66564 bounded source findings: author-reported 404, actual work loss/performed workaround and candidate UNKNOWN. Source exposed, holdout assignment UNKNOWN after no target assignment found within allowed files; no untouched-independent evaluation claim, nonassignment or all-purpose ineligibility inference. Preserve all prior judgments and document-specific exposure limits; no product credit. User accepted pandas #66574 bounded source findings: local example modification/output verification author-performed, task-driven workaround burden and candidate UNKNOWN. Source exposed, holdout assignment UNKNOWN, no untouched-independent evaluation claim or nonassignment inference. Preserve prior judgments and document-specific limits; no product credit. User accepted pandas #66579 bounded source findings: engine/value checks author-performed, task-driven burden/candidate UNKNOWN; minimal recovery effect distinct from workplace equivalence and not an extra candidate gate. Source exposed, holdout assignment UNKNOWN; no untouched-independent claim, assignment change or nonassignment inference. Preserve prior judgments and limits; no product credit. User accepted pandas #66588 bounded findings: error/legacy comparisons and PR-preparation claim distinct from UNKNOWN actual work loss/task workaround burden/candidate. Three candidates include development metadata. Entire continuous timer missing: total ten-minute compliance UNVERIFIED, individual durations not total. Source exposed; local development assignment only. Preserve prior judgments and limits; no product credit. User accepted pandas #66605 bounded source findings: actual training-task context author-reported but actual work loss/task workaround burden and candidate UNKNOWN. Whole continuous timer verified across calls through post-finalization 58.037658125 seconds, two duplicate report copies; no inference of assignment from missing target metadata. Preserve prior judgments including original twelfth final judgment not submitted and pandas 66588 unverified timer; no product credit. User accepted fixed twelve-case record reconciliation: documented investigation 12, uninvestigated 0, record-link-unconfirmed 0. This is two-document record linkage, not independent source verification. Candidate UNKNOWN 11 and ECG ELIGIBLE 1 unchanged; continuous timer after finalization 63.328751708 seconds. Preserve prior judgments and pandas 66588 timer limitation; no new cases or product credit. User accepted bounded metadata-only local material location check: ten candidates are one existing collection file and nine unverified record positions, content duplication unconfirmed. Stop at candidate cap; 21 direct references plus two listing-only entries remain unexamined. Whole continuous timer after finalization 111.614265084 seconds. No target body reads or new evidence claim; preserve all prior judgments and limitations, no product credit. User accepted next-ten metadata check: full ordered 31-key match to retained prior memory, previous ten excluded, positions 11-20 only. Three current file existence checks, prior collection existence reused, seven record positions unverified. Eleven direct references and two listing-only entries remain; continuous timer after finalization 103.598744917 seconds. No target body read or independent evidence claim; preserve prior judgments and limits, no product credit. User accepted original positions 21-30 metadata check: full ordered 31-key match and previous two rounds bound; slice(20,30) selects ten keys disjoint from prior twenty. Previous raw-file existence reused without target stat; ten record positions unverified. One direct reference and two listing-only names remain. Continuous timer after finalization 63.022942500 seconds; no body read or product credit, all prior judgments and limits preserved.",
+  "basis": "최신 수작업 후보 감사: HOLD·손실 UNKNOWN/null·확정 관찰0건·선정 절차 미확인. 문구 보완 리뷰는 대화 내 승인만 있으며 분석 공식 RED 보류는 유지한다. User-provided ordinary-terminal outputs: local permission checks successful and cleanup confirmed; historical preservation UNCHANGED; implementation bundle MATCH. No independent rerun during documentation update. Import restriction not established: imports/corpus NOT_RUN; user accepted investigation closure. Historical metric and terminal-probe records preserved; v2 cause remains UNKNOWN. Independent manual GitHub case reviewed in chat: initial HOLD, source audit, final HOLD confirmed by user; missing recurrence and impact evidence. Not automated output, product validation, or card production. Accepted OMC investigation closure: 69cfadd commit successful; completion receipt not generated; new work did not start completion tracking, exact historical invalid condition UNKNOWN. No historical receipt backfill. User accepted limited local keyword search: no additional event or quantitative impact evidence found within scope; not exhaustive source audit; HOLD unchanged. Second manual case github:4996577382: initial exposed-draft HOLD, source audit, user final HOLD; recurrence/impact unestablished; same author as first case, no production credit. Third manual case github:5002866511: initial exposed-draft HOLD, source audit, final user HOLD; recurrence/impact/closed reason unknown; not product validation or production. Fourth manual case github:5003192389: initial exposed-draft HOLD, source audit, final user HOLD; regression/recurrence/impact unknown, not product validation or production. Fifth manual case github:5006282465: initial exposed-draft HOLD, source audit, final HOLD; loc/iloc discrepancy, regression, recurrence and impact unresolved. Five manual reviews are not the five-card production goal. Sixth manual case github:5016862188: initial exposed-draft HOLD, source audit, final HOLD; recurrence/impact/closed reason unknown, author evidence levels separated; no product validation or production credit. Seventh manual case github:5021233814: initial exposed-draft HOLD, source audit, final HOLD; recurrence/impact/adoption unknown, helper/workaround equivalence and author performance/tests/PR claims unverified; no product or production credit. Eighth manual case github:5031774885: initial exposed-draft HOLD, source audit, final HOLD; 404 author report, explicit target URLs only 1.4/1.0, regression/recurrence/impact/closed reason unknown; no product or production credit. Ninth manual case github:5034214812: initial exposed-draft HOLD, source audit, final HOLD; documentation example, author local validation/fix claims, recurrence/impact/adoption/closed reason unknown; no product or production credit. Tenth manual case github:5037425861: initial exposed-draft HOLD, source audit, final HOLD; read-result loss not source corruption, covered-cell example not matrix-formula reproduction, author comparisons/specification claims unverified; recurrence/impact/resolution unknown, no product or production credit. Eleventh manual case github:5038193296: initial exposed-draft HOLD, source audit, final HOLD; error distinctions, legacy numeric mismatch, different alternative semantics; recurrence/impact/PR adoption/closed reason unknown; no product or production credit. Accepted ECG follow-up: existing HOLD unchanged; separate additional-investigation candidate ELIGIBLE; workaround persistence UNKNOWN. Fixed four-file search found two duplicate copies of one report; not product validation or production credit. User accepted pandas #66499 chat-only assessment: separate candidate eligibility UNKNOWN, not rejection or absence of source evidence; actual burden/causal link/performed workaround unestablished. Preserve prior HOLD and ECG candidate/persistence judgments; no production credit. User accepted a separate bounded original-source check for pandas #66499: work loss/performed workaround unestablished; two duplicate copies of one report. OS version #58 reference-extraction false positive disclosed, no extra candidate or absence inference. Preserve prior judgments; no production credit. User accepted pandas #66501 bounded source findings: workaround method/effect author-reported, actual workplace use/loss and candidate eligibility UNKNOWN. Three candidates comprise original, duplicate and assignment metadata, not independent experiences. Preserve all prior judgments; no product credit. User accepted pandas #66509 bounded source findings: author performed crash comparison experiments, not established workplace loss or recovery workaround; candidate UNKNOWN. Two duplicate copies, no independent reproduction or closed-state resolution inference. Preserve all prior judgments; no product credit. User accepted pandas #66514 bounded source findings: error reproduction author-reported, actual work loss/performed workaround and candidate eligibility UNKNOWN; input-change execution/avoidance/equivalence unestablished. Two duplicate copies, no independent reproduction or previous-version regression comparison. Prior judgments preserved; no product credit. User accepted pandas #66527 bounded source findings: author-reported error experience/workaround effects retained, workplace use/loss and loc/iloc path-effect mapping unestablished; candidate UNKNOWN. Two duplicate copies, no independent reproduction. Prior judgments preserved; no product credit. User accepted pandas #66542 bounded source findings: actual work loss/performed workaround and candidate UNKNOWN. Three candidates are original, duplicate and assignment metadata. This document is marked holdout but source-exposed, not untouched independent evaluation evidence; no whole-holdout invalidation, first-exposure inference or assignment change. Prior judgments preserved; no product credit. User accepted pandas #66564 bounded source findings: author-reported 404, actual work loss/performed workaround and candidate UNKNOWN. Source exposed, holdout assignment UNKNOWN after no target assignment found within allowed files; no untouched-independent evaluation claim, nonassignment or all-purpose ineligibility inference. Preserve all prior judgments and document-specific exposure limits; no product credit. User accepted pandas #66574 bounded source findings: local example modification/output verification author-performed, task-driven workaround burden and candidate UNKNOWN. Source exposed, holdout assignment UNKNOWN, no untouched-independent evaluation claim or nonassignment inference. Preserve prior judgments and document-specific limits; no product credit. User accepted pandas #66579 bounded source findings: engine/value checks author-performed, task-driven burden/candidate UNKNOWN; minimal recovery effect distinct from workplace equivalence and not an extra candidate gate. Source exposed, holdout assignment UNKNOWN; no untouched-independent claim, assignment change or nonassignment inference. Preserve prior judgments and limits; no product credit. User accepted pandas #66588 bounded findings: error/legacy comparisons and PR-preparation claim distinct from UNKNOWN actual work loss/task workaround burden/candidate. Three candidates include development metadata. Entire continuous timer missing: total ten-minute compliance UNVERIFIED, individual durations not total. Source exposed; local development assignment only. Preserve prior judgments and limits; no product credit. User accepted pandas #66605 bounded source findings: actual training-task context author-reported but actual work loss/task workaround burden and candidate UNKNOWN. Whole continuous timer verified across calls through post-finalization 58.037658125 seconds, two duplicate report copies; no inference of assignment from missing target metadata. Preserve prior judgments including original twelfth final judgment not submitted and pandas 66588 unverified timer; no product credit. User accepted fixed twelve-case record reconciliation: documented investigation 12, uninvestigated 0, record-link-unconfirmed 0. This is two-document record linkage, not independent source verification. Candidate UNKNOWN 11 and ECG ELIGIBLE 1 unchanged; continuous timer after finalization 63.328751708 seconds. Preserve prior judgments and pandas 66588 timer limitation; no new cases or product credit. User accepted bounded metadata-only local material location check: ten candidates are one existing collection file and nine unverified record positions, content duplication unconfirmed. Stop at candidate cap; 21 direct references plus two listing-only entries remain unexamined. Whole continuous timer after finalization 111.614265084 seconds. No target body reads or new evidence claim; preserve all prior judgments and limitations, no product credit. User accepted next-ten metadata check: full ordered 31-key match to retained prior memory, previous ten excluded, positions 11-20 only. Three current file existence checks, prior collection existence reused, seven record positions unverified. Eleven direct references and two listing-only entries remain; continuous timer after finalization 103.598744917 seconds. No target body read or independent evidence claim; preserve prior judgments and limits, no product credit. User accepted original positions 21-30 metadata check: full ordered 31-key match and previous two rounds bound; slice(20,30) selects ten keys disjoint from prior twenty. Previous raw-file existence reused without target stat; ten record positions unverified. One direct reference and two listing-only names remain. Continuous timer after finalization 63.022942500 seconds; no body read or product credit, all prior judgments and limits preserved. Latest 2026-11-02 documentation synchronization: isolated preparation specifications only; synthetic RED/tests NOT_RUN; omc_kit is user-identified installation source; current VERSION 0.6.2 and one Guard file match do not establish historical or full-install version. Historical evidence and original checkout preserved.",
   "readiness": {
     "infrastructure": "READY",
     "operations": "V4_ABSTENTION_OBTAINED_ECG_V2_TOOL_EVENT_INVALID",
@@ -177,49 +177,19 @@
   },
   "next_steps": [
     {
-      "lane": "ECG v2 로컬 진단 수용",
-      "title": "현재 문구 일치와 당시 전달 미확인 구분",
-      "detail": "ECG v2 고정10개 파일 진단 수용: 현재 AGENTS 문구 일치만 확인; 당시 로딩·전달·사전 차단 근거 미확인. 진단 OMC 게이트 미실행·보고상 BLOCK은 새 공식 판정과 구분. 기존 예산·판단 보존; 후속 조회·실행 자동 진행 없음."
+      "lane": "수작업 후보 결론",
+      "title": "StatefulSet Recreate CI 후보 · HOLD",
+      "detail": "고정 후보 관련 표현을 기존400건에서 검색, 원문2건 상세 감사. 증거 INSUFFICIENT_EVIDENCE·실행 가능성 UNKNOWN·제품 실적0. 동일 원인/독립 수요는 미확정, 지불 근거 미확보. 후보 교체·새 수집·모델 실행 없음."
     },
     {
-      "lane": "ECG v2 실행 무효 수용",
-      "title": "SPENT·품질 미평가 유지 / 자동 재시도 없음",
-      "detail": "실제 도구 실행의 사후 감지로 무효이며 사전 차단 성공으로 보지 않는다. v1 마지막 UNUSED·기존 BLOCK·판단·원출력을 보존한다. 추가 조사·실행은 별도 승인 전 진행하지 않는다."
+      "lane": "손실과 선정 한계",
+      "title": "손실 UNKNOWN/null · 선정 절차 미확인",
+      "detail": "기술적 실패2건·명시적 시간초과1건. 확정 집계0건은 실제 손실0건이 아님. 최초 적격 후보·앞선 본문/제외 기록·예비 손실 인정·10건 속도·30분 한도·전체 연속 시간은 미확인. 소급 검증 아님."
     },
     {
-      "lane": "ECG 추가 확인 수용",
-      "title": "작성자 우회 수행 보고와 독립 검증 구분",
-      "detail": "ECG 작업 때문에 별도 코드 작성·보간 후 수동 간격 계산 및 마스킹을 했다는 작성자 보고 / 단순 기능 제안과 구분 / 정량적 업무 손실·반복 빈도·지속 기간 미확인 / 남은 미확인 구간·전체 자료의 근거 부재 단정 없음 / 기존 BLOCK 유지·후속 실행은 별도 승인."
-    },
-    {
-      "lane": "ECG 준비 중단 수용",
-      "title": "제한 근거 미확인·조건부 준비 미진입 유지",
-      "detail": "현재 범위는 종료한다. 미출력 부분의 근거 부재를 단정하거나 기존 ECG 후보 판단을 변경하지 않는다. 추가 열람·준비·초기화·실행은 자동 진행하지 않고 별도 승인 대상이다."
-    },
-    {
-      "lane": "단건 결과 수용",
-      "title": "#66574 정상 보류·카드 HOLD 유지",
-      "detail": "실제 출력 1건을 확보했다. 문서 예제 문제와 로컬 수정·출력 확인은 보고되지만 실제 업무 손실·업무상 우회 부담은 미확인이다. 추가 실행·초기화는 자동 진행하지 않으며 별도 승인 대상이다."
-    },
-    {
-      "lane": "배포 준비 차단",
-      "title": "품질 게이트 계약 조사와 범위 승인",
-      "detail": "기존 benchmark_maintenance 변경을 보존한 읽기 전용 조사로 명령·외부 호출 조건·환경·비밀값 검사 정책을 확정한다. 설정 적용·품질 실행·push·배포 승인은 각각 별도다. 코드 승인으로 배포 준비 완료를 추정하지 않는다."
-    },
-    {
-      "lane": "진단 보류 유지",
-      "title": "A조회 진단 추가 실행 보류",
-      "detail": "A조회 보류 반영 6개 파일은 로컬 커밋 740afc4로 기록되었고 당시 완료 기록 MATCH가 보고됐다. 커밋 결속은 화면 검증 통과나 기존 진단 BLOCK 해제가 아니다. 완전 취득 stderr 해시 일치와 과거 원문 미보존·새 원문 생략·app-server 인과관계 미확인을 구분한다. 추가 조회·모델 실행·예산 재초기화는 별도 승인 전 진행하지 않는다."
-    },
-    {
-      "lane": "기록 보존",
-      "title": "중단 결과와 품질 미측정을 구분",
-      "detail": "실패 1건·미시도 39건, P/M/E 성능 미집계. 기존 v1~v5·metric-v1은 수정하지 않고 새 메타데이터로 과거 원인을 추정하지 않는다."
-    },
-    {
-      "lane": "병행 검토",
-      "title": "독립 2차 검토와 소스 적격성",
-      "detail": "소스별 5건의 독립 검토와 공식 적격성 receipt가 제품 승격에 필요하다."
+      "lane": "문구 리뷰와 공식 상태",
+      "title": "보고서 보완 리뷰 승인 · 공식 완료 보류 유지",
+      "detail": "손실 구분·선정 한계 보완을 대화 내 읽기 전용 리뷰에서 승인. 공식 승인 receipt 없음. 분석 complete-task는 RED 미등록으로 보류 유지. 이번 문서 동기화·커밋은 분석 완료 게이트 해제가 아니며 사용자 가치 판단도 미수행."
     }
   ],
   "promotion_blockers": [
@@ -229,6 +199,7 @@
   ],
   "deferred": "다섯 번째 소스 탐색·외부 SaaS·심층 리서치·자동 MVP·시장 규모 추정·자동 투자 판단",
   "evidence_notes": [
+    "2026-11-02 수작업 후보 감사: 관련 원문2건, HOLD·실행 가능성UNKNOWN·제품 실적0. 손실 UNKNOWN/null과 확정 관찰0건 구분, 선정 절차 미확인. 문구 리뷰 승인은 분석 공식 RED 보류 해제나 제품 검증이 아니다.",
     "구현과 테스트 수는 제품 완성도 지표가 아니다.",
     "fixture 카드는 실제 Opportunity Card 성과로 계산하지 않는다.",
     "독립 2차 검토는 calibration 실행의 선행 조건은 아니지만 제품 승격에는 필수다.",
@@ -267,9 +238,20 @@
     "persistent-v4: 실제 출력 1건 확보·정상 보류 수용·사람 카드 HOLD. 저장 품질 NOT_ASSESSED·human_card NOT_RUN은 수정하지 않음. 업무 손실·업무상 우회 미확인; 독립 holdout·제품 품질 통과·생산 실적 아님. 기존 SPENT·원출력·각 한계·import/corpus NOT_RUN 유지.",
     "ECG 제한 확인 수용: 제한 근거 미확인·조건부 준비 미진입. 미출력 부분의 근거 부재 단정 없음. R2 미충족·RED 미등록 OMC BLOCK 유지. 인용 1,000단위와 통합 계수 미확보 구분; 약 100.54초는 Guard·최종 정리/보고 제외. 기존 판단·SPENT·원출력·import/corpus NOT_RUN 보존.",
     "ECG 고정 3구간 추가 확인 수용: 작성자 우회 수행 보고 확인·독립 검증 미완료. 이전 제한 근거 미확인 중단은 당시 이력으로 보존. 추가 작업 A3 미충족·RED 미등록 BLOCK, 통합 출력 계수 미확보·평가 기록까지 타이머 한계 유지. 기존 판단·SPENT·원출력·import/corpus NOT_RUN 유지.",
-    "ECG v2 run-001 수용: 실제 command_execution 이벤트로 experiment_invalid·SPENT, 내용 품질 NOT_ASSESSED·사람 카드 NOT_RUN. OMC 초기화 도구 명령은 scripts/omc.py 부재로 종료 2; 지시 유입 경로 미확인. 사후 감지이며 사전 차단 입증 아님. v1 마지막 UNUSED·기존 BLOCK·판단·각 한계·원출력·import/corpus NOT_RUN 보존. 원출력·예산 재열람 없음."
+    "ECG v2 run-001 수용: 실제 command_execution 이벤트로 experiment_invalid·SPENT, 내용 품질 NOT_ASSESSED·사람 카드 NOT_RUN. OMC 초기화 도구 명령은 scripts/omc.py 부재로 종료 2; 지시 유입 경로 미확인. 사후 감지이며 사전 차단 입증 아님. v1 마지막 UNUSED·기존 BLOCK·판단·각 한계·원출력·import/corpus NOT_RUN 보존. 원출력·예산 재열람 없음.",
+    "로드맵·대시보드 최신화로 복귀. omc_kit 설치본 조사는 별도 보류; 원본 문서 반영·이관은 미수행.",
+    "/private/tmp/research-auto-access-synthetic-001에 비공식 준비 파일 3개 생성. 하위 21개 사례·단계별 도구 호출 1회·프로세스 최대 43개·동시 3개. 구현 NOT_CREATED·OMC 등록·RED·시험·TDD 게이트 NOT_RUN.",
+    "UTF-16 전체 4,000단위=도구 반환 2,000+진행 500+종료 보고 1,500. 단계당 한 번 초기화. 전체 600초·540초 작업 중단 우선. 미시작 NOT_RUN·진행 중 STOPPED·미확인 UNVERIFIED이면 전체 통과 금지. 실제 합성 시험 아님.",
+    "격리 OMC 고정 5개 파일 확인은 접근 전제 미확보로 NOT_RUN·취득 0바이트. 실제 지원·강제 제한 미확인; 당시 전체 시간·통합 출력 미측정.",
+    "문서 갱신 Guard는 -I 로컬 omc_state import 실패로 분류 게이트 미도달. import 경로 추가 이전 import와 파서 default=Path.cwd() 평가를 정적으로 확인. import 성공·분류 통과·문서 검증은 별개.",
+    "추가 import 두 곳은 snapshot 함수·조건문 내부. record_session 본문 완결·직접 snapshot 호출 미발견; 조건부 보조 함수 이후 간접 연결 미확정. 세션·공유 상태 쓰기와 이전 세션 변경 호출 관찰은 실제 실행이 아님.",
+    "orchestration_usage.md 고정 경로 부재로 본문 0바이트·custody 코드 미열람. docs 제한 검색 28항목·3디렉터리, 저장소 제한 검색 441항목·30디렉터리·표식 29회·제외 23개에서 후보 0건. 허용 범위 완료이며 전체 부재·공식 지원 부재 아님.",
+    "이전 격리 체크아웃 검색 376항목·29디렉터리·후보 0건은 사전 범위 승인 없이 수행한 관찰 이력. 소급 승인·공식 검증 증거·후속 실행 권한으로 사용하지 않음.",
+    "사용자가 omc_kit 설치 출처를 명시. 현재 VERSION 0.6.2·설치 안내 확인. Guard 쌍 17,481바이트 전체·SHA-256 일치. 설치 당시 버전·전체 설치본 일치·현재 작업의 공식 격리 지원 미확인. 설치·업데이트 실행 없음.",
+    "기존 CLI SPENT·마지막 확인 UNUSED·판단·HOLD·품질 미평가·역사적 BLOCK·원출력·import/corpus NOT_RUN 유지. 과거 기록 소급 복구 없음. 현재 문서의 정합성 검사는 과거 실행·품질 검증을 대신하지 않음.",
+    "04e8c807 기준 새 격리 문서 작업. 원본 HEAD·인덱스·미커밋 변경 보존. 현재 작업 Guard·CONTRACT 통과와 과거 공식 게이트 NOT_RUN을 구분. 원본 반영·이관·push 없음. 과거 화면 검증 미완료 유지; 이번 화면 검증은 별도 보고."
   ],
-  "snapshot_revision": "2026-10-31-diagnosis-commit-sync",
+  "snapshot_revision": "2026-11-02-manual-candidate-review-sync",
   "delivery": {
     "status": "BLOCKED",
     "code_review": "PROBE_APPROVED",
@@ -4214,7 +4196,79 @@
       "execution": "사용자 수용 진단 결과만 문서 반영 / 진단 대상 재조회·재실행·초기화·모델·외부 통신·스테이징·커밋 없음",
       "commit_documentation": "2026-10-31 문서 정합성 확인: 로컬 Git b023a83 / 승인된 6개 파일·부모 커밋·OMC 완료 기록 MATCH",
       "correction_documentation": "next_steps 첫 항목 객체 수정·잘못된 형식 빌드 거부·HTML 재생성 수용 / 당시 회귀 3개 통과·카드 9개 27필드 일치·undefined 0건 / 이번 수정 게이트 PROCEED는 기존 진단 BLOCK 해제·화면 검증 통과 아님",
-      "commit_boundary_documentation": "Git 커밋 성공과 해당 커밋 작업의 OMC 완료 기록 MATCH를 구분 / 기존 진단·문서 BLOCK·화면 검증 미완료·SPENT·마지막 확인값 UNUSED·판단·원출력·각 한계·import·corpus NOT_RUN 유지 / 이번 최신화는 미커밋 문서 변경이며 진단 대상·예산 재조회 없음"
+      "commit_boundary_documentation": "Git 커밋 성공과 해당 커밋 작업의 OMC 완료 기록 MATCH를 구분 / 기존 진단·문서 BLOCK·화면 검증 미완료·SPENT·마지막 확인값 UNUSED·판단·원출력·각 한계·import·corpus NOT_RUN 유지 / 이번 최신화는 미커밋 문서 변경이며 진단 대상·예산 재조회 없음",
+      "l_status": "L단계 수용 결과: 무통신·파일 쓰기 사전 차단 근거 미확보로 CLI 0회·NOT_RUN 중단 / 차단 수단 자체가 없다는 단정 아님",
+      "l_calls": "고정 CLI --help: 시작 0회·NOT_RUN / exec --help: 시작 0회·NOT_RUN / 경로·상위 링크 조회도 미수행",
+      "l_capture": "도움말 stdout·stderr 취득 0바이트 / 취득 부분 해시 해당 없음 / 생성한 자식 프로세스가 없어 종료·회수·파이프 닫기 해당 없음",
+      "l_measurement": "L단계 연속 타이머·통합 보고 출력 계수 미측정 / 600초·4,000단위 상한 준수를 검증했다고 주장하지 않음 / 고정 10개 파일 진단의 66.808초·3,482단위와 별개",
+      "l_gate": "L단계 공식 OMC 완료 게이트 미실행 / 중단 보고상의 BLOCK이며 새 공식 게이트 판정 아님 / 과거 BLOCK이나 next_steps 수정 게이트 통과와 구분",
+      "l_boundary": "도움말 설명·실제 도구 사전 차단 모두 미검증 / 별도 승인 없이 차단 수단 탐색·추가 조회·CLI 실행·실험 준비로 확대하지 않음",
+      "l_preservation": "기존 SPENT·마지막 확인값 UNUSED·BLOCK·화면 검증 미완료·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 이번 문서화에서 진단·CLI·예산 추가 조회·초기화·모델·외부 통신·스테이징·커밋 없음",
+      "shell_stop_status": "새 Terminal 셸 비교 수용 결과: 시작 부수효과가 허용 범위 안이라는 근거 미확보 / 시작 전제 미확인으로 새 셸 0개·비교 NOT_RUN 중단",
+      "shell_stop_counts": "이번 승인 절차의 새 셸 생성 0개·상위 계층 확인 0회·Downloads 및 Downloads/dev의 chdir·getcwd 비교 각 0회 / 다른 셸의 존재·부재를 조사한 결과 아님",
+      "shell_stop_timing": "새 셸 비교 전체 시간·명령 시간 모두 미측정 / 0초로 해석하지 않음 / 전체 120초 및 명령 시간 상한 준수 검증 아님 / 사용자 측정과 단조 시계 측정 결과 모두 미확보",
+      "shell_stop_gate": "새 셸 비교 공식 OMC 완료 게이트 미실행 / 중단 보고상 BLOCK이며 새 공식 게이트 판정·기존 BLOCK 해제 아님 / 이번 문서 갱신의 검증과 별개",
+      "shell_stop_evidence": "수용된 계획·중단 보고·대화상 리뷰에 근거 / printf는 상태 출력용 예시이며 사용자 실행 결과·실행 영수증 미확보 / 독립 실행 검증 아님",
+      "shell_stop_causality": "새 셸 계층 차이 자체를 관찰하지 못함 / 보안 문맥 분리·Kiro 개입 여부·getcwd 거부의 보안 정책 원인 미확인 / 비교 결과 없음으로 정책·권한 원인을 단정하지 않음",
+      "shell_stop_preservation": "기존 SPENT·마지막 확인값 UNUSED·BLOCK·화면 검증 미완료·예산·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 이번 문서화에서 추가 진단 조회·새 Terminal 셸 시작·권한·설정 변경·모델·외부 통신·스테이징·커밋 없음",
+      "commit_stop_status": "일반 터미널 커밋 사전 확인 중단 수용: 표준 모듈 import PASS 후 getcwd PermissionError·errno=1 재현 / 파일 내용 오류나 Git 커밋 실패로 판정하지 않음",
+      "commit_stop_calls": "실제 Python 사전 확인은 실행됨 / getcwd 오류 이후 Git·OMC·스테이징·커밋 모두 NOT_RUN / 커밋 게이트 통과·새 커밋·새 완료 기록 MATCH 주장 없음",
+      "commit_stop_custody": "승인된 로드맵·README·source-data·생성 HTML 4개 문서는 미커밋 변경으로 보존 / 이번 중단 시도로 스테이징 변경·OMC 기록 생성에 도달하지 않음 / 내용·해시·인덱스 상태를 당시 리뷰에서 재조회한 것은 아님",
+      "commit_stop_evidence": "사용자가 제공하고 수용한 실행 출력과 직전 명령 순서에 근거 / getcwd의 권한·보안 정책 원인은 계속 미확인 / 이번 문서화에서 경로 접근을 독립 재현하거나 진단 자료를 조회하지 않음",
+      "commit_stop_gate": "실패한 일반 터미널 커밋 시도의 OMC 명령·공식 게이트 NOT_RUN / 현재 문서 반영의 OMC 관리 기록·빌드·정합성 검사와 별개 / 기존 BLOCK·화면 검증 미완료 유지",
+      "commit_stop_measurement": "이번 커밋 사전 중단의 전체·명령 시간 및 통합 출력 계수 미확보 / 앞선 L단계·새 셸 비교의 미측정 상태와 고정 10개 파일 진단 측정값을 대체하거나 합산하지 않음",
+      "commit_stop_preservation": "기존 SPENT·마지막 확인값 UNUSED·예산·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 추가 진단 조회·커밋 재시도·새 Terminal 셸 시작·모델·외부 통신·권한 확대·스테이징·커밋 없음",
+      "commit_chdir_addendum": "최신 사용자 출력 수용: 표준 모듈 import PASS·chdir PASS 뒤 getcwd PermissionError·errno=1 재현 / 이전 getcwd 중단 기록과 별도 추가 근거이며 원인 확정·Git 실패 판정 아님",
+      "commit_chdir_boundary": "해당 터미널 시도의 Git·OMC·스테이징·커밋 모두 NOT_RUN / 승인된 4개 문서는 미커밋 변경으로 보존 / 새 커밋·완료 기록 MATCH 주장 없음 / 시간·출력 계수 미확보·공식 게이트 미실행·화면 검증 미완료·기존 예산·SPENT·마지막 UNUSED·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 이번 문서화에서 추가 진단·재시도·새 Terminal 셸·모델·외부 통신·권한 확대·스테이징·커밋 없음",
+      "getcwd_retry_hold_status": "동일 getcwd 오류 재현 수용: 사용자 제공 출력에서 import·chdir PASS 후 PermissionError·errno=1이 같은 형태로 재현 / 이후 Git·OMC·스테이징·커밋 NOT_RUN / 동일한 근본 원인이 입증된 것은 아님",
+      "getcwd_retry_hold_policy": "원인 또는 실행 조건의 변화가 확인되기 전 같은 커밋 명령의 재시도 보류 / 변화 확인 자체를 위한 추가 진단·재시도·새 셸 시작을 승인한 것은 아님 / 승인된 4개 문서 미커밋·기존 예산·SPENT·마지막 UNUSED·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 화면 검증 미완료·공식 게이트 미실행 유지 / 이번 문서화에서 추가 진단·재시도·새 Terminal 셸·모델·외부 통신·권한 확대·스테이징·커밋 없음",
+      "s_settings_display": "S단계 화면 표시 수용: 파일 및 폴더의 터미널.app 항목 있음·Downloads 켜짐 / 전체 디스크 접근 권한의 터미널.app 항목 있음·꺼짐 / 항목 없음·확인 불가로 분류하지 않음",
+      "s_settings_evidence": "사용자가 첨부하고 수용한 두 설정 화면에서 보이는 상태만 기록 / 현재 설정·권한 DB·로그를 추가 조회하지 않음 / 실제 실행 프로세스의 접근 범위·getcwd 오류 원인·전체 디스크 접근 권한의 필요성은 계속 미확인",
+      "s_settings_boundary": "표시 결과를 설정 변경·새 셸 시작·커밋 재시도 승인이나 기존 BLOCK 해제로 확대하지 않음 / 이전 NOT_RUN·재시도 보류 기록은 당시 이력으로 보존 / 기존 미커밋 문서 4개·예산·SPENT·마지막 확인값 UNUSED·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 이번 문서화에서 추가 조회·설정 변경·새 Terminal 셸·재시도·모델·외부 통신·스테이징·커밋 없음",
+      "d_comparison_status": "D단계 수용: 기존 대화의 S·P·N·M·A·C 결과만 대조 / 추가 조회·독립 재현 없음 / 서로 다른 시점의 관찰을 동일 시점 상태나 독립 표본 증가로 묶지 않음",
+      "d_comparison_facts": "S: Downloads 표시 켜짐·전체 디스크 접근 표시 꺼짐 / P: chdir 성공·getcwd는 Downloads까지 성공하고 dev부터 실패 / N: dev의 /bin/pwd -P도 실패 / M: Downloads 700·삭제 거부 ACL, dev 755·추가 ACL 미출력 / A: Apple Terminal 계층의 kiro-cli-term 표기 / C: 분리된 셸 비교 결과 없음",
+      "d_comparison_hypotheses": "가설 확률 순위 없음 / 설명하기 부족함: Python import만의 문제[P·N], 현재 Downloads 꺼짐 설명[S] / 가능하지만 미검증: 실행 문맥·경로 정책·접근 조건[P·M·A] / 구분할 자료 없음: 실패 당시 권한·전체 디스크 접근 필요성·Kiro 인과 개입·분리 셸 차이[S·A·C]",
+      "d_comparison_limits": "getcwd 원인·권한 필요성 미확인 / 표시 상태·삭제 거부 ACL·프로세스 이름을 원인 확정으로 확대하지 않음 / D 대화 내 분석 수행과 공식 OMC 완료 게이트 미실행을 구분 / D 보고상 BLOCK은 분석 오류나 새 공식 게이트 판정 아님",
+      "d_comparison_hold": "후속 후보 C단계는 시작 전제 확인·별도 승인이 필요하므로 현재 보류 / 권한 변경·커밋 재시도 권고 아님 / 원인·실행 조건 변화 전 커밋 재시도 보류 유지 / 기존 미커밋 문서 4개·예산·SPENT·마지막 UNUSED·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 이번 문서화에서 추가 진단·설정 변경·새 셸·모델·외부 통신·스테이징·커밋 없음",
+      "c0_procedure_status": "C0 Terminal 프로파일·시작 방식 표시 확인 절차 및 보고 양식 승인 수용 / 실제 관찰 결과 미확보 / 절차 승인과 관찰 완료를 구분",
+      "c0_report_contract": "자동 명령 입력값 존재·비어 있음과 활성·비활성을 별도로 보고 / 항목 없음·확인 불가 구분 / 명령·인자·환경변수·실제 작업 경로 등 비밀값 제외 / 프로파일은 P1 등으로 익명화 가능",
+      "c0_start_boundary": "시작 안전성·getcwd 원인·권한 필요성 미확인 / 정적 표시 확인은 실제 차단 검증 아님 / C1 로컬 확인·C2 시작 전제 평가·C3 새 셸 비교는 각각 별도 승인 필요 / 이번 승인으로 조회·새 셸·커밋 재시도를 허용하지 않음",
+      "c0_preservation": "기존 미커밋 문서 4개·예산·SPENT·마지막 확인값 UNUSED·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 화면 검증 미완료·공식 완료 게이트 미실행 유지 / 이번 문서화에서 추가 진단 조회·설정 변경·새 셸·재시도·모델·외부 통신·스테이징·커밋 없음",
+      "c1_stop_status": "2026-11-01 C1 실행 전제 대화 내 확인 결과 수용 / 전제 미확보로 명령 0회·파일 열람 0건·NOT_RUN 중단 / 부분 수행 후 중단 아님",
+      "c1_stop_scope": "위 0회·0건은 해당 C1 절차 기준 / 시작 파일 동작·시작 안전성·getcwd 원인 미확인 / C1 실행 보류·C2 및 C3 별도 승인 유지",
+      "c1_stop_time": "C1 전체 경과 시간 미측정 / 도구 시간은 실행 없어 해당 없음 / 0초 측정이나 600초 상한 준수로 해석하지 않음",
+      "c1_stop_gate": "C1 공식 게이트 미실행 / 대화 내 중단 보고·검토와 공식 판정 기록을 구분 / 이번 문서 갱신도 빌드 명령·공식 게이트·화면 검증 미실행",
+      "c1_stop_preservation": "기존 미커밋 문서·예산·SPENT·마지막 확인값 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 유지 / 추가 진단·새 셸·명령 실행·모델·외부 통신·스테이징·커밋 없음",
+      "c1_support_stage": "2026-11-01 1차 도구 지원 설명 검토 수행 수용 / 대화에 제공된 node_repl.js 설명만 검토 / 시험 호출·대상 접근 없이 2차 C1 실제 열람은 NOT_RUN 중단",
+      "c1_support_timeout": "timeout_ms 인자 지정은 설명상 지원 / 실제 읽기 중단·하위 작업 종료·자원 정리 보장 미확인 / 전체 시간 상한 준수·실제 동작 검증 근거 아님",
+      "c1_support_unknown": "파일 접근 경로 전체의 셸 미사용·읽기 시점의 상위 경로 및 대상 링크 미추적·파일당 및 누적 바이트 제한은 설명상 미확인 / 명시적 미지원 확인 항목 없음 / 미기재를 지원이나 미지원으로 단정하지 않음",
+      "c1_support_stop": "필수 보장 미확보로 C1 실제 열람 NOT_RUN 유지 / 부분 수행 후 중단 아님 / 설명 검토는 부수효과 수용·2차 열람 승인·시작 안전성 확인 아님 / 필수 지원 근거 확보 전 실제 열람 보류",
+      "c1_support_boundary": "1차 검토 시간 미측정 / 대상 파일·메타데이터 접근 및 시험 호출 0회는 해당 지원 설명 검토 절차 기준 / 공식 게이트·별도 판정 기록 생성 미실행 / 이번 HTML은 직접 편집하며 빌드·화면 검증 미실행 / 기존 미커밋 문서·예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 유지",
+      "a1_review_status": "2026-11-01 A1 대화 내 설명 검토 수행 수용 / 새 API 식별자·기능 설명의 추가 근거 미확보 / 같은 설명의 반복 탐색 없이 종료",
+      "a1_location_binding": "최소 구현의 정확한 로컬 경로 미확정 / 해당 구현과 현재 도구·버전의 결속 미확인 / 위치 미확정을 자료 부재·기능 미지원으로 단정하지 않음",
+      "a1_prior_evidence": "기존 timeout_ms 설명은 인자 지원에 관한 기존 근거 / 실제 읽기 중단·자원 정리 보장의 새 근거 아님 / 설명 검토와 실제 동작 검증을 구분",
+      "a1_stop_scope": "A1 설명 검토는 수행 / A2 구현 조회·C1 실제 열람은 NOT_RUN / 부분 수행 후 중단 아님 / 해당 A1 절차에서 실제 조회·시험·변경·새 셸·명령 실행 없음 / 새 설명이나 명시적 구현 위치 근거 제공 전 A2·C1 보류",
+      "a1_preservation": "A1 검토 시간 미측정·공식 게이트 및 별도 판정 기록 생성 미실행 / 이번 HTML은 직접 편집·빌드 및 화면 검증 미실행 / 기존 미커밋 문서·예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 유지",
+      "official_search_status": "2026-11-01 공식 문서 탐색 수행 후 중단 수용 / 검색 질의 2개·본문 취득 요청 2회 / C1 필수 보장 근거 미확보 / 위치 미확정을 자료 부재·기능 미지원으로 단정하지 않음",
+      "official_search_redirect": "허용한 developers.openai.com 요청에서 허용 목록 밖 learn.chatgpt.com으로 자동 리디렉션 발생 / 사전 차단하지 못함 / 인지 후 추가 취득 중단·해당 내용을 근거에서 제외 / 사후 중단이 이미 발생한 범위 밖 접근을 취소하지 않음",
+      "official_search_counts": "검색 질의 2개·본문 취득 요청 2회는 호출 인자 기준 / 내부 네트워크 요청 수 미확인 / 별도 자동 재시도 요청 없음·도구 내부 재시도 동작 미확인 / 허용 출처만 접근했다는 준수 판정 보류",
+      "official_search_timing": "취득 종료까지 부분 경과 약 8.5초 / 최종 보고 포함 전체 시간 미확인 / 600초 상한 준수로 보고하지 않음",
+      "official_search_hold": "공식 문서 탐색은 수행 후 중단 / A2 구현 조회·C1 실제 열람은 NOT_RUN 유지 / 접근 경계 재확정 전 추가 탐색 보류 / 기존 미커밋 문서·예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 유지 / 이번 HTML 직접 편집·빌드·공식 게이트·화면 검증 미실행",
+      "fixed_readme_status": "2026-11-01 고정 README 취득 결과 수용 / 본문 요청 1회·검색 0회·별도 재시도 0회 / 이번 본문에서 C1 필수 지원 근거 미확보 / 자료 부재·기능 미지원으로 단정하지 않음",
+      "fixed_readme_source": "승인 URL과 반환 URL은 https://github.com/openai/codex/blob/main/README.md 로 일치 / 예상 밖 리디렉션은 반환 결과에 표시되지 않음 / 내부 요청·중간 이동·내부 재시도가 전혀 없었다는 증거는 아님 / 링크 미추적",
+      "fixed_readme_time": "요청 시작부터 반환까지 부분 경과 약 2.16초 / 내부 요청 수·내부 재시도·최종 보고 포함 전체 시간 미확인 / 600초 상한 준수 검증 아님",
+      "fixed_readme_binding": "main은 변경 가능한 참조 / 취득한 커밋 식별 정보·현재 도구와 구현의 결속 미확인 / README 취득 수행과 A2 구현 조회·C1 실제 열람 NOT_RUN을 구분 / 새 근거와 별도 승인 전 추가 취득 보류",
+      "fixed_readme_preservation": "기존 미커밋 문서·예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 유지 / 과거 허용 밖 리디렉션 이력은 소급 해소하지 않음 / 이번 HTML 직접 편집·빌드·공식 게이트·화면 검증 미실행 / 이번 문서화에서 추가 진단·통신·시험·명령 실행·스테이징·커밋 없음",
+      "github_code_stop_status": "2026-11-01 GitHub 코드 검색 1회 후 인증 요구 중단 수용 / 첫 질의 repo:openai/codex node_repl 요청에서 로그인 요구 반환 / 로그인·인증 없이 종료 / 두 번째 질의 repo:openai/codex nodeRepl NOT_RUN",
+      "github_code_stop_counts": "검색 요청 1회·검색 결과 페이지 취득 1회 / 후보 미확보·파일 본문 열람 0회·별도 재시도 0회 / 페이지 취득과 파일 본문 열람을 구분 / 다른 검색 방식으로 대체하지 않음",
+      "github_code_stop_limits": "반환 위치 github.com/search와 질의 표기 정규화 확인 / 내부 요청 수·중간 이동·내부 재시도 미확인 / 요청부터 반환까지 부분 경과 약 3.09초·최종 보고 포함 전체 시간 미확인 / 600초 준수 검증 아님",
+      "github_code_stop_hold": "후보 미확보를 코드 부재·자료 부재·기능 미지원으로 단정하지 않음 / 현재 도구 결속 미확인·A2 구현 조회 및 C1 실제 열람 NOT_RUN 유지 / 새 근거 또는 별도 탐색 승인 전 추가 요청 보류",
+      "github_code_stop_preservation": "기존 미커밋 문서·예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 보존 / 이번 HTML 직접 편집·빌드·공식 게이트·화면 검증 미실행 / 이번 문서화에서 추가 진단·통신·인증·시험·명령 실행·스테이징·커밋 없음",
+      "listing_stop_status": "2026-11-01 고정 codex-rs 공개 목록 요청 1회 후 반환 페이지의 로딩 오류 표시로 중단 / 일부 목록은 반환됐으나 오류 중단 기준에 따라 직하 항목 검토·후보 선별 0개 / 목록이 비어 있었다는 뜻 아님",
+      "listing_stop_counts": "목록 요청 1회 / 하위 목록·파일 본문·검색·별도 재시도 각 0회 / 후보 파일·디렉터리·종류 미확인 판정 모두 미수행 / 대체 URL·범위 확대 없음",
+      "listing_stop_time": "요청부터 반환까지 부분 경과 약 2.05초 / 내부 요청 수·내부 재시도·최종 보고 포함 전체 시간 미확인 / 600초 상한 준수 검증 아님",
+      "listing_stop_hold": "후보 미확보를 코드 부재·자료 부재·기능 미지원으로 단정하지 않음 / 현재 도구 결속 미확인·A2 구현 조회 및 C1 실제 열람 NOT_RUN 유지 / 새 근거 또는 별도 승인 전 추가 요청 보류",
+      "listing_stop_history": "기존 예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN과 과거 리디렉션·인증 중단 이력 보존 / 원본 미커밋 문서·소스 변경을 보존한 격리 문서 작업 / 과거 HTML 직접 편집·빌드·공식 게이트·화면 검증 미실행 기록은 당시 이력으로 유지"
     }
   },
   "documentation_sync": {
@@ -4242,5 +4296,768 @@
     "this_documentation_update": "UNCOMMITTED",
     "import": "NOT_RUN",
     "corpus": "NOT_RUN"
+  },
+  "l_stage_accepted_stop": {
+    "basis": "User-accepted L-stage stop and conversation review; no independent diagnostic or CLI query during documentation",
+    "status": "NOT_RUN",
+    "reason": "pre_execution_restrictions_unestablished",
+    "absence_of_blocking_mechanism_proven": false,
+    "cli_process_count": 0,
+    "calls": [
+      {
+        "arguments": [
+          "--help"
+        ],
+        "started": 0,
+        "status": "NOT_RUN"
+      },
+      {
+        "arguments": [
+          "exec",
+          "--help"
+        ],
+        "started": 0,
+        "status": "NOT_RUN"
+      }
+    ],
+    "path_query": "NOT_RUN",
+    "captured_stdout_stderr_bytes": 0,
+    "captured_partial_sha256": null,
+    "captured_hash_status": "NOT_APPLICABLE",
+    "timer": "NOT_MEASURED",
+    "integrated_report_output": "NOT_MEASURED",
+    "limit_compliance": "NOT_VERIFIED",
+    "cleanup": "NOT_APPLICABLE_NO_CHILD_PROCESS",
+    "help_description": "NOT_VERIFIED",
+    "actual_tool_prevention": "NOT_VERIFIED",
+    "official_completion_gate": "NOT_RUN",
+    "reported_verdict": "BLOCK",
+    "new_official_gate_verdict": false,
+    "budget_requery": false,
+    "import": "NOT_RUN",
+    "corpus": "NOT_RUN",
+    "historical_states": "PRESERVED",
+    "surface": {
+      "l_status": "L단계 수용 결과: 무통신·파일 쓰기 사전 차단 근거 미확보로 CLI 0회·NOT_RUN 중단 / 차단 수단 자체가 없다는 단정 아님",
+      "l_calls": "고정 CLI --help: 시작 0회·NOT_RUN / exec --help: 시작 0회·NOT_RUN / 경로·상위 링크 조회도 미수행",
+      "l_capture": "도움말 stdout·stderr 취득 0바이트 / 취득 부분 해시 해당 없음 / 생성한 자식 프로세스가 없어 종료·회수·파이프 닫기 해당 없음",
+      "l_measurement": "L단계 연속 타이머·통합 보고 출력 계수 미측정 / 600초·4,000단위 상한 준수를 검증했다고 주장하지 않음 / 고정 10개 파일 진단의 66.808초·3,482단위와 별개",
+      "l_gate": "L단계 공식 OMC 완료 게이트 미실행 / 중단 보고상의 BLOCK이며 새 공식 게이트 판정 아님 / 과거 BLOCK이나 next_steps 수정 게이트 통과와 구분",
+      "l_boundary": "도움말 설명·실제 도구 사전 차단 모두 미검증 / 별도 승인 없이 차단 수단 탐색·추가 조회·CLI 실행·실험 준비로 확대하지 않음",
+      "l_preservation": "기존 SPENT·마지막 확인값 UNUSED·BLOCK·화면 검증 미완료·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 이번 문서화에서 진단·CLI·예산 추가 조회·초기화·모델·외부 통신·스테이징·커밋 없음"
+    }
+  },
+  "new_terminal_shell_accepted_stop": {
+    "basis": "User-accepted conversation-only stop and review; no new diagnostic or independent execution verification",
+    "status": "NOT_RUN",
+    "reason": "shell_start_precondition_unconfirmed",
+    "new_shells_created_by_this_procedure": 0,
+    "ancestry_checks": 0,
+    "path_comparisons": [
+      {
+        "path": "/Users/noseunglae/Downloads",
+        "chdir_calls": 0,
+        "getcwd_calls": 0,
+        "status": "NOT_RUN"
+      },
+      {
+        "path": "/Users/noseunglae/Downloads/dev",
+        "chdir_calls": 0,
+        "getcwd_calls": 0,
+        "status": "NOT_RUN"
+      }
+    ],
+    "other_shell_existence": "NOT_CHECKED",
+    "overall_time": "NOT_MEASURED",
+    "command_time": "NOT_MEASURED",
+    "limit_compliance": "NOT_VERIFIED",
+    "official_completion_gate": "NOT_RUN",
+    "reported_verdict": "BLOCK",
+    "new_official_gate_verdict": false,
+    "printf_user_execution": "UNCONFIRMED",
+    "independent_verification": "NOT_RUN",
+    "security_context_separation": "UNCONFIRMED",
+    "permission_policy_cause": "UNCONFIRMED",
+    "budget_requery": false,
+    "historical_states": "PRESERVED",
+    "import": "NOT_RUN",
+    "corpus": "NOT_RUN",
+    "surface": {
+      "shell_stop_status": "새 Terminal 셸 비교 수용 결과: 시작 부수효과가 허용 범위 안이라는 근거 미확보 / 시작 전제 미확인으로 새 셸 0개·비교 NOT_RUN 중단",
+      "shell_stop_counts": "이번 승인 절차의 새 셸 생성 0개·상위 계층 확인 0회·Downloads 및 Downloads/dev의 chdir·getcwd 비교 각 0회 / 다른 셸의 존재·부재를 조사한 결과 아님",
+      "shell_stop_timing": "새 셸 비교 전체 시간·명령 시간 모두 미측정 / 0초로 해석하지 않음 / 전체 120초 및 명령 시간 상한 준수 검증 아님 / 사용자 측정과 단조 시계 측정 결과 모두 미확보",
+      "shell_stop_gate": "새 셸 비교 공식 OMC 완료 게이트 미실행 / 중단 보고상 BLOCK이며 새 공식 게이트 판정·기존 BLOCK 해제 아님 / 이번 문서 갱신의 검증과 별개",
+      "shell_stop_evidence": "수용된 계획·중단 보고·대화상 리뷰에 근거 / printf는 상태 출력용 예시이며 사용자 실행 결과·실행 영수증 미확보 / 독립 실행 검증 아님",
+      "shell_stop_causality": "새 셸 계층 차이 자체를 관찰하지 못함 / 보안 문맥 분리·Kiro 개입 여부·getcwd 거부의 보안 정책 원인 미확인 / 비교 결과 없음으로 정책·권한 원인을 단정하지 않음",
+      "shell_stop_preservation": "기존 SPENT·마지막 확인값 UNUSED·BLOCK·화면 검증 미완료·예산·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 이번 문서화에서 추가 진단 조회·새 Terminal 셸 시작·권한·설정 변경·모델·외부 통신·스테이징·커밋 없음"
+    }
+  },
+  "getcwd_commit_accepted_stop": {
+    "basis": "User-accepted terminal output and command order reviewed in conversation; no independent reproduction",
+    "status": "PREFLIGHT_STOPPED",
+    "python_import": "PASS",
+    "getcwd": "FAILED",
+    "error_type": "PermissionError",
+    "errno": 1,
+    "git": "NOT_RUN",
+    "omc": "NOT_RUN",
+    "staging": "NOT_RUN",
+    "commit": "NOT_RUN",
+    "new_commit_claimed": false,
+    "new_completion_match_claimed": false,
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "index_rechecked_at_review": false,
+    "permission_policy_cause": "UNCONFIRMED",
+    "overall_time": "NOT_MEASURED",
+    "command_time": "NOT_MEASURED",
+    "integrated_output": "NOT_MEASURED",
+    "historical_states": "PRESERVED",
+    "import": "NOT_RUN",
+    "corpus": "NOT_RUN",
+    "surface": {
+      "commit_stop_status": "일반 터미널 커밋 사전 확인 중단 수용: 표준 모듈 import PASS 후 getcwd PermissionError·errno=1 재현 / 파일 내용 오류나 Git 커밋 실패로 판정하지 않음",
+      "commit_stop_calls": "실제 Python 사전 확인은 실행됨 / getcwd 오류 이후 Git·OMC·스테이징·커밋 모두 NOT_RUN / 커밋 게이트 통과·새 커밋·새 완료 기록 MATCH 주장 없음",
+      "commit_stop_custody": "승인된 로드맵·README·source-data·생성 HTML 4개 문서는 미커밋 변경으로 보존 / 이번 중단 시도로 스테이징 변경·OMC 기록 생성에 도달하지 않음 / 내용·해시·인덱스 상태를 당시 리뷰에서 재조회한 것은 아님",
+      "commit_stop_evidence": "사용자가 제공하고 수용한 실행 출력과 직전 명령 순서에 근거 / getcwd의 권한·보안 정책 원인은 계속 미확인 / 이번 문서화에서 경로 접근을 독립 재현하거나 진단 자료를 조회하지 않음",
+      "commit_stop_gate": "실패한 일반 터미널 커밋 시도의 OMC 명령·공식 게이트 NOT_RUN / 현재 문서 반영의 OMC 관리 기록·빌드·정합성 검사와 별개 / 기존 BLOCK·화면 검증 미완료 유지",
+      "commit_stop_measurement": "이번 커밋 사전 중단의 전체·명령 시간 및 통합 출력 계수 미확보 / 앞선 L단계·새 셸 비교의 미측정 상태와 고정 10개 파일 진단 측정값을 대체하거나 합산하지 않음",
+      "commit_stop_preservation": "기존 SPENT·마지막 확인값 UNUSED·예산·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 추가 진단 조회·커밋 재시도·새 Terminal 셸 시작·모델·외부 통신·권한 확대·스테이징·커밋 없음"
+    }
+  },
+  "getcwd_chdir_confirmed_addendum": {
+    "basis": "Latest user-provided output and accepted conversation-only review; no independent reproduction",
+    "status": "PREFLIGHT_STOPPED",
+    "python_import": "PASS",
+    "chdir": "PASS",
+    "getcwd": "FAILED",
+    "error_type": "PermissionError",
+    "errno": 1,
+    "git": "NOT_RUN",
+    "omc": "NOT_RUN",
+    "staging": "NOT_RUN",
+    "commit": "NOT_RUN",
+    "prior_stop_record": "PRESERVED_UNCHANGED",
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "new_commit_claimed": false,
+    "new_completion_match_claimed": false,
+    "permission_policy_cause": "UNCONFIRMED",
+    "overall_time": "NOT_MEASURED",
+    "command_time": "NOT_MEASURED",
+    "integrated_output": "NOT_MEASURED",
+    "official_completion_gate": "NOT_RUN",
+    "historical_states": "PRESERVED",
+    "import": "NOT_RUN",
+    "corpus": "NOT_RUN",
+    "surface": {
+      "commit_chdir_addendum": "최신 사용자 출력 수용: 표준 모듈 import PASS·chdir PASS 뒤 getcwd PermissionError·errno=1 재현 / 이전 getcwd 중단 기록과 별도 추가 근거이며 원인 확정·Git 실패 판정 아님",
+      "commit_chdir_boundary": "해당 터미널 시도의 Git·OMC·스테이징·커밋 모두 NOT_RUN / 승인된 4개 문서는 미커밋 변경으로 보존 / 새 커밋·완료 기록 MATCH 주장 없음 / 시간·출력 계수 미확보·공식 게이트 미실행·화면 검증 미완료·기존 예산·SPENT·마지막 UNUSED·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 이번 문서화에서 추가 진단·재시도·새 Terminal 셸·모델·외부 통신·권한 확대·스테이징·커밋 없음"
+    }
+  },
+  "getcwd_retry_hold_accepted": {
+    "basis": "Latest user-provided repeated output and accepted conversation-only review; no independent reproduction",
+    "status": "PREFLIGHT_STOPPED_RETRY_DEFERRED",
+    "python_import": "PASS",
+    "chdir": "PASS",
+    "getcwd": "FAILED",
+    "error_type": "PermissionError",
+    "errno": 1,
+    "same_error_shape": true,
+    "same_root_cause_confirmed": false,
+    "git": "NOT_RUN",
+    "omc": "NOT_RUN",
+    "staging": "NOT_RUN",
+    "commit": "NOT_RUN",
+    "retry_policy": "DEFER_UNTIL_CAUSE_OR_EXECUTION_CONDITIONS_CHANGE_CONFIRMED",
+    "diagnosis_or_retry_authorized_by_policy": false,
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "index_rechecked_at_review": false,
+    "new_completion_match_claimed": false,
+    "overall_time": "NOT_MEASURED",
+    "command_time": "NOT_MEASURED",
+    "integrated_output": "NOT_MEASURED",
+    "official_completion_gate": "NOT_RUN",
+    "screen_verification": "NOT_RUN",
+    "historical_states": "PRESERVED",
+    "import": "NOT_RUN",
+    "corpus": "NOT_RUN",
+    "surface": {
+      "getcwd_retry_hold_status": "동일 getcwd 오류 재현 수용: 사용자 제공 출력에서 import·chdir PASS 후 PermissionError·errno=1이 같은 형태로 재현 / 이후 Git·OMC·스테이징·커밋 NOT_RUN / 동일한 근본 원인이 입증된 것은 아님",
+      "getcwd_retry_hold_policy": "원인 또는 실행 조건의 변화가 확인되기 전 같은 커밋 명령의 재시도 보류 / 변화 확인 자체를 위한 추가 진단·재시도·새 셸 시작을 승인한 것은 아님 / 승인된 4개 문서 미커밋·기존 예산·SPENT·마지막 UNUSED·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 화면 검증 미완료·공식 게이트 미실행 유지 / 이번 문서화에서 추가 진단·재시도·새 Terminal 셸·모델·외부 통신·권한 확대·스테이징·커밋 없음"
+    }
+  },
+  "terminal_settings_S_accepted_display": {
+    "basis": "Two user-provided screenshots and user-accepted conversation review; display observation only",
+    "stage": "S",
+    "status": "DISPLAY_OBSERVATIONS_ACCEPTED",
+    "app_display_name": "터미널.app",
+    "files_and_folders_terminal_entry": "PRESENT",
+    "downloads_display": "ON",
+    "full_disk_access_terminal_entry": "PRESENT",
+    "full_disk_access_display": "OFF",
+    "live_settings_query": "NOT_RUN",
+    "actual_process_access_scope": "UNCONFIRMED",
+    "getcwd_cause": "UNCONFIRMED",
+    "full_disk_access_necessity": "UNCONFIRMED",
+    "settings_change_authorized": false,
+    "agent_settings_change": false,
+    "new_shell_or_retry_authorized": false,
+    "observation_time": "NOT_INDEPENDENTLY_VERIFIED",
+    "official_completion_gate": "NOT_RUN",
+    "historical_blocks": "PRESERVED",
+    "documentation_screen_validation": "NOT_RUN",
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "import": "NOT_RUN",
+    "corpus": "NOT_RUN",
+    "surface": {
+      "s_settings_display": "S단계 화면 표시 수용: 파일 및 폴더의 터미널.app 항목 있음·Downloads 켜짐 / 전체 디스크 접근 권한의 터미널.app 항목 있음·꺼짐 / 항목 없음·확인 불가로 분류하지 않음",
+      "s_settings_evidence": "사용자가 첨부하고 수용한 두 설정 화면에서 보이는 상태만 기록 / 현재 설정·권한 DB·로그를 추가 조회하지 않음 / 실제 실행 프로세스의 접근 범위·getcwd 오류 원인·전체 디스크 접근 권한의 필요성은 계속 미확인",
+      "s_settings_boundary": "표시 결과를 설정 변경·새 셸 시작·커밋 재시도 승인이나 기존 BLOCK 해제로 확대하지 않음 / 이전 NOT_RUN·재시도 보류 기록은 당시 이력으로 보존 / 기존 미커밋 문서 4개·예산·SPENT·마지막 확인값 UNUSED·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 이번 문서화에서 추가 조회·설정 변경·새 Terminal 셸·재시도·모델·외부 통신·스테이징·커밋 없음"
+    }
+  },
+  "D_stage_accepted_comparison": {
+    "basis": "User-accepted conversation-only comparison and review of previously provided observations; no new query or independent reproduction",
+    "status": "CONVERSATION_COMPARISON_PERFORMED",
+    "inputs": [
+      {
+        "id": "S",
+        "fact": "Terminal Downloads 표시 켜짐·전체 디스크 접근 표시 꺼짐",
+        "limit": "실패 당시 설정·실제 프로세스 접근 권한 입증 아님"
+      },
+      {
+        "id": "P",
+        "fact": "chdir 성공; getcwd는 Downloads까지 성공·dev부터 실패",
+        "limit": "관찰된 경계이며 dev 자체 권한 원인 입증 아님"
+      },
+      {
+        "id": "N",
+        "fact": "dev에서 /bin/pwd -P도 실패",
+        "limit": "Python만의 문제로 설명하기 부족하나 특정 정책 원인은 미확정"
+      },
+      {
+        "id": "M",
+        "fact": "Downloads 모드 700·삭제 거부 ACL; dev 모드 755·추가 ACL 미출력",
+        "limit": "모드·삭제 거부·확장 속성만으로 getcwd 거부를 설명하지 않음"
+      },
+      {
+        "id": "A",
+        "fact": "Apple Terminal 계층에서 kiro-cli-term 표기 관찰",
+        "limit": "개입 방식·보안 문맥·인과관계 미확인"
+      },
+      {
+        "id": "C",
+        "fact": "분리된 셸 비교 결과 없음",
+        "limit": "다른 셸 부재·새 셸 접근 가능성 입증 아님"
+      }
+    ],
+    "hypothesis_classes": [
+      {
+        "category": "설명하기 부족함",
+        "claim": "Python import 문제만으로 전체 실패 설명; 현재 Downloads 표시가 꺼져 있다는 설명",
+        "input_ids": [
+          "P",
+          "N",
+          "S"
+        ]
+      },
+      {
+        "category": "가능하지만 미검증",
+        "claim": "실행 문맥·경로 접근 정책 또는 파일시스템 접근 조건의 영향",
+        "input_ids": [
+          "P",
+          "M",
+          "A"
+        ]
+      },
+      {
+        "category": "구분할 자료 없음",
+        "claim": "실패 당시 적용 권한·전체 디스크 접근 필요성·Kiro 인과적 개입·분리된 셸에서의 차이",
+        "input_ids": [
+          "S",
+          "A",
+          "C"
+        ]
+      }
+    ],
+    "probability_ranking": false,
+    "simultaneous_observations_assumed": false,
+    "getcwd_cause": "UNCONFIRMED",
+    "permission_necessity": "UNCONFIRMED",
+    "official_completion_gate": "NOT_RUN",
+    "reported_verdict": "BLOCK",
+    "new_official_gate_verdict": false,
+    "followup_candidate": "C_SEPARATE_SHELL_COMPARISON",
+    "C_status": "DEFERRED_PENDING_START_PRECONDITION_AND_SEPARATE_APPROVAL",
+    "C_authorized": false,
+    "commit_retry": "DEFERRED_UNTIL_CAUSE_OR_EXECUTION_CONDITIONS_CHANGE_CONFIRMED",
+    "permission_change_recommended": false,
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "historical_states": "PRESERVED",
+    "import": "NOT_RUN",
+    "corpus": "NOT_RUN",
+    "surface": {
+      "d_comparison_status": "D단계 수용: 기존 대화의 S·P·N·M·A·C 결과만 대조 / 추가 조회·독립 재현 없음 / 서로 다른 시점의 관찰을 동일 시점 상태나 독립 표본 증가로 묶지 않음",
+      "d_comparison_facts": "S: Downloads 표시 켜짐·전체 디스크 접근 표시 꺼짐 / P: chdir 성공·getcwd는 Downloads까지 성공하고 dev부터 실패 / N: dev의 /bin/pwd -P도 실패 / M: Downloads 700·삭제 거부 ACL, dev 755·추가 ACL 미출력 / A: Apple Terminal 계층의 kiro-cli-term 표기 / C: 분리된 셸 비교 결과 없음",
+      "d_comparison_hypotheses": "가설 확률 순위 없음 / 설명하기 부족함: Python import만의 문제[P·N], 현재 Downloads 꺼짐 설명[S] / 가능하지만 미검증: 실행 문맥·경로 정책·접근 조건[P·M·A] / 구분할 자료 없음: 실패 당시 권한·전체 디스크 접근 필요성·Kiro 인과 개입·분리 셸 차이[S·A·C]",
+      "d_comparison_limits": "getcwd 원인·권한 필요성 미확인 / 표시 상태·삭제 거부 ACL·프로세스 이름을 원인 확정으로 확대하지 않음 / D 대화 내 분석 수행과 공식 OMC 완료 게이트 미실행을 구분 / D 보고상 BLOCK은 분석 오류나 새 공식 게이트 판정 아님",
+      "d_comparison_hold": "후속 후보 C단계는 시작 전제 확인·별도 승인이 필요하므로 현재 보류 / 권한 변경·커밋 재시도 권고 아님 / 원인·실행 조건 변화 전 커밋 재시도 보류 유지 / 기존 미커밋 문서 4개·예산·SPENT·마지막 UNUSED·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 이번 문서화에서 추가 진단·설정 변경·새 셸·모델·외부 통신·스테이징·커밋 없음"
+    }
+  },
+  "C0_accepted_procedure": {
+    "basis": "User-accepted procedure and report form review only; no actual observation report supplied",
+    "procedure": "APPROVED",
+    "report_form": "APPROVED",
+    "actual_observations": "NOT_OBTAINED",
+    "automatic_command_presence": "UNCONFIRMED",
+    "automatic_command_enabled": "UNCONFIRMED",
+    "startup_safety": "UNCONFIRMED",
+    "getcwd_cause": "UNCONFIRMED",
+    "permission_necessity": "UNCONFIRMED",
+    "secret_values": "EXCLUDED_FROM_REPORT",
+    "C1_authorized": false,
+    "C2_authorized": false,
+    "C3_authorized": false,
+    "official_completion_gate": "NOT_RUN",
+    "screen_validation": "NOT_RUN",
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "historical_states": "PRESERVED",
+    "import": "NOT_RUN",
+    "corpus": "NOT_RUN",
+    "surface": {
+      "c0_procedure_status": "C0 Terminal 프로파일·시작 방식 표시 확인 절차 및 보고 양식 승인 수용 / 실제 관찰 결과 미확보 / 절차 승인과 관찰 완료를 구분",
+      "c0_report_contract": "자동 명령 입력값 존재·비어 있음과 활성·비활성을 별도로 보고 / 항목 없음·확인 불가 구분 / 명령·인자·환경변수·실제 작업 경로 등 비밀값 제외 / 프로파일은 P1 등으로 익명화 가능",
+      "c0_start_boundary": "시작 안전성·getcwd 원인·권한 필요성 미확인 / 정적 표시 확인은 실제 차단 검증 아님 / C1 로컬 확인·C2 시작 전제 평가·C3 새 셸 비교는 각각 별도 승인 필요 / 이번 승인으로 조회·새 셸·커밋 재시도를 허용하지 않음",
+      "c0_preservation": "기존 미커밋 문서 4개·예산·SPENT·마지막 확인값 UNUSED·BLOCK·판단·각 한계·원출력·import·corpus NOT_RUN 유지 / 화면 검증 미완료·공식 완료 게이트 미실행 유지 / 이번 문서화에서 추가 진단 조회·설정 변경·새 셸·재시도·모델·외부 통신·스테이징·커밋 없음"
+    }
+  },
+  "C1_accepted_precondition_stop": {
+    "basis": "User-accepted conversation-only precondition assessment and review; no independent runtime query",
+    "status": "NOT_RUN",
+    "preconditions": "UNCONFIRMED",
+    "command_calls": 0,
+    "files_read": 0,
+    "partial_execution": false,
+    "overall_time": "NOT_MEASURED",
+    "tool_time": "NOT_APPLICABLE_NO_EXECUTION",
+    "time_limit_compliance": "NOT_VERIFIED",
+    "official_gate": "NOT_RUN",
+    "startup_safety": "UNCONFIRMED",
+    "getcwd_cause": "UNCONFIRMED",
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "documentation_build": "NOT_RUN",
+    "html_update": "DIRECT_DOCUMENT_EDIT_NOT_REBUILD",
+    "screen_validation": "NOT_RUN",
+    "historical_states": "PRESERVED",
+    "surface": {
+      "c1_stop_status": "2026-11-01 C1 실행 전제 대화 내 확인 결과 수용 / 전제 미확보로 명령 0회·파일 열람 0건·NOT_RUN 중단 / 부분 수행 후 중단 아님",
+      "c1_stop_scope": "위 0회·0건은 해당 C1 절차 기준 / 시작 파일 동작·시작 안전성·getcwd 원인 미확인 / C1 실행 보류·C2 및 C3 별도 승인 유지",
+      "c1_stop_time": "C1 전체 경과 시간 미측정 / 도구 시간은 실행 없어 해당 없음 / 0초 측정이나 600초 상한 준수로 해석하지 않음",
+      "c1_stop_gate": "C1 공식 게이트 미실행 / 대화 내 중단 보고·검토와 공식 판정 기록을 구분 / 이번 문서 갱신도 빌드 명령·공식 게이트·화면 검증 미실행",
+      "c1_stop_preservation": "기존 미커밋 문서·예산·SPENT·마지막 확인값 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 유지 / 추가 진단·새 셸·명령 실행·모델·외부 통신·스테이징·커밋 없음"
+    }
+  },
+  "C1_accepted_tool_description_review": {
+    "basis": "User-accepted review of tool description supplied in conversation; no runtime probe or target access",
+    "stage1_review": "PERFORMED_DESCRIPTION_ONLY",
+    "reviewed_tool": "node_repl.js",
+    "capabilities": {
+      "timeout_parameter": "SUPPORTED_BY_DESCRIPTION",
+      "shell_free_file_access": "UNCONFIRMED",
+      "read_time_ancestor_and_target_no_follow": "UNCONFIRMED",
+      "per_file_and_total_byte_limit": "UNCONFIRMED",
+      "actual_stop_and_cleanup": "UNCONFIRMED"
+    },
+    "explicitly_unsupported": [],
+    "stage2_actual_read": "NOT_RUN",
+    "target_file_reads": 0,
+    "target_metadata_accesses": 0,
+    "test_calls": 0,
+    "partial_execution": false,
+    "review_elapsed": "NOT_MEASURED",
+    "runtime_verification": "NOT_RUN",
+    "side_effect_acceptance": false,
+    "stage2_authorization": false,
+    "official_gate": "NOT_RUN",
+    "official_verdict_record_created": false,
+    "documentation_build": "NOT_RUN",
+    "html_update": "DIRECT_DOCUMENT_EDIT_NOT_REBUILD",
+    "screen_validation": "NOT_RUN",
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "historical_states": "PRESERVED",
+    "surface": {
+      "c1_support_stage": "2026-11-01 1차 도구 지원 설명 검토 수행 수용 / 대화에 제공된 node_repl.js 설명만 검토 / 시험 호출·대상 접근 없이 2차 C1 실제 열람은 NOT_RUN 중단",
+      "c1_support_timeout": "timeout_ms 인자 지정은 설명상 지원 / 실제 읽기 중단·하위 작업 종료·자원 정리 보장 미확인 / 전체 시간 상한 준수·실제 동작 검증 근거 아님",
+      "c1_support_unknown": "파일 접근 경로 전체의 셸 미사용·읽기 시점의 상위 경로 및 대상 링크 미추적·파일당 및 누적 바이트 제한은 설명상 미확인 / 명시적 미지원 확인 항목 없음 / 미기재를 지원이나 미지원으로 단정하지 않음",
+      "c1_support_stop": "필수 보장 미확보로 C1 실제 열람 NOT_RUN 유지 / 부분 수행 후 중단 아님 / 설명 검토는 부수효과 수용·2차 열람 승인·시작 안전성 확인 아님 / 필수 지원 근거 확보 전 실제 열람 보류",
+      "c1_support_boundary": "1차 검토 시간 미측정 / 대상 파일·메타데이터 접근 및 시험 호출 0회는 해당 지원 설명 검토 절차 기준 / 공식 게이트·별도 판정 기록 생성 미실행 / 이번 HTML은 직접 편집하며 빌드·화면 검증 미실행 / 기존 미커밋 문서·예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 유지"
+    }
+  },
+  "A1_accepted_description_stop": {
+    "basis": "User-accepted conversation-only A1 assessment and review; no new source or runtime probe",
+    "A1": "PERFORMED_DESCRIPTION_ONLY",
+    "new_API_or_feature_evidence": "NOT_OBTAINED",
+    "implementation_location": "UNCONFIRMED",
+    "current_tool_version_binding": "UNCONFIRMED",
+    "material_absence_conclusion": false,
+    "unsupported_conclusion": false,
+    "repeated_search": false,
+    "A2": "NOT_RUN",
+    "C1_actual_read": "NOT_RUN",
+    "partial_execution": false,
+    "review_elapsed": "NOT_MEASURED",
+    "official_gate": "NOT_RUN",
+    "official_verdict_record_created": false,
+    "documentation_build": "NOT_RUN",
+    "html_update": "DIRECT_DOCUMENT_EDIT_NOT_REBUILD",
+    "screen_validation": "NOT_RUN",
+    "historical_states": "PRESERVED",
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "surface": {
+      "a1_review_status": "2026-11-01 A1 대화 내 설명 검토 수행 수용 / 새 API 식별자·기능 설명의 추가 근거 미확보 / 같은 설명의 반복 탐색 없이 종료",
+      "a1_location_binding": "최소 구현의 정확한 로컬 경로 미확정 / 해당 구현과 현재 도구·버전의 결속 미확인 / 위치 미확정을 자료 부재·기능 미지원으로 단정하지 않음",
+      "a1_prior_evidence": "기존 timeout_ms 설명은 인자 지원에 관한 기존 근거 / 실제 읽기 중단·자원 정리 보장의 새 근거 아님 / 설명 검토와 실제 동작 검증을 구분",
+      "a1_stop_scope": "A1 설명 검토는 수행 / A2 구현 조회·C1 실제 열람은 NOT_RUN / 부분 수행 후 중단 아님 / 해당 A1 절차에서 실제 조회·시험·변경·새 셸·명령 실행 없음 / 새 설명이나 명시적 구현 위치 근거 제공 전 A2·C1 보류",
+      "a1_preservation": "A1 검토 시간 미측정·공식 게이트 및 별도 판정 기록 생성 미실행 / 이번 HTML은 직접 편집·빌드 및 화면 검증 미실행 / 기존 미커밋 문서·예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 유지"
+    }
+  },
+  "C1_accepted_official_search_stop": {
+    "basis": "User-accepted prior web call/return and review; no new network or diagnostic query",
+    "search_status": "PERFORMED_THEN_STOPPED",
+    "search_queries": 2,
+    "body_acquisition_requests": 2,
+    "internal_network_requests": "UNCONFIRMED",
+    "separate_retry_requested": false,
+    "internal_retry_behavior": "UNCONFIRMED",
+    "redirect": {
+      "requested_host": "developers.openai.com",
+      "returned_host": "learn.chatgpt.com",
+      "outside_allowlist": true,
+      "prevented_before_access": false,
+      "stopped_after_recognition": true,
+      "redirected_content_used_as_evidence": false
+    },
+    "scope_compliance": "NOT_APPROVED_PENDING_ACCESS_BOUNDARY",
+    "required_evidence": "NOT_OBTAINED",
+    "material_absence_conclusion": false,
+    "unsupported_conclusion": false,
+    "partial_elapsed_seconds_approx": 8.5,
+    "elapsed_scope": "THROUGH_ACQUISITION_END_ONLY",
+    "overall_elapsed": "UNCONFIRMED",
+    "time_limit_compliance": "NOT_VERIFIED",
+    "A2": "NOT_RUN",
+    "C1_actual_read": "NOT_RUN",
+    "further_search": "DEFERRED_UNTIL_ACCESS_BOUNDARY_REDEFINED",
+    "official_gate": "NOT_RUN",
+    "official_verdict_record_created": false,
+    "documentation_build": "NOT_RUN",
+    "html_update": "DIRECT_DOCUMENT_EDIT_NOT_REBUILD",
+    "screen_validation": "NOT_RUN",
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "historical_states": "PRESERVED",
+    "surface": {
+      "official_search_status": "2026-11-01 공식 문서 탐색 수행 후 중단 수용 / 검색 질의 2개·본문 취득 요청 2회 / C1 필수 보장 근거 미확보 / 위치 미확정을 자료 부재·기능 미지원으로 단정하지 않음",
+      "official_search_redirect": "허용한 developers.openai.com 요청에서 허용 목록 밖 learn.chatgpt.com으로 자동 리디렉션 발생 / 사전 차단하지 못함 / 인지 후 추가 취득 중단·해당 내용을 근거에서 제외 / 사후 중단이 이미 발생한 범위 밖 접근을 취소하지 않음",
+      "official_search_counts": "검색 질의 2개·본문 취득 요청 2회는 호출 인자 기준 / 내부 네트워크 요청 수 미확인 / 별도 자동 재시도 요청 없음·도구 내부 재시도 동작 미확인 / 허용 출처만 접근했다는 준수 판정 보류",
+      "official_search_timing": "취득 종료까지 부분 경과 약 8.5초 / 최종 보고 포함 전체 시간 미확인 / 600초 상한 준수로 보고하지 않음",
+      "official_search_hold": "공식 문서 탐색은 수행 후 중단 / A2 구현 조회·C1 실제 열람은 NOT_RUN 유지 / 접근 경계 재확정 전 추가 탐색 보류 / 기존 미커밋 문서·예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 유지 / 이번 HTML 직접 편집·빌드·공식 게이트·화면 검증 미실행"
+    }
+  },
+  "C1_accepted_fixed_readme_result": {
+    "basis": "User-accepted fixed README call/return and conversation-only review; no new retrieval",
+    "status": "ACQUISITION_PERFORMED_EVIDENCE_NOT_OBTAINED",
+    "requested_url": "https://github.com/openai/codex/blob/main/README.md",
+    "returned_url": "https://github.com/openai/codex/blob/main/README.md",
+    "returned_url_matches": true,
+    "unexpected_redirect_reported": false,
+    "intermediate_redirects": "UNCONFIRMED",
+    "body_requests": 1,
+    "search_queries": 0,
+    "separate_retries": 0,
+    "internal_requests": "UNCONFIRMED",
+    "internal_retries": "UNCONFIRMED",
+    "partial_elapsed_seconds_approx": 2.16,
+    "elapsed_scope": "REQUEST_START_THROUGH_RETURN",
+    "overall_elapsed": "NOT_MEASURED",
+    "time_limit_compliance": "NOT_VERIFIED",
+    "commit_identity": "UNCONFIRMED",
+    "current_tool_binding": "UNCONFIRMED",
+    "required_evidence": "NOT_OBTAINED_IN_RETURNED_BODY",
+    "material_absence_conclusion": false,
+    "unsupported_conclusion": false,
+    "links_followed": 0,
+    "A2": "NOT_RUN",
+    "C1_actual_read": "NOT_RUN",
+    "further_retrieval": "DEFERRED_PENDING_NEW_EVIDENCE_AND_SEPARATE_APPROVAL",
+    "official_gate": "NOT_RUN",
+    "official_verdict_record_created": false,
+    "documentation_build": "NOT_RUN",
+    "html_update": "DIRECT_DOCUMENT_EDIT_NOT_REBUILD",
+    "screen_validation": "NOT_RUN",
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "historical_states": "PRESERVED",
+    "surface": {
+      "fixed_readme_status": "2026-11-01 고정 README 취득 결과 수용 / 본문 요청 1회·검색 0회·별도 재시도 0회 / 이번 본문에서 C1 필수 지원 근거 미확보 / 자료 부재·기능 미지원으로 단정하지 않음",
+      "fixed_readme_source": "승인 URL과 반환 URL은 https://github.com/openai/codex/blob/main/README.md 로 일치 / 예상 밖 리디렉션은 반환 결과에 표시되지 않음 / 내부 요청·중간 이동·내부 재시도가 전혀 없었다는 증거는 아님 / 링크 미추적",
+      "fixed_readme_time": "요청 시작부터 반환까지 부분 경과 약 2.16초 / 내부 요청 수·내부 재시도·최종 보고 포함 전체 시간 미확인 / 600초 상한 준수 검증 아님",
+      "fixed_readme_binding": "main은 변경 가능한 참조 / 취득한 커밋 식별 정보·현재 도구와 구현의 결속 미확인 / README 취득 수행과 A2 구현 조회·C1 실제 열람 NOT_RUN을 구분 / 새 근거와 별도 승인 전 추가 취득 보류",
+      "fixed_readme_preservation": "기존 미커밋 문서·예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 유지 / 과거 허용 밖 리디렉션 이력은 소급 해소하지 않음 / 이번 HTML 직접 편집·빌드·공식 게이트·화면 검증 미실행 / 이번 문서화에서 추가 진단·통신·시험·명령 실행·스테이징·커밋 없음"
+    }
+  },
+  "C1_accepted_github_code_search_stop": {
+    "basis": "User-accepted prior GitHub code-search call/return and conversation review; no new retrieval",
+    "status": "SEARCH_PERFORMED_STOPPED_ON_AUTH_REQUIREMENT",
+    "first_query": "repo:openai/codex node_repl",
+    "first_query_status": "REQUESTED_AUTH_REQUIRED",
+    "second_query": "repo:openai/codex nodeRepl",
+    "second_query_status": "NOT_RUN",
+    "search_requests": 1,
+    "search_result_page_acquisitions": 1,
+    "candidates": "NOT_OBTAINED",
+    "file_body_reads": 0,
+    "separate_retries": 0,
+    "authentication_performed": false,
+    "alternative_search": false,
+    "returned_host": "github.com",
+    "returned_path": "/search",
+    "query_notation_normalized": true,
+    "internal_requests": "UNCONFIRMED",
+    "intermediate_redirects": "UNCONFIRMED",
+    "internal_retries": "UNCONFIRMED",
+    "partial_elapsed_seconds_approx": 3.09,
+    "elapsed_scope": "REQUEST_START_THROUGH_RETURN",
+    "overall_elapsed": "NOT_MEASURED",
+    "time_limit_compliance": "NOT_VERIFIED",
+    "current_tool_binding": "UNCONFIRMED",
+    "code_absence_conclusion": false,
+    "material_absence_conclusion": false,
+    "unsupported_conclusion": false,
+    "A2": "NOT_RUN",
+    "C1_actual_read": "NOT_RUN",
+    "further_requests": "DEFERRED_PENDING_NEW_EVIDENCE_OR_SEPARATE_SEARCH_APPROVAL",
+    "official_gate": "NOT_RUN",
+    "official_verdict_record_created": false,
+    "documentation_build": "NOT_RUN",
+    "html_update": "DIRECT_DOCUMENT_EDIT_NOT_REBUILD",
+    "screen_validation": "NOT_RUN",
+    "documents": "UNCOMMITTED_CHANGES_PRESERVED",
+    "historical_states": "PRESERVED",
+    "surface": {
+      "github_code_stop_status": "2026-11-01 GitHub 코드 검색 1회 후 인증 요구 중단 수용 / 첫 질의 repo:openai/codex node_repl 요청에서 로그인 요구 반환 / 로그인·인증 없이 종료 / 두 번째 질의 repo:openai/codex nodeRepl NOT_RUN",
+      "github_code_stop_counts": "검색 요청 1회·검색 결과 페이지 취득 1회 / 후보 미확보·파일 본문 열람 0회·별도 재시도 0회 / 페이지 취득과 파일 본문 열람을 구분 / 다른 검색 방식으로 대체하지 않음",
+      "github_code_stop_limits": "반환 위치 github.com/search와 질의 표기 정규화 확인 / 내부 요청 수·중간 이동·내부 재시도 미확인 / 요청부터 반환까지 부분 경과 약 3.09초·최종 보고 포함 전체 시간 미확인 / 600초 준수 검증 아님",
+      "github_code_stop_hold": "후보 미확보를 코드 부재·자료 부재·기능 미지원으로 단정하지 않음 / 현재 도구 결속 미확인·A2 구현 조회 및 C1 실제 열람 NOT_RUN 유지 / 새 근거 또는 별도 탐색 승인 전 추가 요청 보류",
+      "github_code_stop_preservation": "기존 미커밋 문서·예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN 보존 / 이번 HTML 직접 편집·빌드·공식 게이트·화면 검증 미실행 / 이번 문서화에서 추가 진단·통신·인증·시험·명령 실행·스테이징·커밋 없음"
+    }
+  },
+  "C1_accepted_directory_listing_stop": {
+    "basis": "User-accepted prior fixed listing call/return and conversation-only review; no new diagnosis or network",
+    "url": "https://github.com/openai/codex/tree/main/codex-rs",
+    "status": "REQUEST_PERFORMED_STOPPED_ON_RETURNED_LOADING_ERROR",
+    "listing_requests": 1,
+    "partial_listing_returned": true,
+    "immediate_entries_reviewed": 0,
+    "candidates_selected": 0,
+    "candidate_type_classification": "NOT_PERFORMED",
+    "child_listing_requests": 0,
+    "file_body_requests": 0,
+    "search_requests": 0,
+    "separate_retries": 0,
+    "internal_requests": "UNCONFIRMED",
+    "internal_retries": "UNCONFIRMED",
+    "partial_elapsed_seconds_approx": 2.05,
+    "overall_elapsed": "NOT_MEASURED",
+    "time_limit_compliance": "NOT_VERIFIED",
+    "current_tool_binding": "UNCONFIRMED",
+    "A2": "NOT_RUN",
+    "C1_actual_read": "NOT_RUN",
+    "material_absence_conclusion": false,
+    "unsupported_conclusion": false,
+    "official_gate": "NOT_RUN",
+    "surface": {
+      "listing_stop_status": "2026-11-01 고정 codex-rs 공개 목록 요청 1회 후 반환 페이지의 로딩 오류 표시로 중단 / 일부 목록은 반환됐으나 오류 중단 기준에 따라 직하 항목 검토·후보 선별 0개 / 목록이 비어 있었다는 뜻 아님",
+      "listing_stop_counts": "목록 요청 1회 / 하위 목록·파일 본문·검색·별도 재시도 각 0회 / 후보 파일·디렉터리·종류 미확인 판정 모두 미수행 / 대체 URL·범위 확대 없음",
+      "listing_stop_time": "요청부터 반환까지 부분 경과 약 2.05초 / 내부 요청 수·내부 재시도·최종 보고 포함 전체 시간 미확인 / 600초 상한 준수 검증 아님",
+      "listing_stop_hold": "후보 미확보를 코드 부재·자료 부재·기능 미지원으로 단정하지 않음 / 현재 도구 결속 미확인·A2 구현 조회 및 C1 실제 열람 NOT_RUN 유지 / 새 근거 또는 별도 승인 전 추가 요청 보류",
+      "listing_stop_history": "기존 예산·SPENT·마지막 UNUSED·BLOCK·원출력·판단·각 한계·import·corpus NOT_RUN과 과거 리디렉션·인증 중단 이력 보존 / 원본 미커밋 문서·소스 변경을 보존한 격리 문서 작업 / 과거 HTML 직접 편집·빌드·공식 게이트·화면 검증 미실행 기록은 당시 이력으로 유지"
+    }
+  },
+  "isolated_documentation_update": {
+    "date": "2026-11-01",
+    "scope": [
+      "docs/roadmap.md",
+      "docs/dashboard/README.md",
+      "docs/dashboard/source-data.json",
+      "docs/dashboard/index.html"
+    ],
+    "work_class": "document_only",
+    "original_changes": "PRESERVED_OUTSIDE_ISOLATED_CHECKOUT",
+    "html_update": "REGENERATED_IN_ISOLATED_CHECKOUT",
+    "historical_direct_edit_and_unrun_records": "PRESERVED_AS_HISTORICAL",
+    "screen_validation": "NOT_RUN",
+    "no_new_diagnostic_or_network": true
+  },
+  "documentation_resume_20261102": {
+    "date": "2026-11-02",
+    "basis": "대화 내 수행·반환 결과와 수용된 리뷰; 진단·모델 재실행 없음",
+    "facts": {
+      "목표": "로드맵·대시보드 최신화로 복귀. omc_kit 설치본 조사는 별도 보류; 원본 문서 반영·이관은 미수행.",
+      "격리 준비": "/private/tmp/research-auto-access-synthetic-001에 비공식 준비 파일 3개 생성. 하위 21개 사례·단계별 도구 호출 1회·프로세스 최대 43개·동시 3개. 구현 NOT_CREATED·OMC 등록·RED·시험·TDD 게이트 NOT_RUN.",
+      "명세 보완": "UTF-16 전체 4,000단위=도구 반환 2,000+진행 500+종료 보고 1,500. 단계당 한 번 초기화. 전체 600초·540초 작업 중단 우선. 미시작 NOT_RUN·진행 중 STOPPED·미확인 UNVERIFIED이면 전체 통과 금지. 실제 합성 시험 아님.",
+      "실행 전제": "격리 OMC 고정 5개 파일 확인은 접근 전제 미확보로 NOT_RUN·취득 0바이트. 실제 지원·강제 제한 미확인; 당시 전체 시간·통합 출력 미측정.",
+      "Python 로딩": "문서 갱신 Guard는 -I 로컬 omc_state import 실패로 분류 게이트 미도달. import 경로 추가 이전 import와 파서 default=Path.cwd() 평가를 정적으로 확인. import 성공·분류 통과·문서 검증은 별개.",
+      "정적 연결": "추가 import 두 곳은 snapshot 함수·조건문 내부. record_session 본문 완결·직접 snapshot 호출 미발견; 조건부 보조 함수 이후 간접 연결 미확정. 세션·공유 상태 쓰기와 이전 세션 변경 호출 관찰은 실제 실행이 아님.",
+      "문서 위치": "orchestration_usage.md 고정 경로 부재로 본문 0바이트·custody 코드 미열람. docs 제한 검색 28항목·3디렉터리, 저장소 제한 검색 441항목·30디렉터리·표식 29회·제외 23개에서 후보 0건. 허용 범위 완료이며 전체 부재·공식 지원 부재 아님.",
+      "승인 경계": "이전 격리 체크아웃 검색 376항목·29디렉터리·후보 0건은 사전 범위 승인 없이 수행한 관찰 이력. 소급 승인·공식 검증 증거·후속 실행 권한으로 사용하지 않음.",
+      "설치 출처": "사용자가 omc_kit 설치 출처를 명시. 현재 VERSION 0.6.2·설치 안내 확인. Guard 쌍 17,481바이트 전체·SHA-256 일치. 설치 당시 버전·전체 설치본 일치·현재 작업의 공식 격리 지원 미확인. 설치·업데이트 실행 없음.",
+      "보존": "기존 CLI SPENT·마지막 확인 UNUSED·판단·HOLD·품질 미평가·역사적 BLOCK·원출력·import/corpus NOT_RUN 유지. 과거 기록 소급 복구 없음. 현재 문서의 정합성 검사는 과거 실행·품질 검증을 대신하지 않음.",
+      "현재 작업": "04e8c807 기준 새 격리 문서 작업. 원본 HEAD·인덱스·미커밋 변경 보존. 현재 작업 Guard·CONTRACT 통과와 과거 공식 게이트 NOT_RUN을 구분. 원본 반영·이관·push 없음. 과거 화면 검증 미완료 유지; 이번 화면 검증은 별도 보고."
+    },
+    "historical_budgets_requeried": false,
+    "historical_records_repaired": false,
+    "original_transfer": "NOT_RUN",
+    "synthetic_tests": "NOT_RUN",
+    "screen_verification": "NOT_RUN"
+  },
+  "original_application_20261102": {
+    "kind": "documented_current_worktree_state_not_omc_receipt",
+    "historical_source_commit": "e7dfb527110a4606ddc28c3d471bfb46aeb1a5bc",
+    "application": "APPLIED_TO_WORKTREE",
+    "original_commit": "NOT_RUN",
+    "official_omc_completion": "NOT_RUN",
+    "omc_gate": "BLOCK_PRESERVED",
+    "build": "NOT_RUN",
+    "screen": "NOT_RUN",
+    "surface": {
+      "application": "현재 상태: 원본 작업 트리에 문서 4개 반영 완료. e7dfb527 전체 바이트 일치는 반영 직후 확인한 기준이며, 이번 상태 문구 보완 후에는 해당 커밋과 바이트가 달라진다.",
+      "history": "이전 documentation_resume_20261102의 원본 반영 미수행·original_transfer NOT_RUN은 격리 커밋 작성 당시 이력으로 보존한다. 현재 상태는 이 원본 반영 추가 기록을 따른다.",
+      "preservation": "기존 소스·테스트·.gitignore 변경과 HEAD·인덱스는 보존. 예산·판단·HOLD·역사적 BLOCK·원출력·import/corpus NOT_RUN 유지.",
+      "verification": "현재 문서 상태 보완은 JSON·Markdown·HTML 직접 편집과 정적 정합성 대조다. 이번 빌드·화면 검증은 NOT_RUN이며 과거 격리 HTML 빌드 PASS와 구분한다.",
+      "governance": "원본 OMC document_only 분류 게이트 BLOCK 유지. 원본 반영의 공식 OMC 완료·승인 receipt는 생성하지 않았으며 격리 커밋의 MATCH로 대체하지 않는다.",
+      "git": "격리 커밋 e7dfb527은 유지. 원본 문서 4개는 미커밋·미스테이징이며 원본 추가 커밋·push는 NOT_RUN."
+    }
+  },
+  "archived_next_steps_before_manual_candidate_review": [
+    {
+      "lane": "원본 현재 상태",
+      "title": "문서 반영 완료·OMC BLOCK·미커밋 구분",
+      "detail": "원본 문서 4개 반영 완료. 아래 격리 당시 미반영·NOT_RUN 기록은 과거 이력이다. OMC BLOCK·빌드 및 화면 검증 NOT_RUN·원본 미커밋 유지."
+    },
+    {
+      "lane": "현재 문서 작업과 원본 분리",
+      "title": "격리 문서 최신화·정합성 확인 후 로컬 커밋",
+      "detail": "04e8c807 기준 새 격리 문서 작업. 원본 HEAD·인덱스·미커밋 변경 보존. 현재 작업 Guard·CONTRACT 통과와 과거 공식 게이트 NOT_RUN을 구분. 원본 반영·이관·push 없음. 과거 화면 검증 미완료 유지; 이번 화면 검증은 별도 보고."
+    },
+    {
+      "lane": "실행·품질 보류 유지",
+      "title": "합성 준비와 실제 실행을 구분",
+      "detail": "/private/tmp/research-auto-access-synthetic-001에 비공식 준비 파일 3개 생성. 하위 21개 사례·단계별 도구 호출 1회·프로세스 최대 43개·동시 3개. 구현 NOT_CREATED·OMC 등록·RED·시험·TDD 게이트 NOT_RUN. 사용자가 omc_kit 설치 출처를 명시. 현재 VERSION 0.6.2·설치 안내 확인. Guard 쌍 17,481바이트 전체·SHA-256 일치. 설치 당시 버전·전체 설치본 일치·현재 작업의 공식 격리 지원 미확인. 설치·업데이트 실행 없음."
+    },
+    {
+      "lane": "커밋 사전 확인 중단 수용",
+      "title": "getcwd 권한 오류·커밋 NOT_RUN 유지",
+      "detail": "사용자 제공 출력에서 import 성공 뒤 getcwd EPERM 재현. Git·OMC·스테이징·커밋 전 중단됐으며 승인된 4개 문서는 미커밋으로 보존한다. 원인 미확인·기존 상태 유지; 추가 진단·재시도·새 셸 시작으로 자동 진행하지 않는다."
+    },
+    {
+      "lane": "새 Terminal 셸 비교 중단 수용",
+      "title": "시작 전제 미확인·새 셸 0개·비교 NOT_RUN 유지",
+      "detail": "시작 부수효과의 허용 범위 충족 근거가 없어 새 셸·계층 확인·경로 비교를 진행하지 않았다. 전체·명령 시간 미측정·공식 게이트 미실행. 추가 조회·새 셸 시작·실행은 자동 진행하지 않으며 기존 상태를 보존한다."
+    },
+    {
+      "lane": "L단계 미실행 중단 수용",
+      "title": "사전 차단 근거 미확보·CLI 0회 유지",
+      "detail": "무통신·쓰기 사전 차단 근거 미확보로 도움말도 NOT_RUN. 실제 차단 기능 부재로 단정하지 않는다. 추가 근거 확인·실행은 별도 승인 대상이며 자동 진행하지 않는다. 기존 예산·BLOCK·판단·원출력·NOT_RUN 유지."
+    },
+    {
+      "lane": "ECG v2 로컬 진단 수용",
+      "title": "현재 문구 일치와 당시 전달 미확인 구분",
+      "detail": "ECG v2 고정10개 파일 진단 수용: 현재 AGENTS 문구 일치만 확인; 당시 로딩·전달·사전 차단 근거 미확인. 진단 OMC 게이트 미실행·보고상 BLOCK은 새 공식 판정과 구분. 기존 예산·판단 보존; 후속 조회·실행 자동 진행 없음."
+    },
+    {
+      "lane": "ECG v2 실행 무효 수용",
+      "title": "SPENT·품질 미평가 유지 / 자동 재시도 없음",
+      "detail": "실제 도구 실행의 사후 감지로 무효이며 사전 차단 성공으로 보지 않는다. v1 마지막 UNUSED·기존 BLOCK·판단·원출력을 보존한다. 추가 조사·실행은 별도 승인 전 진행하지 않는다."
+    },
+    {
+      "lane": "ECG 추가 확인 수용",
+      "title": "작성자 우회 수행 보고와 독립 검증 구분",
+      "detail": "ECG 작업 때문에 별도 코드 작성·보간 후 수동 간격 계산 및 마스킹을 했다는 작성자 보고 / 단순 기능 제안과 구분 / 정량적 업무 손실·반복 빈도·지속 기간 미확인 / 남은 미확인 구간·전체 자료의 근거 부재 단정 없음 / 기존 BLOCK 유지·후속 실행은 별도 승인."
+    },
+    {
+      "lane": "ECG 준비 중단 수용",
+      "title": "제한 근거 미확인·조건부 준비 미진입 유지",
+      "detail": "현재 범위는 종료한다. 미출력 부분의 근거 부재를 단정하거나 기존 ECG 후보 판단을 변경하지 않는다. 추가 열람·준비·초기화·실행은 자동 진행하지 않고 별도 승인 대상이다."
+    },
+    {
+      "lane": "단건 결과 수용",
+      "title": "#66574 정상 보류·카드 HOLD 유지",
+      "detail": "실제 출력 1건을 확보했다. 문서 예제 문제와 로컬 수정·출력 확인은 보고되지만 실제 업무 손실·업무상 우회 부담은 미확인이다. 추가 실행·초기화는 자동 진행하지 않으며 별도 승인 대상이다."
+    },
+    {
+      "lane": "배포 준비 차단",
+      "title": "품질 게이트 계약 조사와 범위 승인",
+      "detail": "기존 benchmark_maintenance 변경을 보존한 읽기 전용 조사로 명령·외부 호출 조건·환경·비밀값 검사 정책을 확정한다. 설정 적용·품질 실행·push·배포 승인은 각각 별도다. 코드 승인으로 배포 준비 완료를 추정하지 않는다."
+    },
+    {
+      "lane": "진단 보류 유지",
+      "title": "A조회 진단 추가 실행 보류",
+      "detail": "A조회 보류 반영 6개 파일은 로컬 커밋 740afc4로 기록되었고 당시 완료 기록 MATCH가 보고됐다. 커밋 결속은 화면 검증 통과나 기존 진단 BLOCK 해제가 아니다. 완전 취득 stderr 해시 일치와 과거 원문 미보존·새 원문 생략·app-server 인과관계 미확인을 구분한다. 추가 조회·모델 실행·예산 재초기화는 별도 승인 전 진행하지 않는다."
+    },
+    {
+      "lane": "기록 보존",
+      "title": "중단 결과와 품질 미측정을 구분",
+      "detail": "실패 1건·미시도 39건, P/M/E 성능 미집계. 기존 v1~v5·metric-v1은 수정하지 않고 새 메타데이터로 과거 원인을 추정하지 않는다."
+    },
+    {
+      "lane": "병행 검토",
+      "title": "독립 2차 검토와 소스 적격성",
+      "detail": "소스별 5건의 독립 검토와 공식 적격성 receipt가 제품 승격에 필요하다."
+    }
+  ],
+  "manual_opportunity_review_20261102": {
+    "candidate_id": "manual-statefulset-recreate-ci-001",
+    "candidate_title": "Kubernetes StatefulSet Recreate 업데이트 CI 실패 진단 지원",
+    "decision": "HOLD",
+    "evidence_status": "INSUFFICIENT_EVIDENCE",
+    "actionability_status": "UNKNOWN",
+    "source_records_keyword_scanned": 400,
+    "detailed_audit_count": 2,
+    "distinct_author_hashes": 2,
+    "loss_assessment": {
+      "status": "UNKNOWN",
+      "qualifying_loss_count": null,
+      "confirmed_qualifying_loss_observations": 0,
+      "technical_failure_reports": 2,
+      "explicit_test_timeout_reports": 1,
+      "meaning": "Zero confirmed qualifying observations is an evidence tally, not a finding that actual loss or qualifying loss count is zero. Whether the reported test timeout/failures satisfy PRD concrete-loss criteria is unconfirmed; neither monetary quantification nor a paying customer is introduced as a new prerequisite.",
+      "decision_effect": "HOLD remains supported independently by insufficient cases/authors/groups and no money observations in audited records."
+    },
+    "selection_limits": [
+      "Title inventory covered100 Github records; initial body excerpts were partial and some output truncated; not all prior records fully audited.",
+      "Selected first observed same-task repeated technical-failure pair at ID-rank35, not a verified globally earliest qualifying pair or best opportunity.",
+      "No other source opportunity candidates were assessed; all-source keyword scan only searches this frozen candidate.",
+      "Selection-rule compliance is UNVERIFIED: no complete sequential body-screening/exclusion ledger proves that the frozen pair was the first candidate meeting repetition plus a directly supported loss/money signal; the pair is the first observed same-task technical-failure pair only.",
+      "The preliminary loss trigger was not separately established against the final loss definition. The initial10-record speed measurement and elapsed selection-limit compliance were not independently recorded.",
+      "This correction does not retrospectively certify the selection procedure, repeat screening, change the frozen candidate, or modify the official completion hold."
+    ],
+    "selection_rule_compliance": "UNVERIFIED",
+    "user_value_review": "NOT_PERFORMED",
+    "wording_review": "APPROVED_IN_CHAT_ONLY",
+    "formal_review_receipt": "NOT_CREATED",
+    "official_task_status": "BLOCKED_RED_NOT_REGISTERED",
+    "original_official_record": "PRESERVED",
+    "product_success_credit": 0,
+    "asof": "2026-11-02T00:00:00+09:00",
+    "recent_start": "2026-08-04T00:00:00+09:00",
+    "source_issue_links": [
+      "https://github.com/kubernetes/kubernetes/issues/141250",
+      "https://github.com/kubernetes/kubernetes/issues/141288"
+    ],
+    "artifact_provenance": {
+      "candidate-freeze.json": "19851425d70888ba30cdb1a5d0123c369e85eec161ac42f55c2f66168ebc1044",
+      "discovery.json": "e810d1c97033dbd6de1740bd6e5368a7053eda3db1a202f19d7b950f097237fd",
+      "evidence-table.json": "30c5c0ad7c51edf652e9a212caebdf096f6921286024a0f2b656c0e7443cd06d",
+      "candidate-audit.json": "8bfbe9975673274380ade2f3a032bfb3af3cad2f5e3fd833eb8c4c386ce85e3c",
+      "opportunity-card-ko.txt": "288be0637a6efa6a2603784a58f6545e63131c9ba74f6828faff73166f4f75c1"
+    },
+    "artifact_custody": "local temporary isolated analysis; hashes retained, original source not copied into repository"
   }
 }
