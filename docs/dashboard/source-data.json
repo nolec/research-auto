@@ -187,9 +187,9 @@
       "detail": "기술적 실패2건·명시적 시간초과1건. 확정 집계0건은 실제 손실0건이 아님. 최초 적격 후보·앞선 본문/제외 기록·예비 손실 인정·10건 속도·30분 한도·전체 연속 시간은 미확인. 소급 검증 아님."
     },
     {
-      "lane": "문구 리뷰와 공식 상태",
-      "title": "보고서 보완 리뷰 승인 · 공식 완료 보류 유지",
-      "detail": "손실 구분·선정 한계 보완을 대화 내 읽기 전용 리뷰에서 승인. 공식 승인 receipt 없음. 분석 complete-task는 RED 미등록으로 보류 유지. 이번 문서 동기화·커밋은 분석 완료 게이트 해제가 아니며 사용자 가치 판단도 미수행."
+      "lane": "문서 커밋 정합성 리뷰",
+      "title": "44fa995 문서 리뷰 승인 · 공식 완료 보류 유지",
+      "detail": "커밋 문서4개를 최신 분석 기록·생성 화면 문구와 읽기 전용 대조, 불일치 미발견. 후보 HOLD·손실 UNKNOWN/null·확정 관찰0건·선정 한계 유지. 대화 내 승인만 있으며 공식 리뷰 receipt 없음. RED 미등록에 따른 분석 공식 보류와 사용자 가치 미판정은 유지."
     }
   ],
   "promotion_blockers": [
@@ -199,6 +199,7 @@
   ],
   "deferred": "다섯 번째 소스 탐색·외부 SaaS·심층 리서치·자동 MVP·시장 규모 추정·자동 투자 판단",
   "evidence_notes": [
+    "44fa995 문서 정합성 리뷰는 대화 내 승인이다. 새 증거·사업성 검증·공식 완료 승격이 아니며, 이번 문구 반영의 새 화면 검증은 미실행이다.",
     "2026-11-02 수작업 후보 감사: 관련 원문2건, HOLD·실행 가능성UNKNOWN·제품 실적0. 손실 UNKNOWN/null과 확정 관찰0건 구분, 선정 절차 미확인. 문구 리뷰 승인은 분석 공식 RED 보류 해제나 제품 검증이 아니다.",
     "구현과 테스트 수는 제품 완성도 지표가 아니다.",
     "fixture 카드는 실제 Opportunity Card 성과로 계산하지 않는다.",
@@ -251,7 +252,7 @@
     "기존 CLI SPENT·마지막 확인 UNUSED·판단·HOLD·품질 미평가·역사적 BLOCK·원출력·import/corpus NOT_RUN 유지. 과거 기록 소급 복구 없음. 현재 문서의 정합성 검사는 과거 실행·품질 검증을 대신하지 않음.",
     "04e8c807 기준 새 격리 문서 작업. 원본 HEAD·인덱스·미커밋 변경 보존. 현재 작업 Guard·CONTRACT 통과와 과거 공식 게이트 NOT_RUN을 구분. 원본 반영·이관·push 없음. 과거 화면 검증 미완료 유지; 이번 화면 검증은 별도 보고."
   ],
-  "snapshot_revision": "2026-11-02-manual-candidate-review-sync",
+  "snapshot_revision": "2026-11-02-document-commit-review-sync",
   "delivery": {
     "status": "BLOCKED",
     "code_review": "PROBE_APPROVED",
@@ -5059,5 +5060,28 @@
       "opportunity-card-ko.txt": "288be0637a6efa6a2603784a58f6545e63131c9ba74f6828faff73166f4f75c1"
     },
     "artifact_custody": "local temporary isolated analysis; hashes retained, original source not copied into repository"
+  },
+  "document_commit_review_20261102": {
+    "reviewed_commit": "44fa9953425bc871f32e9b3fafcaf2e1c366f188",
+    "reviewed_paths": [
+      "docs/roadmap.md",
+      "docs/dashboard/README.md",
+      "docs/dashboard/source-data.json",
+      "docs/dashboard/index.html"
+    ],
+    "review_result": "APPROVED_IN_CHAT_ONLY",
+    "consistency": "NO_MISMATCH_FOUND",
+    "review_method": "Read-only comparison of committed4 documents, current analysis JSON/provenance hashes, and3 generated HTML card texts",
+    "candidate_decision": "HOLD",
+    "loss_qualification": "UNKNOWN",
+    "qualifying_loss_count": null,
+    "confirmed_qualifying_loss_observations": 0,
+    "selection_rule_compliance": "UNVERIFIED",
+    "official_task_status": "BLOCKED_RED_NOT_REGISTERED",
+    "formal_review_receipt": "NOT_CREATED",
+    "original_analysis_official_record": "PRESERVED",
+    "new_source_observation": false,
+    "new_model_execution": false,
+    "new_browser_verification": false
   }
 }
