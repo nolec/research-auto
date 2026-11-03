@@ -1,5 +1,13 @@
 # Roadmap dashboard
 
+## 2026-11-04 · 새 구매자 증거 경로 접근 실패·종료 수용
+
+- **수용·종료:** 새 구매자 후기·완료 이력 경로의 상세 열람 시도 6개가 모두 접근 실패해 한도에서 이번 공개 조사 경로를 종료했다. 403 3건·캐시 오류 2건·지원하지 않는 응답 형식 1건이며 원문 확인은 0건이다. 재요청·접근 우회·자동 재조사·범위 확대 없음. 검색 색인에서 후보 경로는 식별했지만 실제 본문 접근 가능성은 확정하지 못했다.
+- **근거와 판단:** 검색 요약은 단서이며 구매자 작성·실제 활용·지급의 증거로 승격하지 않았다. 활용 근거 확인 불가와 인정 관찰 0건은 실제 활용 부재·고객 거절을 뜻하지 않는다. 축소 납품 가치 UNKNOWN·조사 HOLD·£600 지불 의사 UNKNOWN·£600 가격 가설 미검증·실제 고객 검증 미완료·제품 목표 실적 0건 유지. 가격 비교·납품안 작성은 미실행이다.
+- **계측·비용:** 준비 전 동일 호스트 monotonic T0 기준으로 준비 종료 50.641초·탐색 종료 102.747초·대조 종료 131.678초·최종 보고 캡처 176.086초(약 2분 56초). 준비 10분·탐색 55분·대조 70분·전체 90분 누적 상한 이내다. 개별 상세 요청별 소요와 후속 채팅 전달 시간은 포함된 계측으로 주장하지 않는다. 신규 구매 0회·£0, 추가 사용료·총비용 UNKNOWN/null, 사람 직접시간 미측정·£30 환산 null. 외부 연락·구매 없음.
+- **공식 보류 분리:** 조사 HOLD는 접근 제한에 따른 근거 부족 판단이다. 이번 complete-task는 별개로 RED 미등록 및 route 필수 검증 미충족으로 BLOCKED_RED_NOT_REGISTERED_AND_ROUTE_UNVERIFIED(구현됨·검증 미완료 / 보류), native exit 1이다. 경로 검증은 unrun이며 통과한 것으로 표시하지 않는다. 사용자 수용·문서 정합성·Git 커밋은 이를 해제하지 않는다. 읽기 전용 검토에서 분류·한도 종료 판단은 타당했지만 경로 검증 통과나 공식 승인 receipt 발급은 아니다.
+- **보존·문서 범위:** 조사 종료 시 기존 변경 7개·원본 OMC 파일 2,130개·HEAD·인덱스 보존 확인. 후속 리뷰에서 자동 훅 로그 1개에 종료 이후 세션 기록이 추가됐고 나머지 2,129개·기존 변경·공식 보류 기록은 동일했다. 이전 조사 HOLD·T3 가격 비교/T4 납품안 미실행·리허설 정답 PASS와 각각의 공식 보류, StatefulSet HOLD·손실 UNKNOWN/null·선정 한계 유지. 이번 변경은 문서 4개이며 데이터·생성 HTML 정합성만 확인한다. 화면 렌더 검증 미실행·기존 390px 가로 넘침 26px 기록 유지. 새 외부 조사·고객 검증·모델 실행·push 없음.
+
 ## 2026-11-03 · 공개 근거 조사 HOLD 수용
 
 - **사용자 결정·조사 결론:** 공개 근거 조사와 읽기 전용 검토 결과를 수용했다. 반복되는 정리·검수 작업 필요는 관찰했지만 현재 축소 납품안의 독립 고객 가치는 UNKNOWN, 조사 판단은 HOLD다. 시장 전체의 수요 부재나 고객 거절을 뜻하지 않는다.
@@ -65,7 +73,7 @@
 
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The documentation snapshot is dated 2026-11-03 (revision 2026-11-03-catalog-public-investigation-hold).
+The documentation snapshot is dated 2026-11-04 (revision 2026-11-04-buyer-route-access-stop).
 This is a documentation refresh date, not a new source observation or quality measurement.
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
