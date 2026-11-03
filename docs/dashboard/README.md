@@ -1,5 +1,16 @@
 # Roadmap dashboard
 
+## 2026-11-03 · 카탈로그 정리·검수 리허설 수용
+
+- **사용자 결정:** 합성 자료 리허설 결과를 수용했다. 이는 실제 고객의 납품 수용·지불 의사 확인·제품 검증 완료와 다르다.
+- **입력·정답·결과:** 동결한 입력·정책·수작업 정답 6개 파일, 20상품·60행. 정답 검증 12항목과 252개 값 대조 통과. KEEP 12행·CHANGE 24행·HOLD 24행이며 납품 후보 36행, 보류 8상품·24행이다. 보호 필드·정상 행 변경과 보류 상품 유출은 없고 수정 재실행은 0회다. 동일 작성자가 만든 알려진 합성 사례로, 블라인드 평가나 일반 정확도 추정은 아니다.
+- **계측:** 준비 시작부터 최종 보고 시점까지 동일 호스트 monotonic 경과 519.552초(약 8분 40초). 처리 종료 252.961초로 150분 처리 중단 기준·180분 전체 한도 이내다. 단계 경과에는 에이전트 추론·명령 준비·대기가 포함된다. 사람 직접 작업시간은 미측정(null), £30/시간 환산도 null이다. 시간 초과 중단 장치의 실제 작동 시험은 아니다.
+- **비용·가격:** 신규 구매 0회·신규 구매 지출 £0. 추가 사용료·기존 구독 배분·총 실제 비용은 UNKNOWN/null이다. £600은 미검증 가격 가설이며 고객 지불 의사·실제 지급·수익성의 증거가 아니다.
+- **검증 경계:** 실제 고객 자료·수정 승인·Shopify 업로드·스토어 화면·이미지 유효성은 미검증이다. 100상품 작업시간·9~14시간 고객 노동으로 외삽하지 않는다. 실제 고객 검증 미완료, 제품 목표 실적 0건 유지. 외부 연락·구매 없음.
+- **공식 상태:** 정답 검증 PASS와 별개로 리허설 complete-task는 RED 미등록으로 BLOCKED_RED_NOT_REGISTERED(구현됨·검증 미완료 / 보류), native exit 1이다. 사용자 수용·문서 최신화·Git 커밋은 이를 해제하거나 RED를 소급 등록하지 않는다. 읽기 전용 검토에서 수정 이슈는 없었으나 공식 리뷰 승인 receipt는 발급하지 않았다.
+- **보존:** 리허설 종료 검사에서 기존 변경 7개·HEAD·인덱스·기존 OMC 파일 2,152개 보존 확인. 후속 리뷰 시 자동 훅 로그 1개에 종료 이후 세션 기록이 추가됐고 나머지 2,151개와 기존 변경·공식 보류 기록은 동일했다. 이전 StatefulSet 후보 HOLD·손실 UNKNOWN/null·확정 관찰 0건·선정 절차 한계는 유지한다.
+- **이번 문서 범위:** 로드맵·대시보드 README·source-data.json·생성 index.html만 갱신한다. 정적 데이터·HTML 정합성 검사는 별도 수행하며 이번 화면 렌더 검증은 미실행이다. 기존 390px 가로 넘침 26px 기록을 유지한다. 새 고객 조사·모델 실행·외부 연락·구매·push 없음.
+
 ## 2026-11-02 · 문서 커밋 44fa995 정합성 리뷰 반영
 
 - 커밋 `44fa9953425bc871f32e9b3fafcaf2e1c366f188`의 로드맵·대시보드 README·source-data.json·index.html을 최신 분석 기록과 읽기 전용으로 대조했다. 후보 HOLD, 손실 UNKNOWN/null과 확정 관찰 0건, 선정 절차 한계, 분석 공식 RED 보류의 반영에서 불일치를 발견하지 못했다.
@@ -45,7 +56,7 @@
 
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The documentation snapshot is dated 2026-11-02 (revision 2026-11-02-document-commit-review-sync).
+The documentation snapshot is dated 2026-11-03 (revision 2026-11-03-catalog-rehearsal-accepted).
 This is a documentation refresh date, not a new source observation or quality measurement.
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
