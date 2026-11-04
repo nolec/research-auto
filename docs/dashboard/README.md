@@ -1,5 +1,13 @@
 # Roadmap dashboard
 
+## 2026-11-04 · 계측 보고 수신 — 계측 확인 불가
+
+- **최신 상태:** 사용자 계측 보고를 수신했으므로 현재 상태는 REPORT_RECEIVED_MEASUREMENT_UNVERIFIABLE이다. 이전 NOT_RECEIVED는 보고 전 이력으로 보존하며 현재 미수신으로 표시하지 않는다. 보고 원문·해시는 dashboard/source-data.json의 card_user_observation_20261104.timing에 기록했다.
+- **사용자 보고:** 경과시간은 “미측정 또는 기록 확인 불가”, 종료 시점은 “기억나지 않음”, 중단 여부·추가 자료 열람 여부·계측 범위는 각각 “확인 불가”다. 실제 미측정인지 기록을 확인할 수 없는지 구분되지 않으며 기록 분실로 단정하지 않는다.
+- **판정 제한:** 유효한 시간값·범위가 없어 경과시간·5분 내 완료·시간 절감은 모두 판정 불가/null이다. 채팅 간격으로 추정하지 않고 후속 보고로 동결 답변이나 사후 설문을 보완하지 않는다. 대화 내 읽기 전용 분류 검토에서 불일치를 발견하지 못했으나 공식 승인 receipt는 발급하지 않았다.
+- **보존:** 최초·사후 답변 원문/해시와 카드 대조는 유지한다. 일부 도움은 카드와 기억을 함께 사용한 사용자 자기보고이며 독립 효과·기억 기여도 미확인이다. 후보 HOLD·£600 지불 의사 UNKNOWN·제품 실적 0건·준비 RED 미등록 공식 보류·이전 경로 RED/route 미충족 공식 보류 유지. 카드·비공개 기준·기존 변경/기록을 수정하지 않는다.
+- **이번 문서 범위:** 로드맵·대시보드 README·데이터·생성 HTML 4개를 최신화하고 정합성 확인 후 로컬 커밋한다. 화면 렌더 검증 미실행·기존 390px 넘침 26px 이력 유지. 재조사·외부 연락·구매·push 없음.
+
 ## 2026-11-04 · 사용자 카드 관찰 수용 — 계측 미수신
 
 - **대상·응답:** 사용자 본인이 기존 pandas #66499 최초 카드 본문 1개를 검토했다. 최초 1~3번 응답을 동결한 뒤 사후 설문을 받았으며 사후 응답도 별도로 동결했다. 원문 메시지·해시·대조 결과는 dashboard/source-data.json의 card_user_observation_20261104에 신규 기록하며 기존 카드·비공개 기준·준비 상태를 덮어쓰지 않는다.
@@ -82,7 +90,7 @@
 
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The documentation snapshot is dated 2026-11-04 (revision 2026-11-04-card-user-observation-timing-pending).
+The documentation snapshot is dated 2026-11-04 (revision 2026-11-04-card-timing-report-unverifiable).
 This is a documentation refresh date, not a new source observation or quality measurement.
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
