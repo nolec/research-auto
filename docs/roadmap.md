@@ -1,5 +1,14 @@
 # Demand Intelligence V1 Roadmap
 
+## 2026-11-06 · 관측 객체 변환 — 격리 검증 완료·원본 반영 완료 구분
+
+- **격리 검증 완료:** 고정 합성 입력 local:observation-001 한 건을 extraction_to_observation 공개 함수로 변환했다. 기존 13개 통과→실제 assertion RED(1 failed, 13 passed)→현 작업 RED 등록→14개 테스트·TDD·완료 게이트 통과(native exit 0). 최종 확인 326.837초로 60분 이내다. work_id=a5344b7f9d5747089bee3cfd789805d7로 식별한다.
+- **원본 반영 완료:** 승인된 src/extraction/development_slice.py·tests/extraction/test_observation_adapter.py 두 파일만 바이트 동일하게 반영했다. 원본에서도 13개 기준선→실제 RED→현 작업 RED 등록→승인 코드 반영→14개·TDD·완료 게이트 통과(native exit 0)를 별도로 기록했다. work_id=e9d2dd65a1714b75b10a3aa473c0bc3f, 최종 확인 75.541초. 후속 원본 리뷰 재실행도 14개 통과했으며 사용자가 수용했다.
+- **계약·미확인:** 기존 validate_extraction을 먼저 호출한다. 인용·위치·입력값을 보존하고 시간·독립 저자 수·반복 수·실제 지급·지불 의사는 null로 둔다. 유효 기권은 ABSTAINED·observation=null과 동일 사유를 반환하며 잘못된 인용은 SPAN_MISMATCH로 거부한다. 입력을 수정하거나 누락 정보를 채우지 않는다. money_signal=false는 실제 지출 부재가 아니며 confidence=0.8은 합성 주석이지 측정 정확도가 아니다.
+- **보존·한계:** 기존 검증기·추출 스키마·3카드 게이트는 무수정이다. 격리 종료 보호 대상 7,202개 기존 바이트 보존(자동 훅 로그 추기 별도), 원본 반영 보호 대상 620개·기존 변경 7개 보존을 대조했다. 과거 보존 재검증 UNKNOWN·전체 보존 해시 목록 미확보·원본 미복구·기존 공식 보류·후보 HOLD·£600 UNKNOWN·동결 답변·제품 실적 0건은 유지한다. 합성 변환 검증을 실제 모델 성능·고객 가치·기회 검증으로 확대하지 않는다.
+- **근거·리뷰 경계:** source-data.json의 observation_conversion_20261106에 두 실행을 구분한다. 격리 근거는 /private/tmp/observation-conversion-9b874dow/work/.omc/observation-conversion, 원본 근거는 .omc/observation-original-apply다. 원본 두 파일의 동일성 리뷰는 통과했으나 원본 전체 후보 9개의 승인 receipt는 만들지 않았고 두 파일 격리 후보에만 리뷰 receipt를 결속했다. 실행 시점 완료 기록은 이번 혼합 6파일 커밋의 새 완료/ship 승인이 아니다. 임시 작업 공간·현재 해시로 과거 보존 PASS나 원본 복구를 주장하지 않는다.
+- **이번 범위:** 승인 코드·테스트 2개와 로드맵·대시보드 README·데이터·생성 HTML 4개만 커밋한다. 기존 .gitignore·untracked 6개는 제외한다. 승인 코드 바이트와 기존 14개 통과 기록을 유지하고 문서 build/data·HTML 정합성·staged TDD를 별도 확인한다. 화면 렌더 검증 미실행·기존 390px 넘침 26px 이력 유지. 모델 호출·외부 연락·구매·push 없음.
+
 ## 2026-11-06 · 문서 ID 연결 — 격리 검증과 원본 반영 별도 완료
 
 - **격리 로컬 검증:** ModelCalibrationRun.outputs에 없는 문서 ID를 카드 지원 근거에 연결하는 공격 1건을 검사했다. 기준선 19개 통과 후 정상 3카드·2카드 거부 통제를 통과했지만 외부 문서가 게시돼 새 테스트가 실제 실패했다(1 failed, 19 passed). 현 작업 RED 등록 뒤 최소 수정했고 20개 테스트·TDD·공식 완료 게이트가 통과했다(native exit 0). 최종 경과 684.002초(약 11분 24초)로 60분 이내다.

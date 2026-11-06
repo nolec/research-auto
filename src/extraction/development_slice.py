@@ -328,3 +328,52 @@ def validate_extraction(
         raise ExtractionValidationError("evidence span is outside the input text", rule="SPAN_BOUNDS")
     if text[start:end] != output["evidence_quote"]:
         raise ExtractionValidationError("evidence span does not match evidence_quote", rule="SPAN_MISMATCH", field="evidence_quote")
+
+
+def extraction_to_observation(
+    document: Mapping[str, object], extraction: Mapping[str, object]
+) -> dict[str, object]:
+    """Map validated fixture annotations without filling gaps or correcting evidence."""
+    validate_extraction(document, extraction)
+    reason = extraction["abstention_reason"]
+    if reason is not None:
+        return {
+            "status": "ABSTAINED",
+            "document_id": extraction["document_id"],
+            "observation": None,
+            "abstention_reason": reason,
+        }
+    return {
+        "status": "OBSERVATION",
+        "document_id": extraction["document_id"],
+        "observation": {
+            "source_metadata": {
+                field: document[field]
+                for field in ("source", "title", "source_url", "published_at")
+            },
+            "extracted": {
+                field: extraction[field]
+                for field in ("actor", "problem", "context", "consequence")
+            },
+            "evidence": {
+                "quote": extraction["evidence_quote"],
+                "start": extraction["evidence_start"],
+                "end": extraction["evidence_end"],
+            },
+            "annotations": {
+                field: extraction[field]
+                for field in (
+                    "observation_type", "problem_signal", "money_signal",
+                    "money_signal_type", "usable_evidence", "confidence",
+                )
+            },
+            "unknowns": {
+                "time_spent_seconds": None,
+                "independent_author_count": None,
+                "recurrence_count": None,
+                "actual_payment": None,
+                "willingness_to_pay": None,
+            },
+        },
+        "abstention_reason": None,
+    }
