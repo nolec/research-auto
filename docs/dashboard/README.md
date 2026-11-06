@@ -1,5 +1,14 @@
 # Roadmap dashboard
 
+## 2026-11-06 · 부분 증거 확보 — 전체 보존 해시 미확보
+
+- **부분 증거:** 당시 채팅 실행 로그에서 CLI 출력·종료시간·공식 보류 출력과 결과 JSON의 33개 필드를 확인했다. 결과 필드는 커밋 ed035ee와 모두 내용이 일치하지만 원본 바이트 해시는 없어 의미 대조만 가능하다. 당시 보고서 작성 명령에 남은 문자열 1,193바이트의 SHA-256은 기존 72357cf5806e854c357f3f7cb95306223e0348a5b55447175653847e4ee97e8b와 일치한다. 이는 메모리상 문자열 대조이며 당시 원본 파일 자체를 확보한 것이 아니다.
+- **미확보·판정:** one-case-preflight-ahog6klm의 원본 임시 폴더·preservation.json과 card-observation-docs-preservation-20261104.json의 보호 파일 42개 해시 목록은 찾지 못했다. 전체 원본 복구 NOT_RECOVERED, 전체 보존 해시 목록 NOT_LOCATED, 과거 보존 재검증 UNKNOWN이다. 부분 증거·현재 파일의 새 해시·재구성 내용으로 과거 보존 검증을 PASS로 승격하지 않는다. 원본 재생성·과거 receipt 보완 없음.
+- **탐색 한계:** 현재 호스트 Time Machine 백업 경로 미확보·로컬 스냅샷 목록 반환 없음. 확인한 임시 작업 공간·Codex 작업 공간·연결 볼륨에서 복사본 미확보. 초기 임시 경로 탐색에는 12,000개 디렉터리/깊이 9 상한과 접근 제한이 있었으므로 전체 저장장치의 자료 부재로 단정하지 않는다.
+- **근거 위치:** .codex/sessions/2026/11/02/rollout-2026-11-02T12-55-09-01a19a65-8df2-7372-80fe-387d9188d980.jsonl의 2832행 작성 명령·2819행 CLI 출력·2843행 공식 보류 출력·2862행 결과 출력. 상세 위치는 dashboard/source-data.json의 preservation_evidence_check_20261106에 신규 기록한다. 아래 과거의 실행 종료 보존 확인은 당시 기록이며 현재 재검증 통과 주장과 구분한다.
+- **기존 상태:** 모델 호출 0회·전체 연결 미실행·실행 전제 미확인은 기능 부재/정상 기권 판단이 아니다. 기존 3카드 게이트·RED 및 preconditions/end_to_end 공식 보류·기타 후보 HOLD·£600 UNKNOWN·동결 답변·일부 도움 자기보고/기억 혼합·계측 보고 수신/확인 불가를 유지한다. 이번 문서 변경에 대한 현재 보존 검사와 과거 보존 재검증은 별개다.
+- **이번 범위:** 로드맵·대시보드 README·데이터·생성 HTML 4개만 최신화·정합성 확인 후 로컬 커밋한다. 기존 변경·공식 보류 기록을 보존하고 화면 렌더 검증은 미실행이다. 기존 390px 넘침 26px 이력 유지. 추가 조사·모델 실행·원본 재생성·push 없음.
+
 ## 2026-11-05 · 1건 진단 실행 전제 미확인 — 호출 전 종료 수용
 
 - **확인·한계:** 설치 CLI 0.166.0-alpha.5.1의 --version·--help·exec --help와 비밀이 아닌 선별 로컬 설정을 비호출 방식으로 확인했다. 모델 지정 옵션·로컬 모델명 선언은 확인했으나 실제 모델 이용 가능성·출력 1,200토큰 상한·내부 재시도 0회·추가 과금 금지·모든 모델 도구 실행 차단의 강제 근거는 미확인이다. 기능 부재·과금 발생으로 단정하지 않는다.
@@ -98,7 +107,7 @@
 
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The documentation snapshot is dated 2026-11-05 (revision 2026-11-05-one-case-preflight-stop).
+The documentation snapshot is dated 2026-11-06 (revision 2026-11-06-partial-evidence-preservation-unverified).
 This is a documentation refresh date, not a new source observation or quality measurement.
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
