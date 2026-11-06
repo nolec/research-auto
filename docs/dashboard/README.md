@@ -1,5 +1,14 @@
 # Roadmap dashboard
 
+## 2026-11-06 · 카드 준비 노출 감사 수용 — 적격 후보 없음으로 종료
+
+- **분류·선정:** 고정한 5문서 모두를 정해진 기록에서 대조했다. 내용 노출 기록 있음 3건, 도구 출력만 일치하여 사용자 표시 여부 확인 불가 2건이다. 표시 여부 확인 불가를 미노출로 바꾸지 않으며 실제 열람·모든 채팅의 노출 이력·자료 부재를 단정하지 않는다. 적격 후보 0건으로 승인된 조기 종료 조건에 따라 종료했고 6번째 후보로 확대하지 않았다.
+- **미실행:** 카드·비공개 대조 기준은 미생성, 사용자 카드 검토는 미실행이다. 본문·기준을 공개하지 않으며 새 정보 전달·기억 효과·시간 절감·제품 실적의 증거로 집계하지 않는다.
+- **한도:** 준비 전 T0부터 판단·보존 확인 160.361초, 최종 확인 188.658초(약 3분 9초)로 누적 20분 단계 및 45분 전체 한도 이내다. 사용자 검토시간 계측은 없다. 신규 모델 호출·외부 연락·구매 없음.
+- **공식 상태:** 노출 감사의 분류·조기 종료 판단은 읽기 전용 검토에서 계획과 일치했고 사용자가 수용했다. 별도로 complete-task는 RED 미등록과 R2 미실행으로 공식 완료 보류(native exit 1)다. R1·R4 passed와 R2 unrun을 구분하며 수용·문서 커밋으로 보류를 해제하거나 RED를 소급 등록하지 않는다. 공식 리뷰 승인 receipt는 발급하지 않았다.
+- **보존·한계:** 실행 종료 시 원본 보호 파일 2,180개·HEAD·인덱스 동일. 후속 검토에서는 나머지 2,179개 동일과 자동 훅 로그 1개의 기존 바이트 보존/137바이트 후속 추기를 구분했다. 이는 현재 실행의 보존 근거이며 과거 전체 보존 해시 목록 미확보·원본 미복구·과거 보존 재검증 UNKNOWN을 승격하지 않는다. 기존 변경·3카드 게이트·각 HOLD·£600 UNKNOWN·동결 답변·자기보고/기억 혼합·계측 확인 불가·공식 보류 유지.
+- **근거·이번 범위:** 상세 상태는 source-data.json의 card_preparation_exposure_check_20261106, 근거는 /private/tmp/card-prep-history-r6pp6kyd/work의 격리 실행 기록이다. 임시 작업 공간이며 영구 보관·과거 원본 복구를 주장하지 않는다. 이번 변경은 문서 4개만의 정합성 확인·로컬 커밋이다. 화면 렌더 검증 미실행·기존 390px 넘침 26px 이력 유지. 추가 조사·카드 생성·모델 실행·push 없음.
+
 ## 2026-11-06 · 부분 증거 확보 — 전체 보존 해시 미확보
 
 - **부분 증거:** 당시 채팅 실행 로그에서 CLI 출력·종료시간·공식 보류 출력과 결과 JSON의 33개 필드를 확인했다. 결과 필드는 커밋 ed035ee와 모두 내용이 일치하지만 원본 바이트 해시는 없어 의미 대조만 가능하다. 당시 보고서 작성 명령에 남은 문자열 1,193바이트의 SHA-256은 기존 72357cf5806e854c357f3f7cb95306223e0348a5b55447175653847e4ee97e8b와 일치한다. 이는 메모리상 문자열 대조이며 당시 원본 파일 자체를 확보한 것이 아니다.
@@ -107,7 +116,7 @@
 
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The documentation snapshot is dated 2026-11-06 (revision 2026-11-06-partial-evidence-preservation-unverified).
+The documentation snapshot is dated 2026-11-06 (revision 2026-11-06-card-preparation-early-stop).
 This is a documentation refresh date, not a new source observation or quality measurement.
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
