@@ -1,5 +1,14 @@
 # Roadmap dashboard
 
+## 2026-11-07 · 연결 전단 검증·원본 반영 완료 / 실제 군집·판정 연결 미완료
+
+- **전단 검증 완료:** 동일 합성 입력 local:observation-001로 prepare_cluster_handoff의 7키 반환과 정보 부족·기권 구분, 근거·미확인·null 독립 복사, 잘못된 인용 예외 전파를 검증했다. 기준선 31통과→실제 assertion RED 3실패·기존31통과→현 작업 RED 등록→34개 테스트·TDD·전단 완료 게이트 통과(native exit 0). 누적 RED 등록 112.277초/구현 후 확인 128.461초/최종 확인 188.165초로 10/20/30분 마감 이내다. 격리 work_id=a9231b92a1e54e838fab37de52b82b90.
+- **원본 반영 완료:** 승인된 src/extraction/observation_handoff.py·tests/extraction/test_observation_handoff.py 두 파일만 바이트 동일하게 반영했다. 원본에서도 기준선31→실제RED3실패·기존31통과→원본 현 작업 RED 등록→승인 코드 적용→34개 테스트·TDD·원본 반영 완료 게이트 통과(native exit 0)를 별도로 기록했다. 원본 work_id=e47a1008a12e42bba17e61f220f28a32. 후속 원본 리뷰 재실행도 34통과, 사용자가 수용했다.
+- **실제 군집·판정 연결 미완료:** NEEDS_INFORMATION과 ABSTAINED는 consumer_input/cards=null·downstream_status=NOT_RUN이다. 누락8개는 현재 변환 계약이 공급하지 않는 정보이며 실제 부재가 아니다. 실제 군집·판정·렌더·게시 진입점에 실패 통제를 설치해 후속 미호출을 검사했다. READY/성공 연결은 구현하지 않았고, 가짜 저자·그룹·제품화 범위·카드 복제로 통과시키지 않는다. 전단 완료와 실제 연결 완료를 혼동하지 않는다.
+- **보존·한계:** 기존 코드·스키마·3카드 게이트 무수정. 격리 종료 원본 보호 대상 2,802개와 원본 반영 보호 대상653개·기존 변경7개 보존을 확인했고 후속 훅 로그 추기는 기존 바이트와 구분했다. 과거 보존 재검증 UNKNOWN·전체 해시목록 미확보·원본 미복구·기존 공식 보류·후보HOLD·£600 UNKNOWN·동결답변·제품실적0건 유지. 실제 모델 성능·고객 가치·기회 검증 아님.
+- **근거·승인 경계:** source-data.json의 observation_handoff_20261107에 두 작업을 구분한다. 격리 근거는 /private/tmp/observation-handoff-h778znbg/work/.omc/observation-handoff, 원본 근거는 .omc/handoff-original-apply다. 원본 전체 후보9개 승인 receipt는 만들지 않고 바이트 동일한 두 파일 격리 후보에만 리뷰 receipt를 결속했다. 실행 시점 완료 기록은 이번 혼합6파일 커밋의 새 완료/ship 승인이 아니며, 임시 기록·현재 해시로 과거 보존 PASS나 원본 복구를 주장하지 않는다.
+- **이번 범위:** 승인 코드·테스트2개와 로드맵·대시보드 README·데이터·생성HTML4개만 커밋한다. 기존 .gitignore·untracked6개는 제외·보존. 기존34개 통과 시점과 승인 코드 바이트 동일, 문서 build/data·HTML 정합성·staged TDD 확인. 화면 렌더 검증 미실행·기존390px 넘침26px 이력 유지. 모델 호출·재조사·외부 연락·구매·push 없음.
+
 ## 2026-11-06 · 관측 객체 변환 — 격리 검증 완료·원본 반영 완료 구분
 
 - **격리 검증 완료:** 고정 합성 입력 local:observation-001 한 건을 extraction_to_observation 공개 함수로 변환했다. 기존 13개 통과→실제 assertion RED(1 failed, 13 passed)→현 작업 RED 등록→14개 테스트·TDD·완료 게이트 통과(native exit 0). 최종 확인 326.837초로 60분 이내다. work_id=a5344b7f9d5747089bee3cfd789805d7로 식별한다.
