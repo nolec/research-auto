@@ -249,7 +249,9 @@ def _validate_model_run(
 
 
 def _validate_cards(
-    cards: Sequence[Mapping[str, object]], model_receipt: Mapping[str, object]
+    cards: Sequence[Mapping[str, object]],
+    model_receipt: Mapping[str, object],
+    model_document_ids: frozenset[str],
 ) -> list[dict[str, object]]:
     if len(cards) < 3:
         raise HandoffBlocked("insufficient_card_count")
@@ -274,6 +276,11 @@ def _validate_cards(
             or value.get("policy_version") != _POLICY_VERSION
         ):
             raise HandoffBlocked("card_provenance_invalid")
+        if any(
+            evidence["document_id"] not in model_document_ids
+            for evidence in value["supporting_evidence"]
+        ):
+            raise HandoffBlocked("card_evidence_document_not_in_outputs")
         normalized.append(value)
     if not model_sources or observed_sources != model_sources:
         raise HandoffBlocked("card_source_membership_mismatch")
@@ -308,11 +315,16 @@ def _execute_reserved_handoff(
         raise HandoffBlocked("calibration_unexpected_failure") from error
     try:
         _validate_model_run(run, preflight_receipt)
+        model_document_ids = frozenset(
+            output["document_id"]
+            for output in run.outputs
+            if isinstance(output.get("document_id"), str)
+        )
         try:
             built_cards = build_cards(run.outputs, run.receipt)
         except Exception as error:
             raise HandoffBlocked("card_build_failed") from error
-        cards = _validate_cards(built_cards, run.receipt)
+        cards = _validate_cards(built_cards, run.receipt, model_document_ids)
         markdown = "\n\n---\n\n".join(render_card_markdown(card) for card in cards)
         cards_bytes, markdown_bytes = _artifact_bytes(cards, markdown)
     except HandoffBlocked as error:

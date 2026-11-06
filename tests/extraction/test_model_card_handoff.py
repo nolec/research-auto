@@ -3,6 +3,7 @@ from __future__ import annotations
 import fcntl
 import json
 import socket
+from copy import deepcopy
 from hashlib import sha256
 from pathlib import Path
 
@@ -118,6 +119,97 @@ def _preflight() -> dict[str, object]:
         "request_id_persisted": False,
         "secret_persisted": False,
     }
+
+
+def test_handoff_rejects_evidence_document_not_in_outputs(tmp_path: Path) -> None:
+    roots = {name: tmp_path / name for name in ("normal-3", "control-2", "foreign-3")}
+    assert all(not root.exists() for root in roots.values())
+    normal_cards = [_card(index) for index in range(3)]
+    run = _run()
+    original_outputs = deepcopy(run.outputs)
+    original_receipt = deepcopy(run.receipt)
+
+    normal = execute_same_process_card_handoff(
+        preflight_receipt=_preflight(),
+        run_calibration=lambda: run,
+        build_cards=lambda *_args: deepcopy(normal_cards),
+        artifact_root=roots["normal-3"],
+    )
+    assert normal["status"] == "CANDIDATE_ONLY"
+    published_names = ("cards.json", "cards.md", "receipt.json")
+    assert all((roots["normal-3"] / name).is_file() for name in published_names)
+    assert run.outputs == original_outputs and run.receipt == original_receipt
+
+    control_run = _run()
+    assert control_run.outputs == original_outputs
+    assert control_run.receipt == original_receipt
+    with pytest.raises(HandoffBlocked, match="^insufficient_card_count$"):
+        execute_same_process_card_handoff(
+            preflight_receipt=_preflight(),
+            run_calibration=lambda: control_run,
+            build_cards=lambda *_args: deepcopy(normal_cards[:2]),
+            artifact_root=roots["control-2"],
+        )
+    control_receipt = json.loads((roots["control-2"] / "failure-receipt.json").read_text())
+    assert control_receipt["status"] == "BLOCKED"
+    assert control_receipt["reason"] == "insufficient_card_count"
+    assert control_receipt["model_output_sha256"] == _digest(control_run.outputs)
+    assert control_receipt["model_run_receipt_sha256"] == _digest(control_run.receipt)
+    assert all(not (roots["control-2"] / name).exists() for name in published_names)
+
+    foreign_cards = deepcopy(normal_cards)
+    foreign_cards[0]["supporting_evidence"][0]["document_id"] = "github:999"
+    restored = deepcopy(foreign_cards)
+    restored[0]["supporting_evidence"][0]["document_id"] = normal_cards[0]["supporting_evidence"][0]["document_id"]
+    assert restored == normal_cards
+    assert foreign_cards != normal_cards
+    attack_run = _run()
+    assert attack_run.outputs == original_outputs
+    assert attack_run.receipt == original_receipt
+    assert "github:999" not in {output["document_id"] for output in attack_run.outputs}
+    outcome = None
+    reason = None
+    try:
+        outcome = execute_same_process_card_handoff(
+            preflight_receipt=_preflight(),
+            run_calibration=lambda: attack_run,
+            build_cards=lambda *_args: foreign_cards,
+            artifact_root=roots["foreign-3"],
+        )
+    except HandoffBlocked as error:
+        reason = str(error)
+
+    attack_files = {name: (roots["foreign-3"] / name).exists() for name in published_names}
+    foreign_published = False
+    if attack_files["cards.json"]:
+        persisted = json.loads((roots["foreign-3"] / "cards.json").read_text())
+        foreign_published = any(
+            evidence["document_id"] == "github:999"
+            for card in persisted
+            for evidence in card["supporting_evidence"]
+        )
+    observation = {
+        "normal_status": normal["status"],
+        "control_reason": control_receipt["reason"],
+        "control_published_files": False,
+        "attack_status": outcome["status"] if outcome else None,
+        "attack_reason": reason,
+        "attack_files": attack_files,
+        "foreign_document_published": foreign_published,
+        "single_changed_path": "cards[0].supporting_evidence[0].document_id",
+        "outputs_unchanged": attack_run.outputs == original_outputs,
+        "receipt_unchanged": attack_run.receipt == original_receipt,
+    }
+    (tmp_path / "boundary-observation.json").write_text(json.dumps(observation, indent=2))
+    assert attack_run.outputs == original_outputs
+    assert attack_run.receipt == original_receipt
+    assert reason == "card_evidence_document_not_in_outputs", observation
+    assert all(not exists for exists in attack_files.values())
+    failure = json.loads((roots["foreign-3"] / "failure-receipt.json").read_text())
+    assert failure["status"] == "BLOCKED"
+    assert failure["reason"] == reason
+    assert failure["model_output_sha256"] == _digest(attack_run.outputs)
+    assert failure["model_run_receipt_sha256"] == _digest(attack_run.receipt)
 
 
 def test_same_process_handoff_persists_only_cards_markdown_and_bound_receipt(

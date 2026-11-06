@@ -1,5 +1,14 @@
 # Roadmap dashboard
 
+## 2026-11-06 · 문서 ID 연결 — 격리 검증과 원본 반영 별도 완료
+
+- **격리 로컬 검증:** ModelCalibrationRun.outputs에 없는 문서 ID를 카드 지원 근거에 연결하는 공격 1건을 검사했다. 기준선 19개 통과 후 정상 3카드·2카드 거부 통제를 통과했지만 외부 문서가 게시돼 새 테스트가 실제 실패했다(1 failed, 19 passed). 현 작업 RED 등록 뒤 최소 수정했고 20개 테스트·TDD·공식 완료 게이트가 통과했다(native exit 0). 최종 경과 684.002초(약 11분 24초)로 60분 이내다.
+- **원본 반영:** 승인된 코드·테스트 2개만 원본에 바이트 단위로 동일하게 반영했다. 원본 기준선 19개 통과→승인 테스트 선반영으로 실제 새 실패→원본 현 작업 RED 등록→승인 코드 반영→20개 테스트·TDD·원본 반영 완료 게이트 통과(native exit 0)를 별도로 확인했다. 최종 경과 456.402초(약 7분 36초)다. 격리 검증 완료와 원본 반영 완료는 서로 다른 실행·작업·완료 기록이다.
+- **동작 경계:** 정상 3카드는 합성 CANDIDATE_ONLY로 게시되고 2카드는 insufficient_card_count로 거부된다. 외부 문서는 card_evidence_document_not_in_outputs로 거부되고 run과 연결된 BLOCKED 실패 영수증만 남으며 cards.json·cards.md·성공 receipt.json은 없다. 기존 최소 3카드 기준과 공개 API는 유지됐다. 검증은 지원 근거의 문서 ID 연결과 종료 후 파일 상태에 한정하며 실제 모델 성능·원자료 추출 정확도·인용 진위·게시 원자성·고객 가치·기회/제품 실적으로 확대하지 않는다.
+- **기존 보류·보존:** 과거 보존 재검증 UNKNOWN·전체 보존 해시 목록 미확보·원본 미복구와 이전 RED 미등록·R2 미실행 등 각 공식 보류를 유지한다. 새 두 작업 완료가 과거 보류 해제·소급 PASS를 뜻하지 않는다. 격리 종료 보호 대상 7,086개 동일과 후속 훅 추기 구분, 원본 반영 보호 대상 2,832개 동일·기존 변경 7개 보존을 확인했다. 후보 HOLD·£600 UNKNOWN·기존 동결 답변·자기보고/기억 혼합·계측 한계·제품 실적 0건 유지. pandas #66499 재검토·추가 조사·모델 호출·외부 연락·구매 없음.
+- **근거·완료 기록 범위:** source-data.json의 document_link_boundary_validation_20261106에 두 실행·현 작업 RED·승인본 해시·완료 기록을 구분한다. 격리 근거는 /private/tmp/foreign-document-local-t80a5qwh/work/.omc/local-boundary, 원본 반영 근거는 .omc/approved-apply다. 두 완료 기록은 문서 변경 전 실행 시점의 후보에 결속된 기록이며 이번 혼합 6파일 커밋에 대한 새 완료/ship 승인 receipt가 아니다. 읽기 전용 리뷰 결과를 사용자가 수용했으며 공식 리뷰 승인 receipt는 발급하지 않았다. 임시 작업 공간·현재 보관본/해시로 과거 전체 보존을 재검증했다고 주장하지 않는다.
+- **이번 커밋 범위:** 승인된 src/extraction/model_card_handoff.py·tests/extraction/test_model_card_handoff.py와 로드맵·대시보드 README·데이터·생성 HTML의 총 6개만 커밋한다. 코드 바이트는 20개 테스트 통과 시점과 동일하며 이번 문서 반영으로 테스트를 재실행하지 않는다. 기존 .gitignore·untracked 소스/테스트 6개는 제외한다. 문서 build/data·HTML 정합성 및 staged TDD를 확인하고 push는 하지 않는다. 화면 렌더 검증 미실행·기존 390px 넘침 26px 이력 유지.
+
 ## 2026-11-06 · 동결한 누락 지적 2건 대조 수용 — 모두 A
 
 - **동결 답변:** ① 실제 작업에서 무엇이 막히거나 추가 부담이 생겼는지(실제 영향 판단에 필요), ② 다른 사용자에게도 반복된 사례가 있는지(한 사람의 보고를 넘어서는지 확인에 필요)를 새 답변으로 동결했다. 사용자 원문·해시는 dashboard/source-data.json의 card_omission_observation_20261106에 보존하고 이전 최초·사후 동결 답변을 교체하지 않는다.
@@ -125,7 +134,7 @@
 
 
 Internal single-page inspection of `../roadmap.md`, not a live product-status service.
-The documentation snapshot is dated 2026-11-06 (revision 2026-11-06-frozen-omission-response).
+The documentation snapshot is dated 2026-11-06 (revision 2026-11-06-document-link-local-and-original).
 This is a documentation refresh date, not a new source observation or quality measurement.
 The approved 40-record metric-v1 execution stopped after its first document with
 CLI_OUTPUT_MISSING: INCOMPLETE / OPERATIONAL_FAILURE, one operational failure,
