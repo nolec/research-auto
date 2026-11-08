@@ -1,5 +1,16 @@
 # Roadmap dashboard
 
+## 2026-11-08 · 실제 items[20] 수작업 주석·전단1회 호출 / NEEDS_INFORMATION / 실제 군집·판정·카드 출력 미완료
+
+- **실제 입력:** 기존 고정 collection-result.json의 items[20]·github:5123208556(VS Code #330309) 한 건을 사용했다. 원자료 SHA-256 cb54022623a8740e0a997cc210b04eb7b93ed43c13056b5e82657a9d3dd6f49c 일치·기존20건 및 #66574와 ID중복 없음. 새 수집·모델 호출은 하지 않았다.
+- **수작업·자동 구분:** actor/problem/context/consequence·인용·신호 분류·confidence=0.8은 수작업 주석이다. confidence는 측정 정확도·모델 성능이 아니다. 원문 인용 [169,577)의 유니코드 코드포인트 일치·ID/해시 확인과 기존 함수 내부 계약 검사·관측 변환만 자동 처리다.
+- **호출·반환:** 공개 prepare_cluster_handoff(document, extraction)를1회 호출했다. 오류·보정 재호출 없음. input_snapshot.status=OBSERVATION, status=NEEDS_INFORMATION, consumer_input=null, cards=null, downstream_status=NOT_RUN을 반환했다. 정상 기권 분기를 검증한 결과가 아니며 실제 군집·판정·렌더·게시 연결은 미완료다.
+- **정보 부족의 의미:** missing_fields는 problem_key, productizable_scope, evidence.evidence_id, evidence.author_hash, evidence.community, evidence.evidence_group_id, evidence.kind, evidence.interpretation의8개다. 현재 변환 계약이 공급하지 않는 값이며 실제 원자료에 전부 없다는 판단이 아니다. 원문 메타데이터에서 보이는 값도 임의 보간하지 않았다.
+- **null·판단 보존:** time_spent_seconds, independent_author_count, recurrence_count, actual_payment, willingness_to_pay는 null로 유지했다. money_signal=false는 지급 부재의 증명이 아니다. 기존 HOLD·UNKNOWN·3카드 게이트·과거 보존 재검증 UNKNOWN·공식 보류를 유지한다.
+- **계측 범위:** 첫 스크립트 시작 monotonic 178005.675928833부터 호출·보존 확인 후 종료 판단178044.820419333까지 약39.14초다. 입력 동결39.0896초·호출 종료39.1440초로 누적5/15/25/30분 마감 내 확인했다. 채팅 보고 작성·전달은 미포함이며 전체 전달 시간 검증으로 확대하지 않는다.
+- **보존·리뷰 경계:** 실행 시 보호 코드4개(observation_handoff, development_slice, model_card_handoff, opportunity_slice)와 입력의 전후 동일성을 확인했다. 전체 파일·과거 기록 재검증은 아니다. 추가 열람 없는 리뷰는 대화의 원문·입력·실행 출력 대조이며 사용자가 수용했다. 제품 완료·기회 검증·모델 성능의 공식 승격 근거가 아니다.
+- **현재 남은 구간:** 실제 입력의 수작업 추출→계약 검사·관측 변환→정보 부족 반환까지 관찰했다. 자동 추출·실제 소비자 판정·군집·카드 출력은 미완료다. 후속 자동 실행 없이 별도 결정을 기다린다. 보류 단일건 진단 코드·테스트6개와 기존 기록을 보존하며 OMC 수정은 하지 않는다.
+
 ## 2026-11-08 · 제품 근거 추적 대조 수용 / 20건 미선정 / 목록 첫 항목 확인 불가 종료
 
 - **제품 목표 대비:** #66574 기존 판단의 사실 주장3개를 원문까지 연결했고 사용자는 이 사례를 보류하기에 충분하다고 답했다. 한 노출 사례의 보류 판단에 대한 사용자 응답이며 시간 절감·독립 효과·자동 제품 성능·새 기회 검증으로 확대하지 않는다.
