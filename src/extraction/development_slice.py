@@ -331,10 +331,29 @@ def validate_extraction(
 
 
 def extraction_to_observation(
-    document: Mapping[str, object], extraction: Mapping[str, object]
+    document: Mapping[str, object], extraction: Mapping[str, object],
+    *, source_metadata: Mapping[str, object] | None = None,
 ) -> dict[str, object]:
-    """Map validated fixture annotations without filling gaps or correcting evidence."""
+    """Preserve validated annotations and optional caller-verified source values.
+
+    Metadata validation checks shape and document identity, not authenticity:
+    the caller must compare supplied values with the fixed source record.
+    """
     validate_extraction(document, extraction)
+    extra_metadata: dict[str, object] = {}
+    if source_metadata is not None:
+        if not isinstance(source_metadata, Mapping) or set(source_metadata) != {
+            "document_id", "author_hash", "community",
+        }:
+            raise ValueError("source_metadata requires document_id, author_hash and community")
+        identifier = source_metadata["document_id"]
+        if not isinstance(identifier, str) or not identifier.strip() or identifier != document["document_id"]:
+            raise ValueError("source_metadata document_id must match the input document")
+        for field in ("author_hash", "community"):
+            value = source_metadata[field]
+            if value is not None and (not isinstance(value, str) or not value.strip()):
+                raise ValueError(f"source_metadata {field} must be nonblank or null")
+            extra_metadata[field] = value
     reason = extraction["abstention_reason"]
     if reason is not None:
         return {
@@ -348,8 +367,8 @@ def extraction_to_observation(
         "document_id": extraction["document_id"],
         "observation": {
             "source_metadata": {
-                field: document[field]
-                for field in ("source", "title", "source_url", "published_at")
+                **{field: document[field] for field in ("source", "title", "source_url", "published_at")},
+                **extra_metadata,
             },
             "extracted": {
                 field: extraction[field]

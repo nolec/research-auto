@@ -1,5 +1,17 @@
 # Roadmap dashboard
 
+## 2026-11-09 · 소비자 격리 검증·원본 반영 완료 / 원본 144개 통과·HOLD 반환 / 운영 공간 게이트 별도
+
+- **격리 검증:** 메타데이터 선택 전달·기존 소비자의 불완전 관측 모드 4개 파일을 독립 복제본에서 구현했다. 격리 회귀 144개 통과와 리뷰 승인 기록을 원본 실행과 구분한다.
+- **원본 반영:** 승인 코드·테스트 4개(development_slice.py, opportunity_slice.py, test_observation_adapter.py, test_opportunity_slice.py)만 원본에 반영했고 승인본·원본·운영 사본의 바이트 일치를 리뷰했다. 기존 fixture API와 3카드 게이트는 유지한다.
+- **원본 검증:** 원본 경로에서 회귀 144개 통과(exit 0)를 확인했다. 기존 격리 결과를 재사용한 수치가 아니다. 이번 문서 최신화·커밋에서는 테스트를 재실행하지 않는다.
+- **실제 입력의 보수적 판정:** 기존 items[20]·github:5123208556에 수작업 주석을 사용했다. 저장 원자료 해시·인용 [169,577)·메타데이터를 대조한 뒤 원본 extraction_to_observation와 build_vertical_slice를 각 1회 호출해 PARTIAL_ASSESSMENT / NEEDS_REVIEW / UNKNOWN / HOLD / NOT_ASSESSED / cards=null을 확인했다. 후속 군집·카드 경로 호출은 0회다.
+- **계약·미확인 보존:** 선택 메타데이터의 문서 ID·형식은 변환 함수가 검사하고 원자료 값 일치는 호출 측에서 대조한다. 정상 봉투·유효 기권·모순 입력 거부와 9키 반환을 검증했다. time_spent_seconds·independent_author_count·recurrence_count·actual_payment·willingness_to_pay는 null이며 money_signal=false를 지급 부재로 해석하지 않는다.
+- **운영 공간의 게이트:** 별도 운영 공간에서 실제 RED 등록과 TDD·완료 게이트 통과를 확인했다. 원본 테스트 144개 통과와 구분하며 원본 운영 상태의 게이트 통과·기존 공식 보류 해제로 승격하지 않는다. 리뷰 전환 뒤 이전 task 세션은 superseded이며 게이트 보고는 당시 실행 기록이다.
+- **보존·리뷰 수용:** 원본 보류 코드·테스트 6개와 기존 기록·인덱스·UNKNOWN·공식 보류·3카드 게이트를 보존했다. 자동 훅 로그 추가는 이전 바이트 해시가 일치하는 추기로 구분했다. 원본 반영 리뷰 승인과 보고 발행을 사용자가 수용했다. 이전 body_judgment_invalid 실패·승인 기록·만료 문맥과 별도 재발행 기록도 유지한다.
+- **남은 병목·성과 경계:** 수작업 추출의 관측 변환에서 기존 소비자의 보수적 HOLD 반환까지 연결됐다. 자동 추출·실제 군집·카드 출력·모델 성능·고객 가치·기회 검증은 미완료다. 앞선 prepare_cluster_handoff의 NEEDS_INFORMATION·39.14초 기록은 별도 과거 실행으로 유지한다. 이번 통합 스크립트 약0.00241초는 해당 스크립트만의 경과시간이며 전체 처리·사용자 검토시간 성과가 아니다.
+- **이번 문서 범위:** 로드맵·대시보드 4개 문서의 정적 내용·JSON·HTML 표시 정합성만 확인한다. 화면 렌더·전체 제품 검증·품질 관찰 등록은 하지 않는다. 품질 관찰 미등록(live_observation_not_enabled)과 코드 승인·기존 공식 보류를 구분한다. OMC 수정·모델 호출·새 자료 수집·push는 하지 않는다.
+
 ## 2026-11-08 · 실제 items[20] 수작업 주석·전단1회 호출 / NEEDS_INFORMATION / 실제 군집·판정·카드 출력 미완료
 
 - **실제 입력:** 기존 고정 collection-result.json의 items[20]·github:5123208556(VS Code #330309) 한 건을 사용했다. 원자료 SHA-256 cb54022623a8740e0a997cc210b04eb7b93ed43c13056b5e82657a9d3dd6f49c 일치·기존20건 및 #66574와 ID중복 없음. 새 수집·모델 호출은 하지 않았다.

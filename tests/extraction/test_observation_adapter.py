@@ -85,3 +85,79 @@ def test_observation_adapter_contract():
     assert error.value.rule == "SPAN_MISMATCH"
     assert error.value.field == "evidence_quote"
     assert invalid == original_invalid and document == original_document
+
+
+@pytest.fixture
+def metadata_adapter_input():
+    document = dict(document_id="local:metadata", source="local_fixture", title="Unicode α😀",
+                    text="α😀 editor restores labels", published_at="2026-11-06T00:00:00Z",
+                    source_url="https://example.invalid/metadata")
+    extraction = dict(document_id=document["document_id"], observation_type="user_problem",
+                      actor="editor", problem="labels missing", context="export",
+                      consequence="restores labels", evidence_quote=document["text"][2:],
+                      evidence_start=2, evidence_end=len(document["text"]), problem_signal=True,
+                      money_signal=False, money_signal_type=None, usable_evidence=True,
+                      confidence=0.8, abstention_reason=None)
+    return document, extraction
+
+
+def test_optional_metadata_preserves_values_and_default(metadata_adapter_input):
+    document, extraction = metadata_adapter_input
+    metadata = dict(document_id=document["document_id"], author_hash="saved-author", community="saved-community")
+    before = deepcopy((document, extraction, metadata))
+    default = development_slice.extraction_to_observation(document, extraction)
+    result = development_slice.extraction_to_observation(document, extraction, source_metadata=metadata)
+    expanded = result["observation"]["source_metadata"]
+    assert expanded == {**default["observation"]["source_metadata"], "author_hash":"saved-author", "community":"saved-community"}
+    assert all(v is None for v in result["observation"]["unknowns"].values())
+    assert (document, extraction, metadata) == before
+    assert development_slice.extraction_to_observation(document, extraction, source_metadata=None) == default
+    expanded.pop("author_hash"); expanded.pop("community")
+    assert result == default
+
+
+@pytest.mark.parametrize("author,community", [(None,None), ("author",None), (None,"community")])
+def test_optional_metadata_keeps_explicit_null(metadata_adapter_input, author, community):
+    document, extraction = metadata_adapter_input
+    result = development_slice.extraction_to_observation(document, extraction, source_metadata=dict(
+        document_id=document["document_id"], author_hash=author, community=community))
+    assert result["observation"]["source_metadata"]["author_hash"] is author
+    assert result["observation"]["source_metadata"]["community"] is community
+
+
+@pytest.mark.parametrize("bad", [[], {}, {"document_id":"other","author_hash":None,"community":None},
+    {"document_id":"local:metadata","author_hash":" ","community":None},
+    {"document_id":"local:metadata","author_hash":False,"community":None},
+    {"document_id":"local:metadata","author_hash":None,"community":42},
+    {"document_id":"local:metadata","author_hash":None,"community":None,"extra":None}])
+def test_optional_metadata_rejects_invalid(metadata_adapter_input, bad):
+    document, extraction = metadata_adapter_input
+    with pytest.raises(ValueError):
+        development_slice.extraction_to_observation(document, extraction, source_metadata=bad)
+
+
+def test_optional_metadata_abstention_and_quote_error(metadata_adapter_input):
+    document, extraction = metadata_adapter_input
+    metadata = dict(document_id=document["document_id"], author_hash=None, community=None)
+    abstained = {key:None for key in extraction}
+    abstained.update(document_id=document["document_id"], abstention_reason=" insufficient source ")
+    result = development_slice.extraction_to_observation(document, abstained, source_metadata=metadata)
+    assert result == dict(status="ABSTAINED", document_id=document["document_id"], observation=None,
+                         abstention_reason=" insufficient source ")
+    with pytest.raises(ValueError):
+        development_slice.extraction_to_observation(document, abstained, source_metadata={**metadata,"document_id":"wrong"})
+    with pytest.raises(development_slice.ExtractionValidationError) as error:
+        development_slice.extraction_to_observation(document, {**extraction,"evidence_quote":"wrong"}, source_metadata=metadata)
+    assert error.value.rule == "SPAN_MISMATCH"
+
+
+def test_source_metadata_authenticity_is_caller_boundary(metadata_adapter_input):
+    document, extraction = metadata_adapter_input
+    saved = dict(document_id=document["document_id"], author_hash="original-author", community="original-community")
+    forged = {**saved, "author_hash":"structurally-valid-forgery"}
+    result = development_slice.extraction_to_observation(document, extraction, source_metadata=forged)
+    # Structural validation cannot establish source truth; caller must compare.
+    with pytest.raises(AssertionError):
+        assert all(result["observation"]["source_metadata"][key] == saved[key] for key in ("author_hash", "community"))
+    genuine = development_slice.extraction_to_observation(document, extraction, source_metadata=saved)
+    assert all(genuine["observation"]["source_metadata"][key] == saved[key] for key in ("author_hash","community"))

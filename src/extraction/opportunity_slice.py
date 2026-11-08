@@ -1,17 +1,19 @@
-"""Deterministic, fixture-only Opportunity Card vertical slice.
+"""Fixture cards and explicit conservative assessment of incomplete observations.
 
-This module deliberately consumes caller-supplied fixture observations.  It is not
-connected to a provider, a source-selection decision, or a production ranking run.
+No provider, source-selection decision or production ranking run is connected.
+The incomplete mode never clusters observations or produces cards.
 """
 
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from hashlib import sha256
 from pathlib import Path
 from typing import Mapping, Sequence
 
-from src.contracts.validation import validate_contract
+from src.contracts.validation import validate_contract, is_public_http_uri, is_timezone_aware_datetime
+from src.extraction import development_slice
 
 
 _ROOT = Path(__file__).resolve().parents[2]
@@ -277,14 +279,146 @@ def _build_card(problem_key: str, observations: Sequence[Mapping[str, object]]) 
     return card
 
 
+def _exact_mapping(
+    value: object, fields: tuple[str, ...], name: str
+) -> Mapping[str, object]:
+    if not isinstance(value, Mapping) or set(value) != set(fields):
+        raise ValueError(f"{name} fields do not match extracted-observation-v1")
+    return value
+
+
+def _assess_extracted_observation(
+    observations: Sequence[Mapping[str, object]],
+) -> dict[str, object]:
+    """Assess one validated observation structurally, without inventing evidence.
+
+    The snapshot does not contain the full source text: this does not revalidate
+    quote truth or certify evidence independence, clustering, or actionability.
+    """
+    if not isinstance(observations, list) or len(observations) != 1:
+        raise ValueError("extracted-observation-v1 requires exactly one observation")
+    envelope = _exact_mapping(
+        observations[0],
+        ("status", "document_id", "observation", "abstention_reason"),
+        "envelope",
+    )
+    _require_nonblank(envelope["document_id"], "document_id")
+    if envelope["status"] == "ABSTAINED":
+        if envelope["observation"] is not None:
+            raise ValueError("abstention must not contain an observation")
+        _require_nonblank(envelope["abstention_reason"], "abstention_reason")
+        return _partial_result(envelope, abstained=True)
+    if envelope["status"] != "OBSERVATION" or envelope["abstention_reason"] is not None:
+        raise ValueError("invalid observation status or contradictory abstention reason")
+    observation = _exact_mapping(
+        envelope["observation"],
+        ("source_metadata", "extracted", "evidence", "annotations", "unknowns"),
+        "observation",
+    )
+    metadata = observation["source_metadata"]
+    base_fields = {"source", "title", "source_url", "published_at"}
+    if not isinstance(metadata, Mapping) or set(metadata) not in (
+        base_fields, base_fields | {"author_hash", "community"},
+    ):
+        raise ValueError("source_metadata requires the legacy four or expanded six fields")
+    for field in base_fields:
+        _require_nonblank(metadata[field], field)
+    for field in ("author_hash", "community"):
+        if field in metadata and metadata[field] is not None:
+            _require_nonblank(metadata[field], field)
+    if not is_public_http_uri(metadata["source_url"]):
+        raise ValueError("source_url must be an HTTP URI")
+    if not is_timezone_aware_datetime(metadata["published_at"]):
+        raise ValueError("published_at must include a timezone")
+    extracted = _exact_mapping(
+        observation["extracted"],
+        ("actor", "problem", "context", "consequence"),
+        "extracted",
+    )
+    for field, value in extracted.items():
+        _require_nonblank(value, field)
+    evidence = _exact_mapping(observation["evidence"], ("quote", "start", "end"), "evidence")
+    quote = _require_nonblank(evidence["quote"], "quote")
+    start, end = evidence["start"], evidence["end"]
+    if (
+        type(start) is not int or type(end) is not int
+        or start < 0 or end <= start or end - start != len(quote)
+    ):
+        raise ValueError("evidence offsets must be integers matching quote length")
+    annotations = _exact_mapping(
+        observation["annotations"],
+        ("observation_type", "problem_signal", "money_signal", "money_signal_type",
+         "usable_evidence", "confidence"),
+        "annotations",
+    )
+    # Reuse the extraction contract's enums without manufacturing a source document.
+    if not isinstance(annotations["observation_type"], str) or annotations["observation_type"] not in development_slice._OBSERVATION_TYPES:
+        raise ValueError("observation_type is invalid")
+    for field in ("problem_signal", "money_signal", "usable_evidence"):
+        if type(annotations[field]) is not bool:
+            raise ValueError(f"{field} must be boolean")
+    money_type = annotations["money_signal_type"]
+    if annotations["money_signal"] is False:
+        if money_type is not None:
+            raise ValueError("money_signal_type must be null when signal is false")
+    elif not isinstance(money_type, str) or money_type not in development_slice._MONEY_TYPES:
+        raise ValueError("money_signal_type is invalid")
+    confidence = annotations["confidence"]
+    if (
+        isinstance(confidence, bool) or not isinstance(confidence, (int, float))
+        or not 0 <= confidence <= 1
+    ):
+        raise ValueError("confidence must be numeric and between zero and one")
+    unknowns = _exact_mapping(
+        observation["unknowns"],
+        ("time_spent_seconds", "independent_author_count", "recurrence_count",
+         "actual_payment", "willingness_to_pay"),
+        "unknowns",
+    )
+    if any(value is not None for value in unknowns.values()):
+        raise ValueError("unknown values must remain null in extracted-observation-v1")
+    return _partial_result(envelope, abstained=False)
+
+
+def _require_nonblank(value: object, name: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"{name} must be a nonblank string")
+    return value
+
+
+def _partial_result(envelope: Mapping[str, object], *, abstained: bool) -> dict[str, object]:
+    return {
+        "status": "ABSTAINED" if abstained else "PARTIAL_ASSESSMENT",
+        "document_id": envelope["document_id"],
+        "input_snapshot": deepcopy(envelope),
+        "evidence_status": "NEEDS_REVIEW",
+        "actionability_status": "UNKNOWN",
+        "automatic_decision": "HOLD",
+        "cluster_status": "NOT_ASSESSED",
+        "cards": None,
+        "decision_reasons": ["extraction_abstained"] if abstained else [
+            "independence_not_established",
+            "actionability_not_established",
+            "cluster_identity_not_supplied",
+        ],
+    }
+
+
 def build_vertical_slice(
     observations: Sequence[Mapping[str, object]],
-) -> list[dict[str, object]]:
-    """Build deterministic fixture-only cards without a provider or source corpus."""
+    *,
+    input_contract: str = "fixture-v1",
+) -> list[dict[str, object]] | dict[str, object]:
+    """Keep legacy cards by default; explicitly assess one incomplete extraction."""
+    if input_contract == "extracted-observation-v1":
+        return _assess_extracted_observation(observations)
+    if input_contract != "fixture-v1":
+        raise ValueError("unsupported input_contract")
     return [
         _build_card(problem_key, values)
         for problem_key, values in sorted(_grouped_observations(observations).items())
     ]
+
 
 
 def evaluate_product_promotion(

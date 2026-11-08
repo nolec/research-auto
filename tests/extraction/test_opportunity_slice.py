@@ -390,3 +390,147 @@ def test_product_promotion_requires_a_non_empty_reviewer_identity() -> None:
     )
 
     assert "reviewer_identity_missing" in receipt["failure_reasons"]
+
+
+@pytest.fixture
+def partial_envelope():
+    from src.extraction.development_slice import extraction_to_observation
+    text = "α😀 author fixes labels manually."
+    document = dict(document_id="local:partial", source="local_fixture", title="Partial observation",
+                    text=text, source_url="https://example.invalid/partial", published_at="2026-11-08T00:00:00Z")
+    extraction = dict(document_id=document["document_id"], observation_type="user_problem",
+        actor="author", problem="missing labels", context="export", consequence="manual fix",
+        evidence_quote=text[2:], evidence_start=2, evidence_end=len(text), problem_signal=True,
+        money_signal=False, money_signal_type=None, usable_evidence=True, confidence=0.8, abstention_reason=None)
+    return extraction_to_observation(document, extraction)
+
+
+def _forbid_incomplete_downstream(monkeypatch):
+    from src.extraction import opportunity_slice, model_card_handoff
+    def forbidden(*args, **kwargs):
+        pytest.fail("incomplete input must not enter downstream card/cluster/promotion paths")
+    for name in ("_grouped_observations", "_build_card", "_conservative_group_count", "render_card_markdown", "evaluate_product_promotion"):
+        monkeypatch.setattr(opportunity_slice, name, forbidden)
+    for name in ("execute_same_process_card_handoff", "_execute_reserved_handoff", "_publish_artifacts"):
+        monkeypatch.setattr(model_card_handoff, name, forbidden)
+
+
+@pytest.mark.parametrize("expanded", [False,True])
+def test_incomplete_observation_nine_keys_hold(partial_envelope, monkeypatch, expanded):
+    from copy import deepcopy
+    if expanded:
+        partial_envelope["observation"]["source_metadata"].update(author_hash="source-author", community=None)
+    before = deepcopy(partial_envelope)
+    _forbid_incomplete_downstream(monkeypatch)
+    result = build_vertical_slice([partial_envelope], input_contract="extracted-observation-v1")
+    assert result == dict(status="PARTIAL_ASSESSMENT", document_id=before["document_id"], input_snapshot=before,
+        evidence_status="NEEDS_REVIEW", actionability_status="UNKNOWN", automatic_decision="HOLD",
+        cluster_status="NOT_ASSESSED", cards=None, decision_reasons=["independence_not_established",
+        "actionability_not_established", "cluster_identity_not_supplied"])
+    assert len(result) == 9 and partial_envelope == before
+    partial_envelope["observation"]["extracted"]["actor"] = "caller mutated"
+    assert result["input_snapshot"] == before
+
+
+def test_incomplete_valid_abstention_preserves_reason(monkeypatch):
+    from copy import deepcopy
+    envelope = dict(status="ABSTAINED", document_id="local:abstained", observation=None, abstention_reason=" source insufficient ")
+    before = deepcopy(envelope)
+    _forbid_incomplete_downstream(monkeypatch)
+    result = build_vertical_slice([envelope], input_contract="extracted-observation-v1")
+    assert result == dict(status="ABSTAINED", document_id=envelope["document_id"], input_snapshot=before,
+        evidence_status="NEEDS_REVIEW", actionability_status="UNKNOWN", automatic_decision="HOLD",
+        cluster_status="NOT_ASSESSED", cards=None, decision_reasons=["extraction_abstained"])
+    envelope["abstention_reason"] = "changed"
+    assert result["input_snapshot"] == before
+
+
+@pytest.mark.parametrize("path,bad", [
+    (("status",),"UNKNOWN"), (("status",),[]), (("document_id",),"  "),
+    (("abstention_reason",),"contradictory reason"), (("observation",),None),
+    (("observation","source_metadata","source")," "),
+    (("observation","source_metadata","title"),"\t"),
+    (("observation","source_metadata","source_url"),"file:///tmp/a"),
+    (("observation","source_metadata","published_at"),"2026-11-08"),
+    *[(("observation","extracted",field)," \t") for field in ("actor","problem","context","consequence")],
+    (("observation","evidence","quote")," "),
+    (("observation","evidence","start"),True), (("observation","evidence","start"),-1),
+    (("observation","evidence","end"),2.0), (("observation","evidence","end"),3),
+    (("observation","annotations","observation_type"),"invalid"),
+    *[(("observation","annotations",field),1) for field in ("problem_signal","money_signal","usable_evidence")],
+    (("observation","annotations","money_signal_type"),"purchase"),
+    *[(("observation","annotations","confidence"),value) for value in (True,-0.1,1.1,float("nan"),float("inf"),None)],
+    *[(("observation","unknowns",field),0) for field in ("time_spent_seconds","independent_author_count","recurrence_count","actual_payment","willingness_to_pay")],
+])
+def test_incomplete_rejects_malformed_values(partial_envelope, monkeypatch, path, bad):
+    target = partial_envelope
+    for key in path[:-1]: target = target[key]
+    target[path[-1]] = bad
+    _forbid_incomplete_downstream(monkeypatch)
+    with pytest.raises(ValueError):
+        build_vertical_slice([partial_envelope], input_contract="extracted-observation-v1")
+
+
+@pytest.mark.parametrize("section", [None,"source_metadata","extracted","evidence","annotations","unknowns"])
+@pytest.mark.parametrize("operation", ["extra","missing"])
+def test_incomplete_rejects_shape_changes(partial_envelope, section, operation):
+    target = partial_envelope if section is None else partial_envelope["observation"][section]
+    if operation == "extra": target["unexpected"] = None
+    else: target.pop(next(iter(target)))
+    with pytest.raises(ValueError):
+        build_vertical_slice([partial_envelope], input_contract="extracted-observation-v1")
+
+
+@pytest.mark.parametrize("patch", [{"author_hash":None}, {"author_hash":"x","community":" "},
+    {"author_hash":False,"community":None}])
+def test_incomplete_rejects_partial_or_invalid_metadata(partial_envelope, patch):
+    partial_envelope["observation"]["source_metadata"].update(patch)
+    with pytest.raises(ValueError):
+        build_vertical_slice([partial_envelope], input_contract="extracted-observation-v1")
+
+
+@pytest.mark.parametrize("status,observation,reason", [("ABSTAINED",None,None), ("ABSTAINED",None," "),
+    ("ABSTAINED",{},"valid reason"), ("OBSERVATION",None,"valid reason"), ("ABSTAINED",None,False)])
+def test_incomplete_rejects_abstention_contradictions(status, observation, reason):
+    with pytest.raises(ValueError):
+        build_vertical_slice([dict(status=status,document_id="local:x",observation=observation,abstention_reason=reason)], input_contract="extracted-observation-v1")
+
+
+@pytest.mark.parametrize("container", [None,{},[],[{},{}],"invalid",({},)])
+def test_incomplete_requires_single_list(container):
+    with pytest.raises(ValueError):
+        build_vertical_slice(container, input_contract="extracted-observation-v1")
+
+
+def test_fixture_api_explicit_default_compatibility():
+    fixture = _actionable_fixture()
+    assert build_vertical_slice(fixture, input_contract="fixture-v1") == build_vertical_slice(fixture)
+    with pytest.raises(ValueError):
+        build_vertical_slice(fixture, input_contract="invalid")
+
+
+@pytest.mark.parametrize("money_type", ["purchase", "willingness_to_pay", "outsourcing", None, [], "invalid"])
+def test_incomplete_money_signal_type_contract(partial_envelope, money_type):
+    annotations = partial_envelope["observation"]["annotations"]
+    annotations.update(money_signal=True, money_signal_type=money_type)
+    if money_type in ("purchase", "willingness_to_pay", "outsourcing"):
+        result = build_vertical_slice([partial_envelope], input_contract="extracted-observation-v1")
+        assert result["automatic_decision"] == "HOLD"
+        assert result["input_snapshot"]["observation"]["unknowns"]["actual_payment"] is None
+    else:
+        with pytest.raises(ValueError):
+            build_vertical_slice([partial_envelope], input_contract="extracted-observation-v1")
+
+
+def test_incomplete_rejects_blank_quote_with_valid_offsets(partial_envelope):
+    partial_envelope["observation"]["evidence"] = dict(quote=" \t", start=0, end=2)
+    with pytest.raises(ValueError):
+        build_vertical_slice([partial_envelope], input_contract="extracted-observation-v1")
+
+
+@pytest.mark.parametrize("part", ["observation", "source_metadata", "extracted", "evidence", "annotations", "unknowns"])
+def test_incomplete_rejects_nonmapping_sections(partial_envelope, part):
+    if part == "observation": partial_envelope[part] = []
+    else: partial_envelope["observation"][part] = []
+    with pytest.raises(ValueError):
+        build_vertical_slice([partial_envelope], input_contract="extracted-observation-v1")
