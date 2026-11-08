@@ -45,3 +45,6 @@ artifacts/source-spike/
 
 # Local-only model calibration audit handoffs and submissions
 artifacts/extraction/calibration/audit-local/
+/artifacts/single-case/66574-cli-persistent-v3/
+/artifacts/single-case/66574-cli-persistent-v4/
+/artifacts/single-case/66545-cli-persistent-v1/
