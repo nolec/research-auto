@@ -20,6 +20,26 @@
 
 ## 현재 상태
 
+### 실제 사용: Research Console
+
+기존 저장 자료를 선택해 `rule_v1` 추출과 단일 관측 평가를 실행하고, 문서별 인용·원문·보류 사유를 확인한다. 모델 기반 군집 및 Opportunity Card 생성은 아직 지원하지 않는다. 새 수집·외부 API 호출·기존 기록 변경은 하지 않는다.
+
+```sh
+python3 -m src.research_console --serve
+```
+
+브라우저에서 `http://127.0.0.1:8765`를 열고 저장된 데이터와 처리할 문서 수를 선택한다. 로컬 서버가 제한된 환경에서는 다음 명령으로 독립 HTML 결과를 생성할 수 있다.
+
+```sh
+python3 -m src.research_console --list
+python3 -m src.research_console --run ff2ac41d-73bb-4593-9e3e-9aa3a93369dd --limit 100 --output research-result.html
+python3 -m src.research_console --snapshot --output research-console.html
+```
+
+`--snapshot`은 저장된 실행별 최대 100건을 분석하고 하나의 HTML에 결과를 포함한다. 브라우저에서 파일을 열면 서버 없이 실행별 결과를 선택하고 검색할 수 있다. 실행 기록 사이 중복 문서가 있을 수 있으며, 오프라인 버튼은 재분석이 아닌 결과 조회다.
+
+기존 결과를 덮어쓰지 않도록 새 출력 파일명을 사용한다. 키워드 검출 건수는 확정 손실·지불 의사나 검증된 사업 기회 건수가 아니다.
+
 Task 1 Opportunity Card 계약은 완료됐다. Task 2 Source Spike는 GitHub, Stack Exchange, Steam, TED에서 각각 실제 analysis dataset **100/100**, 총 **400/500**을 확보한 상태로 동결했다. 네 source의 primary human review는 모두 **20/20** 완료됐고 독립 secondary는 각각 **0/5**라 official eligibility와 canonical source-quality report는 아직 deferred다. 기존 source-spike holdout은 이미 검토 과정에 노출됐으므로 extractor의 독립 평가셋이 아니라 `source_spike_reserved` 이력으로 취급한다.
 
 Task 3는 deterministic calibration baseline, evaluator, provenance-bound metric bundle generator와 count-aware calibration gate에 더해 첫 OpenAI GPT-5.6 inference profile, strict Responses transport, one-shot 40-record calibration runner, synthetic bounded provider-preflight executor까지 구현됐다. preflight는 별도 atomic claim, active/orphan 판별, 최대 3회 operational attempt, 보수적 $0.10 비용 상한, metric claim 불변 검증, semantic sanity hard-stop, hash-bound aggregate-only terminal artifact와 상태별 CLI exit code를 강제한다. 실제 `rule_v1` 40건 aggregate bundle은 implementation hash `555d9a2e…caa98`로 동결됐고 valid 40, invalid 0, abstention 26, coverage 35%이며 Problem precision/recall은 100%/30.3%, Money는 75%/33.3%, usable evidence는 100%/42.4%다. Promotion-candidate receipt scaffold는 model·card·source·review hash를 기록하지만 authoritative card-generation·source-eligibility producer가 없어 제품 승격을 항상 차단한다.
