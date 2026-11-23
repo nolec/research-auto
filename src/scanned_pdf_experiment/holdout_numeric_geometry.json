@@ -1,0 +1,16 @@
+{
+  "status": "FIXED_MANUAL_GEOMETRY_NUMERIC_DIAGNOSTIC_ONLY",
+  "coordinate_system": "resized crop pixels, excluding ruler margins; scale by actual crop width / view_width and height / view_height",
+  "scopes": [
+    {"id":"H04","crop":0,"view_width":1100,"view_height":460,"columns":[[456,575],[584,701],[711,825]],"centers":[247,270,287,303,321,338,354,371],"half_height":8},
+    {"id":"H05","crop":0,"view_width":837,"view_height":800,"columns":[[365,457],[469,560],[565,658]],"centers":[379,435,472,509,546,581,619,637],"half_height":10},
+    {"id":"H06","crop":1,"view_width":1100,"view_height":427,"columns":[[411,510],[732,810],[820,890]],"centers":[82,103,121,139,156,174,191,209],"half_height":9,"column_y_offsets":[0,4,5]},
+    {"id":"H09A","crop":1,"view_width":1100,"view_height":333,"columns":[[522,655],[665,798],[805,940]],"centers":[73,90,107,123,139,155,171,187],"half_height":8},
+    {"id":"H10","crop":1,"view_width":1100,"view_height":325,"columns":[[683,761],[779,857],[875,952]],"centers":[48,68,85,104,122,141,160,179],"half_height":9},
+    {"id":"H13","crop":0,"view_width":1100,"view_height":739,"columns":[[391,516],[525,653],[661,780]],"centers":[384,405,426,447,468,489,511,532,553],"half_height":10},
+    {"id":"H14","crop":0,"view_width":1081,"view_height":800,"columns":[[502,625],[636,748],[756,868]],"centers":[382,406,431,455,480,504,529,565],"half_height":11,"column_y_offsets":[0,2,4]},
+    {"id":"H15","crop":0,"view_width":1100,"view_height":789,"columns":[[365,465],[473,558],[680,766]],"centers":[431,456,477,498,519,540,560,580],"half_height":10},
+    {"id":"H16","crop":0,"view_width":1100,"view_height":748,"columns":[[587,664],[673,746],[754,829]],"centers":[387,416,437,458,480,501,522,543],"half_height":10},
+    {"id":"H18","crop":0,"view_width":732,"view_height":800,"columns":[[318,393],[402,474],[526,597]],"centers":[386,402,418,449,465,480,511,527,543],"half_height":8}
+  ]
+}
