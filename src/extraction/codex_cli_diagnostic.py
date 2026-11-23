@@ -194,10 +194,15 @@ def parse_cli_events(
     stdout: str, document: Mapping[str, object], *,
     schema: Mapping[str, object] | None = None,
     usage_out: dict[str, int] | None = None,
+    allow_chronicle_startup_warning: bool = False,
+    semantic_validator=validate_extraction,
 ) -> dict[str, object]:
     terminal_count = 0
     messages: list[str] = []
     saw_error = False
+    thread_started = False
+    turn_started = False
+    chronicle_warning_seen = False
     _capture_usage(stdout, usage_out)
     for line in stdout.splitlines():
         try:
@@ -207,6 +212,10 @@ def parse_cli_events(
         if not isinstance(event, dict):
             raise CliContractError("CLI_TERMINAL_EVENT_INVALID")
         kind = event.get("type")
+        if kind == "thread.started":
+            thread_started = True
+        if kind == "turn.started":
+            turn_started = True
         if kind in {"error", "turn.failed"}:
             saw_error = True
         if kind == "turn.completed":
@@ -216,6 +225,26 @@ def parse_cli_events(
             if not isinstance(item, dict):
                 raise CliContractError("CLI_TERMINAL_EVENT_INVALID")
             item_type = item.get("type")
+            if item_type == "error":
+                # An error item is not a tool invocation. Keep it fail-closed;
+                # only expose a narrow, non-sensitive classification.
+                message = item.get("message")
+                known_warning = (
+                    "Under-development features enabled: chronicle. Under-development features are incomplete and may behave unpredictably. "
+                    "To suppress this warning, set `suppress_unstable_features_warning = true` in "
+                    + str(Path.home() / ".codex/config.toml") + "."
+                )
+                if (allow_chronicle_startup_warning and thread_started and not turn_started
+                    and not terminal_count and not chronicle_warning_seen
+                    and kind == "item.completed" and message == known_warning):
+                    chronicle_warning_seen = True
+                    continue
+                error_class = (
+                    "TIMEOUT" if isinstance(message, str)
+                    and message.strip().lower() == "failed to refresh available models: request timed out"
+                    else "UNKNOWN"
+                )
+                raise CliContractError("CLI_ERROR_EVENT", error_class=error_class)
             if item_type in {"command_execution", "file_change", "mcp_tool_call", "web_search", "tool_call"}:
                 raise CliContractError("CLI_TOOL_EVENT")
             if item_type not in {"agent_message", "reasoning"}:
@@ -267,7 +296,7 @@ def parse_cli_events(
             "stage": "semantic", "field": "document_id", "rule": "DOCUMENT_ID",
         })
     try:
-        validate_extraction(document, output)
+        semantic_validator(document, output)
     except ExtractionValidationError as error:
         raise CliContractError("CLI_OUTPUT_SCHEMA_INVALID", validation={
             "stage": "semantic", "field": error.field, "rule": error.rule,

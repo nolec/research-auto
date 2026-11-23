@@ -121,6 +121,38 @@ def test_parser_accepts_one_terminal_message_and_rejects_tools() -> None:
         parse_cli_events(_events() + '\n{"type":"turn.completed"}', DOCUMENT)
 
 
+@pytest.mark.parametrize("message,classification", [
+    ("failed to refresh available models: request timed out", "TIMEOUT"),
+    ("unrecognized error", "UNKNOWN"),
+])
+def test_error_item_is_not_misclassified_as_tool_use(message, classification):
+    lines = _events().splitlines()
+    lines.insert(1, json.dumps({"type": "item.completed", "item": {
+        "type": "error", "message": message}}))
+    with pytest.raises(CliContractError, match="^CLI_ERROR_EVENT$") as caught:
+        parse_cli_events("\n".join(lines), DOCUMENT)
+    assert caught.value.diagnostics["error_class"] == classification
+
+
+def test_chronicle_warning_is_only_allowed_before_turn_when_explicitly_enabled():
+    warning = {"type": "item.completed", "item": {"id": "item_0", "type": "error",
+        "message": "Under-development features enabled: chronicle. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in " + str(Path.home() / '.codex/config.toml') + "."}}
+    lines = _events().splitlines()
+    before = "\n".join([lines[0], json.dumps(warning), *lines[1:]])
+    with pytest.raises(CliContractError, match="CLI_ERROR_EVENT"):
+        parse_cli_events(before, DOCUMENT)
+    assert parse_cli_events(before, DOCUMENT, allow_chronicle_startup_warning=True) == _output()
+    after = "\n".join([*lines[:2], json.dumps(warning), *lines[2:]])
+    for invalid in (after, before.replace('chronicle.', 'other.'),
+                    before.replace('unpredictably.', 'unpredictably. unexpected error'),
+                    "\n".join([lines[0], json.dumps(warning), json.dumps(warning), *lines[1:]])):
+        with pytest.raises(CliContractError, match="CLI_ERROR_EVENT"):
+            parse_cli_events(invalid, DOCUMENT, allow_chronicle_startup_warning=True)
+    with pytest.raises(CliContractError, match="CLI_TOOL_EVENT"):
+        parse_cli_events(before + '\n{"type":"item.started","item":{"type":"command_execution"}}',
+                         DOCUMENT, allow_chronicle_startup_warning=True)
+
+
 def test_parser_exposes_observed_token_usage_without_raw_events() -> None:
     usage: dict[str, int] = {}
     parse_cli_events(_events(), DOCUMENT, usage_out=usage)
