@@ -1,0 +1,15 @@
+# Economic burden and loss discovery
+
+2026-11-23 KST. Separate exploratory evidence register: `artifacts/extraction/calibration/audit-local/economic-burden-loss-discovery-20261123/observations.json`. Four public source records, no model calls and no independent gold. The successful Companies House collection remains a separate reported card-payment pilot (20 records, GBP 55,531.30). V7 unchanged.
+
+| Signal | Verified source | Interpretation |
+| --- | --- | --- |
+| Labor burden | [UK Small Business Commissioner, 2025](https://www.smallbusinesscommissioner.gov.uk/late-payments-research-2/): 86 hours annually per business affected by late payment; 22% of surveyed businesses reported spending staff time chasing late payments | Survey-based work burden; not individual time logs |
+| Economic consequence | Same UK study: estimated nearly GBP 11bn/year economic cost, GBP 26bn outstanding late payments | Modeled costs and outstanding debt; not observed lost principal. Same evidence group as staff time |
+| Task friction | [UK DBT, 2024](https://www.gov.uk/government/publications/late-payments-research-performance-and-practices-across-business/late-payments-research-understanding-variations-in-payment-performance-and-practices-across-business-sectors-and-sizes-html-executive-summary): administrative errors 36%, disputed invoices 31%, technical issues 23% among surveyed businesses' reported reasons for paying suppliers late | Concrete workflow hypothesis; survey attribution, not proof of avoidable losses |
+| Regulatory workload | [SBA approved ICR](https://www.reginfo.gov/public/do/PRAViewICR?ref_nbr=202506-3245-003): 250 estimated annual responses, 1,000 hours, USD 32,520 cost burden | Estimated 4 hours per response; not observed time or actual expenditure |
+| Reported accounting loss | [SEC XBRL disclosure](https://www.sec.gov/Archives/edgar/data/1402436/000119312526076745/R13.htm): net receivables write-offs USD 14.8m in FY2025, 8.7m in FY2024, 9.2m in FY2023 | Accounting write-off data; no demonstrated causal relation to invoice automation, three years are not three independent buyers |
+
+## Next bounded experiment
+
+Candidate workflow: invoice reconciliation / overdue invoice follow-up. The UK survey links task burden and cost estimates but does not show purchase commitments for this workflow. The SEC observation must not be joined as if attributable to that workflow; it supports a separate accounting-loss source feasibility test. Public SEC [XBRL API docs](https://www.sec.gov/search-filings/edgar-application-programming-interfaces) support a possible deterministic adapter; underlying concept availability and 10-K period/unit/duplicate handling still need verified before collection. Regulatory estimates must remain a separate type from actual measured work hours. Prioritize finding actual buyer listings or completed solution spend specific to invoicing, reconciliation, and collections before scoring an opportunity; no change to official gates. All results here are exploratory, not independent benchmark or market size.
