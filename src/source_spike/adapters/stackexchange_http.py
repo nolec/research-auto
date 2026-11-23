@@ -80,7 +80,7 @@ class HttpStackExchangeTransport:
                         max_http_attempts: int, request_timeout_seconds: float,
                         max_total_elapsed_seconds: float, max_backoff_wait_seconds: float,
                         max_retries: int, base_backoff_seconds: float,
-                        max_backoff_seconds: float) -> StackExchangeTransportSuccess | StackExchangeTransportFailure:
+                        max_backoff_seconds: float, tagged: str | None = None) -> StackExchangeTransportSuccess | StackExchangeTransportFailure:
         started = self._monotonic()
         wait = max(0.0, self._next_questions_at - started)
         if wait > max_backoff_wait_seconds or wait >= max_total_elapsed_seconds:
@@ -89,6 +89,8 @@ class HttpStackExchangeTransport:
             self._sleep(wait)
         query = {"site": site, "page": page, "pagesize": page_size, "filter": filter_id,
                  "sort": sort, "order": order, "fromdate": _epoch(published_after), "todate": _epoch(published_before)}
+        if tagged is not None:
+            query["tagged"] = tagged
         if self._key:
             query["key"] = self._key
         request = Request(f"https://api.stackexchange.com/2.3/questions?{urlencode(query)}",

@@ -1,0 +1,7 @@
+# Fresh Stack Exchange economic-signal intake
+
+2026-11-23 KST. New one-shot diagnostic under the existing official API-only policy. Do not modify historical authorization, datasets or labels. Source: https://api.stackexchange.com/docs/questions and https://api.stackexchange.com/docs/throttle. Use the existing safe filter from `config/source-spike/stackexchange-filter.json`.
+
+Freeze two arms: Super User tag `microsoft-excel` and `libreoffice-calc`. One official `/2.3/questions` page of ten returned questions per arm, creation descending, UTC 2026-08-25 through 2026-11-22 inclusive. Retain first five eligible distinct questions per arm. No retries, no HTML scraping, no substitutions. Stop before a second call if quota remaining is at most 100, any positive backoff is reported, or a transport error occurs. Preserve shortfalls. Anonymous API only; do not request user OAuth or credentials.
+
+Retain canonical question URL, ID, publication date, content license, title and first 25 words of visible question body (HTML decoded and whitespace normalized). Exclude contact candidates, unsafe or sensitive topics, missing license/provenance, missing author key, duplicates against historical IDs/text or prior retained records, and more than two questions from the same author. Author IDs are ephemeral, never persisted. No raw payload, labels, model inference or product promotion. The excerpt sample is not representative of all Stack Exchange questions.
