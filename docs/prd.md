@@ -46,6 +46,18 @@ The initial ACTIONABLE gate requires observed support for the actor, a current s
 
 Allowed states are `ACTIONABLE`, `NOT_ACTIONABLE`, and `UNKNOWN`.
 
+#### 4.2.1 Founder execution fit (online-only)
+
+Discovery remains industry-agnostic. For the project team's own business selection, evaluate the proposed delivery scope separately from evidence strength and the existing actionability gate. A candidate must support an end-to-end online offering: acquisition, delivery and support must be feasible without the founder doing onsite work, handling physical inventory, or shipping goods. An offline industry's digital problem can qualify, but an online marketplace listing for physical work does not qualify by itself.
+
+- `PASS`: a credible online deliverable and delivery path are identified, feasible for one founder with an estimated initial cost no greater than KRW 500,000.
+- `FAIL`: the proposed scope requires physical execution by the founder or exceeds the initial resource constraints.
+- `UNKNOWN`: delivery scope, required resources, or feasibility remains unverified. Hold for investigation rather than assuming fit.
+
+Prefer repeatable or automatable delivery, platform/inbound acquisition, and a small paid pilot before building a full product. These are selection preferences, not proof of demand or willingness to pay. A new digital solution hypothesis for an offline task requires its own evidence of buyer pain and purchasing behavior.
+
+Apply this additional fit screen to the team's business shortlist immediately through manual triage. Do not modify frozen V1 benchmark labels, evidence thresholds, or historical TOP 20 results; automated screening requires a separately versioned implementation and evaluation. A `PASS` never upgrades evidence or actionability status.
+
 ### 4.3 Review Value
 
 Review Value ranks candidates only after the evidence and actionability gates have run. Frequency establishes eligibility but does not directly increase rank.
