@@ -11,24 +11,24 @@
 
 ## 작업 절차
 
-프로젝트 루트에서 아래 명령을 실행한다. 기존 설치된 Poppler, Tesseract.js, 로컬 영어 OCR 모델을 재사용한다. `openpyxl`은 기존 Codex Python에 설치되어 있다. 원본 경로와 작업 폴더 이름을 실제 주문에 맞게 바꾼다. 작업 폴더는 미리 만들지 않는다.
+프로젝트 루트에서 아래 명령을 실행한다. 기존 `src.scanned_pdf_experiment.order` 모듈 경로도 호환된다. 기존 설치된 Poppler, Tesseract.js, 로컬 영어 OCR 모델을 재사용한다. `openpyxl`은 기존 Codex Python에 설치되어 있다. 원본 경로와 작업 폴더 이름을 실제 주문에 맞게 바꾼다. 작업 폴더는 미리 만들지 않는다.
 
 ```sh
-python3 -m src.scanned_pdf_experiment.order prepare /absolute/path/customer.pdf /tmp/order-001 --pages 1 2
+python3 -m src.services.scanned_pdf.order prepare /absolute/path/customer.pdf /tmp/order-001 --pages 1 2
 open /tmp/order-001/map.html
 ```
 
 1. 화면에서 열 경계와 행 경계를 선택한다. 파란 선은 열, 주황 선은 행이다. 숫자 영역의 첫 경계와 마지막 경계까지 포함한다. 클릭 후 좌표를 직접 수정할 수도 있다. 반드시 원문과 비교해 각 셀이 정확히 한 값인지 확인한다. `scope.json`을 내려받는다.
 
 ```sh
-python3 -m src.scanned_pdf_experiment.order extract /tmp/order-001 ~/Downloads/scope.json
+python3 -m src.services.scanned_pdf.order extract /tmp/order-001 ~/Downloads/scope.json
 open /tmp/order-001/review.html
 ```
 
 2. 모든 셀을 원본 및 확대 이미지와 대조한다. OCR 초안을 수정하고 확인 완료를 선택한다. 판독 불가는 빈 값으로 남긴다. 검수 완료 후 `review.json`을 다운로드한다. 브라우저를 새로고침하면 입력 내용은 사라지므로 검수 중에는 새로고침하지 않는다.
 
 ```sh
-~/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 -m src.scanned_pdf_experiment.order deliver /tmp/order-001 ~/Downloads/review.json
+~/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 -m src.services.scanned_pdf.order deliver /tmp/order-001 ~/Downloads/review.json
 ```
 
 3. `delivery.xlsx`의 페이지별 숫자 시트와 `Review` 시트를 확인한다. Review에는 원본 페이지, 선택 영역 기준 행/열 번호, 페이지 이미지 좌표, OCR 초안, 확정 값 및 상태가 남는다. 판독 불가 값은 빈 셀과 강조 표시로 나타난다. 원본 표의 행/열 이름은 자동 추출하지 않으므로 필요한 경우 수동 입력하고 원문과 대조한다.

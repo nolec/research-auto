@@ -6,10 +6,10 @@
 
 ## 실행
 
-Python 환경에 openpyxl이 필요하다. 저장소 루트에서 다음과 같이 실행한다. 출력 경로는 존재하지 않는 새 디렉터리여야 한다.
+Python 환경에 openpyxl이 필요하다. 저장소 루트에서 다음과 같이 실행한다. 출력 경로는 존재하지 않는 새 디렉터리여야 한다. 기존 `src.periodic_report` 모듈도 호환된다.
 
 ```bash
-python3 -m src.periodic_report --key id --date-field day --category-field group --quantity-field qty --frequency monthly --output /tmp/report-order-001 /tmp/a.csv /tmp/b.csv
+python3 -m src.services.periodic_report --key id --date-field day --category-field group --quantity-field qty --frequency monthly --output /tmp/report-order-001 /tmp/a.csv /tmp/b.csv
 ```
 
 `weekly`는 월요일 시작, `monthly`는 달력 월 기준. 지정 필드가 실제 헤더와 일치해야 한다. 기존 엑셀 정리 CLI의 동작은 변경하지 않는다.
