@@ -18,6 +18,8 @@
 
 현재 권위 있는 제품 계약은 [`docs/prd.md`](docs/prd.md), 구현 진행 상황과 다음 작업은 [`docs/roadmap.md`](docs/roadmap.md)를 참고한다. 초기 아이디어를 정리한 [`docs/v1-spec.md`](docs/v1-spec.md)는 역사적 초안이다.
 
+수요 탐색 엔진, 납품용 서비스, 독립 실험의 코드 경계와 실행 명령은 [프로젝트 구조](docs/project-structure.md)를 참고한다. 기존 검증 기록의 경로·해시를 유지하기 위해 엔진 패키지는 이동하지 않으며, 납품용 구현만 `src/services/`로 분리했다.
+
 ## 현재 상태
 
 ### 실제 사용: Research Console
