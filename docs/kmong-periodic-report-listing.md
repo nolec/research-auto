@@ -1,6 +1,15 @@
 # 크몽 정기 실적 보고서 상품 등록안
 
-상태: 등록 전 초안. 기존 엑셀 정리·검수 상품과 별도 판매. 고객 주문·리뷰·결제 실적을 주장하지 않는다.
+2026-11-24에 [엑셀 주간 월간 실적 보고서 및 데이터 검수 #875274](https://kmong.com/gig/875274)의 샘플이 공개 페이지에 표시되는 것을 확인했다. 아래 등록안은 준비 당시 기록이다.
+
+## 게시한 샘플 이미지
+
+작업 안내 뒤에 아래 네 장을 배치했다. 동일한 가상 시설 점검 CSV 2개에서 원본 13행을 대조했다. 6행 반영, 1행 중복 제외, 6행 확인 필요로 분류했다. 월간 집계는 9월 14건과 10월 17건이다. 주간 샘플은 8월 31일~9월 6일 14건과 9월 28일~10월 4일 17건을 비교한다.
+
+1. [월간 실적](../generated_images/kmong-listing-samples/report/01-monthly-report.png)
+2. [주간 실적](../generated_images/kmong-listing-samples-v2/report-weekly-summary.png)
+3. [원본 행 및 검수](../generated_images/kmong-listing-samples-v2/report-source-review.png)
+4. [확인 필요 목록](../generated_images/kmong-listing-samples/report/03-needs-review.png)
 
 ## 상품명
 

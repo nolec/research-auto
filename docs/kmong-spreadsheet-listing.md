@@ -1,6 +1,17 @@
 # 크몽 엑셀 정리·검수 등록 초안
 
-상태: 등록 전. PDF 상품 #874602은 승인 대기를 유지한다. 가상 자료의 XLSX 납품 샘플 및 일반 주문용 로컬 도구를 검증했다. 실제 고객 주문의 전체 소요시간은 미측정이며, 결제 전에 샘플·범위·작업 가능 여부를 확인한다.
+2026-11-24에 [엑셀 파일 병합 및 중복 불일치 데이터 검수 #874814](https://kmong.com/gig/874814)와 [PDF 스캔 표 엑셀 변환 및 숫자 검수 #874602](https://kmong.com/gig/874602)의 샘플이 공개 페이지에 표시되는 것을 확인했다. 아래 상품 설명과 가격 초안은 등록 준비 당시 기록이다. 가상 자료의 XLSX 납품 샘플 및 일반 주문용 로컬 도구를 검증했다. 실제 고객 주문의 전체 소요시간은 미측정이며, 결제 전에 샘플·범위·작업 가능 여부를 확인한다.
+
+## 게시한 샘플 이미지
+
+엑셀 병합 상품은 작업 안내 뒤에 다음 네 장을 배치했다. 원본 CSV 24행의 값과 행 번호를 대조했고, 수정본은 `0007`과 같은 품목코드의 앞자리 0을 표시한다.
+
+1. [원본 행 기록](../generated_images/kmong-spreadsheet-portfolio-v2/01-source-row-log.png)
+2. [병합 결과](../generated_images/kmong-spreadsheet-portfolio-v2/02-cleaned-result.png)
+3. [중복 기록](../generated_images/kmong-spreadsheet-portfolio-v2/03-duplicates.png)
+4. [확인 필요 목록](../generated_images/kmong-spreadsheet-portfolio-v2/04-conflicts.png)
+
+PDF 상품은 [엑셀 변환 결과](../generated_images/kmong-listing-samples/scanned-pdf/01-excel-result.png)와 [숫자 검수표](../generated_images/kmong-listing-samples-v2/pdf-number-review.png)를 게시했다. 미국 인구조사국의 공개 스캔에서 8개 항목의 3개 연도 값을 대조했다. 검수표에는 원본 스캔과 `29,249,086`에서 `29,249,088`로 수정한 사례가 포함되어 있다.
 
 ## 제목
 
