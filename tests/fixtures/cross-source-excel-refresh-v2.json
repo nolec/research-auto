@@ -1,0 +1,154 @@
+{
+  "source_receipt": "artifacts/extraction/calibration/audit-local/weekly-excel-rework-evidence-20261125/run-01",
+  "records": [
+    {
+      "id": "freelancer:40718187",
+      "role": "buyer",
+      "url": "https://www.freelancer.com/projects/excel-macros/weekly-excel-report-automation",
+      "kind": "archived_summary",
+      "published_date": "2026-09-17",
+      "summary": "I keep one master report in Excel and every week I receive three supporting reports, also in Excel.\nAppend any new entries\n$10-30 CAD",
+      "context": "The buyer needs a reusable one-click refresh. The latest data from three Excel workbooks goes into the existing Excel master, appending new rows and updating existing rows. Other requirements are normalized dates, preserved calculations and two outputs split by site code. The public CAD 10–30 range is a posted budget; actual payment is unverified."
+    },
+    {
+      "id": "microsoft:1352370",
+      "role": "user",
+      "url": "https://techcommunity.microsoft.com/discussions/excelgeneral/update-a-table-from-external-file-weekly/1352370",
+      "kind": "archived_summary",
+      "published_date": "2020-05-01",
+      "summary": "I need some help to find the best way to analyse a table I receive updated weekly.\nmy file is also automatically updated?",
+      "context": "The author manually copies a newly received weekly table into a separate Excel workbook with formulas, merges it with an existing table and updates pivot tables. The author wants the existing workbook updated from the latest source file without copy and paste."
+    },
+    {
+      "id": "freelancer:40698089",
+      "role": "buyer",
+      "url": "https://www.br.freelancer.com/projects/data-management/weekly-investment-returns-entry",
+      "kind": "archived_summary",
+      "published_date": "2026-09-08",
+      "summary": "I receive a fresh Excel workbook every week\nUpdated master Excel workbook with all new return figures populated.\n₹12500-37500 INR",
+      "context": "The buyer receives an Excel file with new portfolio investment returns each week. They want to insert the new figures into the correct tabs of their existing master Excel workbook, verify totals, percentages and dates against the source, and get the updated workbook back for analysis every week. Automation is allowed; the buyer commissions the recurring updates and also accepts manual data entry."
+    },
+    {
+      "id": "reddit:1xod1c8",
+      "role": "user",
+      "url": "https://www.reddit.com/r/excel/comments/1xod1c8/pulling_information_from_one_spreadsheet_to/",
+      "kind": "archived_summary",
+      "published_date": "2026-11-05",
+      "summary": "There is a master spreadsheet that I am provided with monthly.\nSimply copying and pasting was too time consuming",
+      "context": "The author is assigned to pull selected management-information columns from a newly provided monthly source spreadsheet into a separate receiving workbook and wants a reusable method because copying and pasting is time consuming. The same post separately asks how to consolidate colleagues’ missing data from their returned files; no promise the two tasks share implementation or acceptance criteria."
+    },
+    {
+      "id": "freelancer:40813052",
+      "role": "buyer",
+      "url": "https://www.freelancer.com/projects/data-analysis/automated-excel-reports-charts",
+      "kind": "archived_summary",
+      "published_date": "2026-11-11",
+      "summary": "Each week I receive a fresh CSV-style export from our internal database.\n₹400-750 INR / hour",
+      "context": "The buyer receives a weekly database CSV export and wants it imported into a reusable Excel workbook whose refreshed tables, pivots, charts, and shareable report mirror their existing manual reports. Their delivery requirement includes a trigger when a new export file appears. Under two minutes per file is an acceptance target, not a measured current loss."
+    }
+  ],
+  "candidates": [
+    {
+      "id": "group-003",
+      "name": "최신 주간 데이터로 기존 Excel 표와 피벗 자동 갱신",
+      "delivery_hypothesis": {
+        "mode": "ONLINE_POSSIBLE",
+        "reason": "표 또는 CSV 원본을 연결해 표와 피벗을 갱신하고, 요청된 경우 차트와 공유용 보고서도 함께 갱신할 수 있다."
+      },
+      "references": [
+        {
+          "source_id": "microsoft:1352370",
+          "role": "user",
+          "task": "매주 받는 최신 표를 복사해 붙여넣지 않아도 기존 Excel 통합 문서의 표와 피벗 테이블이 갱신되게 한다.",
+          "evidence_field": "summary",
+          "evidence": "my file is also automatically updated?"
+        },
+        {
+          "source_id": "freelancer:40813052",
+          "role": "buyer",
+          "task": "매주 새 데이터베이스 CSV 내보내기 파일이 들어오면 자동으로 가져와 기존 보고서와 같은 표, 피벗 테이블, 차트, 공유용 보고서를 갱신하는 재사용 가능한 Excel 통합 문서를 만든다.",
+          "evidence_field": "summary",
+          "evidence": "Each week I receive a fresh CSV-style export from our internal database."
+        }
+      ]
+    },
+    {
+      "id": "group-001",
+      "name": "주간 Excel 마스터의 행 추가·갱신과 사이트 코드별 결과 분리",
+      "delivery_hypothesis": {
+        "mode": "ONLINE_POSSIBLE",
+        "reason": "Excel 파일에서 행을 추가·갱신하고 날짜 형식과 기존 수식을 정리해 사이트 코드별 결과를 만들 수 있다."
+      },
+      "references": [
+        {
+          "source_id": "freelancer:40718187",
+          "role": "buyer",
+          "task": "매주 받는 보조 Excel 보고서 3개의 데이터를 한 번에 기존 마스터에 반영한다. 새 행을 추가하고 기존 행을 갱신하면서 날짜 형식을 통일하고 기존 계산식을 유지하며, 사이트 코드별로 결과를 두 개로 나눈다.",
+          "evidence_field": "summary",
+          "evidence": "Append any new entries"
+        }
+      ]
+    },
+    {
+      "id": "group-005",
+      "name": "주간 포트폴리오 수익률의 마스터 반영과 원본 검증",
+      "delivery_hypothesis": {
+        "mode": "ONLINE_POSSIBLE",
+        "reason": "수익률을 해당 탭에 입력하고 합계·비율·날짜를 원본과 대조한 Excel 파일을 전달할 수 있다."
+      },
+      "references": [
+        {
+          "source_id": "freelancer:40698089",
+          "role": "buyer",
+          "task": "매주 새로 받은 포트폴리오 투자 수익률을 기존 Excel 마스터의 해당 탭에 반영하고, 합계·비율·날짜를 원본과 대조한 뒤 갱신된 파일을 전달한다.",
+          "evidence_field": "summary",
+          "evidence": "Updated master Excel workbook with all new return figures populated."
+        }
+      ]
+    },
+    {
+      "id": "group-007",
+      "name": "월간 스프레드시트에서 지정 열만 별도 통합 문서로 가져오기",
+      "delivery_hypothesis": {
+        "mode": "ONLINE_POSSIBLE",
+        "reason": "필요한 관리 정보 열만 추출하는 재사용 가능한 방법을 통합 문서에 구현할 수 있다."
+      },
+      "references": [
+        {
+          "source_id": "reddit:1xod1c8",
+          "role": "user",
+          "task": "매월 제공되는 원본 스프레드시트에서 필요한 관리 정보 열만 별도 통합 문서로 가져오는 재사용 가능한 방법이 필요하다. 수동 복사와 붙여넣기에 시간이 오래 걸린다.",
+          "evidence_field": "summary",
+          "evidence": "Simply copying and pasting was too time consuming"
+        }
+      ]
+    }
+  ],
+  "monthly_link_proposal": {
+    "buyer_group_ids": [
+      "group-001",
+      "group-005"
+    ],
+    "shared_task": "정기적으로 받은 원본 파일의 데이터를 기존 Excel 보고서에 반영해 갱신",
+    "support": [
+      {
+        "field": "summary",
+        "quote": "I keep one master report in Excel and every week I receive three supporting reports, also in Excel.\nAppend any new entries",
+        "source_id": "freelancer:40718187"
+      },
+      {
+        "field": "summary",
+        "quote": "I receive a fresh Excel workbook every week\nUpdated master Excel workbook with all new return figures populated.",
+        "source_id": "freelancer:40698089"
+      },
+      {
+        "field": "summary",
+        "quote": "There is a master spreadsheet that I am provided with monthly.\nSimply copying and pasting was too time consuming",
+        "source_id": "reddit:1xod1c8"
+      }
+    ],
+    "user_group_ids": [
+      "group-007"
+    ]
+  }
+}
