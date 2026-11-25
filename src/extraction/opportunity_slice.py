@@ -24,6 +24,12 @@ _PROMOTION_SCHEMA = json.loads(
 _POLICY_VERSION = "deterministic-vertical-slice-v1"
 _FIXTURE_SOURCE_VERSIONS = {"fixture": "deterministic-v1"}
 _FIXTURE_TIME = "2026-09-03T00:00:00Z"
+MIN_INDEPENDENT_AUTHORS = 5
+MIN_INDEPENDENT_GROUPS = 3
+MIN_RECENT_CASES = 10
+MIN_LOSS_OBSERVATIONS = 2
+MIN_MONEY_OBSERVATIONS = 2
+MIN_SOLUTION_GAPS = 2
 
 
 def _stable_id(prefix: str, value: str) -> str:
@@ -191,11 +197,11 @@ def _build_card(problem_key: str, observations: Sequence[Mapping[str, object]]) 
         evidence_status = "NEEDS_REVIEW"
         evidence_reasons.append("independence is unknown")
     elif (
-        len(authors) >= 5
-        and group_count >= 3
-        and len(supporting) >= 10
-        and len(loss) >= 2
-        and len(money) >= 2
+        len(authors) >= MIN_INDEPENDENT_AUTHORS
+        and group_count >= MIN_INDEPENDENT_GROUPS
+        and len(supporting) >= MIN_RECENT_CASES
+        and len(loss) >= MIN_LOSS_OBSERVATIONS
+        and len(money) >= MIN_MONEY_OBSERVATIONS
     ):
         evidence_status = "EVIDENCE_BACKED"
         evidence_reasons.append("evidence thresholds passed")
@@ -207,7 +213,7 @@ def _build_card(problem_key: str, observations: Sequence[Mapping[str, object]]) 
     if blockers or explicit_not_productizable:
         actionability_status = "NOT_ACTIONABLE"
         actionability_reason = "known blocker or non-productizable scope"
-    elif alternatives and channels and len(gaps) >= 2 and delivery_mode != "UNKNOWN":
+    elif alternatives and channels and len(gaps) >= MIN_SOLUTION_GAPS and delivery_mode != "UNKNOWN":
         actionability_status = "ACTIONABLE"
         actionability_reason = "actionability thresholds passed"
     else:
