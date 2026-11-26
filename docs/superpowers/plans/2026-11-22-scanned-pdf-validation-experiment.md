@@ -106,6 +106,12 @@
 - [ ] Run full offline CLI using frozen dataset, including all 40 combinations. Verify receipt hashes, inspect examples of correct and incorrect detections, report actual precision/recall+per-type and baseline comparison with uncertainties. If failed, preserve failure and no tuning on holdout. Link output to candidate evidence via new report (do not alter historical report or existing production state). H0/H1 actual human timing only once reviewer agrees and can participate; otherwise report PENDING with review packet.
 - [ ] Scoped commit when permitted; include code/tests/runbook, not arbitrary public source binaries without approval and redistribution rights. Report status separately (technical automated gate, human timing, business HOLD).
 
+## 합성 파일럿 재현 기록 (2026-11-26 KST)
+
+- **24/30**은 `Item`을 포함한 헤더 네 열 모두에 OCR 신뢰도 80 이상을 요구하면 재현된다. `doc-07`과 `doc-08`의 `Item` 신뢰도는 둘 다 76.37이어서 문서별 오류 3건씩을 놓쳤다. 이 결과는 보관된 `results-parser-corrected.json`과 전체 JSON이 일치했다.
+- **30/30**은 현재 `reconstruct()`의 결과다. 첫 열을 위치로 식별하고 `Units`, `Price`, `Stock` 세 열에만 신뢰도 80 이상을 요구한다. 같은 OCR과 CSV로 평가했으므로 차이는 파일 정리 이전과 이후의 입력이 아니라 헤더 판정 조건에서 생겼다.
+- **재현 방법**은 [합성 파일럿 스크립트](../../../scripts/scanned_pdf_synthetic_pilot.py)의 `generate(임시_폴더, 20261122)`로 입력을 만들고 PNG 10개와 CSV 20개의 SHA-256을 `artifacts/scanned-pdf-experiment/synthetic-pilot-20261122/input-hashes.json`과 비교하는 것이다. 같은 폴더에 보관된 `ocr.json`과 `truth.json`을 사용해 재생성 CSV를 `evaluate()`로 평가하고 결과는 임시 폴더에 쓴다. 24/30 조건은 임시 실행에서 첫 헤더에도 같은 기준을 적용하고, 80 미만이면 `reconstruct()`가 `({}, 0, 1)`을 반환하도록 해 비교한다.
+
 ## Self-review
 
 - Design §§1–4 mapped to T1 and T5: local isolated experiment, rights/transcription, 20/40/60 exact counts; explicitly stops for missing real-public verification. §5 mapped T2/T3; §6 T4 exact metrics + paired human study; §7 T5 report and startup gates. No service launch, payments or market claim.
